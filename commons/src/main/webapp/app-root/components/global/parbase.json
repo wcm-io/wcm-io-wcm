@@ -1,0 +1,7 @@
+{
+  /*
+   * Super component for all application's components within paragraph systems.
+   */
+  "jcr:primaryType": "cq:Component",
+  "sling:resourceSuperType": "/libs/wcm/foundation/components/parbase"
+}

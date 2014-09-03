@@ -87,6 +87,13 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Sling-Initial-Content>
+              SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/ui/extjs
+            </Sling-Initial-Content>
+          </instructions>
+        </configuration>
       </plugin>
 
       <plugin>
