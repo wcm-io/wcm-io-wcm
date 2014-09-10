@@ -33,7 +33,7 @@ public class RunModeTest {
 
   @Test
   public void testIs() {
-    Set<String> runModes = ImmutableSet.<String>builder().add("mode1", "mode2").build();
+    Set<String> runModes = ImmutableSet.of("mode1", "mode2");
     assertTrue(RunMode.is(runModes, "mode1"));
     assertTrue(RunMode.is(runModes, "mode2"));
     assertFalse(RunMode.is(runModes, "mode3"));
@@ -57,10 +57,22 @@ public class RunModeTest {
 
   @Test
   public void testIsInvalidParams() {
-    Set<String> runModes = ImmutableSet.<String>builder().add("mode1", "mode2").build();
+    Set<String> runModes = ImmutableSet.of("mode1", "mode2");
     assertFalse(RunMode.is(runModes));
     assertFalse(RunMode.is(runModes, (String[])null));
     assertFalse(RunMode.is(runModes, (String)null));
+  }
+
+  @Test
+  public void testIsAuthor() throws Exception {
+    Set<String> runModes = ImmutableSet.of("mode1", "author");
+    assertTrue(RunMode.isAuthor(runModes));
+  }
+
+  @Test
+  public void testIsPublish() throws Exception {
+    Set<String> runModes = ImmutableSet.of("publish");
+    assertTrue(RunMode.isPublish(runModes));
   }
 
 }
