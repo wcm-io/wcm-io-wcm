@@ -22,7 +22,6 @@ package io.wcm.wcm.commons.util;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.junit.Test;
@@ -41,7 +40,7 @@ public class RunModeTest {
 
   @Test
   public void testIsEmptySet() {
-    Set<String> runModes = Collections.emptySet();
+    Set<String> runModes = ImmutableSet.of();
     assertFalse(RunMode.is(runModes, "mode1"));
     assertFalse(RunMode.is(runModes, "mode2"));
     assertFalse(RunMode.is(runModes, "mode3"));
