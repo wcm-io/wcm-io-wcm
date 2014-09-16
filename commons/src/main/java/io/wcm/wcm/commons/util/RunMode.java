@@ -21,6 +21,11 @@ package io.wcm.wcm.commons.util;
 
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+import org.osgi.service.component.ComponentConstants;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+
 /**
  * Sling run mode utility methods
  */
@@ -73,6 +78,85 @@ public final class RunMode {
    */
   public static boolean isPublish(Set<String> runModes) {
     return RunMode.is(runModes, PUBLISH);
+  }
+
+  /**
+   * Use this to disable a component if none of its run modes are active. Component activation status is logged
+   * with DEBUG level.
+   * This method is a replacement for the
+   * <code>com.day.cq.commons.RunModeUtil#disableIfNoRunModeActive(RunMode, String[], ComponentContext, Logger)</code>
+   * method which is deprecated.
+   * @param runModes Run modes
+   * @param allowedRunModes Allowed run modes
+   * @param componentContext OSGI component context
+   * @param log Logger
+   * @return true if component was disabled
+   */
+  public static boolean disableIfNoRunModeActive(Set<String> runModes, String[] allowedRunModes,
+      ComponentContext componentContext, Logger log) {
+
+    final String name = (String)componentContext.getProperties().get(ComponentConstants.COMPONENT_NAME);
+    boolean result = false;
+
+    boolean isActive = false;
+    for (String runMode : allowedRunModes) {
+      if (runModes.contains(runMode)) {
+        isActive = true;
+        break;
+      }
+    }
+    if (!isActive) {
+      if (log.isDebugEnabled()) {
+        log.debug("Component '" + name + "' "
+            + "disabled as none of its run modes (" + StringUtils.join(allowedRunModes, ",") + ") "
+            + "are currently active (" + StringUtils.join(runModes, ",") + ")."
+            );
+      }
+      componentContext.disableComponent(name);
+      result = true;
+    }
+    else if (log.isDebugEnabled()) {
+      log.debug("Component '" + name + "' "
+          + "enabled as at least one of its run modes (" + StringUtils.join(allowedRunModes, ",") + ") "
+          + "are currently active (" + StringUtils.join(runModes, ",") + ")."
+          );
+    }
+
+    return result;
+  }
+
+  /**
+   * Use this to disable a component if the runmode "author" is not active. Component activation status is logged
+   * with DEBUG level.
+   * This method is a replacement for the
+   * <code>com.day.cq.commons.RunModeUtil#disableIfNoRunModeActive(RunMode, String[], ComponentContext, Logger)</code>
+   * method which is deprecated.
+   * @param runModes Run modes
+   * @param componentContext OSGI component context
+   * @param log Logger
+   * @return true if component was disabled
+   */
+  public static boolean disableIfNotAuthor(Set<String> runModes, ComponentContext componentContext, Logger log) {
+    return disableIfNoRunModeActive(runModes, new String[] {
+        AUTHOR
+    }, componentContext, log);
+  }
+
+  /**
+   * Use this to disable a component if the runmode "publish" is not active. Component activation status is logged
+   * with DEBUG level.
+   * This method is a replacement for the
+   * <code>com.day.cq.commons.RunModeUtil#disableIfNoRunModeActive(RunMode, String[], ComponentContext, Logger)</code>
+   * method which is deprecated.
+   * @param runModes Run modes
+   * @param componentContext OSGI component context
+   * @param log Logger
+   * @return true if component was disabled
+   */
+  public static boolean disableIfNotPublish(Set<String> runModes, ComponentContext componentContext, Logger log) {
+    return disableIfNoRunModeActive(runModes, new String[] {
+        PUBLISH
+    }, componentContext, log);
   }
 
 }

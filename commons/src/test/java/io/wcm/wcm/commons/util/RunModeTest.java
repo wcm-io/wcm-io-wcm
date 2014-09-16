@@ -21,14 +21,40 @@ package io.wcm.wcm.commons.util;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.util.Hashtable;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
 
 import com.google.common.collect.ImmutableSet;
 
+@RunWith(MockitoJUnitRunner.class)
 public class RunModeTest {
+
+  private static final Set<String> AUTHOR_RUNMODES = ImmutableSet.of(RunMode.AUTHOR);
+  private static final Set<String> PUBLISH_RUNMODES = ImmutableSet.of(RunMode.PUBLISH, "anotherRunMode");
+
+  @Mock
+  private ComponentContext componentContext;
+  @Mock
+  private Logger logger;
+
+  @Before
+  public void setUp() {
+    when(logger.isDebugEnabled()).thenReturn(true);
+    when(componentContext.getProperties()).thenReturn(new Hashtable<String, Object>());
+  }
 
   @Test
   public void testIs() {
@@ -63,15 +89,43 @@ public class RunModeTest {
   }
 
   @Test
-  public void testIsAuthor() throws Exception {
+  public void testIsAuthor() {
     Set<String> runModes = ImmutableSet.of("mode1", "author");
     assertTrue(RunMode.isAuthor(runModes));
   }
 
   @Test
-  public void testIsPublish() throws Exception {
+  public void testIsPublish() {
     Set<String> runModes = ImmutableSet.of("publish");
     assertTrue(RunMode.isPublish(runModes));
+  }
+
+  @Test
+  public void testDisableIfNotAuthor_Author() {
+    boolean disabled = RunMode.disableIfNotAuthor(AUTHOR_RUNMODES, componentContext, logger);
+    assertFalse(disabled);
+    verify(componentContext, never()).disableComponent(anyString());
+  }
+
+  @Test
+  public void testDisableIfNotAuthor_Publish() {
+    boolean disabled = RunMode.disableIfNotAuthor(PUBLISH_RUNMODES, componentContext, logger);
+    assertTrue(disabled);
+    verify(componentContext).disableComponent(anyString());
+  }
+
+  @Test
+  public void testDisableIfNotPublish_Author() {
+    boolean disabled = RunMode.disableIfNotPublish(AUTHOR_RUNMODES, componentContext, logger);
+    assertTrue(disabled);
+    verify(componentContext).disableComponent(anyString());
+  }
+
+  @Test
+  public void testDisableIfNotPublish_Publish() {
+    boolean disabled = RunMode.disableIfNotPublish(PUBLISH_RUNMODES, componentContext, logger);
+    assertFalse(disabled);
+    verify(componentContext, never()).disableComponent(anyString());
   }
 
 }
