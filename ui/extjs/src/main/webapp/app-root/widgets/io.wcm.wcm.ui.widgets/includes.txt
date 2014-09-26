@@ -1,0 +1,17 @@
+# Include the files that build the js library
+global.js
+form/BrowseField.js
+form/Checkbox.js
+form/DateTimeField.js
+form/DateField.js
+form/DoubleField.js
+form/Hidden.js
+form/LongField.js
+form/MultiField.js
+form/RichText.js
+form/Selection.js
+form/TextArea.js
+form/TextField.js
+form/TimeField.js
+form/TypeSelectionFieldSet.js
+
