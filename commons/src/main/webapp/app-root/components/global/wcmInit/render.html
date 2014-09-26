@@ -1,0 +1,39 @@
+<!--/**
+		 * Renders HTML Library includes and initialization code to enable WCM authoring for the current page.
+		 * Supports both Touch UI and Classic UI. 
+		 * @param clientLibCategories List of client library categories for Touch UI mode.
+		 * @param clientLibCategoriesClassicUI List of client library categories for Classic UI mode.
+		 */-->
+<template data-sly-template.head="${ @ clientLibCategories, clientLibCategoriesClassicUI}"
+    data-sly-use.wcmInit="io.wcm.wcm.commons.controller.WcmInit"
+    data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
+    data-sly-test="!wcmmode.disabled">
+
+  <!--/* Outputs the WCM initialization code. If WCM mode is disabled nothing is rendered. */-->
+  <meta data-sly-test="${wcmInit.isTouchUI}"
+      data-sly-call="${clientLib.all @ categories=$clientLibCategories || 'cq.authoring.page'}"
+      data-sly-unwrap></meta>
+  <meta data-sly-test="${wcmInit.isClassicUI}"
+      data-sly-call="${clientLib.all @ categories=$clientLibCategoriesClassicUI || 'cq.wcm.edit'}"
+      data-sly-unwrap></meta>
+
+  <!--/* Initialize Sidekick and Undo Manager for Classic UI */-->
+  <script data-sly-test="${wcmInit.isClassicUI}" type="text/javascript">
+    (function() {
+      var cfg = ${wcmInit.undoConfig @ context='unsafe'};
+      cfg.pagePath = "${currentPage.path @ context='uri'}";
+      if (CQClientLibraryManager.channelCB() != "touch") {
+        cfg.enabled = ${wcmmode.edit @ context="scriptString"};
+        CQ.undo.UndoManager.initialize(cfg);
+        CQ.Ext.onReady(function() {
+          CQ.undo.UndoManager.detectCachedPage((new Date()).getTime());
+        });
+      }
+    })();
+    CQ.WCM.launchSidekick("${currentPage.path @ context='uri'}", {
+      propsDialog: "${wcmInit.pagePropertiesDialogPath @ context='uri'}",
+      locked: ${currentPage.locked @ context="scriptString"}
+    });
+  </script>
+
+</template>

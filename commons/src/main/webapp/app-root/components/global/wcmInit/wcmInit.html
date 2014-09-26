@@ -1,32 +1,6 @@
+<!--/* This script can be overridden to call the render template with custom client library categories */-->
 <head
-    data-sly-use.wcmInit="io.wcm.wcm.commons.controller.WcmInit"
-    data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
-    data-sly-unwrap>
-    
-  <!--/* Outputs the WCM initialization code. If WCM mode is disabled nothing is rendered. */-->
-  <meta data-sly-test="${!wcmmode.disabled && wcmInit.isTouchAuthoring}"
-      data-sly-call="${clientLib.all @ categories='cq.authoring.page'}"
-      data-sly-unwrap></meta>
-  <meta data-sly-test="${!wcmmode.disabled && !wcmInit.isTouchAuthoring}"
-      data-sly-call="${clientLib.all @ categories='cq.wcm.edit'}"
-      data-sly-unwrap></meta>
-
-  <script data-sly-test="${!wcmmode.disabled && !wcmInit.isTouchAuthoring}" type="text/javascript">
-    (function() {
-      var cfg = ${wcmInit.undoConfig @ context='unsafe'};
-      cfg.pagePath = "${currentPage.path @ context='uri'}";
-      if (CQClientLibraryManager.channelCB() != "touch") {
-        cfg.enabled = ${wcmmode.edit @ context="scriptString"};
-        CQ.undo.UndoManager.initialize(cfg);
-        CQ.Ext.onReady(function() {
-          CQ.undo.UndoManager.detectCachedPage((new Date()).getTime());
-        });
-      }
-    })();
-    CQ.WCM.launchSidekick("${currentPage.path @ context='uri'}", {
-      propsDialog: "${wcmInit.pagePropertiesDialogPath @ context='uri'}",
-      locked: ${currentPage.locked @ context="scriptString"}
-    });
-  </script>
-
+    data-sly-use.render="render.html"
+    data-sly-call="${render.head}"
+    data-sly-unwrap>  
 </head>

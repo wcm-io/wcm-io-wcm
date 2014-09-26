@@ -40,7 +40,8 @@ import com.day.cq.wcm.undo.UndoConfigService;
 @Model(adaptables = SlingHttpServletRequest.class)
 public class WcmInit {
 
-  private final boolean touchAuthoring;
+  private final boolean touchUI;
+  private final boolean classicUI;
   private final String pagePropertiesDialogPath;
   private final String undoConfig;
 
@@ -54,7 +55,8 @@ public class WcmInit {
       @OSGiService UndoConfigService undoConfigService) throws IOException {
 
     // detect touch authoring mode
-    this.touchAuthoring = (authoringUIMode == AuthoringUIMode.TOUCH);
+    this.touchUI = (authoringUIMode == AuthoringUIMode.TOUCH);
+    this.classicUI = (authoringUIMode == AuthoringUIMode.CLASSIC);
 
     // detect page properties dialog path
     if (componentContext.getEditContext() != null) {
@@ -73,8 +75,15 @@ public class WcmInit {
   /**
    * @return true if Touch UI authoring mode is active
    */
-  public boolean isTouchAuthoring() {
-    return this.touchAuthoring;
+  public boolean isTouchUI() {
+    return this.touchUI;
+  }
+
+  /**
+   * @return true if Classic UI authoring mode is active
+   */
+  public boolean isClassicUI() {
+    return this.classicUI;
   }
 
   /**

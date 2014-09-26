@@ -77,10 +77,12 @@ public class WcmInitTest {
   @Test
   public void testIsTouchAuthoring() throws Exception {
     WcmInit underTest = new WcmInit(AuthoringUIMode.TOUCH, componentContext, undoConfigService);
-    assertTrue(underTest.isTouchAuthoring());
+    assertTrue(underTest.isTouchUI());
+    assertFalse(underTest.isClassicUI());
 
     underTest = new WcmInit(AuthoringUIMode.CLASSIC, componentContext, undoConfigService);
-    assertFalse(underTest.isTouchAuthoring());
+    assertFalse(underTest.isTouchUI());
+    assertTrue(underTest.isClassicUI());
   }
 
   @Test
