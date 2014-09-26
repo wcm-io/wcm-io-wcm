@@ -52,6 +52,13 @@
 
     <dependency>
       <groupId>io.wcm</groupId>
+      <artifactId>io.wcm.sling.models</artifactId>
+      <version>1.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.wcm</groupId>
       <artifactId>io.wcm.sling.commons</artifactId>
       <version>0.1.0-SNAPSHOT</version>
       <scope>compile</scope>
@@ -92,6 +99,12 @@
             <Sling-Initial-Content>
               SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/parsys
             </Sling-Initial-Content>
+            <Export-Package>
+              io.wcm.wcm.parsys.*;version=${project.version}
+            </Export-Package>
+            <Sling-Model-Packages>
+              io.wcm.wcm.parsys
+            </Sling-Model-Packages>
           </instructions>
         </configuration>
       </plugin>

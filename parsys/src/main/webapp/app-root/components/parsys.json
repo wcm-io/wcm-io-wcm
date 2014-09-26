@@ -1,0 +1,9 @@
+{
+  "jcr:primaryType": "cq:Component",
+  "jcr:title": "wcm.io Paragraph system",
+  "cq:isContainer": true,
+
+  "cq:editConfig": {
+    "cq:disableTargeting": true
+  }
+}

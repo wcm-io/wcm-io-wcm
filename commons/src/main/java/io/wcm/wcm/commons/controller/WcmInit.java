@@ -38,7 +38,7 @@ import com.day.cq.wcm.undo.UndoConfigService;
  * Controller for wcmInit component.
  */
 @Model(adaptables = SlingHttpServletRequest.class)
-public class WcmInit {
+public final class WcmInit {
 
   private final boolean touchUI;
   private final boolean classicUI;

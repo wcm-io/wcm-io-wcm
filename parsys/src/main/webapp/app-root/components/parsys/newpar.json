@@ -1,0 +1,13 @@
+{
+  "jcr:primaryType": "cq:Component",
+  "jcr:title": "New Paragraph",
+
+  "cq:editConfig": {
+    "jcr:primaryType": "cq:EditConfig",
+    "cq:disableTargeting": true,
+    "cq:actions": [
+      "_clear",
+      "insert"
+    ]
+  }
+}
