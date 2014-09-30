@@ -1,11 +1,12 @@
 {
   "jcr:primaryType": "cq:Component",
-  "jcr:title": "New Paragraph",
+  "sling:resourceSuperType": "/apps/wcm-io/wcm/parsys/components/parsys/newpar",
+  "jcr:title": "New Paragraph (Editbar)",
   "componentGroup": ".hidden",
 
   "cq:editConfig": {
     "jcr:primaryType": "cq:EditConfig",
-    "cq:layout": "rollover",
+    "cq:layout": "editbar",
     "cq:disableTargeting": true,
     "cq:actions": [
       "_clear",

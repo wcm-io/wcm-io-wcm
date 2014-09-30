@@ -34,6 +34,7 @@ import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 
 import com.day.cq.wcm.api.WCMMode;
+import com.day.cq.wcm.api.components.ComponentContext;
 
 /**
  * Controller for paragraph system.
@@ -45,9 +46,9 @@ import com.day.cq.wcm.api.WCMMode;
 public final class Parsys {
 
   static final String DECORATION_TAG_NAME = "div";
-  static final String NEWAREA_RESOURCE_TYPE = "/apps/wcm-io/wcm/parsys/components/parsys/newpar";
   static final String NEWAREA_RESOURCE_PATH = "./*";
   static final String NEWAREA_CSS_CLASS_NAME = "new";
+  static final String NEWAREA_RESOURCE_TYPE_SUFFIX = "/newpar";
 
   @SlingObject
   private Resource currentResource;
@@ -55,13 +56,12 @@ public final class Parsys {
   @AemObject
   private WCMMode wcmMode;
 
+  @AemObject
+  private ComponentContext componentContext;
+
   @RequestAttribute(optional = true)
   @Default(values = DECORATION_TAG_NAME)
   private String decorationTagName;
-
-  @RequestAttribute(optional = true)
-  @Default(values = NEWAREA_RESOURCE_TYPE)
-  private String newAreaResourceType;
 
   private List<Item> items;
 
@@ -81,7 +81,8 @@ public final class Parsys {
   }
 
   private Item createNewAreaItem() {
-    return new Item(NEWAREA_RESOURCE_PATH, this.newAreaResourceType, this.decorationTagName, NEWAREA_CSS_CLASS_NAME, true);
+    String newAreaResourceType = componentContext.getComponent().getPath() + NEWAREA_RESOURCE_TYPE_SUFFIX;
+    return new Item(NEWAREA_RESOURCE_PATH, newAreaResourceType, this.decorationTagName, NEWAREA_CSS_CLASS_NAME, true);
   }
 
   /**

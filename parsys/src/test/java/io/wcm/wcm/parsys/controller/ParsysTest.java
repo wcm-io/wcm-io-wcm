@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
@@ -32,14 +33,27 @@ import org.apache.sling.api.resource.Resource;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
+import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.api.components.ComponentContext;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ParsysTest {
+
+  private static final String RESOURCE_TYPE_SAMPLE = "/apps/sample/components/parsys";
 
   @Rule
   public AemContext context = new AemContext();
+
+  @Mock
+  private ComponentContext componentContext;
+  @Mock
+  private Component component;
 
   private Resource parsysResource;
   private Resource par1Resource;
@@ -47,6 +61,10 @@ public class ParsysTest {
 
   @Before
   public void setUp() {
+    context.request().setAttribute(ComponentContext.CONTEXT_ATTR_NAME, componentContext);
+    when(componentContext.getComponent()).thenReturn(component);
+    when(component.getPath()).thenReturn(RESOURCE_TYPE_SAMPLE);
+
     Page page = context.create().page("/content/page1", "/apps/sample/templates/test1");
     parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsys");
     par1Resource = context.create().resource(parsysResource.getPath() + "/par1");
@@ -78,7 +96,7 @@ public class ParsysTest {
 
     Item item3 = items.get(2);
     assertEquals(Parsys.NEWAREA_RESOURCE_PATH, item3.getResourcePath());
-    assertEquals(Parsys.NEWAREA_RESOURCE_TYPE, item3.getResourceType());
+    assertEquals(RESOURCE_TYPE_SAMPLE + Parsys.NEWAREA_RESOURCE_TYPE_SUFFIX, item3.getResourceType());
     assertEquals(Parsys.DECORATION_TAG_NAME, item3.getDecorationTagName());
     assertEquals(Parsys.NEWAREA_CSS_CLASS_NAME, item3.getCssClassName());
     assertTrue(item3.isNewArea());
