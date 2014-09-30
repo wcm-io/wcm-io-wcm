@@ -1,0 +1,39 @@
+{
+  "jcr:primaryType": "cq:Component",
+  "sling:resourceSuperType":"/libs/foundation/components/page",
+
+  "wcmio:parsysConfig": {
+    "jcr:primaryType": "nt:unstructured",
+    "paths": {
+      "content": {
+        "allowedChildren": [
+          "/apps/dummy/components/comp1",
+          "/apps/dummy/components/comp2",
+          "/apps/dummy/components/linklist",
+          "/apps/dummy/components/container2col"
+        ]
+      },
+
+      "content_container_2col": {
+        "pattern": "^jcr:content/.*$",
+        "parentAncestorLevel": 2,
+        "allowedParents": [
+          "/apps/dummy/components/container2Col"
+        ],
+        "allowedChildren": [
+          "/apps/dummy/components/nestedComp1",
+          "/apps/dummy/components/nestedComp2",
+          "/apps/dummy/components/linklist"
+        ]
+      },
+
+      "linklist":{
+        "pattern":"^jcr:content/(?!megaFlyout).*/links$",
+        "allowedChildren":[
+           "/apps/dummy/components/linkItem"
+        ]
+      }
+
+    }
+  }
+}

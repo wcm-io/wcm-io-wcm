@@ -1,0 +1,18 @@
+{
+  "jcr:primaryType": "cq:Component",
+  "sling:resourceSuperType":"/apps/dummy/components/page/basePage",
+
+  "wcmio:parsysConfig": {
+    "jcr:primaryType": "nt:unstructured",
+    "paths": {
+
+      "special": {
+        "allowedChildren": [
+          "/apps/dummy/components/specialComp1",
+          "/apps/dummy/components/specialText"
+        ]
+      }
+
+    }
+  }
+}

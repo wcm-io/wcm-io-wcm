@@ -1,0 +1,11 @@
+{
+  "jcr:primaryType": "cq:Template",
+  "jcr:title": "dummy template",
+  "ranking": 10,
+  "allowedPaths": "^/content/dummy(/.*)?$",
+
+  "jcr:content": {
+    "jcr:primaryType": "cq:PageContent",
+    "sling:resourceType": "/apps/dummy/components/page/basePage"
+  }
+}
