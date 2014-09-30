@@ -1,0 +1,9 @@
+{
+  "jcr:primaryType": "cq:ClientLibraryFolder",
+  "categories": [
+    "cq.authoring.editor.hook"
+  ],
+  "dependencies": [
+    "cq.authoring.editor"
+  ]
+}
