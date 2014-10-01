@@ -3,9 +3,7 @@
   
   <div style="clear:both" data-sly-test="${item.newArea}"></div>  
   
-  <div data-sly-resource="${item.resourcePath @ resourceType=item.resourceType,
-      decorationTagName=item.decorationTagName, cssClassName=item.cssClassName}"
-      data-sly-unwrap></div>
+  <div class="${item.cssClassName}" data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"></div>
 
 </div>
  

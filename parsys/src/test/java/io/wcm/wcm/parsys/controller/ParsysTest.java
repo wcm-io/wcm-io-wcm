@@ -29,6 +29,7 @@ import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 import java.util.List;
 
+import org.apache.sling.api.SlingConstants;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Before;
 import org.junit.Rule;
@@ -41,11 +42,13 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentContext;
+import com.google.common.collect.ImmutableMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParsysTest {
 
   private static final String RESOURCE_TYPE_SAMPLE = "/apps/sample/components/parsys";
+  private static final String SUPER_RESOURCE_TYPE_SAMPLE = "/apps/sample/components/superParsys";
 
   @Rule
   public AemContext context = new AemContext();
@@ -83,21 +86,18 @@ public class ParsysTest {
     Item item1 = items.get(0);
     assertEquals(par1Resource.getPath(), item1.getResourcePath());
     assertNull(item1.getResourceType());
-    assertEquals(Parsys.DECORATION_TAG_NAME, item1.getDecorationTagName());
     assertNull(item1.getCssClassName());
     assertFalse(item1.isNewArea());
 
     Item item2 = items.get(1);
     assertEquals(par2Resource.getPath(), item2.getResourcePath());
     assertNull(item2.getResourceType());
-    assertEquals(Parsys.DECORATION_TAG_NAME, item2.getDecorationTagName());
     assertNull(item2.getCssClassName());
     assertFalse(item2.isNewArea());
 
     Item item3 = items.get(2);
     assertEquals(Parsys.NEWAREA_RESOURCE_PATH, item3.getResourcePath());
-    assertEquals(RESOURCE_TYPE_SAMPLE + Parsys.NEWAREA_RESOURCE_TYPE_SUFFIX, item3.getResourceType());
-    assertEquals(Parsys.DECORATION_TAG_NAME, item3.getDecorationTagName());
+    assertEquals(Parsys.FALLBACK_NEWAREA_RESOURCE_TYPE, item3.getResourceType());
     assertEquals(Parsys.NEWAREA_CSS_CLASS_NAME, item3.getCssClassName());
     assertTrue(item3.isNewArea());
   }
@@ -113,16 +113,44 @@ public class ParsysTest {
     Item item1 = items.get(0);
     assertEquals(par1Resource.getPath(), item1.getResourcePath());
     assertNull(item1.getResourceType());
-    assertEquals(Parsys.DECORATION_TAG_NAME, item1.getDecorationTagName());
     assertNull(item1.getCssClassName());
     assertFalse(item1.isNewArea());
 
     Item item2 = items.get(1);
     assertEquals(par2Resource.getPath(), item2.getResourcePath());
     assertNull(item2.getResourceType());
-    assertEquals(Parsys.DECORATION_TAG_NAME, item2.getDecorationTagName());
     assertNull(item2.getCssClassName());
     assertFalse(item2.isNewArea());
+  }
+
+  @Test
+  public void testNewAreaResourceTypeFromCurrentComponent() {
+    context.create().resource(RESOURCE_TYPE_SAMPLE);
+    context.create().resource(RESOURCE_TYPE_SAMPLE + "/" + Parsys.NEWAREA_CHILD_NAME);
+
+    WCMMode.EDIT.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+    List<Item> items = parsys.getItems();
+
+    Item item3 = items.get(2);
+    assertEquals(RESOURCE_TYPE_SAMPLE + "/" + Parsys.NEWAREA_CHILD_NAME, item3.getResourceType());
+  }
+
+  @Test
+  public void testNewAreaResourceTypeFromSuperComponent() {
+    context.create().resource(RESOURCE_TYPE_SAMPLE, ImmutableMap.<String, Object>builder()
+        .put(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, SUPER_RESOURCE_TYPE_SAMPLE)
+        .build());
+
+    context.create().resource(SUPER_RESOURCE_TYPE_SAMPLE);
+    context.create().resource(SUPER_RESOURCE_TYPE_SAMPLE + "/" + Parsys.NEWAREA_CHILD_NAME);
+
+    WCMMode.EDIT.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+    List<Item> items = parsys.getItems();
+
+    Item item3 = items.get(2);
+    assertEquals(SUPER_RESOURCE_TYPE_SAMPLE + "/" + Parsys.NEWAREA_CHILD_NAME, item3.getResourceType());
   }
 
 }
