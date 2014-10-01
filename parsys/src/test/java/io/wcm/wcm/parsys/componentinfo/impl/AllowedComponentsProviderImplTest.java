@@ -17,15 +17,15 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.parsys.componentinfo;
+package io.wcm.wcm.parsys.componentinfo.impl;
 
 import static org.apache.sling.jcr.resource.JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.wcm.parsys.componentinfo.impl.AllowedComponentsProviderImpl;
-import io.wcm.wcm.parsys.componentinfo.impl.ParsysConfigManagerImpl;
+import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
+import io.wcm.wcm.parsys.componentinfo.ParsysPageInfoProvider;
 
 import java.util.Set;
 

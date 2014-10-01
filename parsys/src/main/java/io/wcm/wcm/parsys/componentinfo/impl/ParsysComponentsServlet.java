@@ -23,6 +23,7 @@ import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.sling.commons.request.RequestParam;
 import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.commons.contenttype.FileExtension;
+import io.wcm.wcm.commons.util.RunMode;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ import java.util.Set;
 import javax.servlet.ServletException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -40,6 +42,8 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.json.JSONArray;
+import org.apache.sling.settings.SlingSettingsService;
+import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,22 +53,37 @@ import com.day.cq.wcm.api.PageManager;
 /**
  * Handles AJAX calls for updateComponentListHandler JS method to update list of allowed component lists dynamically.
  * TODO: add unit tests
- * TODO: should only be active on author instances
  */
 @SlingServlet(extensions = FileExtension.JSON, selectors = "wcmio-parsys-components",
 resourceTypes = "sling/servlet/default", methods = HttpConstants.METHOD_GET)
 public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
   private static final long serialVersionUID = 1L;
 
-  private static final String RP_PATH = "path";
+  static final String RP_PATH = "path";
 
   private static final Logger log = LoggerFactory.getLogger(ParsysComponentsServlet.class);
 
   @Reference
   private AllowedComponentsProvider allowedComponentsProvider;
 
+  @Reference
+  private SlingSettingsService slingSettings;
+
+  private boolean enabled;
+
+  @Activate
+  protected void activate(ComponentContext componentContext) {
+    // Activate only in author mode
+    enabled = !RunMode.disableIfNotAuthor(slingSettings.getRunModes(), componentContext, log);
+  }
+
   @Override
   protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
+    if (!enabled) {
+      response.sendError(404);
+      return;
+    }
+
     ResourceResolver resolver = request.getResourceResolver();
     PageManager pageManager = AdaptTo.notNull(resolver, PageManager.class);
     Page currentPage = pageManager.getContainingPage(request.getResource());
