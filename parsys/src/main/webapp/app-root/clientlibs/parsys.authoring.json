@@ -1,5 +1,6 @@
 {
   "jcr:primaryType": "cq:ClientLibraryFolder",
+  /* Register to load automatically in Touch UI edit mode */
   "categories": [
     "cq.authoring.editor.hook"
   ]

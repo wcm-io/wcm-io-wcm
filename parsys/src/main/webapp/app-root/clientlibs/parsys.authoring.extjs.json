@@ -1,5 +1,6 @@
 {
   "jcr:primaryType": "cq:ClientLibraryFolder",
+  /* Register to load automatically in Classic UI edit mode */
   "categories": [
     "cq.wcm.edit"
   ]
