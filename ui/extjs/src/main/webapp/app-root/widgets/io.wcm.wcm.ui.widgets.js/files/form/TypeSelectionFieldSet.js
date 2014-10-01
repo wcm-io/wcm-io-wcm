@@ -86,7 +86,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
     var typeSelectionFieldSet = this;
 
     // detect current path and initialize controls after content loaded
-    registerOnLoadContent(this, function (e) {
+    typeSelectionFieldSet.registerOnLoadContent(this, function (e) {
 
       // call processPath for all fields in this container
       typeSelectionFieldSet.processPath(this.path);
