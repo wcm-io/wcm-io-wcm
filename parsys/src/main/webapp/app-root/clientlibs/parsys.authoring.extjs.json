@@ -1,6 +1,6 @@
 {
   "jcr:primaryType": "cq:ClientLibraryFolder",
   "categories": [
-    "wcmio.wcm.parsys.extjs"
+    "cq.wcm.edit"
   ]
 }

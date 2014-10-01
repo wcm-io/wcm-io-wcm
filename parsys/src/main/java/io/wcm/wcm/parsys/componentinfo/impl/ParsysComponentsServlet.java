@@ -49,6 +49,7 @@ import com.day.cq.wcm.api.PageManager;
 /**
  * Handles AJAX calls for updateComponentListHandler JS method to update list of allowed component lists dynamically.
  * TODO: add unit tests
+ * TODO: should only be active on author instances
  */
 @SlingServlet(extensions = FileExtension.JSON, selectors = "wcmio-parsys-components",
 resourceTypes = "sling/servlet/default", methods = HttpConstants.METHOD_GET)
