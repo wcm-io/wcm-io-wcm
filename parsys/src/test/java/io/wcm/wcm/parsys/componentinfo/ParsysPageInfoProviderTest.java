@@ -22,19 +22,15 @@ package io.wcm.wcm.parsys.componentinfo;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.wcm.parsys.componentinfo.mock.MockComponentManager;
 
-import java.util.Collection;
 import java.util.List;
 
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
-import org.apache.sling.models.annotations.Model;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,17 +38,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.day.cq.wcm.api.components.Component;
-import com.day.cq.wcm.api.components.ComponentManager;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParsysPageInfoProviderTest {
-
-  private static final String COMPONENT_PATH_1 = "/apps/sample/components/comp1";
-  private static final String COMPONENT_PATH_2 = "/apps/sample/components/comp2";
 
   @Rule
   public AemContext context = new AemContext();
@@ -70,11 +61,11 @@ public class ParsysPageInfoProviderTest {
         .build()));
 
     when(allowedComponentsProvider.getAllowedComponentsForTemplate(anyString(), any(ResourceResolver.class)))
-    .thenReturn(ImmutableSortedSet.of(COMPONENT_PATH_1, COMPONENT_PATH_2));
+    .thenReturn(ImmutableSortedSet.of(MockComponentManager.COMPONENT_PATH_1, MockComponentManager.COMPONENT_PATH_2));
 
     context.registerService(AllowedComponentsProvider.class, allowedComponentsProvider);
 
-    context.addModelsForPackage("io.wcm.wcm.parsys.componentinfo");
+    context.addModelsForPackage("io.wcm.wcm.parsys.componentinfo.mock");
 
     underTest = new ParsysPageInfoProvider();
   }
@@ -87,44 +78,8 @@ public class ParsysPageInfoProviderTest {
     JSONObject components = result.getJSONObject("components");
     List<String> keys = ImmutableList.copyOf(components.keys());
     assertEquals(2, keys.size());
-    assertEquals(COMPONENT_PATH_1, keys.get(0));
-    assertEquals(COMPONENT_PATH_2, keys.get(1));
-  }
-
-
-  /**
-   * Mocked WCM API component manager returning two mocked components.
-   */
-  @Model(adaptables = ResourceResolver.class, adapters = ComponentManager.class)
-  public static class MockComponentManager implements ComponentManager {
-
-    @Override
-    public Component getComponentOfResource(Resource resource) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Component getComponent(String path) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Collection<Component> getComponents() {
-      return ImmutableList.of(
-          mockComponent(COMPONENT_PATH_1),
-          mockComponent(COMPONENT_PATH_2)
-          );
-    }
-
-    private Component mockComponent(String path) {
-      Component component = mock(Component.class);
-      when(component.getPath()).thenReturn(path);
-      when(component.getResourceType()).thenReturn(path);
-      when(component.isEditable()).thenReturn(true);
-      when(component.getProperties()).thenReturn(ValueMap.EMPTY);
-      return component;
-    }
-
+    assertEquals(MockComponentManager.COMPONENT_PATH_1, keys.get(0));
+    assertEquals(MockComponentManager.COMPONENT_PATH_2, keys.get(1));
   }
 
 }
