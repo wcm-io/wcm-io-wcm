@@ -153,4 +153,30 @@ public class ParsysTest {
     assertEquals(SUPER_RESOURCE_TYPE_SAMPLE + "/" + Parsys.NEWAREA_CHILD_NAME, item3.getResourceType());
   }
 
+  @Test
+  public void testOtherParentParsysResource() {
+    parsysResource = context.create().resource(context.currentPage().getContentResource().getPath() + "/parsysOther");
+    par1Resource = context.create().resource(parsysResource.getPath() + "/par1");
+
+    context.request().setAttribute(Parsys.RA_PARSYS_PARENT_RESOURCE, parsysResource);
+
+    WCMMode.EDIT.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+
+    List<Item> items = parsys.getItems();
+    assertEquals(2, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertNull(item1.getResourceType());
+    assertNull(item1.getCssClassName());
+    assertFalse(item1.isNewArea());
+
+    Item item2 = items.get(1);
+    assertEquals(Parsys.NEWAREA_RESOURCE_PATH, item2.getResourcePath());
+    assertEquals(Parsys.FALLBACK_NEWAREA_RESOURCE_TYPE, item2.getResourceType());
+    assertEquals(Parsys.NEWAREA_CSS_CLASS_NAME, item2.getCssClassName());
+    assertTrue(item2.isNewArea());
+  }
+
 }

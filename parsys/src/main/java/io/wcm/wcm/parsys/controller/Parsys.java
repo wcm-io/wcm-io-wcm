@@ -31,6 +31,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 
 import com.day.cq.wcm.api.WCMMode;
@@ -45,10 +46,17 @@ import com.day.cq.wcm.api.components.ComponentContext;
 @Model(adaptables = SlingHttpServletRequest.class)
 public final class Parsys {
 
+  static final String RA_PARSYS_PARENT_RESOURCE = "parsysParentResource";
   static final String NEWAREA_RESOURCE_PATH = "./*";
   static final String NEWAREA_CSS_CLASS_NAME = "new";
   static final String NEWAREA_CHILD_NAME = "newpar";
   static final String FALLBACK_NEWAREA_RESOURCE_TYPE = "/apps/wcm-io/wcm/parsys/components/parsys/newpar";
+
+  /**
+   * Allows to override the resource which children are iterated to display the parsys.
+   */
+  @RequestAttribute(name = RA_PARSYS_PARENT_RESOURCE, optional = true)
+  private Resource parsysParentResource;
 
   @SlingObject
   private Resource currentResource;
@@ -64,7 +72,10 @@ public final class Parsys {
   @PostConstruct
   protected void activate() {
     items = new ArrayList<>();
-    for (Resource childResource : currentResource.getChildren()) {
+    if (parsysParentResource == null) {
+      parsysParentResource = currentResource;
+    }
+    for (Resource childResource : parsysParentResource.getChildren()) {
       items.add(createResourceItem(childResource));
     }
     if (wcmMode != WCMMode.DISABLED) {
