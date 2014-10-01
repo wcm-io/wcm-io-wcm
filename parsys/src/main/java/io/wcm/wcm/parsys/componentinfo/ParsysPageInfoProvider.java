@@ -65,8 +65,6 @@ import com.day.text.Text;
  *   }
  * }
  * </pre>
- * 
- * TODO: add unit tests
  */
 public final class ParsysPageInfoProvider implements PageInfoProvider {
 
@@ -99,7 +97,7 @@ public final class ParsysPageInfoProvider implements PageInfoProvider {
     // check if resource is a CQ page
     try {
       ResourceResolver resolver = request.getResourceResolver();
-      PageManager pageManager = AdaptTo.notNull(request, PageManager.class);
+      PageManager pageManager = AdaptTo.notNull(request.getResourceResolver(), PageManager.class);
       Page page = pageManager.getContainingPage(resource);
       if (page != null) {
 
