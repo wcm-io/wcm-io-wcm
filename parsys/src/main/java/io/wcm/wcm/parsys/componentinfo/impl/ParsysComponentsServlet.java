@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Activate;
@@ -52,7 +53,6 @@ import com.day.cq.wcm.api.PageManager;
 
 /**
  * Handles AJAX calls for updateComponentListHandler JS method to update list of allowed component lists dynamically.
- * TODO: add unit tests
  */
 @SlingServlet(extensions = FileExtension.JSON, selectors = "wcmio-parsys-components",
 resourceTypes = "sling/servlet/default", methods = HttpConstants.METHOD_GET)
@@ -80,7 +80,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
   @Override
   protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
     if (!enabled) {
-      response.sendError(404);
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 
@@ -89,7 +89,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
     Page currentPage = pageManager.getContainingPage(request.getResource());
 
     if (currentPage == null) {
-      response.sendError(404);
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 
