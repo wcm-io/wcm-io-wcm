@@ -39,7 +39,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedSet;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParsysComponentsServletTest {
@@ -56,7 +56,7 @@ public class ParsysComponentsServletTest {
   private Page currentPage;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     currentPage = context.create().page(PAGE_PATH);
     context.currentPage(currentPage);
 
@@ -66,7 +66,7 @@ public class ParsysComponentsServletTest {
 
     when(allowedComponentsProvider.getAllowedComponents(
         eq(PAGE_PATH + "/" + LOCAL_PATH), any(ResourceResolver.class)))
-        .thenReturn(ImmutableSet.of("/apps/sample/components/comp1", "/apps/sample/components/comp2"));
+        .thenReturn(ImmutableSortedSet.of("/apps/sample/components/comp1", "/apps/sample/components/comp2"));
 
     context.registerService(AllowedComponentsProvider.class, allowedComponentsProvider);
   }
@@ -79,7 +79,7 @@ public class ParsysComponentsServletTest {
 
     underTest.service(context.request(), context.response());
     assertEquals(HttpServletResponse.SC_OK, context.response().getStatus());
-    assertEquals("[\"sample/components/comp2\",\"sample/components/comp1\"]", context.response().getOutputAsString());
+    assertEquals("[\"/apps/sample/components/comp1\",\"/apps/sample/components/comp2\"]", context.response().getOutputAsString());
   }
 
   @Test

@@ -19,7 +19,7 @@
  */
 package io.wcm.wcm.parsys.componentinfo;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.apache.sling.api.resource.ResourceResolver;
 
@@ -34,15 +34,15 @@ public interface ParsysConfigManager {
    * @param resolver Resource resolver
    * @return All configurations defined in any source
    */
-  List<ParsysConfig> getParSysConfigs(String pageComponentPath, ResourceResolver resolver);
+  Iterable<ParsysConfig> getParsysConfigs(String pageComponentPath, ResourceResolver resolver);
 
   /**
    * Get all paragraph system configurations for a certian path inside a page with the given template/page component.
    * @param pageComponentPath Page component resource type
-   * @param relativeResourcePath Relative path inside the page (starting with jcr:content, but without leading slash).
+   * @param relativePath Relative path inside the page (starting with jcr:content, but without leading slash).
    * @param resolver Resource resolver
    * @return All configurations defined in any source
    */
-  List<ParsysConfig> getParSysConfigs(String pageComponentPath, String relativeResourcePath, ResourceResolver resolver);
+  Iterable<ParsysConfig> getParsysConfigs(String pageComponentPath, String relativePath, ResourceResolver resolver);
 
 }

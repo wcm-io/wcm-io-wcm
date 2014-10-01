@@ -32,12 +32,7 @@
             allowed.splice(0, allowed.length);
             // add elements from new array
             for (var i=0; i<result.length; i++) {
-              var componentPath = result[i];
-              // unlike CQ5, CQ6 touch edit mode seems to expect an absolute component path
-              if (componentPath.indexOf("/apps/")!=0) {
-                componentPath = "/apps/" + componentPath;
-              }
-              allowed.push(componentPath);
+              allowed.push(result[i]);
             }
           }
         },

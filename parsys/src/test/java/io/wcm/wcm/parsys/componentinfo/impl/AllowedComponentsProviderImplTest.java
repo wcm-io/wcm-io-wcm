@@ -78,14 +78,14 @@ public class AllowedComponentsProviderImplTest {
     addDummyContent(inheritedPage);
     context.create().resource(inheritedPage.getContentResource().getPath() + "/special",
         ImmutableMap.<String, Object>builder()
-            .put(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/parsys")
-            .build());
+        .put(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/parsys")
+        .build());
 
-    underTest = context.slingScriptHelper().getService(AllowedComponentsProvider.class);
+    underTest = context.getService(AllowedComponentsProvider.class);
   }
 
   @Test
-  public void testGetAllowedComponentsForParSys() {
+  public void testGetAllowedComponentsForParsys() {
     String contentParsys = CONTENT_ROOT_PATH + "/page-1/jcr:content/content";
     Set<String> allowedComponents = underTest.getAllowedComponents(contentParsys, context.resourceResolver());
 
@@ -169,7 +169,7 @@ public class AllowedComponentsProviderImplTest {
   }
 
   @Test
-  public void testGetAllowedComponentsForInheritedParSys() {
+  public void testGetAllowedComponentsForInheritedParsys() {
     // ---- special parsys (not inherited) ----
     String specialParsys = CONTENT_ROOT_PATH + "/page-2/jcr:content/special";
     Set<String> allowedComponents = underTest.getAllowedComponents(specialParsys, context.resourceResolver());

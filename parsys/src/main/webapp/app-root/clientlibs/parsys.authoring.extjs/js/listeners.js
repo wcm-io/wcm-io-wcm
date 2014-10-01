@@ -34,7 +34,12 @@ wcmio.wcm.parsys = function() {
           allowed.splice(0, allowed.length);
           // add elements from new array
           for (var i=0; i<result.length; i++) {
-            allowed.push(result[i]);
+            var componentPath = result[i];
+            // Classic UI expected component path without leading /apps/ or /libs/
+            if (componentPath.indexOf("/apps/")==0 || componentPath.indexOf("/libs/")==0) {
+              componentPath = componentPath.substring(6);
+            }
+            allowed.push(componentPath);
           }
         }
       }

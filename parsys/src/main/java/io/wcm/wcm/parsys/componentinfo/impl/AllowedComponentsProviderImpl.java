@@ -24,7 +24,6 @@ import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -43,7 +42,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Detects allowed components for authoring for a given page/resource context.
- * TODO: validate unit tests
  */
 @Component(immediate = true)
 @Service(AllowedComponentsProvider.class)
@@ -74,7 +72,7 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
       String pageComponentPath = page.getContentResource().getResourceType();
       String relativePath = resourcePath.substring(page.getPath().length() + 1);
 
-      List<ParsysConfig> parSysConfigs = parsysConfigManager.getParSysConfigs(pageComponentPath, relativePath, resolver);
+      Iterable<ParsysConfig> parSysConfigs = parsysConfigManager.getParsysConfigs(pageComponentPath, relativePath, resolver);
 
       Resource parentResource = null;
       Resource grandParentResource = null;
@@ -129,7 +127,7 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
   public Set<String> getAllowedComponentsForTemplate(String pageComponentPath, ResourceResolver resolver) {
     Resource pageComponentResource = resolver.getResource(pageComponentPath);
     if (pageComponentResource != null) {
-      List<ParsysConfig> parSysConfigs = parsysConfigManager.getParSysConfigs(pageComponentResource.getPath(), resolver);
+      Iterable<ParsysConfig> parSysConfigs = parsysConfigManager.getParsysConfigs(pageComponentResource.getPath(), resolver);
 
       SortedSet<String> allowedChildren = new TreeSet<>();
       for (ParsysConfig parSysConfig : parSysConfigs) {

@@ -113,7 +113,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
       // create set with relative resource type paths
       Set<String> allowedComponentsRelative = new HashSet<String>();
       for (String resourceType : allowed) {
-        allowedComponentsRelative.add(ResourceTypeUtil.removePrefix(resourceType));
+        allowedComponentsRelative.add(ResourceTypeUtil.makeAbsolute(resourceType));
       }
 
       allowedComponents = new JSONArray(allowedComponentsRelative);

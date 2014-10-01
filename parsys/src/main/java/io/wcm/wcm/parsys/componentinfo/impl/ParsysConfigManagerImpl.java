@@ -24,6 +24,7 @@ import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +37,13 @@ import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+
 /**
- * ParSys configuration manager
- * TODO: add unit tests
+ * Collects paragraph system configurations from repository and OSGi configuration.
+ * Apply super resource type based inheritance to both configuration types.
  */
 @Component(immediate = true, metatype = false)
 @Service(ParsysConfigManager.class)
@@ -49,19 +54,42 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
   private final RankedServices<ParsysConfig> osgiParsysConfigs = new RankedServices<>();
 
   @Override
-  public List<ParsysConfig> getParSysConfigs(String pageComponentPath, ResourceResolver resolver) {
+  public Iterable<ParsysConfig> getParsysConfigs(String pageComponentPath, ResourceResolver resolver) {
+    Resource pageComponentResource = resolver.getResource(pageComponentPath);
+    if (pageComponentResource != null) {
+      return ImmutableList.copyOf(getParsysConfigsWithInheritance(pageComponentResource, resolver));
+    }
+    else {
+      return ImmutableList.<ParsysConfig>of();
+    }
+  }
+
+  @Override
+  public Iterable<ParsysConfig> getParsysConfigs(final String pageComponentPath, final String relativePath,
+      final ResourceResolver resolver) {
+    Iterable<ParsysConfig> configs = getParsysConfigs(pageComponentPath, resolver);
+    return Iterables.filter(configs, new Predicate<ParsysConfig>() {
+      @Override
+      public boolean apply(ParsysConfig parsysConfig) {
+        // sanity check
+        if (parsysConfig == null || parsysConfig.getPathPattern() == null) {
+          return false;
+        }
+        return parsysConfig.getPathPattern().matcher(relativePath).matches();
+      }
+    });
+  }
+
+  private Collection<ParsysConfig> getParsysConfigs(Resource pageComponentResource) {
     List<ParsysConfig> configs = new ArrayList<>();
 
     // get first jcr parsys configurations for this page component
-    Resource pageComponentResource = resolver.getResource(pageComponentPath);
-    if (pageComponentResource != null) {
-      ResourceParsysConfigProvider resourceParsysConfigProvider = new ResourceParsysConfigProvider(pageComponentResource);
-      configs.addAll(resourceParsysConfigProvider.getAllPathDefs());
-    }
+    ResourceParsysConfigProvider resourceParsysConfigProvider = new ResourceParsysConfigProvider(pageComponentResource);
+    configs.addAll(resourceParsysConfigProvider.getPathDefs());
 
     // add osgi parsys configurations
     for (ParsysConfig osgiParsysConfig : osgiParsysConfigs) {
-      if (StringUtils.equals(pageComponentPath, osgiParsysConfig.getPageComponentPath())) {
+      if (StringUtils.equals(pageComponentResource.getPath(), osgiParsysConfig.getPageComponentPath())) {
         configs.add(osgiParsysConfig);
       }
     }
@@ -69,25 +97,22 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
     return configs;
   }
 
-  @Override
-  public List<ParsysConfig> getParSysConfigs(String pageComponentPath, String relativeResourcePath, ResourceResolver resolver) {
+  private Collection<ParsysConfig> getParsysConfigsWithInheritance(Resource pageComponentResource, ResourceResolver resolver) {
     List<ParsysConfig> configs = new ArrayList<>();
 
-    for (ParsysConfig parSysConfig : getParSysConfigs(pageComponentPath, resolver)) {
-      if (matches(parSysConfig, relativeResourcePath)) {
-        configs.add(parSysConfig);
+    // get path definitions from this page component
+    configs.addAll(getParsysConfigs(pageComponentResource));
+
+    // add path definitions from for super page components
+    String resourceSuperType = pageComponentResource.getResourceSuperType();
+    if (StringUtils.isNotEmpty(resourceSuperType)) {
+      Resource superResource = resolver.getResource(resourceSuperType);
+      if (superResource != null) {
+        configs.addAll(getParsysConfigsWithInheritance(superResource, resolver));
       }
     }
 
     return configs;
-  }
-
-  private boolean matches(ParsysConfig parSysConfig, String resourcePath) {
-    // sanity check
-    if (parSysConfig == null || parSysConfig.getPattern() == null || StringUtils.isEmpty(resourcePath)) {
-      return false;
-    }
-    return parSysConfig.getPattern().matcher(resourcePath).matches();
   }
 
   void bindParsysConfig(ParsysConfig service, Map<String, Object> props) {

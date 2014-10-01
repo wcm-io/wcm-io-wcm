@@ -40,7 +40,6 @@ import com.google.common.collect.ImmutableSet;
 /**
  * Reads paragraph system configuration from page component resource type definition in repository.
  * TODO: add caching for resolved parsys config from resource?
- * TODO: add unit tests
  */
 final class ResourceParsysConfigProvider {
 
@@ -52,16 +51,12 @@ final class ResourceParsysConfigProvider {
   private static final String PN_ALLOWEDPARENTS = "allowedParents";
   private static final String PN_PARENTANCESTORLEVEL = "parentAncestorLevel";
 
-  private final ResourceResolver resolver;
-  private final String resourceSuperType;
   private final List<ParsysConfig> pathDefs;
 
   /**
    * @param pageComponentResource Page component resource
    */
   public ResourceParsysConfigProvider(Resource pageComponentResource) {
-    this.resolver = pageComponentResource.getResourceResolver();
-    this.resourceSuperType = pageComponentResource.getResourceSuperType();
     this.pathDefs = getPathDefs(pageComponentResource);
   }
 
@@ -84,22 +79,8 @@ final class ResourceParsysConfigProvider {
   /**
    * @return All path definitions
    */
-  public List<ParsysConfig> getAllPathDefs() {
-    List<ParsysConfig> allPathDefs = new ArrayList<>();
-
-    // get path definitions from this page component
-    allPathDefs.addAll(this.pathDefs);
-
-    // add path definitions from for super page components
-    if (StringUtils.isNotEmpty(this.resourceSuperType)) {
-      Resource superResource = resolver.getResource(this.resourceSuperType);
-      if (superResource != null) {
-        ResourceParsysConfigProvider superParSysConfig = new ResourceParsysConfigProvider(superResource);
-        allPathDefs.addAll(superParSysConfig.getAllPathDefs());
-      }
-    }
-
-    return allPathDefs;
+  public List<ParsysConfig> getPathDefs() {
+    return this.pathDefs;
   }
 
   /**
@@ -157,7 +138,7 @@ final class ResourceParsysConfigProvider {
       // ancestor level
       this.parentAncestorLevel = pathDefProps.get(PN_PARENTANCESTORLEVEL, 1);
 
-      // no denied children - this is supported only in OsgiParSysConfig
+      // no denied children - this is supported only in OsgiParsysConfig
       this.deniedChildren = ImmutableSet.of();
 
     }
@@ -168,7 +149,7 @@ final class ResourceParsysConfigProvider {
     }
 
     @Override
-    public Pattern getPattern() {
+    public Pattern getPathPattern() {
       return this.pathPattern;
     }
 

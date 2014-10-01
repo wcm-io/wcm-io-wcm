@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.ConfigurationPolicy;
 import org.apache.felix.scr.annotations.Property;
@@ -42,7 +43,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Factory configuration provider for OSGi parsys configuration.
- * TODO: add unit tests
  */
 @Component(immediate = true, metatype = true, configurationFactory = true, policy = ConfigurationPolicy.REQUIRE,
 label = "wcm.io Paragraph System Configuration Extension",
@@ -52,37 +52,37 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
   private static final Logger log = LoggerFactory.getLogger(OsgiParsysConfigProvider.class);
 
-  private static final int DEFAULT_PARENT_ANCESTOR_LEVEL = 1;
+  static final int DEFAULT_PARENT_ANCESTOR_LEVEL = 1;
 
   @Property(label = "Page Component Path",
       description = "Resource type of the page component for this parsys config (required).")
-  private static final String PROPERTY_PAGE_COMPONENT_PATH = "pageComponentPath";
+  static final String PROPERTY_PAGE_COMPONENT_PATH = "pageComponentPath";
 
   @Property(label = "Path",
       description = "Parsys node name (e.g. 'content') or parsys path relative to page "
           + "(should start with 'jcr:content/'). Path will be ignored if a pattern is defined.")
-  private static final String PROPERTY_PATH = "path";
+  static final String PROPERTY_PATH = "path";
 
   @Property(label = "Path Pattern",
       description = "Regular expression that matches parsys path within the page, "
           + "e.g. '^jcr:content/.*$'. Leave empty if you want to use the Path property.")
-  private static final String PROPERTY_PATH_PATTERN = "pathPattern";
+  static final String PROPERTY_PATH_PATTERN = "pathPattern";
 
   @Property(label = "Allowed Children",
       description = "Resource types of the allowed components in this paragraph system",
       cardinality = Integer.MAX_VALUE)
-  private static final String PROPERTY_ALLOWED_CHILDREN = "allowedChildren";
+  static final String PROPERTY_ALLOWED_CHILDREN = "allowedChildren";
 
   @Property(label = "Denied Children",
       description = "Resource types of the denied components in this paragraph system",
       cardinality = Integer.MAX_VALUE)
-  private static final String PROPERTY_DENIED_CHILDREN = "deniedChildren";
+  static final String PROPERTY_DENIED_CHILDREN = "deniedChildren";
 
   @Property(label = "Allowed Parents",
       description = "(optional) Resource types of parsys parent components. "
           + "You can limit the context of parsys where child components can be added by configuratiion of allowed parent components.",
           cardinality = Integer.MAX_VALUE)
-  private static final String PROPERTY_ALLOWED_PARENTS = "allowedParents";
+  static final String PROPERTY_ALLOWED_PARENTS = "allowedParents";
 
   @Property(label = "Parent Ancestor Level",
       description = "(optional) Indicates the ancestor level, where allowed parents should match.",
@@ -91,7 +91,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
       @PropertyOption(name = "1", value = "Direct Parent (1)"),
       @PropertyOption(name = "2", value = "Grand Parent (2)")
   })
-  private static final String PROPERTY_PARENT_ANCESTOR_LEVEL = "parentAncestorLevel";
+  static final String PROPERTY_PARENT_ANCESTOR_LEVEL = "parentAncestorLevel";
 
   private String pageComponentPath;
   private Pattern pathPattern;
@@ -106,7 +106,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
   }
 
   @Override
-  public Pattern getPattern() {
+  public Pattern getPathPattern() {
     return this.pathPattern;
   }
 
@@ -132,9 +132,10 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
   // --- SCR Integration ---
 
-  protected void activate(ComponentContext pOsgiContext) {
+  @Activate
+  protected void activate(ComponentContext componentContext) {
     @SuppressWarnings("unchecked")
-    final Dictionary<String, Object> props = pOsgiContext.getProperties();
+    final Dictionary<String, Object> props = componentContext.getProperties();
 
     // read config properties
     this.pageComponentPath = PropertiesUtil.toString(props.get(PROPERTY_PAGE_COMPONENT_PATH), null);

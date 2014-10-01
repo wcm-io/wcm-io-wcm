@@ -40,7 +40,7 @@ public interface ParsysConfig {
    * Example: {@code ^jcr:content/(?!megaFlyout).*$}
    * @return parsys path pattern
    */
-  Pattern getPattern();
+  Pattern getPathPattern();
 
   /**
    * @return parent ancestor level (can be 1 or 2)
