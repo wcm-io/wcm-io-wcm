@@ -35,7 +35,7 @@
   <packaging>bundle</packaging>
 
   <name>WCM Parsys</name>
-  <description>AEM WCM Paragraph system.</description>
+  <description>AEM paragraph system based on path configuration in page components.</description>
 
   <scm>
     <connection>scm:git:git@github.com:wcm-io/wcm-io.git</connection>

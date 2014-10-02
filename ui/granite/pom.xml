@@ -35,7 +35,7 @@
   <packaging>bundle</packaging>
 
   <name>WCM Granite UI Extensions</name>
-  <description>Granite UI Components for AEM WCM UI.</description>
+  <description>Granite UI Components for AEM Touch UI.</description>
 
   <scm>
     <connection>scm:git:git@github.com:wcm-io/wcm-io.git</connection>

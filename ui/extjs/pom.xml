@@ -35,7 +35,7 @@
   <packaging>bundle</packaging>
 
   <name>WCM ExtJS UI Extensions</name>
-  <description>ExtJS Widgets for AEM WCM UI.</description>
+  <description>ExtJS Widgets for AEM Classic UI.</description>
 
   <scm>
     <connection>scm:git:git@github.com:wcm-io/wcm-io.git</connection>
