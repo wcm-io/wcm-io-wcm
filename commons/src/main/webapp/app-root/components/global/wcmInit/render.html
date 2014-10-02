@@ -1,9 +1,9 @@
 <!--/**
-		 * Renders HTML Library includes and initialization code to enable WCM authoring for the current page.
-		 * Supports both Touch UI and Classic UI. 
-		 * @param clientLibCategories List of client library categories for Touch UI mode.
-		 * @param clientLibCategoriesClassicUI List of client library categories for Classic UI mode.
-		 */-->
+     * Renders HTML Library includes and initialization code to enable WCM authoring for the current page.
+     * Supports both Touch UI and Classic UI.
+     * @param clientLibCategories List of client library categories for Touch UI mode.
+     * @param clientLibCategoriesClassicUI List of client library categories for Classic UI mode.
+     */-->
 <template data-sly-template.head="${ @ clientLibCategories, clientLibCategoriesClassicUI}"
     data-sly-use.wcmInit="io.wcm.wcm.commons.controller.WcmInit"
     data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"

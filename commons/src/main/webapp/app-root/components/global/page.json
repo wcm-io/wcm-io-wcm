@@ -7,7 +7,7 @@
   "sling:resourceSuperType": "/libs/wcm/foundation/components/page",
 
   /*
-   * Global page properties dialog 
+   * Global page properties dialog
    */
   "cq:dialog": {
     "jcr:primaryType": "nt:unstructured",
@@ -28,24 +28,24 @@
             "type": "nav"
           },
           "items": {
-                        
+
             "basic": {
               "sling:resourceType": "granite/ui/components/foundation/include",
               "jcr:title": "Basic",
               "path": "/apps/wcm-io/wcm/commons/components/global/include/pagepropsBasicTab"
             },
-            
+
             "advanced": {
               "sling:resourceType": "granite/ui/components/foundation/include",
               "jcr:title": "Advanced",
               "path": "/apps/wcm-io/wcm/commons/components/global/include/pagepropsAdvancedTab"
             },
-                        
+
             "preview": {
               "sling:resourceType": "granite/ui/components/foundation/include",
               "jcr:title": "Preview",
               "path": "/apps/wcm-io/wcm/commons/components/global/include/pagepropsPreviewTab"
-            }            
+            }
 
           }
         }

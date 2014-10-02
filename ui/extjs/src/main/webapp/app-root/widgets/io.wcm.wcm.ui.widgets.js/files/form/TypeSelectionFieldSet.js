@@ -1,3 +1,22 @@
+/*
+ * #%L
+ * wcm.io
+ * %%
+ * Copyright (C) 2014 wcm.io
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 /**
  * Field set whose fields are shown/hidden based on a selected value from a type selection box.
  * This field set can e.g. be used to implement link or media reference field sets with link type/media source selection.
@@ -7,14 +26,14 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
    * Defines the property name of the select field that is used for type selection.
    */
   typeSelectionField: null,
-  
+
   /**
    * This method can be set to pass through a method for initializing drag&drop capabilities of a field.
    * This method has to be called on "render" events of fields that require such support.
    * In context of RTE the link dialog implementation used this property to path a customized method.
    */
   initFieldDragAndDrop: null,
-  
+
   /**
    * Creates a new TypeSelectionFieldSet component.
    * @param config configuration
@@ -76,7 +95,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
 
     io.wcm.wcm.ui.form.TypeSelectionFieldSet.superclass.constructor.call(this, config);
   },
-  
+
   /**
    * Initializes the component.
    */
@@ -121,7 +140,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
     });
 
   },
-  
+
   /**
    * Initialize controls for path of current page.
    */
@@ -146,7 +165,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
       }
     });
   },
-  
+
   /**
    * Call "process path" methods on all form widgets
    */
@@ -162,7 +181,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
       }
     });
   },
-  
+
   /**
    * Call "process record" methods on all form widgets
    */
@@ -178,7 +197,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
       }
     });
   },
-  
+
   /**
    * Show/hide form field incl. associated label and description DIV containers.
    */
@@ -209,7 +228,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
       pField.addClass(hiddenCssClass);
     }
   },
-  
+
   /**
    * Detect parent dialog of component.
    * This methods implements two ways of parent dialog detection:
@@ -227,7 +246,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
       });
     }
   },
-  
+
   /**
    * Register function on "loadContent" event of parent dialog of component.
    */

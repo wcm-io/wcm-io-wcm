@@ -17,6 +17,6 @@
       "preview": {
         "sling:resourceType": "cq/gui/components/siteadmin/admin/pagepreview"
       }
-    }                    
+    }
   }
 }

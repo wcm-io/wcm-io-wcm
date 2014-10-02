@@ -5,7 +5,7 @@
   "componentGroup": ".hidden",
   "cq:isContainer": true,
   "allowedChildren": ["*"],
-  
+
   // define custom css class for decoration div to avoid conflicts with cell id-based css classes
   "cq:htmlTag": {
     "class": "wcm-io-parsys"

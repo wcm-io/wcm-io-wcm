@@ -6,7 +6,7 @@
   "componentGroup": ".hidden",
   "cq:isContainer": true,
   "allowedChildren": ["*"],
-  
+
   "cq:childEditConfig": {
     "jcr:primaryType": "cq:EditConfig",
     "cq:layout": "editbar",
