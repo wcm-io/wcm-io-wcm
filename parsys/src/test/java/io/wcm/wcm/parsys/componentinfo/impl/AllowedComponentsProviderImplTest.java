@@ -23,6 +23,7 @@ import static org.apache.sling.jcr.resource.JcrResourceConstants.SLING_RESOURCE_
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 import io.wcm.wcm.parsys.componentinfo.ParsysPageInfoProvider;
@@ -34,7 +35,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.day.cq.wcm.api.Page;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Unit tests for {@link ParsysPageInfoProvider}
@@ -66,20 +66,14 @@ public class AllowedComponentsProviderImplTest {
 
     // create pages with dummy content
     Page basePage = context.create().page(CONTENT_ROOT_PATH + "/page-1", BASE_TEMPLATE,
-        ImmutableMap.<String, Object>builder()
-        .put(SLING_RESOURCE_TYPE_PROPERTY, BASE_PAGE_COMPONENT)
-        .build());
+        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, BASE_PAGE_COMPONENT));
     addDummyContent(basePage);
 
     Page inheritedPage = context.create().page(CONTENT_ROOT_PATH + "/page-2", INHERITED_TEMPLATE,
-        ImmutableMap.<String, Object>builder()
-        .put(SLING_RESOURCE_TYPE_PROPERTY, INHERITED_PAGE_COMPONENT)
-        .build());
+        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, INHERITED_PAGE_COMPONENT));
     addDummyContent(inheritedPage);
     context.create().resource(inheritedPage.getContentResource().getPath() + "/special",
-        ImmutableMap.<String, Object>builder()
-        .put(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/parsys")
-        .build());
+        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/parsys"));
 
     underTest = context.getService(AllowedComponentsProvider.class);
   }
@@ -241,20 +235,17 @@ public class AllowedComponentsProviderImplTest {
     String contentPath = page.getContentResource().getPath();
 
     // content parsys
-    context.create().resource(contentPath + "/content", ImmutableMap.<String, Object>builder()
-        .put(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/parsys")
-        .build());
+    context.create().resource(contentPath + "/content",
+        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/parsys"));
 
     // 2col-container (nested parsys )
-    context.create().resource(contentPath + "/content/2colContainer", ImmutableMap.<String, Object>builder()
-        .put(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/container2Col")
-        .build());
+    context.create().resource(contentPath + "/content/2colContainer",
+        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/container2Col"));
     context.create().resource(contentPath + "/content/2colContainer/items");
 
     // link list (nested parsys)
-    context.create().resource(contentPath + "/content/linklist", ImmutableMap.<String, Object>builder()
-        .put(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/linklist")
-        .build());
+    context.create().resource(contentPath + "/content/linklist",
+        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/linklist"));
     context.create().resource(contentPath + "/content/linklist/links");
   }
 

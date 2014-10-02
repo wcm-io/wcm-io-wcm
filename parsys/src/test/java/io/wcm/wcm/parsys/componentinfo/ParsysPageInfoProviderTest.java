@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.parsys.componentinfo.mock.MockComponentManager;
 
@@ -39,7 +40,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -56,9 +56,7 @@ public class ParsysPageInfoProviderTest {
   @Before
   public void setUp() {
     context.currentPage(context.create().page("/conent/sample/page1", "/apps/sample/templates/template1",
-        ImmutableMap.<String, Object>builder()
-        .put(ResourceResolver.PROPERTY_RESOURCE_TYPE, "/apps/sample/components/page1")
-        .build()));
+        ImmutableValueMap.of(ResourceResolver.PROPERTY_RESOURCE_TYPE, "/apps/sample/components/page1")));
 
     when(allowedComponentsProvider.getAllowedComponentsForTemplate(anyString(), any(ResourceResolver.class)))
     .thenReturn(ImmutableSortedSet.of(MockComponentManager.COMPONENT_PATH_1, MockComponentManager.COMPONENT_PATH_2));

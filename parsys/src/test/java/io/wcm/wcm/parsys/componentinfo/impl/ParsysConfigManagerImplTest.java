@@ -22,6 +22,7 @@ package io.wcm.wcm.parsys.componentinfo.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
@@ -37,7 +38,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -62,9 +62,8 @@ public class ParsysConfigManagerImplTest {
   @Before
   public void setUp() {
     context.create().resource(RESOURCE_PATH_1);
-    context.create().resource(RESOURCE_PATH_2, ImmutableMap.<String, Object>builder()
-        .put(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, RESOURCE_PATH_1)
-        .build());
+    context.create().resource(RESOURCE_PATH_2,
+        ImmutableValueMap.of(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, RESOURCE_PATH_1));
 
     when(parsysConfig1.getPageComponentPath()).thenReturn(RESOURCE_PATH_1);
     when(parsysConfig1.getPathPattern()).thenReturn(PATH_PATTERN_1);

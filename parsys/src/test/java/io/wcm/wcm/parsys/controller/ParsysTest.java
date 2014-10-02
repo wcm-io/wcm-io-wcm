@@ -24,6 +24,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
@@ -42,7 +43,6 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentContext;
-import com.google.common.collect.ImmutableMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParsysTest {
@@ -138,9 +138,8 @@ public class ParsysTest {
 
   @Test
   public void testNewAreaResourceTypeFromSuperComponent() {
-    context.create().resource(RESOURCE_TYPE_SAMPLE, ImmutableMap.<String, Object>builder()
-        .put(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, SUPER_RESOURCE_TYPE_SAMPLE)
-        .build());
+    context.create().resource(RESOURCE_TYPE_SAMPLE,
+        ImmutableValueMap.of(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, SUPER_RESOURCE_TYPE_SAMPLE));
 
     context.create().resource(SUPER_RESOURCE_TYPE_SAMPLE);
     context.create().resource(SUPER_RESOURCE_TYPE_SAMPLE + "/" + Parsys.NEWAREA_CHILD_NAME);

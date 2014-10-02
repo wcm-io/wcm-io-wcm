@@ -22,6 +22,7 @@ package io.wcm.wcm.parsys.componentinfo.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 
@@ -31,7 +32,6 @@ import java.util.regex.Pattern;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 public class OsgiParsysConfigProviderTest {
@@ -47,7 +47,7 @@ public class OsgiParsysConfigProviderTest {
   @Test
   public void testWithProperties_Path() {
     ParsysConfig underTest = context.registerInjectActivateService(new OsgiParsysConfigProvider(),
-        ImmutableMap.<String, Object>builder()
+        ImmutableValueMap.builder()
         .put(OsgiParsysConfigProvider.PROPERTY_PAGE_COMPONENT_PATH, COMPONENT_PATH)
         .put(OsgiParsysConfigProvider.PROPERTY_PATH, "localpath")
         .put(OsgiParsysConfigProvider.PROPERTY_PARENT_ANCESTOR_LEVEL, 2)
@@ -67,7 +67,7 @@ public class OsgiParsysConfigProviderTest {
   @Test
   public void testWithProperties_PathPattern() {
     ParsysConfig underTest = context.registerInjectActivateService(new OsgiParsysConfigProvider(),
-        ImmutableMap.<String, Object>builder()
+        ImmutableValueMap.builder()
         .put(OsgiParsysConfigProvider.PROPERTY_PAGE_COMPONENT_PATH, COMPONENT_PATH)
         .put(OsgiParsysConfigProvider.PROPERTY_PATH_PATTERN, ".*any.*")
         .put(OsgiParsysConfigProvider.PROPERTY_PARENT_ANCESTOR_LEVEL, 1)

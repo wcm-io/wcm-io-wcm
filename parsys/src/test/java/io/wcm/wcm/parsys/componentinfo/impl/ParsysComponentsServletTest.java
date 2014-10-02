@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.commons.util.RunMode;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
@@ -38,7 +39,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.Page;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -60,9 +60,7 @@ public class ParsysComponentsServletTest {
     currentPage = context.create().page(PAGE_PATH);
     context.currentPage(currentPage);
 
-    context.request().setParameterMap(ImmutableMap.<String, Object>builder()
-        .put(ParsysComponentsServlet.RP_PATH, LOCAL_PATH)
-        .build());
+    context.request().setParameterMap(ImmutableValueMap.of(ParsysComponentsServlet.RP_PATH, LOCAL_PATH));
 
     when(allowedComponentsProvider.getAllowedComponents(
         eq(PAGE_PATH + "/" + LOCAL_PATH), any(ResourceResolver.class)))
@@ -88,7 +86,7 @@ public class ParsysComponentsServletTest {
     ParsysComponentsServlet underTest = new ParsysComponentsServlet();
     context.registerInjectActivateService(underTest);
 
-    context.request().setParameterMap(ImmutableMap.<String, Object>of());
+    context.request().setParameterMap(ImmutableValueMap.of());
 
     underTest.service(context.request(), context.response());
     assertEquals(HttpServletResponse.SC_OK, context.response().getStatus());
