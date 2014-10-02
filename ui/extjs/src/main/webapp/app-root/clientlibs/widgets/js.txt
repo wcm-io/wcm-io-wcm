@@ -1,4 +1,5 @@
-# Include the files that build the js library
+#base=js
+
 global.js
 form/BrowseField.js
 form/Checkbox.js
@@ -14,4 +15,3 @@ form/TextArea.js
 form/TextField.js
 form/TimeField.js
 form/TypeSelectionFieldSet.js
-
