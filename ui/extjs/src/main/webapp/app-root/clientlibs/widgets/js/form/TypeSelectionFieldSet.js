@@ -154,6 +154,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
    */
   showHideFieldsForSelection: function (pValue) {
     var value = pValue;
+    var self = this;
     if (!value) {
       value = this.typeSelectionField.getValue();
     }
@@ -161,7 +162,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
       var field = this;
       if (field.typeSelectionValues) {
         var showField = field.typeSelectionValues.indexOf(value) >= 0;
-        showFormField(field, showField);
+        self.showFormField(field, showField);
       }
     });
   },
@@ -251,8 +252,9 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
    * Register function on "loadContent" event of parent dialog of component.
    */
   registerOnLoadContent: function (pComponent, pFunction) {
+    var self = this;
     pComponent.on("render", function () {
-      var parentDialog = getParentDialog(pComponent);
+      var parentDialog = self.getParentDialog(pComponent);
       if (parentDialog) {
         parentDialog.on("loadContent", pFunction, this.parentDialog);
       }
