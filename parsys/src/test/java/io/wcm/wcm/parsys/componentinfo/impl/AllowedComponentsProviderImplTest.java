@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
-import io.wcm.wcm.parsys.componentinfo.ParsysPageInfoProvider;
 
 import java.util.Set;
 
@@ -36,9 +35,6 @@ import org.junit.Test;
 
 import com.day.cq.wcm.api.Page;
 
-/**
- * Unit tests for {@link ParsysPageInfoProvider}
- */
 public class AllowedComponentsProviderImplTest {
 
   @Rule
