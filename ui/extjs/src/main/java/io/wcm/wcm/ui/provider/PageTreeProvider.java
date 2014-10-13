@@ -22,6 +22,7 @@ package io.wcm.wcm.ui.provider;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
 import com.day.cq.wcm.api.Template;
+import io.wcm.sling.commons.request.RequestParam;
 import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 import java.io.IOException;
@@ -177,7 +178,7 @@ public class PageTreeProvider extends SlingSafeMethodsServlet {
    */
   protected Resource getRootResource(SlingHttpServletRequest request) {
     Resource rootResource = request.getResource();
-    String path = request.getParameter(RP_PATH);
+    String path = RequestParam.get(request, RP_PATH);
 
     if (StringUtils.isNotEmpty(path)) {
       rootResource = request.getResourceResolver().getResource(path);

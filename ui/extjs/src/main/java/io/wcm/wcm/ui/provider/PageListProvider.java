@@ -39,6 +39,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.commons.WCMUtils;
+import io.wcm.sling.commons.request.RequestParam;
 import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 
@@ -94,7 +95,7 @@ public class PageListProvider extends SlingSafeMethodsServlet {
   protected PageFilter getPageFilter(SlingHttpServletRequest request) {
 
     // check for predicate filter
-    String predicateName = request.getParameter("predicate");
+    String predicateName = RequestParam.get(request, "predicate");
     if (StringUtils.isNotEmpty(predicateName)) {
       return new PredicatePageFilter(predicateName, request);
     }
