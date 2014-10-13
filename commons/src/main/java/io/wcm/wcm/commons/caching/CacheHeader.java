@@ -37,11 +37,14 @@ import org.apache.sling.api.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.day.cq.wcm.api.WCMMode;
 
 /**
  * Contains common functionality to control client-side caching.
  */
+@ProviderType
 public final class CacheHeader {
 
   private CacheHeader() {

@@ -30,6 +30,8 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.day.cq.wcm.api.AuthoringUIMode;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.undo.UndoConfigService;
@@ -38,6 +40,7 @@ import com.day.cq.wcm.undo.UndoConfigService;
  * Controller for wcmInit component.
  */
 @Model(adaptables = SlingHttpServletRequest.class)
+@ProviderType
 public final class WcmInit {
 
   private final boolean touchUI;

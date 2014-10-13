@@ -19,16 +19,16 @@
  */
 package io.wcm.wcm.ui.provider;
 
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageFilter;
-import com.day.cq.wcm.api.Template;
 import io.wcm.sling.commons.request.RequestParam;
 import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.commons.contenttype.FileExtension;
+
 import java.io.IOException;
 import java.util.Iterator;
+
 import javax.jcr.Node;
 import javax.servlet.ServletException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
@@ -42,15 +42,22 @@ import org.apache.sling.commons.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import aQute.bnd.annotation.ProviderType;
+
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageFilter;
+import com.day.cq.wcm.api.Template;
+
 /**
  * Exports the resource tree at the addressed resource in JSON format to the
  * response. This can be used by the
  * <code>cqstone.core.widgets.form.BrowseField</code> widget.
  */
 @SlingServlet(extensions = FileExtension.JSON, selectors = "io-wcm-wcm-ui-tree",
-        resourceTypes = "sling/servlet/default", methods = "GET",
-        generateComponent = false)
+resourceTypes = "sling/servlet/default", methods = "GET",
+generateComponent = false)
 @Component(immediate = true, metatype = false)
+@ProviderType
 public class PageTreeProvider extends SlingSafeMethodsServlet {
 
   private static final long serialVersionUID = 1L;

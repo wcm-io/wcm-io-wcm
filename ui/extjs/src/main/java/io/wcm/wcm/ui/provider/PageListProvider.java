@@ -19,6 +19,10 @@
  */
 package io.wcm.wcm.ui.provider;
 
+import io.wcm.sling.commons.request.RequestParam;
+import io.wcm.wcm.commons.contenttype.ContentType;
+import io.wcm.wcm.commons.contenttype.FileExtension;
+
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -35,13 +39,12 @@ import org.apache.sling.commons.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.commons.WCMUtils;
-import io.wcm.sling.commons.request.RequestParam;
-import io.wcm.wcm.commons.contenttype.ContentType;
-import io.wcm.wcm.commons.contenttype.FileExtension;
 
 /**
  * Exports the list of child pages of the addressed resource in JSON format to
@@ -49,10 +52,11 @@ import io.wcm.wcm.commons.contenttype.FileExtension;
  * <code>cqstone.core.widgets.form.Selection</code> widget.
  */
 @SlingServlet(extensions = FileExtension.JSON, selectors = "io-wcm-wcm-ui-pagelist",
-        resourceTypes = "sling/servlet/default", methods = "GET",
-        generateComponent = false)
+resourceTypes = "sling/servlet/default", methods = "GET",
+generateComponent = false)
 @Component(immediate = true, metatype = false)
-public class PageListProvider extends SlingSafeMethodsServlet {
+@ProviderType
+public final class PageListProvider extends SlingSafeMethodsServlet {
 
   private static final long serialVersionUID = 1L;
 

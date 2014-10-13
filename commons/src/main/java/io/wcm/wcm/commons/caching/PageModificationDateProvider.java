@@ -21,11 +21,14 @@ package io.wcm.wcm.commons.caching;
 
 import java.util.Date;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.day.cq.wcm.api.Page;
 
 /**
  * {@link ModificationDateProvider} for a {@link Page} object.
  */
+@ProviderType
 public final class PageModificationDateProvider implements ModificationDateProvider {
 
   private final Page page;

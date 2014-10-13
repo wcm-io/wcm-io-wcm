@@ -23,11 +23,14 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.google.common.collect.ImmutableSet;
 
 /**
  * Frequently used file extensions.
  */
+@ProviderType
 public final class FileExtension {
 
   private FileExtension() {

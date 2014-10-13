@@ -21,9 +21,12 @@ package io.wcm.wcm.parsys.componentinfo;
 
 import org.apache.sling.api.resource.ResourceResolver;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Collects all paragraph system configurations from different sources.
  */
+@ProviderType
 public interface ParsysConfigManager {
 
   /**

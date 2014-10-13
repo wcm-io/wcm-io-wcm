@@ -21,10 +21,13 @@ package io.wcm.wcm.commons.contenttype;
 
 import org.apache.commons.lang3.CharEncoding;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Frequently used content types/mime types.
  * All mime types that that require encoding definition include UTF-8 as charset.
  */
+@ProviderType
 public final class ContentType {
 
   private ContentType() {

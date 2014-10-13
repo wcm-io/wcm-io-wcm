@@ -23,9 +23,12 @@ import java.util.Date;
 
 import org.apache.sling.api.resource.Resource;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * {@link ModificationDateProvider} for a {@link Resource} object.
  */
+@ProviderType
 public final class ResourceModificationDateProvider implements ModificationDateProvider {
 
   private final Resource resource;

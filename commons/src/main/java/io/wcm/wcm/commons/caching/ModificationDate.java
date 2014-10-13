@@ -26,12 +26,15 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ValueMap;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 
 /**
  * Contains static utility methods to find the last modification date of one or multiple resources
  */
+@ProviderType
 public final class ModificationDate {
 
   private ModificationDate() {

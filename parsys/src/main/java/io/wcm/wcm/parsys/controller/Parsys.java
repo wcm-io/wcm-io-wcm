@@ -34,6 +34,8 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.components.ComponentContext;
 
@@ -44,6 +46,7 @@ import com.day.cq.wcm.api.components.ComponentContext;
  * and the new area.
  */
 @Model(adaptables = SlingHttpServletRequest.class)
+@ProviderType
 public final class Parsys {
 
   static final String RA_PARSYS_PARENT_RESOURCE = "parsysParentResource";

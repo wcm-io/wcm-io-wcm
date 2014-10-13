@@ -20,19 +20,22 @@
 package io.wcm.wcm.ui.provider;
 
 import org.apache.commons.collections.Predicate;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.api.scripting.SlingScriptHelper;
+
+import aQute.bnd.annotation.ProviderType;
 
 import com.day.cq.commons.predicate.PredicateProvider;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.api.scripting.SlingScriptHelper;
 
 /**
  * PageFilter that uses a {@link Predicate} instance to evaluate pages in page
  * list.
  */
-public class PredicatePageFilter extends PageFilter {
+@ProviderType
+public final class PredicatePageFilter extends PageFilter {
 
   private final Predicate mPredicate;
 
@@ -54,7 +57,7 @@ public class PredicatePageFilter extends PageFilter {
    */
   public PredicatePageFilter(String predicateName, boolean includeInvalid, boolean includeHidden, SlingHttpServletRequest request) {
     super(includeInvalid, includeHidden);
-    
+
     SlingBindings bindings = (SlingBindings)request.getAttribute(SlingBindings.class.getName());
     SlingScriptHelper scriptHelper = bindings.getSling();
 

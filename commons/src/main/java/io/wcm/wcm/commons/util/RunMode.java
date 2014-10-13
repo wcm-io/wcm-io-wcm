@@ -26,9 +26,12 @@ import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Sling run mode utility methods
  */
+@ProviderType
 public final class RunMode {
 
   /**

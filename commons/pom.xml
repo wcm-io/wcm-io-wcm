@@ -106,7 +106,7 @@
               SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/commons
             </Sling-Initial-Content>
             <Export-Package>
-              io.wcm.wcm.commons.*;version=${project.version}
+              io.wcm.wcm.commons.*
             </Export-Package>
             <Sling-Model-Packages>
               io.wcm.wcm.commons

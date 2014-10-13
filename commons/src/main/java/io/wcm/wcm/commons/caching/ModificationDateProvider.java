@@ -21,10 +21,13 @@ package io.wcm.wcm.commons.caching;
 
 import java.util.Date;
 
+import aQute.bnd.annotation.ConsumerType;
+
 /**
  * This interface allows to use the isNotModifed() utility method in cases where the last modification date
  * can not be directly read from a corresponding JCR resource.
  */
+@ConsumerType
 public interface ModificationDateProvider {
 
   /**

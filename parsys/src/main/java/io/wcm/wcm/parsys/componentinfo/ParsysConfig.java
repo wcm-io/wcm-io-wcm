@@ -22,9 +22,12 @@ package io.wcm.wcm.parsys.componentinfo;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import aQute.bnd.annotation.ConsumerType;
+
 /**
  * Configuration of allowed components for a path inside a page of a specific template/page component.
  */
+@ConsumerType
 public interface ParsysConfig {
 
   /**
