@@ -110,10 +110,6 @@
             <Sling-Initial-Content>
               SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/parsys
             </Sling-Initial-Content>
-            <Export-Package>
-              io.wcm.wcm.parsys.componentinfo,
-              io.wcm.wcm.parsys.controller
-            </Export-Package>
             <Sling-Model-Packages>
               io.wcm.wcm.parsys.controller
             </Sling-Model-Packages>
