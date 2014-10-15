@@ -22,8 +22,7 @@ package io.wcm.wcm.commons.caching;
 import java.util.Date;
 
 import org.apache.sling.api.resource.Resource;
-
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * {@link ModificationDateProvider} for a {@link Resource} object.

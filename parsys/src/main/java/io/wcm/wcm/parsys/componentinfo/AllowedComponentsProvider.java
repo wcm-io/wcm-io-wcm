@@ -22,8 +22,7 @@ package io.wcm.wcm.parsys.componentinfo;
 import java.util.Set;
 
 import org.apache.sling.api.resource.ResourceResolver;
-
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Detects allowed components for authoring for a given page/resource context.

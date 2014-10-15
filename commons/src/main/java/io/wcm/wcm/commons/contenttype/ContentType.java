@@ -20,8 +20,7 @@
 package io.wcm.wcm.commons.contenttype;
 
 import org.apache.commons.lang3.CharEncoding;
-
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Frequently used content types/mime types.

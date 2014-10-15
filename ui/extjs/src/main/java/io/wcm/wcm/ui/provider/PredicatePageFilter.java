@@ -23,8 +23,7 @@ import org.apache.commons.collections.Predicate;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
-
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.commons.predicate.PredicateProvider;
 import com.day.cq.wcm.api.Page;

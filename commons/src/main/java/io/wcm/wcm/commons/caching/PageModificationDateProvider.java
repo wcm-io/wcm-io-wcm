@@ -21,7 +21,7 @@ package io.wcm.wcm.commons.caching;
 
 import java.util.Date;
 
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.wcm.api.Page;
 

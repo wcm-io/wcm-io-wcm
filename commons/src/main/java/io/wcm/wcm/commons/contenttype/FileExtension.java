@@ -22,8 +22,7 @@ package io.wcm.wcm.commons.contenttype;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 import com.google.common.collect.ImmutableSet;
 

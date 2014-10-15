@@ -22,11 +22,10 @@ package io.wcm.wcm.commons.util;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
-
-import aQute.bnd.annotation.ProviderType;
 
 /**
  * Sling run mode utility methods

@@ -21,7 +21,7 @@ package io.wcm.wcm.commons.caching;
 
 import java.util.Date;
 
-import aQute.bnd.annotation.ConsumerType;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * This interface allows to use the isNotModifed() utility method in cases where the last modification date
