@@ -35,7 +35,7 @@
   <packaging>bundle</packaging>
 
   <name>WCM Commons</name>
-  <description>Common WCM utility and helper funtions.</description>
+  <description>Common WCM utility and helper functions.</description>
 
   <scm>
     <connection>scm:git:git@github.com:wcm-io/wcm-io.git</connection>
