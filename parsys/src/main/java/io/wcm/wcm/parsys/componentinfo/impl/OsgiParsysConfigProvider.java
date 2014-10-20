@@ -154,7 +154,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
     else if (StringUtils.isNotBlank(path)) {
       // path may also contain a simple node name
       if (!StringUtils.startsWith(path, JcrConstants.JCR_CONTENT + "/")) {
-        path = JcrConstants.JCR_CONTENT + "/" + path;
+        path = JcrConstants.JCR_CONTENT + "/" + path; //NOPMD
       }
       this.pathPattern = Pattern.compile("^" + Pattern.quote(path) + "$");
     }
