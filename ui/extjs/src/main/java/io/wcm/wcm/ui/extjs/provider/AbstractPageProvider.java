@@ -137,7 +137,7 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
       if (predicate == null) {
         throw new RuntimeException("Predicate '" + predicateName + "' not available.");
       }
-      return new PredicatePageFilter(predicate);
+      return new PredicatePageFilter(predicate, true, true);
     }
 
     return null;

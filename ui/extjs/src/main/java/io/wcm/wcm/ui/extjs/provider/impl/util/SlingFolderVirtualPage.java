@@ -24,18 +24,17 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 
 import com.day.cq.commons.Filter;
-import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.commons.DeepResourceIterator;
+import com.day.text.Text;
 
 /**
  * Virtual page implementation for handling sling:Folder and sling:OrderedFolder nodes as pages in {@link PageIterator}
@@ -50,7 +49,7 @@ class SlingFolderVirtualPage implements Page {
 
   @Override
   public String getDescription() {
-    return getProperties().get(JcrConstants.JCR_DESCRIPTION, String.class);
+    return null;
   }
 
   @SuppressWarnings("unchecked")
@@ -71,7 +70,7 @@ class SlingFolderVirtualPage implements Page {
 
   @Override
   public Page getAbsoluteParent(int level) {
-    String parentPath = Text.getAbsoluteParent(resource.getPath(), level);
+    String parentPath = Text.getAbsoluteParent(resource.getPath(), level - 1);
     Resource parentResource = resource.getResourceResolver().getResource(parentPath);
     if (parentResource != null) {
       return parentResource.adaptTo(Page.class);
@@ -81,21 +80,22 @@ class SlingFolderVirtualPage implements Page {
 
   @Override
   public Resource getContentResource() {
-    return resource.getChild("./" + JcrConstants.JCR_CONTENT);
+    return null;
   }
 
   @Override
   public Resource getContentResource(String path) {
-    Resource contentResource = getContentResource();
-    if (contentResource != null) {
-      return contentResource.getChild(path);
-    }
     return null;
   }
 
   @Override
   public int getDepth() {
-    return StringUtils.split(resource.getPath(), "/").length - 1;
+    if (StringUtils.equals("/", this.resource.getPath())) {
+      return 0;
+    }
+    else {
+      return StringUtils.countMatches(this.resource.getPath(), "/");
+    }
   }
 
   @Override
@@ -171,24 +171,12 @@ class SlingFolderVirtualPage implements Page {
 
   @Override
   public ValueMap getProperties() {
-    Resource contentResource = getContentResource();
-    if (contentResource == null) {
-      return ValueMap.EMPTY;
-    }
-    else {
-      return contentResource.getValueMap();
-    }
+    return ValueMap.EMPTY;
   }
 
   @Override
   public ValueMap getProperties(String path) {
-    Resource contentResource = getContentResource(path);
-    if (contentResource == null) {
-      return ValueMap.EMPTY;
-    }
-    else {
-      return contentResource.getValueMap();
-    }
+    return null;
   }
 
   @Override
@@ -203,7 +191,7 @@ class SlingFolderVirtualPage implements Page {
 
   @Override
   public String getTitle() {
-    return getProperties().get(JcrConstants.JCR_TITLE, String.class);
+    return null;
   }
 
   @Override
@@ -267,7 +255,7 @@ class SlingFolderVirtualPage implements Page {
 
   @Override
   public long timeUntilValid() {
-    return 0;
+    return 0L;
   }
 
   @Override
