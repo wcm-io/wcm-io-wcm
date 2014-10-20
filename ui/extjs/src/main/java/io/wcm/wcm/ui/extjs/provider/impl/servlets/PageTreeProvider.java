@@ -29,6 +29,8 @@ import org.apache.sling.api.servlets.HttpConstants;
 
 import com.day.cq.commons.predicate.PredicateProvider;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Exports the resource tree at the addressed resource in JSON format to the response.
  * This can be used by the <code>io.wcm.wcm.ui.form.BrowseField</code> widget.
@@ -38,6 +40,7 @@ import com.day.cq.commons.predicate.PredicateProvider;
     selectors = "wcm-io-wcm-ui-extjs-pagetree",
     resourceTypes = "sling/servlet/default",
     methods = HttpConstants.METHOD_GET)
+@SuppressFBWarnings("SE_BAD_FIELD")
 public final class PageTreeProvider extends AbstractPageTreeProvider {
   private static final long serialVersionUID = 1L;
 

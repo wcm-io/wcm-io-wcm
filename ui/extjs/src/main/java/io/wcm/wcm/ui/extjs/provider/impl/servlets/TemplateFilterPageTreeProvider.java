@@ -51,6 +51,8 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
 import com.day.text.ISO9075;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Page tree provider for tree nodes filtered by their templates
  */
@@ -59,6 +61,7 @@ import com.day.text.ISO9075;
     selectors = "wcm-io-wcm-ui-extjs-pagetree-templatefilter",
     resourceTypes = "sling/servlet/default",
     methods = HttpConstants.METHOD_GET)
+@SuppressFBWarnings("SE_BAD_FIELD")
 public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
   private static final long serialVersionUID = 1L;
 
