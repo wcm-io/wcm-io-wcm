@@ -19,26 +19,18 @@
  */
 package io.wcm.wcm.ui.extjs.provider;
 
-import io.wcm.sling.commons.request.RequestParam;
-import io.wcm.wcm.commons.contenttype.ContentType;
-import io.wcm.wcm.ui.extjs.provider.impl.servlets.util.PageIterator;
+import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Iterator;
 
-import javax.servlet.ServletException;
-
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
 import org.osgi.annotation.versioning.ConsumerType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
@@ -47,43 +39,17 @@ import com.day.cq.wcm.api.PageFilter;
 /**
  * Exports the resource tree at the addressed resource in JSON format to the response.
  * This can be used by the <code>io.wcm.wcm.ui.form.BrowseField</code> widget.
- * Abstract implementation, some methods can be overwritten by sublcasses.
+ * Abstract implementation, some methods can be overwritten by subclasses.
  */
 @ConsumerType
-public abstract class AbstractPageTreeProvider extends SlingSafeMethodsServlet {
+public abstract class AbstractPageTreeProvider extends AbstractPageProvider {
   private static final long serialVersionUID = 1L;
 
-  /**
-   * Request parameter for passing the path of the root resource to list the children
-   */
-  public static final String RP_PATH = "path";
-
-  protected final Logger log = LoggerFactory.getLogger(getClass());
-
   @Override
-  protected final void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response)
-      throws ServletException, IOException {
-
-    response.setContentType(ContentType.JSON);
-
-    // determine root resource
-    Resource rootResource = getRootResource(request);
-
-    try {
-      JSONArray pages;
-      if (rootResource != null) {
-        PageFilter pageFilter = getPageFilter(request);
-        pages = getPages(listChildren(rootResource, pageFilter), 0, pageFilter);
-      }
-      else {
-        pages = new JSONArray();
-      }
-      response.getWriter().write(pages.toString());
-    }
-    catch (Throwable ex) {
-      log.error("Unexpected error, rethrow as servlet exception.", ex);
-      throw new ServletException(ex);
-    }
+  protected void renderJsonContent(Resource rootResource, PageFilter pageFilter, Writer writer)
+      throws JSONException, IOException {
+    JSONArray pages = getPages(listChildren(rootResource, pageFilter), 0, pageFilter);
+    writer.write(pages.toString());
   }
 
   /**
@@ -129,22 +95,6 @@ public abstract class AbstractPageTreeProvider extends SlingSafeMethodsServlet {
   }
 
   /**
-   * Determine root resource to list its children. (use resource for root page because root node does not have to be a
-   * page but can be e.g. a nt:folder node)
-   * @param request
-   * @return Root resource or null if invalid resource was referenced
-   */
-  protected final Resource getRootResource(SlingHttpServletRequest request) {
-    Resource rootResource = request.getResource();
-    String path = RequestParam.get(request, RP_PATH);
-
-    if (StringUtils.isNotEmpty(path)) {
-      rootResource = request.getResourceResolver().getResource(path);
-    }
-    return rootResource;
-  }
-
-  /**
    * Generate JSON object for page
    * @param page Page
    * @return JSON object
@@ -186,17 +136,6 @@ public abstract class AbstractPageTreeProvider extends SlingSafeMethodsServlet {
    */
   protected int getMaxDepth() {
     return 2;
-  }
-
-  /**
-   * Can be overridden by subclasses to filter page tree/children via page
-   * filter. This method is only called once per request.
-   *
-   * @param request
-   * @return Page filter or null if no filtering applies
-   */
-  protected PageFilter getPageFilter(SlingHttpServletRequest request) {
-    return null;
   }
 
 }

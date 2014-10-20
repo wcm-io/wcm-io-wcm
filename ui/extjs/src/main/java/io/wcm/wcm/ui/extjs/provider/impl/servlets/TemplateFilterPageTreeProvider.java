@@ -38,12 +38,15 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.felix.scr.annotations.Reference;
+import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.HttpConstants;
 
+import com.day.cq.commons.predicate.PredicateProvider;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
 import com.day.text.ISO9075;
@@ -63,6 +66,14 @@ public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
    * Define one or multiple template paths to filter the page tree for.
    */
   private static final String RP_TEMPLATE = "template";
+
+  @Reference(cardinality = ReferenceCardinality.OPTIONAL_UNARY)
+  private PredicateProvider predicateProvider;
+
+  @Override
+  protected PredicateProvider getPredicateProvider() {
+    return predicateProvider;
+  }
 
   @Override
   protected PageFilter getPageFilter(SlingHttpServletRequest request) {

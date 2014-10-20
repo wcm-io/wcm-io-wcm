@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.ui.extjs.provider.impl.servlets.util;
+package io.wcm.wcm.ui.extjs.provider.impl.util;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -31,8 +31,8 @@ import com.day.cq.wcm.api.Page;
 
 /**
  * Implements an iterator that returns page objects.
- * If it hits a resource of with primary type sling:Folder or sling:OrderedFolder it supports them
- * as well returning a simulates page object for them.
+ * If it hits a resource of with primary type sling:Folder or sling:OrderedFolder it supports them as well returning a
+ * simulates page object for them.
  */
 public final class PageIterator implements Iterator<Page> {
 
