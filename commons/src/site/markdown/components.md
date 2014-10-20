@@ -36,7 +36,7 @@ Markup for subcomponent:
     data-sly-use.render="render.html"
     data-sly-call="${render.head
         @ clientLibCategoriesClassicUI='cq.wcm.edit,myapp.widgets1,myapp.widgets2'}"
-    data-sly-unwrap>  
+    data-sly-unwrap>
 </head>
 ```
 

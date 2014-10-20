@@ -19,14 +19,14 @@ To define which components are allowed in your paragraph system you create a nod
 "wcmio:parsysConfig": {
   "jcr:primaryType": "nt:unstructured",
   "paths": {
-    
+
     /* Allowed components in jcr:content/content node */
     "content": {
       "allowedChildren": [
         "/apps/myapp/components/component1"
       ]
     },
-     
+
     /* Allowed components in jcr:content/leftcol/teasers node */
     "leftcol_teasers": {
       "path": "jcr:content/lefcol/teasers",
@@ -35,7 +35,7 @@ To define which components are allowed in your paragraph system you create a nod
         "/apps/myapp/components/component2"
       ]
     },
-     
+
     /* Allowed components in a nested parsys that is contained in component1 */
     "nested_parsys": {
       "pattern": "^jcr:content/.*$",
@@ -48,7 +48,7 @@ To define which components are allowed in your paragraph system you create a nod
         "/apps/myapp/components/subcomponent2"
       ]
     }
- 
+
   }
 }
 ```
