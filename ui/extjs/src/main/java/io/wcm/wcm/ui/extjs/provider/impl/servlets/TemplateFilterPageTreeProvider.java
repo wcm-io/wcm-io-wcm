@@ -65,7 +65,7 @@ public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
   /**
    * Define one or multiple template paths to filter the page tree for.
    */
-  private static final String RP_TEMPLATE = "template";
+  public static final String RP_TEMPLATE = "template";
 
   @Reference(cardinality = ReferenceCardinality.OPTIONAL_UNARY)
   private PredicateProvider predicateProvider;
