@@ -168,7 +168,7 @@ public final class CacheHeader {
     // only compare if both resource modification date and If-Modified-Since header is available
     if (lastModificationDate != null && StringUtils.isNotBlank(ifModifiedSince)) {
       try {
-        java.util.Date clientModificationDate = parseDate(ifModifiedSince);
+        Date clientModificationDate = parseDate(ifModifiedSince);
 
         // resource is considered modified if it's modification date is *after* the client's modification date
         isModified = lastModificationDate.getTime() - DateUtils.MILLIS_PER_SECOND > clientModificationDate.getTime();

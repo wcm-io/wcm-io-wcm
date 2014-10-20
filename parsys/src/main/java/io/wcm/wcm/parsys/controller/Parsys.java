@@ -72,7 +72,7 @@ public final class Parsys {
   private List<Item> items;
 
   @PostConstruct
-  protected void activate() {
+  private void activate() {
     items = new ArrayList<>();
     if (parsysParentResource == null) {
       parsysParentResource = currentResource;
@@ -131,7 +131,7 @@ public final class Parsys {
     private final String cssClassName;
     private final boolean newArea;
 
-    private Item(String resourcePath, String resourceType, String cssClassName, boolean newArea) {
+    Item(String resourcePath, String resourceType, String cssClassName, boolean newArea) {
       this.resourcePath = resourcePath;
       this.resourceType = resourceType;
       this.cssClassName = cssClassName;

@@ -79,7 +79,7 @@ public class SlingFolderVirtualPageTest {
     assertNull(underTest.getPageTitle());
     assertTrue(underTest.getProperties().isEmpty());
     assertNull(underTest.getProperties(null));
-    assertNull(underTest.getTags());
+    assertEquals(0, underTest.getTags().length);
     assertNull(underTest.getTemplate());
     assertNull(underTest.getTitle());
     assertNull(underTest.getVanityUrl());

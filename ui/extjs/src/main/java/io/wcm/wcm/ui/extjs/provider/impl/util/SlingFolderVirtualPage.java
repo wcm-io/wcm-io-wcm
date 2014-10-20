@@ -181,7 +181,7 @@ class SlingFolderVirtualPage implements Page {
 
   @Override
   public Tag[] getTags() {
-    return null;
+    return new Tag[0];
   }
 
   @Override

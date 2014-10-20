@@ -133,7 +133,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
   // --- SCR Integration ---
 
   @Activate
-  protected void activate(ComponentContext componentContext) {
+  private void activate(ComponentContext componentContext) {
     @SuppressWarnings("unchecked")
     final Dictionary<String, Object> props = componentContext.getProperties();
 

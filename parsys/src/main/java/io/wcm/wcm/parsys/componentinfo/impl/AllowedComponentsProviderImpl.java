@@ -62,11 +62,9 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
 
     PageManager pageManager = resolver.adaptTo(PageManager.class);
     Page page = pageManager.getContainingPage(resourcePath);
-    if (page == null) {
+    if (page == null && StringUtils.contains(resourcePath, "/" + JcrConstants.JCR_CONTENT)) {
       // if resource does not exist (e.g. inherited parsys) get page from resource path manually
-      if (StringUtils.contains(resourcePath, JcrConstants.JCR_CONTENT)) {
-        page = pageManager.getPage(StringUtils.substringBefore(resourcePath, "/" + JcrConstants.JCR_CONTENT));
-      }
+      page = pageManager.getPage(StringUtils.substringBefore(resourcePath, "/" + JcrConstants.JCR_CONTENT));
     }
     if (page != null) {
       String pageComponentPath = page.getContentResource().getResourceType();
