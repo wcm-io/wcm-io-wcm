@@ -36,7 +36,9 @@ import org.junit.Test;
 
 import com.day.cq.commons.predicate.PredicateProvider;
 
-public class PageListProviderTest {
+public class PageTreeProviderTest {
+
+  private static final String TEMPLATE = "/apps/app1/templates/template1";
 
   @Rule
   public AemContext context = new AemContext();
@@ -44,8 +46,14 @@ public class PageListProviderTest {
   @Before
   public void setUp() throws Exception {
     context.create().page("/content/sample/en");
-    context.create().page("/content/sample/en/page1", "", "title1");
-    context.create().page("/content/sample/en/page2", "", "title2");
+    context.create().page("/content/sample/en/page1", TEMPLATE, "title1");
+    context.create().page("/content/sample/en/page1/page11", TEMPLATE, "title11");
+    context.create().page("/content/sample/en/page1/page11/page111", TEMPLATE, "title111");
+    context.create().page("/content/sample/en/page1/page11/page112", TEMPLATE, "title111");
+    context.create().page("/content/sample/en/page1/page12", TEMPLATE, "title12");
+    context.create().page("/content/sample/en/page1/page12/page121", TEMPLATE, "title121");
+    context.create().page("/content/sample/en/page1/page12/page122", TEMPLATE, "title122");
+    context.create().page("/content/sample/en/page2", TEMPLATE, "title2");
   }
 
   @Test
@@ -55,25 +63,16 @@ public class PageListProviderTest {
     JSONArray result = getJsonResult();
 
     assertEquals(2, result.length());
-    assertItem(result.getJSONObject(0), "/content/sample/en/page1", "title1");
-    assertItem(result.getJSONObject(1), "/content/sample/en/page2", "title2");
-  }
+    assertItem(result.getJSONObject(0), "page1", "title1", TEMPLATE, false);
+    assertItem(result.getJSONObject(1), "page2", "title2", TEMPLATE, true);
 
-  @Test
-  public void testWithCurrentResource() throws Exception {
-    context.currentResource(context.resourceResolver().getResource("/content/sample/en/jcr:content"));
+    JSONArray page1children = result.getJSONObject(0).getJSONArray("children");
+    assertEquals(2, page1children.length());
 
-    JSONArray result = getJsonResult();
-
-    assertEquals(2, result.length());
-    assertItem(result.getJSONObject(0), "/content/sample/en/page1", "title1");
-    assertItem(result.getJSONObject(1), "/content/sample/en/page2", "title2");
-  }
-
-  @Test
-  public void testInvalidPath() throws Exception {
-    context.request().setParameterMap(ImmutableValueMap.of(AbstractPageProvider.RP_PATH, "/content/sample/en/invalid/path"));
-    assertNull(getJsonResult());
+    assertItem(page1children.getJSONObject(0), "page11", "title11", TEMPLATE, false);
+    assertNull(page1children.getJSONObject(0).optJSONArray("children"));
+    assertItem(page1children.getJSONObject(1), "page12", "title12", TEMPLATE, false);
+    assertNull(page1children.getJSONObject(1).optJSONArray("children"));
   }
 
   @Test
@@ -84,12 +83,13 @@ public class PageListProviderTest {
         AbstractPageProvider.RP_PREDICATE, DummyPredicateProvider.PREDICATE_PAGENAME_PAGE1));
 
     JSONArray result = getJsonResult();
+
     assertEquals(1, result.length());
-    assertItem(result.getJSONObject(0), "/content/sample/en/page1", "title1");
+    assertItem(result.getJSONObject(0), "page1", "title1", TEMPLATE, true);
   }
 
   private JSONArray getJsonResult() throws Exception {
-    PageListProvider underTest = context.registerInjectActivateService(new PageListProvider());
+    PageTreeProvider underTest = context.registerInjectActivateService(new PageTreeProvider());
     underTest.service(context.request(), context.response());
     if (context.response().getStatus() == HttpServletResponse.SC_OK) {
       return new JSONArray(context.response().getOutputAsString());
@@ -99,9 +99,14 @@ public class PageListProviderTest {
     }
   }
 
-  private void assertItem(JSONObject jsonObject, String path, String title) throws JSONException {
-    assertEquals(path, jsonObject.get("value"));
+  private void assertItem(JSONObject jsonObject, String name, String title, String template,
+      boolean leaf) throws JSONException {
+    assertEquals(name, jsonObject.get("name"));
     assertEquals(title, jsonObject.get("text"));
+    assertEquals("cq:Page", jsonObject.get("type"));
+    assertEquals(template, jsonObject.get("template"));
+    assertEquals("page", jsonObject.get("cls"));
+    assertEquals(leaf, jsonObject.optBoolean("leaf"));
   }
 
 }

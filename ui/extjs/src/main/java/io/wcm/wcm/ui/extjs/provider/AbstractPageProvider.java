@@ -24,7 +24,6 @@ import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.ui.extjs.provider.impl.util.PredicatePageFilter;
 
 import java.io.IOException;
-import java.io.Writer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +34,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
 import org.osgi.annotation.versioning.ConsumerType;
 import org.slf4j.Logger;
@@ -83,7 +83,8 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
 
     try {
       PageFilter pageFilter = getPageFilter(request);
-      renderJsonContent(rootResource, pageFilter, response.getWriter());
+      JSONArray jsonContent = getJsonContent(rootResource, pageFilter);
+      response.getWriter().write(jsonContent.toString());
     }
     catch (Throwable ex) {
       log.error("Unexpected error, rethrow as servlet exception.", ex);
@@ -95,12 +96,9 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
    * Render result of provider servlet as JSON to string writer.
    * @param rootResource Root resource
    * @param pageFilter Page filter
-   * @param writer Strint writer
    * @throws JSONException
-   * @throws IOException
    */
-  protected abstract void renderJsonContent(Resource rootResource, PageFilter pageFilter, Writer writer)
-      throws JSONException, IOException;
+  protected abstract JSONArray getJsonContent(Resource rootResource, PageFilter pageFilter) throws JSONException;
 
   /**
    * Determine root resource to list its children. (use resource for root page because root node does not have to be a

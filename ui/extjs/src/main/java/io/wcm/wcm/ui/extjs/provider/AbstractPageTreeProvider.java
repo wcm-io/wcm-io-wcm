@@ -21,8 +21,6 @@ package io.wcm.wcm.ui.extjs.provider;
 
 import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
@@ -46,10 +44,8 @@ public abstract class AbstractPageTreeProvider extends AbstractPageProvider {
   private static final long serialVersionUID = 1L;
 
   @Override
-  protected void renderJsonContent(Resource rootResource, PageFilter pageFilter, Writer writer)
-      throws JSONException, IOException {
-    JSONArray pages = getPages(listChildren(rootResource, pageFilter), 0, pageFilter);
-    writer.write(pages.toString());
+  protected JSONArray getJsonContent(Resource rootResource, PageFilter pageFilter) throws JSONException {
+    return getPages(listChildren(rootResource, pageFilter), 0, pageFilter);
   }
 
   /**

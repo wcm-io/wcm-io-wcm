@@ -21,8 +21,6 @@ package io.wcm.wcm.ui.extjs.provider;
 
 import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Iterator;
 
 import org.apache.sling.api.resource.Resource;
@@ -44,8 +42,7 @@ public abstract class AbstractPageListProvider extends AbstractPageProvider {
   private static final long serialVersionUID = 1L;
 
   @Override
-  protected void renderJsonContent(Resource rootResource, PageFilter pageFilter, Writer writer)
-      throws JSONException, IOException {
+  protected JSONArray getJsonContent(Resource rootResource, PageFilter pageFilter) throws JSONException {
     JSONArray pagelist = new JSONArray();
 
     Iterator<Page> pages = new PageIterator(rootResource.listChildren(), pageFilter);
@@ -59,7 +56,7 @@ public abstract class AbstractPageListProvider extends AbstractPageProvider {
       pagelist.put(childItem);
     }
 
-    writer.write(pagelist.toString());
+    return pagelist;
   }
 
 }
