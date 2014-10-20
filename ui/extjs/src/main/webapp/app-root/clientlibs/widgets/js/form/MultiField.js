@@ -19,7 +19,7 @@
  */
 /**
  * The MultiField is an editable list of form fields for editing multi-value properties.
- * <p>Enhancements over CQ5 version:</p>
+ * <p>Enhancements over AEM version:</p>
  * <ul>
  *   <li>Allow drag and drop into subfields</li>
  * </ul>

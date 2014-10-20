@@ -20,12 +20,12 @@
 /**
  * The BrowseField class represents an input field
  * with a button to open a <code>CQ.BrowseDialog</code> for browsing links.
- * <p>Enhancements over CQ5 version:</p>
+ * <p>Enhancements over AEM version:</p>
  * <ul>
  *   <li>Displaying only a subtree with a specific root and root label</li>
  *   <li>Support initForPagePath method to initialize for current page's path</li>
  *   <li>Supports validateSelectedNode method to validate node on selection in tree</li>
- *   <li>Supports configurable Drag&Drop from contentfinder</li>
+ *   <li>Supports configurable Drag&Drop from content finder</li>
  * </ul>
  */
 io.wcm.wcm.ui.form.BrowseField = CQ.Ext.extend(CQ.form.BrowseField, {
@@ -41,19 +41,18 @@ io.wcm.wcm.ui.form.BrowseField = CQ.Ext.extend(CQ.form.BrowseField, {
   treeRootText: null,
 
   /**
-   * the path that serves the JSON tree data (if empty, the treeRootPath will be used)
+   * The path that serves the JSON tree data (if empty, the treeRootPath will be used)
    */
   treeDataPath: null,
 
   /**
    * Selector strings to be used for generating tree JSON request.
-   * Default: .wcm_ui_extjs_widget_tree
+   * Default: .wcm-io-wcm-ui-extjs-pagetree
    */
   dataSelectorString: null,
 
   /**
    * Additional URL parameters to be appended to JSON requests for fetching tree.
-   * Default: empty
    */
   dataUrlParameters: null,
 

@@ -19,7 +19,7 @@
  */
 /**
  * Form field for multiple line String data.
- * <p>Enhancements over CQ5 version:</p>
+ * <p>Enhancements over AEM version:</p>
  * <ul>
  *   <li>Store with correct String datatype via explicit @TypeHint</li>
  *   <li>Support "rows" attribute defining number of rows to display</li>

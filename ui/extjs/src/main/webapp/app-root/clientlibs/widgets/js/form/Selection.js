@@ -19,13 +19,13 @@
  */
 /**
  * Enhanced version of selection.
- * <p>Enhancements over CQ5 version:</p>
+ * <p>Enhancements over AEM version:</p>
  * <ul>
  *   <li>Fixes validation problem with allowBlank=true</li>
  *   <li>Support initForPagePath method to initialize for current page's path</li>
  *   <li>Add loadChildPageOptions method to fill selection with a list of child pages</li>
- *   <li>Supports configurable Drag&Drop from contentfinder</li>
- *   <li>Fix problem with default value in CQ54 </li>
+ *   <li>Supports configurable Drag&Drop from content finder</li>
+ *   <li>Fix problem with default value in AEM</li>
  * </ul>
  */
 io.wcm.wcm.ui.form.Selection = CQ.Ext.extend(CQ.form.Selection, {
@@ -55,7 +55,7 @@ io.wcm.wcm.ui.form.Selection = CQ.Ext.extend(CQ.form.Selection, {
   constructor : function(config) {
     config = config || {};
 
-    // set value to defaultValue to fix problem in CQ54 with applying default values
+    // set value to defaultValue to fix problem in AEM with applying default values
     if (config.value===undefined && config.defaultValue!==undefined) {
       config.value = config.defaultValue;
     }
@@ -113,7 +113,7 @@ io.wcm.wcm.ui.form.Selection = CQ.Ext.extend(CQ.form.Selection, {
    * Set options
    */
   setOptions : function(options) {
-    // ignore empty/invalid options (avoid script error in CQ5 selection control)
+    // ignore empty/invalid options (avoid script error in AEM selection control)
     if (!options) {
       return;
     }

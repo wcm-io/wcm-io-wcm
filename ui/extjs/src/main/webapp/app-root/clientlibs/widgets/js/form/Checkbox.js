@@ -19,12 +19,12 @@
  */
 /**
  * Form checkbox for boolean data.
- * <p>Enhancements over CQ5 version:</p>
+ * <p>Enhancements over AEM version:</p>
  * <ul>
  *   <li>Fix problem with standalone ExtJS checkbox storing always a correct value</li>
  *   <li>Store with correct Boolean datatype via explicit @TypeHint</li>
  *   <li>Always store value to repository (true or false), even if checkbox is not checked</li>
- *   <li>Fix problem with default value in CQ54 </li>
+ *   <li>Fix problem with default value in AEM</li>
  * </ul>
  */
 io.wcm.wcm.ui.form.Checkbox = CQ.Ext.extend(CQ.form.Selection, {
@@ -36,7 +36,7 @@ io.wcm.wcm.ui.form.Checkbox = CQ.Ext.extend(CQ.form.Selection, {
   constructor : function(config) {
     config = config || {};
 
-    // set value to defaultValue to fix problem in CQ54 with applying default values
+    // set value to defaultValue to fix problem in AEM with applying default values
     if (config.value===undefined && config.defaultValue!==undefined) {
       config.value = config.defaultValue;
     }

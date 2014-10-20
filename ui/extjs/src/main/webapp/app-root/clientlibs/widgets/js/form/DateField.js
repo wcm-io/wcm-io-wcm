@@ -19,7 +19,7 @@
  */
 /**
  * Form field for date value.
- * <p>Enhancements over CQ5 version:</p>
+ * <p>Enhancements over AEM version:</p>
  * <ul>
  *   <li>Ensure time is always set to 00:00:00</li>
  * </ul>
@@ -33,7 +33,7 @@ io.wcm.wcm.ui.form.DateField = CQ.Ext.extend(io.wcm.wcm.ui.form.DateTimeField, {
   constructor : function(config) {
     config = config || {};
 
-    // set value to defaultValue to fix problem in CQ54 with applying default values
+    // set value to defaultValue to fix problem in AEM with applying default values
     if (config.value===undefined && config.defaultValue!==undefined) {
       config.value = config.defaultValue;
     }

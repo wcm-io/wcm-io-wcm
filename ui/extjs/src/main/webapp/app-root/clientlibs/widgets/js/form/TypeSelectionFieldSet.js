@@ -57,7 +57,7 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
        "typeSelectionFieldName": "./type",
        "items": [
        {
-       "xtype": "wcm.ui.extjs.selection",
+       "xtype": "io.wcm.wcm.ui.selection",
        "name" : "./type",
        "fieldLabel" : "Type",
        "allowBlank" : false,
@@ -75,13 +75,13 @@ io.wcm.wcm.ui.form.TypeSelectionFieldSet = CQ.Ext.extend(CQ.form.DialogFieldSet,
        ]
        },
        {
-       "xtype": "wcm.ui.extjs.textfield",
+       "xtype": "io.wcm.wcm.ui.textfield",
        "name": "./text1",
        "fieldLabel": "Text 1",
        "typeSelectionValues": ["option1"]
        },
        {
-       "xtype": "wcm.ui.extjs.textfield",
+       "xtype": "io.wcm.wcm.ui.textfield",
        "name": "./text2",
        "fieldLabel": "Text 2",
        "typeSelectionValues": ["option2"]

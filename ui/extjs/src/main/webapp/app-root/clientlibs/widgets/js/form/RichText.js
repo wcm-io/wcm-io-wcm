@@ -19,11 +19,11 @@
  */
 /**
  * Form field for editing styled text information (rich text).
- * <p>Enhancements over CQ5 version:</p>
+ * <p>Enhancements over AEM version:</p>
  * <ul>
  *   <li>Set link browse protocols to http|https|mailto</li>
  *   <li>Use strong and em instead of b and i for bold/italic</li>
- *   <li>Ensure that all <br> tags are replaced with XHTML-conformant <br/> tags </li>
+ *   <li>Ensure that all <br> tags are replaced with XHTML-conformant <br/> tags</li>
  * </ul>
  */
 io.wcm.wcm.ui.form.RichText = CQ.Ext.extend(CQ.form.RichText, {
