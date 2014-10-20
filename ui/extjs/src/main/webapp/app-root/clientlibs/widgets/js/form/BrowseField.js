@@ -77,7 +77,7 @@ io.wcm.wcm.ui.form.BrowseField = CQ.Ext.extend(CQ.form.BrowseField, {
       "treeRootPath": null,
       "treeRootText": null,
       "treeDataPath": null,
-      "dataSelectorString": ".io-wcm-wcm-ui-tree",
+      "dataSelectorString": ".wcm-io-wcm-ui-extjs-pagetree",
       "ddGroups": null,
       "ddAccept": null,
 

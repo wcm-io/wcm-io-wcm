@@ -207,7 +207,7 @@ io.wcm.wcm.ui.form.Selection = CQ.Ext.extend(CQ.form.Selection, {
    */
   loadChildPageOptions : function(pRootPath, pParams) {
     // load options from pagelist json
-    var url = pRootPath + ".io-wcm-wcm-ui-pagelist" + CQ.HTTP.EXTENSION_JSON;
+    var url = pRootPath + ".wcm-io-wcm-ui-extjs-pagetree" + CQ.HTTP.EXTENSION_JSON;
     if (pParams && pParams.predicate) {
       url = CQ.HTTP.addParameter(url, "predicate", pParams.predicate);
     }

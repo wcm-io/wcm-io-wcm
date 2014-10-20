@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.ui.extjs.provider.impl.util;
+package io.wcm.wcm.ui.extjs.provider.impl.servlets.util;
 
 import org.apache.commons.collections.Predicate;
 import org.apache.sling.api.SlingHttpServletRequest;
