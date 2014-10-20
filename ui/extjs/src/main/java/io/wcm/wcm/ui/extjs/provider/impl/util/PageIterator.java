@@ -17,18 +17,13 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.ui.provider;
+package io.wcm.wcm.ui.extjs.provider.impl.util;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 
 import com.day.cq.commons.Filter;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -36,8 +31,10 @@ import com.day.cq.wcm.api.Page;
 
 /**
  * Implements an iterator that returns page objects.
+ * If it hits a resource of with primary type sling:Folder or sling:OrderedFolder it supports them
+ * as well returning a simulates page object for them.
  */
-class PageIterator implements Iterator<Page> {
+public final class PageIterator implements Iterator<Page> {
 
   /**
    * Next element available
@@ -45,14 +42,9 @@ class PageIterator implements Iterator<Page> {
   private Page next;
 
   /**
-   * Resource resolver for resolving page resources
+   * Underlying resource iterator
    */
-  private final ResourceResolver resourceResolver;
-
-  /**
-   * Underlying node iterator
-   */
-  private final NodeIterator nodes;
+  private final Iterator<Resource> resources;
 
   /**
    * the filter to use
@@ -61,13 +53,11 @@ class PageIterator implements Iterator<Page> {
 
   /**
    * Creates a new iterator that is based on the given node iterator.
-   * @param nodes base iterator
-   * @param resourceResolver resource resolver
+   * @param resources base iterator
    * @param pageFilter iteration filter
    */
-  public PageIterator(NodeIterator nodes, ResourceResolver resourceResolver, Filter<Page> pageFilter) {
-    this.nodes = nodes;
-    this.resourceResolver = resourceResolver;
+  public PageIterator(Iterator<Resource> resources, Filter<Page> pageFilter) {
+    this.resources = resources;
     this.pageFilter = pageFilter;
     seek();
   }
@@ -79,26 +69,20 @@ class PageIterator implements Iterator<Page> {
   private Page seek() {
     Page prev = next;
     next = null;
-    while (nodes.hasNext() && next == null) {
-      Node node = nodes.nextNode();
-      try {
-        Resource nextResource = resourceResolver.getResource(node.getPath());
-        next = nextResource.adaptTo(Page.class);
+    while (resources.hasNext() && next == null) {
+      Resource nextResource = resources.next();
+      next = nextResource.adaptTo(Page.class);
 
-        if (next == null) {
-          // handle sling:Folder and sling:OrderedFolder as "virtual pages" to allow browsing pages below them
-          String primaryType = nextResource.getValueMap().get(JcrConstants.JCR_PRIMARYTYPE, String.class);
-          if (StringUtils.equals(primaryType, "sling:Folder") || StringUtils.equals(primaryType, "sling:OrderedFolder")) {
-            next = new SlingFolderVirtualPage(nextResource);
-          }
-        }
-
-        if (next != null && pageFilter != null && !pageFilter.includes(next)) {
-          next = null;
+      if (next == null) {
+        // handle sling:Folder and sling:OrderedFolder as "virtual pages" to allow browsing pages below them
+        String primaryType = nextResource.getValueMap().get(JcrConstants.JCR_PRIMARYTYPE, String.class);
+        if (StringUtils.equals(primaryType, "sling:Folder") || StringUtils.equals(primaryType, "sling:OrderedFolder")) {
+          next = new SlingFolderVirtualPage(nextResource);
         }
       }
-      catch (RepositoryException e) {
-        // skip
+
+      if (next != null && pageFilter != null && !pageFilter.includes(next)) {
+        next = null;
       }
     }
     return prev;

@@ -17,11 +17,12 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.ui.provider;
+package io.wcm.wcm.ui.extjs.provider.impl;
 
 import io.wcm.sling.commons.request.RequestParam;
 import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.commons.contenttype.FileExtension;
+import io.wcm.wcm.ui.extjs.provider.impl.util.PredicatePageFilter;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -29,14 +30,12 @@ import java.util.Iterator;
 import javax.servlet.ServletException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONObject;
-import org.osgi.annotation.versioning.ProviderType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,15 +50,11 @@ import com.day.cq.wcm.commons.WCMUtils;
  * <code>cqstone.core.widgets.form.Selection</code> widget.
  */
 @SlingServlet(extensions = FileExtension.JSON, selectors = "io-wcm-wcm-ui-pagelist",
-resourceTypes = "sling/servlet/default", methods = "GET",
-generateComponent = false)
-@Component(immediate = true, metatype = false)
-@ProviderType
+resourceTypes = "sling/servlet/default", methods = "GET")
 public final class PageListProvider extends SlingSafeMethodsServlet {
-
   private static final long serialVersionUID = 1L;
 
-  private static final Logger mLog = LoggerFactory.getLogger(PageListProvider.class);
+  private static final Logger log = LoggerFactory.getLogger(PageListProvider.class);
 
   @Override
   protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
@@ -84,7 +79,7 @@ public final class PageListProvider extends SlingSafeMethodsServlet {
       response.getWriter().write(pagelist.toString());
     }
     catch (Throwable ex) {
-      mLog.error("Unexpected error, rethrow as servlet exception.", ex);
+      log.error("Unexpected error, rethrow as servlet exception.", ex);
       throw new ServletException(ex);
     }
   }

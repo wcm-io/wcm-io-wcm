@@ -17,13 +17,12 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.ui.provider;
+package io.wcm.wcm.ui.extjs.provider.impl.util;
 
 import org.apache.commons.collections.Predicate;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
-import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.commons.predicate.PredicateProvider;
 import com.day.cq.wcm.api.Page;
@@ -33,10 +32,9 @@ import com.day.cq.wcm.api.PageFilter;
  * PageFilter that uses a {@link Predicate} instance to evaluate pages in page
  * list.
  */
-@ProviderType
 public final class PredicatePageFilter extends PageFilter {
 
-  private final Predicate mPredicate;
+  private final Predicate predicate;
 
   /**
    * @param predicateName Predicate name (as registered via predicate.name OSGI
@@ -54,7 +52,8 @@ public final class PredicatePageFilter extends PageFilter {
    * @param includeHidden if <code>true</code> hidden pages are included.
    * @param request
    */
-  public PredicatePageFilter(String predicateName, boolean includeInvalid, boolean includeHidden, SlingHttpServletRequest request) {
+  public PredicatePageFilter(String predicateName, boolean includeInvalid, boolean includeHidden,
+      SlingHttpServletRequest request) {
     super(includeInvalid, includeHidden);
 
     SlingBindings bindings = (SlingBindings)request.getAttribute(SlingBindings.class.getName());
@@ -64,8 +63,8 @@ public final class PredicatePageFilter extends PageFilter {
     if (predicateProvider == null) {
       throw new RuntimeException("PredicateProvider service not running.");
     }
-    mPredicate = predicateProvider.getPredicate(predicateName);
-    if (mPredicate == null) {
+    predicate = predicateProvider.getPredicate(predicateName);
+    if (predicate == null) {
       throw new RuntimeException("Predicate '" + predicateName + "' not defined.");
     }
   }
@@ -75,7 +74,7 @@ public final class PredicatePageFilter extends PageFilter {
     if (!super.includes(pPage)) {
       return false;
     }
-    return mPredicate.evaluate(pPage);
+    return predicate.evaluate(pPage);
   }
 
 }

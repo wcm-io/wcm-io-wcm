@@ -17,20 +17,19 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.ui.provider;
+package io.wcm.wcm.ui.extjs.provider.impl;
 
 import io.wcm.sling.commons.request.RequestParam;
 import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.commons.contenttype.FileExtension;
+import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
 
 import java.io.IOException;
 import java.util.Iterator;
 
-import javax.jcr.Node;
 import javax.servlet.ServletException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -39,7 +38,6 @@ import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
-import org.osgi.annotation.versioning.ProviderType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,21 +51,16 @@ import com.day.cq.wcm.api.Template;
  * <code>cqstone.core.widgets.form.BrowseField</code> widget.
  */
 @SlingServlet(extensions = FileExtension.JSON, selectors = "io-wcm-wcm-ui-tree",
-resourceTypes = "sling/servlet/default", methods = "GET",
-generateComponent = false)
-@Component(immediate = true, metatype = false)
-@ProviderType
-public class PageTreeProvider extends SlingSafeMethodsServlet {
-
+resourceTypes = "sling/servlet/default", methods = "GET")
+public final class PageTreeProvider extends SlingSafeMethodsServlet {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Request parameter for passing the path of the root resource to list the
-   * children
+   * Request parameter for passing the path of the root resource to list the children
    */
   public static final String RP_PATH = "path";
 
-  private static final Logger mLog = LoggerFactory.getLogger(PageTreeProvider.class);
+  private static final Logger log = LoggerFactory.getLogger(PageTreeProvider.class);
 
   @Override
   protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
@@ -80,9 +73,8 @@ public class PageTreeProvider extends SlingSafeMethodsServlet {
     try {
       JSONArray pages;
       if (rootResource != null) {
-        Node startNode = rootResource.adaptTo(Node.class);
         PageFilter pageFilter = getPageFilter(request);
-        pages = getPages(new PageIterator(startNode.getNodes(), request.getResourceResolver(), pageFilter), 0, pageFilter);
+        pages = getPages(new PageIterator(rootResource.listChildren(), pageFilter), 0, pageFilter);
       }
       else {
         pages = new JSONArray();
@@ -90,7 +82,7 @@ public class PageTreeProvider extends SlingSafeMethodsServlet {
       response.getWriter().write(pages.toString());
     }
     catch (Throwable ex) {
-      mLog.error("Unexpected error, rethrow as servlet exception.", ex);
+      log.error("Unexpected error, rethrow as servlet exception.", ex);
       throw new ServletException(ex);
     }
   }

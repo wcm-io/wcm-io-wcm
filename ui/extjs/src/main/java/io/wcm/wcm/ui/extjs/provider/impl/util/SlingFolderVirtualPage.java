@@ -17,14 +17,11 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.ui.provider;
+package io.wcm.wcm.ui.extjs.provider.impl.util;
 
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
-
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
@@ -38,10 +35,10 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.WCMException;
+import com.day.cq.wcm.commons.DeepResourceIterator;
 
 /**
- * Virtual page implementation for handling sling:Folder and sling:OrderedFolder
- * nodes as pages in {@link PageIterator}
+ * Virtual page implementation for handling sling:Folder and sling:OrderedFolder nodes as pages in {@link PageIterator}
  */
 class SlingFolderVirtualPage implements Page {
 
@@ -58,12 +55,12 @@ class SlingFolderVirtualPage implements Page {
 
   @SuppressWarnings("unchecked")
   @Override
-  public <AdapterType> AdapterType adaptTo(Class<AdapterType> pType) {
-    if (pType == Resource.class) {
+  public <AdapterType> AdapterType adaptTo(Class<AdapterType> type) {
+    if (type == Resource.class) {
       return (AdapterType)resource;
     }
     else {
-      return resource.adaptTo(pType);
+      return resource.adaptTo(type);
     }
   }
 
@@ -102,7 +99,7 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
-  public Locale getLanguage(boolean arg0) {
+  public Locale getLanguage(boolean ignoreContent) {
     return null;
   }
 
@@ -215,7 +212,7 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
-  public boolean hasChild(String arg0) {
+  public boolean hasChild(String name) {
     return false;
   }
 
@@ -245,29 +242,22 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
-  public Iterator<Page> listChildren(Filter<Page> pageFilter) {
-    try {
-      Node node = resource.adaptTo(Node.class);
-      if (node != null) {
-        return new PageIterator(node.getNodes(), resource.getResourceResolver(), null);
-      }
-      else {
-        return null;
-      }
-    }
-    catch (RepositoryException ex) {
-      throw new RuntimeException(ex);
-    }
+  public Iterator<Page> listChildren(final Filter<Page> filter) {
+    return listChildren(filter, false);
   }
 
   @Override
-  public Iterator<Page> listChildren(Filter<Page> pageFilter, boolean deep) {
+  public Iterator<Page> listChildren(final Filter<Page> filter, final boolean deep) {
+    Iterator<Resource> resources;
     if (deep) {
-      throw new UnsupportedOperationException("Deep children list not supported.");
+      resources = new DeepResourceIterator(resource);
     }
     else {
-      return listChildren(pageFilter);
+      resources = resource.getResourceResolver().listChildren(resource);
     }
+
+    // return filtered page iterator
+    return new PageIterator(resources, filter);
   }
 
   @Override
