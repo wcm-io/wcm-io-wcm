@@ -51,11 +51,17 @@ import org.slf4j.LoggerFactory;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Handles AJAX calls for updateComponentListHandler JS method to update list of allowed component lists dynamically.
  */
-@SlingServlet(extensions = FileExtension.JSON, selectors = "wcmio-parsys-components",
-resourceTypes = "sling/servlet/default", methods = HttpConstants.METHOD_GET)
+@SlingServlet(
+    extensions = FileExtension.JSON,
+    selectors = "wcmio-parsys-components",
+    resourceTypes = "sling/servlet/default",
+    methods = HttpConstants.METHOD_GET)
+@SuppressFBWarnings("SE_BAD_FIELD")
 public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
   private static final long serialVersionUID = 1L;
 
