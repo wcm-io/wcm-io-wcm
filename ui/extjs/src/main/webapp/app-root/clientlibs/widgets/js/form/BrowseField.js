@@ -119,6 +119,10 @@ io.wcm.wcm.ui.form.BrowseField = CQ.Ext.extend(CQ.form.BrowseField, {
           return CQ.Util.externalize(url);
         },
         "requestMethod":"GET",
+        "baseParams": {
+          "predicate": null,  // make sure no predicate is sent
+          "_charset_": "utf-8"
+        },
         "baseAttrs": {
           "singleClickExpand":true
         }
