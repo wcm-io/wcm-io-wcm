@@ -37,7 +37,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 @SlingServlet(
     extensions = FileExtension.JSON,
-    selectors = "wcm-io-wcm-ui-extjs-pagetree",
+    selectors = "wcm-io-wcm-ui-extjs-pagelist",
     resourceTypes = "sling/servlet/default",
     methods = HttpConstants.METHOD_GET)
 @SuppressFBWarnings("SE_BAD_FIELD")
