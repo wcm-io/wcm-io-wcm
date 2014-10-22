@@ -48,19 +48,6 @@
     <site.url.module.prefix>wcm</site.url.module.prefix>
   </properties>
 
-  <build>
-    <plugins>
-
-      <!-- release plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <inherited>false</inherited>
-      </plugin>
-
-    </plugins>
-  </build>
-
   <distributionManagement>
     <site>
       <id>${site.deploy.id}</id>
