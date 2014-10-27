@@ -14,8 +14,8 @@ AEM paragraph system based on path configuration in page components.
 
 ### Documentation
 
-* [API documentation][apidocs]
 * [Usage][usage]
+* [API documentation][apidocs]
 * [Changelog][changelog]
 
 
@@ -32,6 +32,6 @@ Differences to the AEM-builtin paragraph system:
 * Written in Sightly.
 
 
-[apidocs]: apidocs/
 [usage]: usage.html
+[apidocs]: apidocs/
 [changelog]: changes-report.html

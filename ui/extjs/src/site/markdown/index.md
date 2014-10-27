@@ -14,8 +14,8 @@ ExtJS Widgets for AEM Classic UI.
 
 ### Documentation
 
-* [API documentation][apidocs]
 * [ExtJS widgets][widgets]
+* [API documentation][apidocs]
 * [Changelog][changelog]
 
 
@@ -26,6 +26,6 @@ This library provides a selection of ExtJS widgets usable in any projects. Some 
 The widgets are accompanied by a set of servlets serving as JSON providers.
 
 
-[apidocs]: apidocs/
 [widgets]: widgets.html
+[apidocs]: apidocs/
 [changelog]: changes-report.html
