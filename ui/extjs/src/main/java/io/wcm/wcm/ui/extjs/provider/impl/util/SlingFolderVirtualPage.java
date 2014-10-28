@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 
@@ -34,7 +35,6 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.commons.DeepResourceIterator;
-import com.day.text.Text;
 
 /**
  * Virtual page implementation for handling sling:Folder and sling:OrderedFolder nodes as pages in {@link PageIterator}
