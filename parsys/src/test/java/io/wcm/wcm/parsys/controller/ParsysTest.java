@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.wcmio.sling.models.MockSlingExtensions;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 import java.util.List;
@@ -64,6 +65,8 @@ public class ParsysTest {
 
   @Before
   public void setUp() {
+    MockSlingExtensions.setUp(context);
+
     context.request().setAttribute(ComponentContext.CONTEXT_ATTR_NAME, componentContext);
     when(componentContext.getComponent()).thenReturn(component);
     when(component.getPath()).thenReturn(RESOURCE_TYPE_SAMPLE);
