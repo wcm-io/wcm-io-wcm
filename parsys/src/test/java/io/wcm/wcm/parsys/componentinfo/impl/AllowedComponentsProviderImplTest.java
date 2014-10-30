@@ -25,7 +25,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.testing.mock.wcmio.sling.models.MockSlingExtensions;
+import io.wcm.testing.mock.wcmio.sling.MockSlingExtensions;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
 import java.util.Set;
