@@ -39,7 +39,7 @@ public interface ParsysConfig {
   /**
    * Path pattern for parsys.
    * The pattern should match paths relative to the jcr:content node of a page,
-   * including this node but without leading slash.<br/>
+   * including this node but without leading slash.<br>
    * Example: {@code ^jcr:content/(?!megaFlyout).*$}
    * @return parsys path pattern
    */
