@@ -27,8 +27,8 @@ import io.wcm.wcm.commons.util.RunMode;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -117,7 +117,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
       Set<String> allowed = allowedComponentsProvider.getAllowedComponents(fullPath, resolver);
 
       // create set with relative resource type paths
-      Set<String> allowedComponentsRelative = new HashSet<String>();
+      Set<String> allowedComponentsRelative = new TreeSet<String>();
       for (String resourceType : allowed) {
         allowedComponentsRelative.add(ResourceTypeUtil.makeAbsolute(resourceType));
       }
