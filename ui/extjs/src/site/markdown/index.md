@@ -8,7 +8,7 @@ ExtJS Widgets for AEM Classic UI.
 <dependency>
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.ui.extjs</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
+  <version>0.5.0</version>
 </dependency>
 ```
 
