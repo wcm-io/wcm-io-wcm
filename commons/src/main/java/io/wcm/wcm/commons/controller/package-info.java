@@ -20,5 +20,5 @@
 /**
  * Sling models controller for common sightly components.
  */
-@org.osgi.annotation.versioning.Version("0.2.0")
+@org.osgi.annotation.versioning.Version("0.5.0")
 package io.wcm.wcm.commons.controller;
