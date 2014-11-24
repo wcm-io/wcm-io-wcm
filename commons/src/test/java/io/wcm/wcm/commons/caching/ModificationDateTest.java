@@ -92,6 +92,12 @@ public class ModificationDateTest {
   }
 
   @Test
+  public void testMostRecentPageArray_WithNullDate() {
+    applyPageLastModified(page1, SAMPLE_CALENDAR_1);
+    assertEquals(SAMPLE_CALENDAR_1.getTime(), ModificationDate.mostRecent(page1, page2));
+  }
+
+  @Test
   public void testMostRecentModificationDateProviderArray() throws Exception {
     applyPageLastModified(page1, SAMPLE_CALENDAR_1);
     applyPageLastModified(resource2, SAMPLE_CALENDAR_2);

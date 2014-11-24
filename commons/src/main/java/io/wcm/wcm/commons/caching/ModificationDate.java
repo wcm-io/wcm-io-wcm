@@ -112,7 +112,7 @@ public final class ModificationDate {
   public static Date mostRecent(Page... pages) {
     Date[] dates = new Date[pages.length];
     for (int i = 0; i < pages.length; i++) {
-      dates[i] = pages[i].getLastModified().getTime();
+      dates[i] = get(pages[i]);
     }
     return mostRecent(dates);
   }
