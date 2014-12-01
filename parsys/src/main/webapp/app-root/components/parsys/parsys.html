@@ -1,8 +1,7 @@
 <div data-sly-use.parsys="io.wcm.wcm.parsys.controller.Parsys"
     data-sly-list.item="${parsys.items}" data-sly-unwrap>
 
-  <div style="clear:both" data-sly-test="${item.newArea}"></div>
-
-  <div class="${item.cssClassName}" data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"></div>
+  <div style="${item.newArea ? 'clear:both' : '' @ context='unsafe'}" class="${item.cssClassName}"
+      data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"></div>
 
 </div>
