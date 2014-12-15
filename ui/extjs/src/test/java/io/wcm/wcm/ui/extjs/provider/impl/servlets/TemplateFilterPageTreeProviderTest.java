@@ -21,39 +21,30 @@ package io.wcm.wcm.ui.extjs.provider.impl.servlets;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.Workspace;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.jackrabbit.commons.iterator.NodeIteratorAdapter;
-import org.apache.sling.api.adapter.AdapterFactory;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
+import org.apache.sling.testing.mock.jcr.MockJcr;
+import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TemplateFilterPageTreeProviderTest {
@@ -62,20 +53,7 @@ public class TemplateFilterPageTreeProviderTest {
   private static final String TEMPLATE_2 = "/apps/app1/templates/template2";
 
   @Rule
-  public AemContext context = new AemContext();
-
-  @Mock
-  public AdapterFactory adapterFactory;
-  @Mock
-  public Session session;
-  @Mock
-  public Workspace workspace;
-  @Mock
-  public QueryManager queryManager;
-  @Mock
-  public Query query;
-  @Mock
-  public QueryResult queryResult;
+  public AemContext context = new AemContext(ResourceResolverType.JCR_MOCK);
 
   @Before
   public void setUp() throws Exception {
@@ -88,14 +66,6 @@ public class TemplateFilterPageTreeProviderTest {
     context.create().page("/content/sample/en/page1/page12/page121", TEMPLATE_2, "title121");
     context.create().page("/content/sample/en/page1/page12/page122", TEMPLATE_2, "title122");
     context.create().page("/content/sample/en/page2", TEMPLATE_1, "title2");
-
-    // simulate query manager
-    when(adapterFactory.getAdapter(any(ResourceResolver.class), eq(Session.class))).thenReturn(session);
-    when(session.getWorkspace()).thenReturn(workspace);
-    when(workspace.getQueryManager()).thenReturn(queryManager);
-    when(queryManager.createQuery(anyString(), anyString())).thenReturn(query);
-    when(query.execute()).thenReturn(queryResult);
-    context.registerService(AdapterFactory.class, adapterFactory);
   }
 
   @Test
@@ -176,14 +146,15 @@ public class TemplateFilterPageTreeProviderTest {
     }
   }
 
-  private void mockQueryResult(String... paths) throws RepositoryException {
-    List<Node> nodes = new ArrayList<>();
-    for (String path : paths) {
-      Node node = mock(Node.class);
-      when(node.getPath()).thenReturn(path);
-      nodes.add(node);
-    }
-    when(queryResult.getNodes()).thenReturn(new NodeIteratorAdapter(nodes));
+  private void mockQueryResult(String... paths) {
+    List<String> resultPaths = ImmutableList.copyOf(paths);
+    List<Node> resultNodes = Lists.transform(resultPaths, new Function<String, Node>() {
+      @Override
+      public Node apply(String path) {
+        return context.resourceResolver().getResource(path).adaptTo(Node.class);
+      }
+    });
+    MockJcr.setQueryResult(context.resourceResolver().adaptTo(Session.class), resultNodes);
   }
 
   private void assertItem(JSONObject jsonObject, String name, String title, String template,
