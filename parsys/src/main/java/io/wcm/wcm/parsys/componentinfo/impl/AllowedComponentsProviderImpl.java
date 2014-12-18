@@ -19,6 +19,7 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
+import io.wcm.sling.commons.resource.ResourceType;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
@@ -96,14 +97,14 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
             checkResource = grandParentResource;
           }
           if (checkResource != null) {
-            String resourceType = ResourceTypeUtil.makeAbsolute(checkResource.getResourceType());
+            String resourceType = ResourceType.makeAbsolute(checkResource.getResourceType(), resolver);
             includePathDef = pathDef.getAllowedParents().contains(resourceType);
           }
         }
 
         if (includePathDef) {
-          allowedComponents.addAll(pathDef.getAllowedChildren());
-          deniedComponents.addAll(pathDef.getDeniedChildren());
+          allowedComponents.addAll(makeAbsolute(pathDef.getAllowedChildren(), resolver));
+          deniedComponents.addAll(makeAbsolute(pathDef.getDeniedChildren(), resolver));
         }
 
       }
@@ -129,13 +130,27 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
 
       SortedSet<String> allowedChildren = new TreeSet<>();
       for (ParsysConfig parSysConfig : parSysConfigs) {
-        allowedChildren.addAll(parSysConfig.getAllowedChildren());
+        allowedChildren.addAll(makeAbsolute(parSysConfig.getAllowedChildren(), resolver));
       }
 
       return allowedChildren;
     }
     // fallback
     return ImmutableSet.of();
+  }
+
+  /**
+   * Ensures that all resource types in the set are resolved to absolute resource types.
+   * @param resourceTypes Resource types
+   * @param resourceResolver Resource resolver
+   * @return Absolute resource types
+   */
+  private static Set<String> makeAbsolute(Set<String> resourceTypes, ResourceResolver resourceResolver) {
+    Set<String> absoluteResourceTypes = new HashSet<>();
+    for (String resourceType : resourceTypes) {
+      absoluteResourceTypes.add(ResourceType.makeAbsolute(resourceType, resourceResolver));
+    }
+    return absoluteResourceTypes;
   }
 
 }

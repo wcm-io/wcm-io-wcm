@@ -122,7 +122,7 @@ final class ResourceParsysConfigProvider {
       Set<String> allowedChildrenSet = new HashSet<>();
       if (allowedChildrenArray != null) {
         for (String resourceType : allowedChildrenArray) {
-          allowedChildrenSet.add(ResourceTypeUtil.makeAbsolute(resourceType));
+          allowedChildrenSet.add(resourceType);
         }
       }
       this.allowedChildren = ImmutableSet.copyOf(allowedChildrenSet);
@@ -130,7 +130,7 @@ final class ResourceParsysConfigProvider {
       Set<String> allowedParentsSet = new HashSet<>();
       if (allowedParentsArray != null) {
         for (String resourceType : allowedParentsArray) {
-          allowedParentsSet.add(ResourceTypeUtil.makeAbsolute(resourceType));
+          allowedParentsSet.add(resourceType);
         }
       }
       this.allowedParents = ImmutableSet.copyOf(allowedParentsSet);

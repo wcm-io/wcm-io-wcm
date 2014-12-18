@@ -164,7 +164,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
     if (allowedChildrenArray != null) {
       for (String resourceType : allowedChildrenArray) {
         if (StringUtils.isNotBlank(resourceType)) {
-          allowedChildrenSet.add(ResourceTypeUtil.makeAbsolute(resourceType));
+          allowedChildrenSet.add(resourceType);
         }
       }
     }
@@ -175,7 +175,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
     if (deniedChildrenArray != null) {
       for (String resourceType : deniedChildrenArray) {
         if (StringUtils.isNotBlank(resourceType)) {
-          deniedChildrenSet.add(ResourceTypeUtil.makeAbsolute(resourceType));
+          deniedChildrenSet.add(resourceType);
         }
       }
     }
@@ -186,7 +186,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
     if (allowedParentsArray != null) {
       for (String resourceType : allowedParentsArray) {
         if (StringUtils.isNotBlank(resourceType)) {
-          allowedParentsSet.add(ResourceTypeUtil.makeAbsolute(resourceType));
+          allowedParentsSet.add(resourceType);
         }
       }
     }
