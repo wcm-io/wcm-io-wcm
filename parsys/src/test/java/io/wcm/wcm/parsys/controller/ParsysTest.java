@@ -67,6 +67,8 @@ public class ParsysTest {
   public void setUp() {
     MockSlingExtensions.setUp(context);
 
+    context.addModelsForPackage("io.wcm.wcm.parsys.controller");
+
     context.request().setAttribute(ComponentContext.CONTEXT_ATTR_NAME, componentContext);
     when(componentContext.getComponent()).thenReturn(component);
     when(component.getPath()).thenReturn(RESOURCE_TYPE_SAMPLE);
