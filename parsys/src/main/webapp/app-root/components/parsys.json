@@ -23,10 +23,7 @@
 
   "cq:childEditConfig": {
     "jcr:primaryType": "cq:EditConfig",
-    "cq:layout": "rollover",
-    "cq:actions": [
-       "EDITANNOTATECOPYMOVEDELETEINSERT"
-    ]
+    "cq:layout": "rollover"
   }
 
 }

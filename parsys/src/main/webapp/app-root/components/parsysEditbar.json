@@ -9,10 +9,7 @@
 
   "cq:childEditConfig": {
     "jcr:primaryType": "cq:EditConfig",
-    "cq:layout": "editbar",
-    "cq:actions": [
-       "EDITANNOTATECOPYMOVEDELETEINSERT"
-    ]
+    "cq:layout": "editbar"
   }
 
 }

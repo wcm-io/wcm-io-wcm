@@ -27,6 +27,9 @@
       <action type="update" dev="sseifert" issue="WCMIO-43">
         Switch to latest io.wcm.sling.commons dependency, remove internal ResourceTypeUtil class.
       </action>
+      <action type="update" dev="sseifert">
+        Make parsys cq:childEditConfig configuration compatible to AEM60 SP2.
+      </action>
     </release>
 
     <release version="0.5.2" date="2014-12-03">
