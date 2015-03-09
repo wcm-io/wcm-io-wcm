@@ -8,7 +8,7 @@ AEM paragraph system based on path configuration in page components.
 <dependency>
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.parsys</artifactId>
-  <version>0.5.0</version>
+  <version>0.5.4</version>
 </dependency>
 ```
 

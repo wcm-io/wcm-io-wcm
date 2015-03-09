@@ -8,7 +8,7 @@ Common WCM utility and helper functions.
 <dependency>
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.commons</artifactId>
-  <version>0.5.0</version>
+  <version>0.5.2</version>
 </dependency>
 ```
 
