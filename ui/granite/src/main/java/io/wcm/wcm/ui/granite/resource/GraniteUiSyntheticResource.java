@@ -41,7 +41,7 @@ import com.google.common.collect.Lists;
  * Extended version of {@link SyntheticResource} that allows to pass an own value map and optional child resources.
  * Please note: Accessing child resources does only work when accessing {@link Resource#listChildren()}, and
  * not when calling the same method on resourceResolver. This breaks the contract of the resource API, but should
- * work at least for the GraniteUI implementation which seems to always use this method.
+ * work at least for the Granite UI implementation which seems to always use this method.
  */
 public final class GraniteUiSyntheticResource extends SyntheticResource {
 
