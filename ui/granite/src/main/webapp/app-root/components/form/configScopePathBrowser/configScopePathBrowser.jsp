@@ -40,8 +40,8 @@ if (contentPath != null) {
     // detect root path of current site via Configuration API
     Configuration conf = contentResource.adaptTo(Configuration.class);
     if (conf != null) {
-      // path browser does not allow to select root path itself - workaround: set parent path as root path
-      rootPath = Text.getRelativeParent(conf.getConfigurationId(), 1);
+      // configuration id = root path
+      rootPath = conf.getConfigurationId();
     }
   }
 }
