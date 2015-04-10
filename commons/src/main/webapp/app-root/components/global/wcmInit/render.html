@@ -11,10 +11,10 @@
   
   <!--/* Outputs the WCM initialization code. If WCM mode is disabled nothing is rendered. */-->
   <meta data-sly-test="${wcmInit.isTouchUI}"
-      data-sly-call="${clientLib.all @ categories=$clientLibCategories || 'cq.authoring.page'}"
+      data-sly-call="${clientLib.all @ categories=clientLibCategories || 'cq.authoring.page'}"
       data-sly-unwrap></meta>
   <meta data-sly-test="${wcmInit.isClassicUI}"
-      data-sly-call="${clientLib.all @ categories=$clientLibCategoriesClassicUI || 'cq.wcm.edit'}"
+      data-sly-call="${clientLib.all @ categories=clientLibCategoriesClassicUI || 'cq.wcm.edit'}"
       data-sly-unwrap></meta>
 
   <!--/* Initialize Sidekick and Undo Manager for Classic UI */-->
