@@ -17,32 +17,25 @@
   limitations under the License.
   #L%
   --%>
-<%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="org.apache.sling.api.resource.Resource"%>
 <%@page import="org.apache.sling.api.resource.ValueMap"%>
 <%@page import="org.apache.sling.api.request.RequestDispatcherOptions"%>
-<%@page import="org.apache.jackrabbit.util.Text"%>
-<%@page import="com.adobe.granite.ui.components.Value"%>
 <%@page import="com.day.cq.commons.jcr.JcrConstants"%>
+<%@page import="com.day.cq.wcm.api.Page"%>
 <%@page import="io.wcm.config.api.Configuration"%>
 <%@page import="io.wcm.sling.commons.resource.ImmutableValueMap"%>
 <%@page import="io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource"%>
+<%@page import="io.wcm.wcm.ui.granite.util.GraniteUi"%>
 <%@include file="../../global/global.jsp" %><%
 
 String rootPath = null;
-String contentPath = (String)request.getAttribute(Value.CONTENTPATH_ATTRIBUTE);
-if (contentPath != null) {
-  if (StringUtils.contains(contentPath, "/" + JcrConstants.JCR_CONTENT + "/")) {
-    contentPath = StringUtils.substringBefore(contentPath, "/" + JcrConstants.JCR_CONTENT + "/");
-  }
-  Resource contentResource = resourceResolver.getResource(contentPath);
-  if (contentResource != null) {
-    // detect root path of current site via Configuration API
-    Configuration conf = contentResource.adaptTo(Configuration.class);
-    if (conf != null) {
-      // configuration id = root path
-      rootPath = conf.getConfigurationId();
-    }
+Page contentPage = GraniteUi.getContentPage(request);
+if (contentPage != null) {
+  // detect root path of current site via Configuration API
+  Configuration conf = contentPage.getContentResource().adaptTo(Configuration.class);
+  if (conf != null) {
+    // configuration id = root path
+    rootPath = conf.getConfigurationId();
   }
 }
 
