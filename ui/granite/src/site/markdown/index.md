@@ -9,7 +9,7 @@ Granite UI Components for AEM Touch UI.
 <dependency>
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.ui.granite</artifactId>
-  <version>0.5.0-SNAPSHOT</version>
+  <version>0.5.0</version>
 </dependency>
 ```
 
