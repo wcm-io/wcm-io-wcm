@@ -31,7 +31,7 @@
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.commons</artifactId>
-  <version>0.5.6</version>
+  <version>0.5.7-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>WCM Commons</name>
@@ -41,7 +41,7 @@
     <connection>scm:git:https://github.com/wcm-io/wcm-io.git</connection>
     <developerConnection>scm:git:https://github.com/wcm-io/wcm-io.git</developerConnection>
     <url>https://github.com/wcm-io/wcm-io</url>
-    <tag>io.wcm.wcm.commons-0.5.6</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>
