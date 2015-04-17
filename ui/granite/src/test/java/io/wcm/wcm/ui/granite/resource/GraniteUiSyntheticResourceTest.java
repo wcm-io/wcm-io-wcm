@@ -37,6 +37,7 @@ import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Rule;
 import org.junit.Test;
 
+import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
 
 public class GraniteUiSyntheticResourceTest {
@@ -67,6 +68,15 @@ public class GraniteUiSyntheticResourceTest {
     Resource underTest = create(context.resourceResolver(), "/my/path", "/my/type", SAMPLE_PROPERTES);
     assertEquals("/my/path", underTest.getPath());
     assertEquals("/my/type", underTest.getResourceType());
+    assertEquals("value1", underTest.getValueMap().get("prop1", String.class));
+    assertEquals(25, (int)underTest.getValueMap().get("prop2", 0));
+  }
+
+  @Test
+  public void testCreateProperitesWithoutPath() {
+    Resource underTest = create(context.resourceResolver(), SAMPLE_PROPERTES);
+    assertEquals(null, underTest.getPath());
+    assertEquals(JcrConstants.NT_UNSTRUCTURED, underTest.getResourceType());
     assertEquals("value1", underTest.getValueMap().get("prop1", String.class));
     assertEquals(25, (int)underTest.getValueMap().get("prop2", 0));
   }

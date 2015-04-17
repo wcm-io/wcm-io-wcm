@@ -34,6 +34,7 @@ import org.apache.sling.api.resource.SyntheticResource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 
+import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -103,6 +104,16 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
 
   private void addChild(Resource child) {
     children.add(child);
+  }
+
+  /**
+   * Create synthetic resource.
+   * @param resourceResolver Resource resolver
+   * @param valueMap Properties
+   * @return Resource
+   */
+  public static Resource create(ResourceResolver resourceResolver, ValueMap valueMap) {
+    return create(resourceResolver, null, JcrConstants.NT_UNSTRUCTURED, valueMap);
   }
 
   /**
