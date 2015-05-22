@@ -8,7 +8,7 @@
     data-sly-use.wcmInit="io.wcm.wcm.commons.controller.WcmInit"
     data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
     data-sly-test="${!wcmmode.disabled}">
-  
+
   <!--/* Outputs the WCM initialization code. If WCM mode is disabled nothing is rendered. */-->
   <meta data-sly-test="${wcmInit.isTouchUI}"
       data-sly-call="${clientLib.all @ categories=clientLibCategories || 'cq.authoring.page'}"
