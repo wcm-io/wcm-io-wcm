@@ -48,6 +48,7 @@ import com.google.common.collect.ImmutableSet;
 label = "wcm.io Paragraph System Configuration Extension",
 description = "Extends configurations of allowed components for wcm.io paragraph systems.")
 @Service(ParsysConfig.class)
+@Property(name = "webconsole.configurationFactory.nameHint", value = "{pageComponentPath}")
 public final class OsgiParsysConfigProvider implements ParsysConfig {
 
   private static final Logger log = LoggerFactory.getLogger(OsgiParsysConfigProvider.class);
