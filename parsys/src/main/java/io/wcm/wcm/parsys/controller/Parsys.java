@@ -19,24 +19,21 @@
  */
 package io.wcm.wcm.parsys.controller;
 
+import com.day.cq.wcm.api.WCMMode;
+import com.day.cq.wcm.api.components.ComponentContext;
 import io.wcm.sling.models.annotations.AemObject;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.osgi.annotation.versioning.ProviderType;
-
-import com.day.cq.wcm.api.WCMMode;
-import com.day.cq.wcm.api.components.ComponentContext;
 
 /**
  * Controller for paragraph system.
@@ -53,6 +50,7 @@ public final class Parsys {
   static final String NEWAREA_CSS_CLASS_NAME = "new";
   static final String NEWAREA_CHILD_NAME = "newpar";
   static final String FALLBACK_NEWAREA_RESOURCE_TYPE = "/apps/wcm-io/wcm/parsys/components/parsys/newpar";
+  static final String COMPONENT_DEFINITION_CSS = "wcmio:css";
 
   /**
    * Allows to override the resource which children are iterated to display the parsys.
@@ -86,7 +84,9 @@ public final class Parsys {
   }
 
   private Item createResourceItem(Resource resource) {
-    return new Item(resource.getPath(), null, null, false);
+    final ValueMap properties = componentContext.getComponent().getProperties();
+    String css = properties != null ? properties.get(COMPONENT_DEFINITION_CSS, String.class) : null;
+    return new Item(resource.getPath(), null, css, false);
   }
 
   private Item createNewAreaItem() {
