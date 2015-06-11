@@ -19,6 +19,7 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
+import static io.wcm.wcm.parsys.ParsysNameConstants.NN_PARSYS_CONFIG;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ import com.google.common.collect.ImmutableSet;
  */
 final class ResourceParsysConfigProvider {
 
-  private static final String NN_PARSYSCONFIG = "wcmio:parsysConfig";
   private static final String NN_PATHS = "paths";
   private static final String PN_PATH = "path";
   private static final String PN_PATTERN = "pattern";
@@ -64,7 +64,7 @@ final class ResourceParsysConfigProvider {
     List<ParsysConfig> pathDefs = new ArrayList<>();
 
     ResourceResolver resourceResolver = pageComponentResource.getResourceResolver();
-    Resource pathsResource = resourceResolver.getResource(pageComponentResource, "./" + NN_PARSYSCONFIG + "/" + NN_PATHS);
+    Resource pathsResource = resourceResolver.getResource(pageComponentResource, "./" + NN_PARSYS_CONFIG + "/" + NN_PATHS);
     if (pathsResource != null) {
       Iterator<Resource> pathDefResources = resourceResolver.listChildren(pathsResource);
       while (pathDefResources.hasNext()) {
