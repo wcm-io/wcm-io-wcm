@@ -19,7 +19,12 @@
  */
 package io.wcm.wcm.parsys.controller;
 
+import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_GENERATE_DEAFULT_CSS;
+import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_NEWAREA_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
+import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_ELEMENT;
+import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
+import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
 import io.wcm.sling.models.annotations.AemObject;
 
 import java.util.ArrayList;
@@ -51,7 +56,9 @@ import com.day.cq.wcm.api.components.ComponentContext;
 public final class Parsys {
 
   static final String RA_PARSYS_PARENT_RESOURCE = "parsysParentResource";
+  static final String SECTION_DEFAULT_CLASS_NAME = "section";
   static final String NEWAREA_RESOURCE_PATH = "./*";
+  static final String NEWAREA_STYLE = "clear:both";
   static final String NEWAREA_CSS_CLASS_NAME = "new";
   static final String NEWAREA_CHILD_NAME = "newpar";
   static final String FALLBACK_NEWAREA_RESOURCE_TYPE = "/apps/wcm-io/wcm/parsys/components/parsys/newpar";
@@ -71,10 +78,27 @@ public final class Parsys {
   @AemObject
   private ComponentContext componentContext;
 
+  private boolean generateDefaultCss;
+  private String paragraphCss;
+  private String newAreaCss;
+  private String paragraphElementName;
+  private String wrapperElementName;
+  private String wrapperCss;
+
   private List<Item> items;
 
   @PostConstruct
   private void activate() {
+    // read customize properties from parsys component
+    final ValueMap props = componentContext.getComponent().getProperties();
+    generateDefaultCss = props.get(PN_PARSYS_GENERATE_DEAFULT_CSS, true);
+    paragraphCss = props.get(PN_PARSYS_PARAGRAPH_CSS, String.class);
+    newAreaCss = props.get(PN_PARSYS_NEWAREA_CSS, String.class);
+    paragraphElementName = props.get(PN_PARSYS_PARAGRAPH_ELEMENT, "div");
+    wrapperElementName = props.get(PN_PARSYS_WRAPPER_ELEMENT, String.class);
+    wrapperCss = props.get(PN_PARSYS_WRAPPER_CSS, String.class);
+
+    // prepare paragraph items
     items = new ArrayList<>();
     if (parsysParentResource == null) {
       parsysParentResource = currentResource;
@@ -88,14 +112,25 @@ public final class Parsys {
   }
 
   private Item createResourceItem(Resource resource) {
-    final ValueMap properties = componentContext.getComponent().getProperties();
-    String css = properties != null ? properties.get(PN_PARSYS_PARAGRAPH_CSS, String.class) : null;
-    return new Item(resource.getPath(), null, css, false);
+    CssBuilder css = new CssBuilder();
+    if (generateDefaultCss) {
+      css.add(SECTION_DEFAULT_CLASS_NAME);
+    }
+    css.add(paragraphCss);
+    return new Item(resource.getPath(), null, paragraphElementName, null, css.build(), false);
   }
 
   private Item createNewAreaItem() {
+    String style = null;
+    CssBuilder css = new CssBuilder();
+    css.add(NEWAREA_CSS_CLASS_NAME);
+    if (generateDefaultCss) {
+      style = NEWAREA_STYLE;
+      css.add(SECTION_DEFAULT_CLASS_NAME);
+    }
+    css.add(newAreaCss);
     String newAreaResourceType = getNewAreaResourceType(componentContext.getComponent().getPath());
-    return new Item(NEWAREA_RESOURCE_PATH, newAreaResourceType, NEWAREA_CSS_CLASS_NAME, true);
+    return new Item(NEWAREA_RESOURCE_PATH, newAreaResourceType, paragraphElementName, style, css.build(), true);
   }
 
   /**
@@ -121,7 +156,28 @@ public final class Parsys {
    * @return Paragraph system items
    */
   public List<Item> getItems() {
-    return this.items;
+    return items;
+  }
+
+  /**
+   * @return Element name for wrapper element
+   */
+  public String getWrapperElementName() {
+    return StringUtils.defaultString(wrapperElementName, "div");
+  }
+
+  /**
+   * @return Wrapper element CSS
+   */
+  public String getWrapperCss() {
+    return this.wrapperCss;
+  }
+
+  /**
+   * @return True if the wrapper element should be rendered
+   */
+  public boolean isWrapperElement() {
+    return StringUtils.isNotBlank(wrapperElementName);
   }
 
 
@@ -132,12 +188,16 @@ public final class Parsys {
 
     private final String resourcePath;
     private final String resourceType;
+    private final String elementName;
+    private final String style;
     private final String cssClassName;
     private final boolean newArea;
 
-    Item(String resourcePath, String resourceType, String cssClassName, boolean newArea) {
+    Item(String resourcePath, String resourceType, String elementName, String style, String cssClassName, boolean newArea) {
       this.resourcePath = resourcePath;
       this.resourceType = resourceType;
+      this.elementName = elementName;
+      this.style = style;
       this.cssClassName = cssClassName;
       this.newArea = newArea;
     }
@@ -146,25 +206,42 @@ public final class Parsys {
      * @return Resource path
      */
     public String getResourcePath() {
-      return this.resourcePath;
+      return resourcePath;
     }
 
     /**
      * @return Resource type
      */
     public String getResourceType() {
-      return this.resourceType;
+      return resourceType;
+    }
+
+    /**
+     * @return Name for item element
+     */
+    public String getElementName() {
+      return elementName;
+    }
+
+    /**
+     * @return Style string
+     */
+    public String getStyle() {
+      return style;
     }
 
     /**
      * @return CSS classes
      */
     public String getCssClassName() {
-      return this.cssClassName;
+      return cssClassName;
     }
 
+    /**
+     * @return true if this is the new area
+     */
     public boolean isNewArea() {
-      return this.newArea;
+      return newArea;
     }
 
   }

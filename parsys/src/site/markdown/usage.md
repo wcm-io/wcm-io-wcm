@@ -76,23 +76,26 @@ Via the OSGi factory configuration _wcm.io Paragraph System Configuration Extens
 * **deniedChildren**: List of components not allowed at the defined position. This allows neglecting allowances defined in the page component itself.
 
 
+### Customize the paragraph system markup
+
+You can set the following property in the component node of the paragraph system to customize the markup:
+
+* **wcmio:parsysGenerateDefaultCss**: Generates CSS classes by default: "section" on each paragraph/new area and "clear:both" on a new area. This is a boolean property and defaults to true if not set.
+
+* **wcmio:parsysParagraphCss**: Defines additional custom CSS classes to be set on each paragraph.
+
+* **wcmio:parsysNewAreaCss**: Defines additional custom CSS classes to be set on the new area.
+
+* **wcmio:parsysParagraphElement**: Sets the element name to be used for the element wrapping each pagraph component. Defaults to "div" if not set.
+
+* **wcmio:parsysWrapperElement**: Sets the element name to be used for the element wrapping the whole paragraph system. If not set no wrapping element is generated for the paragraph system.
+
+* **wcmio:parsysWrapperCss**: Defines custom CSS classes to be set on the wrapper element.
+
+
 ### Override markup of the paragraph system
 
-The markup provided by the paragraph system without any override is very simple:
-
-```html
-<div data-sly-use.parsys="io.wcm.wcm.parsys.controller.Parsys"
-    data-sly-list.item="${parsys.items}" data-sly-unwrap>
-
-  <div style="clear:both" data-sly-test="${item.newArea}"></div>
-
-  <div class="${item.cssClassName}"
-      data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"></div>
-
-</div>
-```
-
-This generated the wrapping markup of the paragraph systems for both contained components an the new area. Before the new area an additional DIV with `clear:both` is inserted to avoid floating issues with the new area. To overwrite this markup you can create a subcomponent and define you own markup.
+When customizing the markup (element names and CSS classes) of the paragraph system is not enough you can override the markup of the paragraph system.
 
 In this example the paragraph systems uses an UL with nested LIs for each component with some extra CSS classes:
 

@@ -1,7 +1,12 @@
 <div data-sly-use.parsys="io.wcm.wcm.parsys.controller.Parsys"
-    data-sly-list.item="${parsys.items}" data-sly-unwrap>
+    data-sly-list.item="${parsys.items}"
+    data-sly-element="${parsys.wrapperElementName}"
+    data-sly-unwrap="${!parsys.wrapperElement}"
+    class="${parsys.wrapperCss}">
 
-  <div style="${item.newArea ? 'clear:both' : '' @ context='unsafe'}" class="${item.cssClassName}"
-      data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"></div>
+  <div style="${item.style @ context='unsafe'}"
+      class="${item.cssClassName}"
+      data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"
+      data-sly-element="${item.elementName}"></div>
 
 </div>

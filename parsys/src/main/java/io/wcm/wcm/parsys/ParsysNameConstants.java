@@ -41,7 +41,7 @@ public final class ParsysNameConstants {
   public static final String NN_PARSYS_CONFIG = "wcmio:parsysConfig";
 
   /**
-   * Generates CSS classes by default: "section" on each paragraph and "section new" on a new area.
+   * Generates CSS classes by default: "section" on each paragraph/new area and "clear:both" on a new area.
    * This is a boolean property and defaults to true if not set.
    * To be used as property in the parsys component definition.
    */
@@ -64,14 +64,20 @@ public final class ParsysNameConstants {
    * Defaults to "div" if not set.
    * To be used as property in the parsys component definition.
    */
-  public static final String PN_PARSYS_PARAGRAPH_ELEMENT = "wcmio:parsysNewAreaCss";
+  public static final String PN_PARSYS_PARAGRAPH_ELEMENT = "wcmio:parsysParagraphElement";
 
   /**
    * Sets the element name to be used for the element wrapping the whole paragraph system.
    * If not set no wrapping element is generated for the paragraph system.
    * To be used as property in the parsys component definition.
    */
-  public static final String PN_PARSYS_WRAPPER_ELEMENT = "wcmio:parsysNewAreaCss";
+  public static final String PN_PARSYS_WRAPPER_ELEMENT = "wcmio:parsysWrapperElement";
+
+  /**
+   * Defines custom CSS classes to be set on the wrapper element.
+   * To be used as property in the parsys component definition.
+   */
+  public static final String PN_PARSYS_WRAPPER_CSS = "wcmio:parsysWrapperCss";
 
   private ParsysNameConstants() {
     // constants only
