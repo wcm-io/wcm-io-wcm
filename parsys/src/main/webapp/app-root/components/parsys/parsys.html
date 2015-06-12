@@ -1,12 +1,30 @@
-<div data-sly-use.parsys="io.wcm.wcm.parsys.controller.Parsys"
-    data-sly-list.item="${parsys.items}"
-    data-sly-element="${parsys.wrapperElementName}"
-    data-sly-unwrap="${!parsys.wrapperElement}"
-    class="${parsys.wrapperCss}">
+<div data-sly-use.parsys="io.wcm.wcm.parsys.controller.Parsys" data-sly-unwrap>
 
+	<!--/* Parsys variant with wrapper element */-->
+	<div data-sly-test="${parsys.wrapperElement}"
+	    data-sly-list.parsysItem="${parsys.items}"
+	    data-sly-element="${parsys.wrapperElementName}"
+	    class="${parsys.wrapperCss}">
+	
+	  <div data-sly-call="${renderItem @ item=parsysItem}" data-sly-unwrap></div>
+	
+	</div>
+	
+	<!--/* Parsys variant without wrapper element */-->
+  <div data-sly-test="${!parsys.wrapperElement}"
+	    data-sly-list.parsysItem="${parsys.items}"
+	    data-sly-unwrap>
+	
+	  <div data-sly-call="${renderItem @ item=parsysItem}" data-sly-unwrap></div>
+	
+	</div>
+
+</div>
+
+<!--/* Render parsys item */-->
+<template data-sly-template.renderItem="${ @ item}">
   <div style="${item.style @ context='unsafe'}"
       class="${item.cssClassName}"
       data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"
       data-sly-element="${item.elementName}"></div>
-
-</div>
+</template>
