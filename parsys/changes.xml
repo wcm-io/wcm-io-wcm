@@ -23,7 +23,7 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
-    <release version="0.6.0" date="not released">
+    <release version="0.6.0" date="2015-06-23">
       <action type="add" dev="sseifert">
         Add options for customizing the CSS classes and element names used when generating the paragraph system.
       </action>
