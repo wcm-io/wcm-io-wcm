@@ -8,3 +8,8 @@ Extensions for AEM authoring and AEM applications.
 * [Parsys](parsys/): AEM paragraph system based on path configuration in page components.
 * [Granite UI Extensions](ui/granite/): Granite UI Components for AEM Touch UI.
 * [ExtJS UI Extensions](ui/extjs/): ExtJS Widgets for AEM Classic UI.
+
+
+### GitHub Repository
+
+Sources: https://github.com/wcm-io/wcm-io-wcm
