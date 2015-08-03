@@ -55,6 +55,30 @@ Form field for date/time value.
 }
 ```
 
+### Selection
+
+Form field for selection with an array as type hint, when multiple is set to true
+
+```json
+"field": {
+  "sling:resourceType": "/apps/wcm-io/wcm/ui/granite/components/form/selection",
+  "name": "./field",
+  "multiple": true,
+  "fieldLabel": "Selection",
+  "items": {
+    "item1": {
+      "value": "1",
+      "text": "Item 1"
+    },
+    "item2": {
+      "value": "2",
+      "text": "Item 2"
+    },
+    ...
+  }
+}
+```
+
 Enhancements over AEM version:
 
 * Store with correct Date datatype via explicit @TypeHint
