@@ -27,6 +27,9 @@
       <action type="add" dev="sseifert">
         Add Configurable Emulator Provider for Touch UI Responsive Mode.
       </action>
+      <action type="add" dev="sseifert">
+        Add new "select" GraniteUI form component that stores the values always as array if "multiple" mode is selected, regardless how many entries are selected.
+      </action>
     </release>
 
     <release version="0.5.0" date="2015-04-17">
