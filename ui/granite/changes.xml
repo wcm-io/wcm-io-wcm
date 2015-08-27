@@ -27,6 +27,9 @@
       <action type="add" dev="sseifert">
         Add Configurable Emulator Provider for Touch UI Responsive Mode.
       </action>
+      <action type="fix" dev="sseifert">
+        GraniteUi.getContentResource: Fallback to request suffix if CONTENTPATH_ATTRIBUTE is not set e.g. in context of multifield components.
+      </action>
     </release>
 
     <release version="0.5.0" date="2015-04-17">

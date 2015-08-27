@@ -21,6 +21,7 @@ package io.wcm.wcm.ui.granite.util;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 
@@ -34,7 +35,7 @@ import com.day.cq.wcm.api.PageManager;
 public final class GraniteUi {
 
   private GraniteUi() {
-    // static methodd only
+    // static methods only
   }
 
   /**
@@ -48,9 +49,13 @@ public final class GraniteUi {
     if (contentPath != null) {
       return slingRequest.getResourceResolver().getResource(contentPath);
     }
-    else {
-      return null;
+    // fallback to suffix if CONTENTPATH_ATTRIBUTE is not set
+    // (e.g. in inside a /libs/granite/ui/components/foundation/form/multifield component)
+    contentPath = ((SlingHttpServletRequest)request).getRequestPathInfo().getSuffix();
+    if (StringUtils.isNotEmpty(contentPath)) {
+      return slingRequest.getResourceResolver().getResource(contentPath);
     }
+    return null;
   }
 
   /**
