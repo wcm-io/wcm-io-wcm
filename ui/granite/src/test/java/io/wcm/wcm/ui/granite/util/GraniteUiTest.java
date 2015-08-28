@@ -24,6 +24,7 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Before;
@@ -44,6 +45,8 @@ public class GraniteUiTest {
   @Mock
   private SlingHttpServletRequest request;
   @Mock
+  private RequestPathInfo requestPathInfo;
+  @Mock
   private ResourceResolver resourceResolver;
   @Mock
   private Resource resource;
@@ -56,6 +59,7 @@ public class GraniteUiTest {
   public void setUp() {
     when(request.getResourceResolver()).thenReturn(resourceResolver);
     when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(CONTENT_PATH);
+    when(request.getRequestPathInfo()).thenReturn(requestPathInfo);
     when(resourceResolver.getResource(CONTENT_PATH)).thenReturn(resource);
     when(resourceResolver.adaptTo(PageManager.class)).thenReturn(pageManager);
     when(pageManager.getContainingPage(resource)).thenReturn(page);
@@ -70,6 +74,13 @@ public class GraniteUiTest {
   public void testGetContentResource_NoContentPath() {
     when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(null);
     assertNull(GraniteUi.getContentResource(request));
+  }
+
+  @Test
+  public void testGetContentResource_NoContentPath_FallbackToSuffix() {
+    when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(null);
+    when(requestPathInfo.getSuffix()).thenReturn(CONTENT_PATH);
+    assertSame(resource, GraniteUi.getContentResource(request));
   }
 
   @Test
