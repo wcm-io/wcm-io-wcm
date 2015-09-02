@@ -31,4 +31,4 @@ String name = cfg.get("name", String.class);
 boolean multiple = cfg.get("multiple", false);
 
 %>
-<% if (multiple) %><input type="hidden" name="<%=name%>@TypeHint" value="String[]" /><% } %>
+<% if (multiple) { %><input type="hidden" name="<%=name%>@TypeHint" value="String[]" /><% } %>
