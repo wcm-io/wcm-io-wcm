@@ -63,6 +63,12 @@
       <version>1.3.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.sling</groupId>
+      <artifactId>org.apache.sling.testing.logging-mock</artifactId>
+      <version>1.0.0</version>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -89,9 +95,17 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+
             <Sling-Initial-Content>
               SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/ui/granite
             </Sling-Initial-Content>
+
+            <!-- Exported package versions differ in major version between AEM60 and AEM61 -->
+            <Import-Package>
+              com.day.cq.wcm.emulator;version="[0.0,2)",
+              *
+            </Import-Package>
+
           </instructions>
         </configuration>
       </plugin>
