@@ -5,9 +5,8 @@
 To use the paragraph system in your sightly template:
 
 ```html
-<div data-sly-resource="${'./content'
-    @ resourceType='/apps/wcm-io/wcm/parsys/components/parsys'}"
-    data-sly-unwrap></div>
+<sly data-sly-resource="${'./content'
+    @ resourceType='/apps/wcm-io/wcm/parsys/components/parsys'}" />
 ```
 
 
@@ -115,9 +114,8 @@ In this example the paragraph systems uses an UL with nested LIs for each compon
 If you want to use editbars instead of rollover edit mode for the paragraph system you can use:
 
 ```html
-<div data-sly-resource="${'./content'
-    @ resourceType='/apps/wcm-io/wcm/parsys/components/parsysEditbar'}"
-    data-sly-unwrap></div>
+<sly data-sly-resource="${'./content'
+    @ resourceType='/apps/wcm-io/wcm/parsys/components/parsysEditbar'}" />
 ```
 
 This is only supported in Classic UI.
