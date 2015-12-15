@@ -17,8 +17,26 @@
  * limitations under the License.
  * #L%
  */
-/**
- * Miscellaneous WCM helper classes.
- */
-@org.osgi.annotation.versioning.Version("0.6.0")
 package io.wcm.wcm.commons.util;
+
+import org.osgi.annotation.versioning.ConsumerType;
+
+/**
+ * Path information for a template.
+ */
+@ConsumerType
+public interface TemplatePathInfo {
+
+  /**
+   * Template path
+   * @return Path
+   */
+  String getTemplatePath();
+
+  /**
+   * Resource type
+   * @return Path
+   */
+  String getResourceType();
+
+}
