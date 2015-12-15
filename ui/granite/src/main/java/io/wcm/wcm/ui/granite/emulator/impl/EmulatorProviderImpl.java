@@ -113,7 +113,7 @@ public class EmulatorProviderImpl implements EmulatorProvider {
 
     private final DeviceGroup deviceGroup;
 
-    public EmulatorGroupImpl(DeviceGroup deviceGroup) {
+    EmulatorGroupImpl(DeviceGroup deviceGroup) {
       this.deviceGroup = deviceGroup;
     }
 

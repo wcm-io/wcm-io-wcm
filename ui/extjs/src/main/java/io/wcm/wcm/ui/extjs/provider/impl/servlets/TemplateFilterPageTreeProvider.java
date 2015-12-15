@@ -19,10 +19,6 @@
  */
 package io.wcm.wcm.ui.extjs.provider.impl.servlets;
 
-import io.wcm.sling.commons.request.RequestParam;
-import io.wcm.wcm.commons.contenttype.FileExtension;
-import io.wcm.wcm.ui.extjs.provider.AbstractPageTreeProvider;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -52,6 +48,9 @@ import com.day.cq.wcm.api.PageFilter;
 import com.day.text.ISO9075;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.sling.commons.request.RequestParam;
+import io.wcm.wcm.commons.contenttype.FileExtension;
+import io.wcm.wcm.ui.extjs.provider.AbstractPageTreeProvider;
 
 /**
  * Page tree provider for tree nodes filtered by their templates
@@ -154,7 +153,7 @@ public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
 
     private Set<String> pathsToFollow = new HashSet<>();
 
-    public PathPageFilter(Set<String> pagePathsToFollow) {
+    PathPageFilter(Set<String> pagePathsToFollow) {
       if (pagePathsToFollow != null) {
         this.pathsToFollow = pagePathsToFollow;
       }
