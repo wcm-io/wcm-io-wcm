@@ -30,6 +30,9 @@
       <action type="add" dev="sseifert">
         Add simple structure element template (by default not active).
       </action>
+      <action type="update" dev="sseifert">
+        Remove page properties customization to stick with default page properties from AEM by default. Should be overwritten only on project level.
+      </action>
     </release>
 
     <release version="0.5.6" date="2015-04-17">
