@@ -27,6 +27,9 @@
       <action type="add" dev="sseifert">
         Add Template and TemplatePathInfo for easier managing "AppTemplate" enums.
       </action>
+      <action type="add" dev="sseifert">
+        Add simple structure element template (by default not active).
+      </action>
     </release>
 
     <release version="0.5.6" date="2015-04-17">
