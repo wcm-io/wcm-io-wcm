@@ -20,7 +20,6 @@
 package io.wcm.wcm.commons.util;
 
 import static org.junit.Assert.assertEquals;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.sling.api.resource.Resource;
@@ -28,6 +27,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.day.cq.wcm.api.Page;
+
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 public class ToStringStyleAemObjectsTest {
 
@@ -66,7 +67,7 @@ public class ToStringStyleAemObjectsTest {
     private final Resource[] resources;
     private final Page page;
 
-    public ToStringTester(Resource resource, Resource[] resources, Page page) {
+    ToStringTester(Resource resource, Resource[] resources, Page page) {
       this.resource = resource;
       this.resources = resources;
       this.page = page;

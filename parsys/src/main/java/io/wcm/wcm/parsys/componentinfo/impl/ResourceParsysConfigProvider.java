@@ -20,7 +20,6 @@
 package io.wcm.wcm.parsys.componentinfo.impl;
 
 import static io.wcm.wcm.parsys.ParsysNameConstants.NN_PARSYS_CONFIG;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,6 +36,8 @@ import org.apache.sling.api.resource.ValueMap;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 
 /**
  * Reads paragraph system configuration from page component resource type definition in repository.
@@ -56,7 +57,7 @@ final class ResourceParsysConfigProvider {
   /**
    * @param pageComponentResource Page component resource
    */
-  public ResourceParsysConfigProvider(Resource pageComponentResource) {
+  ResourceParsysConfigProvider(Resource pageComponentResource) {
     this.pathDefs = getPathDefs(pageComponentResource);
   }
 
@@ -99,7 +100,7 @@ final class ResourceParsysConfigProvider {
      * @param pathDefResource Path definition resource
      * @param pageComponentPath resource type of page component
      */
-    public PathDef(Resource pathDefResource, String pageComponentPath) {
+    PathDef(Resource pathDefResource, String pageComponentPath) {
       this.pageComponentPath = pageComponentPath;
       ValueMap pathDefProps = pathDefResource.adaptTo(ValueMap.class);
 

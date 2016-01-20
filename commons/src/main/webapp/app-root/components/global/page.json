@@ -4,53 +4,5 @@
    * Default Page properties dialog
    */
   "jcr:primaryType": "cq:Component",
-  "sling:resourceSuperType": "/libs/wcm/foundation/components/page",
-
-  /*
-   * Global page properties dialog
-   */
-  "cq:dialog": {
-    "jcr:primaryType": "nt:unstructured",
-    "jcr:title": "Page",
-    "extraClientlibs": [
-      "cq.common.wcm",
-      "cq.siteadmin.admin.properties"
-    ],
-    "mode": "edit",
-    "sling:resourceType": "cq/gui/components/authoring/dialog",
-    "content": {
-      "sling:resourceType": "granite/ui/components/foundation/container",
-      "items": {
-        "tabs": {
-          "sling:resourceType": "granite/ui/components/foundation/container",
-          "layout": {
-            "sling:resourceType": "granite/ui/components/foundation/layouts/tabs",
-            "type": "nav"
-          },
-          "items": {
-
-            "basic": {
-              "sling:resourceType": "granite/ui/components/foundation/include",
-              "jcr:title": "Basic",
-              "path": "/apps/wcm-io/wcm/commons/components/global/include/pagepropsBasicTab"
-            },
-
-            "advanced": {
-              "sling:resourceType": "granite/ui/components/foundation/include",
-              "jcr:title": "Advanced",
-              "path": "/apps/wcm-io/wcm/commons/components/global/include/pagepropsAdvancedTab"
-            },
-
-            "preview": {
-              "sling:resourceType": "granite/ui/components/foundation/include",
-              "jcr:title": "Preview",
-              "path": "/apps/wcm-io/wcm/commons/components/global/include/pagepropsPreviewTab"
-            }
-
-          }
-        }
-      }
-    }
-  }
-
+  "sling:resourceSuperType": "/libs/wcm/foundation/components/page"
 }

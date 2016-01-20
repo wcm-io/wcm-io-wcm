@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableList;
  * Simple implementation of {@link EmulatorProvider} to activate AEM 6.1 responsive mode for this application.
  * To work it needs a property "cq:deviceGroups[]" set to "/etc/mobile/groups/responsive" in the site root page.
  */
-@Component(immediate = true, metatype = true,
+@Component(metatype = true, configurationFactory = true,
 label = "wcm.io Emulator Provider",
 description = "Provides emulators based on device groups in the pages with a configurable set of templates.")
 @Service(EmulatorProvider.class)
@@ -113,7 +113,7 @@ public class EmulatorProviderImpl implements EmulatorProvider {
 
     private final DeviceGroup deviceGroup;
 
-    public EmulatorGroupImpl(DeviceGroup deviceGroup) {
+    EmulatorGroupImpl(DeviceGroup deviceGroup) {
       this.deviceGroup = deviceGroup;
     }
 

@@ -43,7 +43,7 @@ class SlingFolderVirtualPage implements Page {
 
   private final Resource resource;
 
-  public SlingFolderVirtualPage(Resource resource) {
+  SlingFolderVirtualPage(Resource resource) {
     this.resource = resource;
   }
 

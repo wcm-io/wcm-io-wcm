@@ -18,7 +18,7 @@
  * #L%
  */
 /**
- * Miscellaneous WCM helper classes.
+ * Sling model classes for UI views.
  */
-@org.osgi.annotation.versioning.Version("0.6.0")
-package io.wcm.wcm.commons.util;
+@org.osgi.annotation.versioning.Version("0.5.0")
+package io.wcm.wcm.commons.ui;

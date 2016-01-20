@@ -5,9 +5,8 @@
 To use the paragraph system in your sightly template:
 
 ```html
-<div data-sly-resource="${'./content'
-    @ resourceType='/apps/wcm-io/wcm/parsys/components/parsys'}"
-    data-sly-unwrap></div>
+<sly data-sly-resource="${'./content'
+    @ resourceType='/apps/wcm-io/wcm/parsys/components/parsys'}" />
 ```
 
 
@@ -86,7 +85,7 @@ You can set the following property in the component node of the paragraph system
 
 * **wcmio:parsysNewAreaCss**: Defines additional custom CSS classes to be set on the new area.
 
-* **wcmio:parsysParagraphElement**: Sets the element name to be used for the element wrapping each pagraph component. Defaults to "div" if not set.
+* **wcmio:parsysParagraphElement**: Sets the element name to be used for the element wrapping each paragraph component. Defaults to "div" if not set.
 
 * **wcmio:parsysWrapperElement**: Sets the element name to be used for the element wrapping the whole paragraph system. If not set no wrapping element is generated for the paragraph system.
 
@@ -115,9 +114,8 @@ In this example the paragraph systems uses an UL with nested LIs for each compon
 If you want to use editbars instead of rollover edit mode for the paragraph system you can use:
 
 ```html
-<div data-sly-resource="${'./content'
-    @ resourceType='/apps/wcm-io/wcm/parsys/components/parsysEditbar'}"
-    data-sly-unwrap></div>
+<sly data-sly-resource="${'./content'
+    @ resourceType='/apps/wcm-io/wcm/parsys/components/parsysEditbar'}" />
 ```
 
 This is only supported in Classic UI.

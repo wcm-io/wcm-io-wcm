@@ -23,6 +23,18 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
+    <release version="0.6.0" date="not released">
+      <action type="add" dev="sseifert">
+        Add Template and TemplatePathInfo for easier managing "AppTemplate" enums.
+      </action>
+      <action type="add" dev="sseifert">
+        Add simple structure element template (by default not active).
+      </action>
+      <action type="update" dev="sseifert">
+        Remove page properties customization to stick with default page properties from AEM by default. Should be overwritten only on project level.
+      </action>
+    </release>
+
     <release version="0.5.6" date="2015-04-17">
       <action type="fix" dev="sseifert">
         wcmInit: Fix syntax error in render.html.

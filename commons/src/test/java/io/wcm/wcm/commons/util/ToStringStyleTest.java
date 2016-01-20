@@ -57,7 +57,7 @@ public class ToStringStyleTest {
     private final String[] stringArray;
     private final Object object;
 
-    public ToStringTester(String string, String[] stringArray, Object object) {
+    ToStringTester(String string, String[] stringArray, Object object) {
       this.string = string;
       this.stringArray = stringArray;
       this.object = object;

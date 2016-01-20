@@ -25,13 +25,13 @@
   <parent>
     <groupId>io.wcm</groupId>
     <artifactId>io.wcm.parent_toplevel</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.10</version>
     <relativePath />
   </parent>
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.parent</artifactId>
-  <version>0.5.5-SNAPSHOT</version>
+  <version>0.5.6</version>
   <packaging>pom</packaging>
 
   <name>WCM Extensions</name>
@@ -47,6 +47,27 @@
   <properties>
     <site.url.module.prefix>wcm</site.url.module.prefix>
   </properties>
+  
+  <dependencies>
+  
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.adobe.aem</groupId>
+      <artifactId>aem-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  
+  </dependencies>
 
   <distributionManagement>
     <site>

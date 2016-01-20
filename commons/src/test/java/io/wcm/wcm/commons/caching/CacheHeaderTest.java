@@ -165,7 +165,7 @@ public class CacheHeaderTest {
     private final long mTimespanMillisecondsTo;
     private final long mNow;
 
-    public ValidateDateHeaderAnswer(long pTimespanMilliseconds) {
+    ValidateDateHeaderAnswer(long pTimespanMilliseconds) {
       mTimespanMillisecondsFrom = pTimespanMilliseconds - TIMESPAN_DIFF_TOLERANCE_MILLISECONDS;
       mTimespanMillisecondsTo = pTimespanMilliseconds + TIMESPAN_DIFF_TOLERANCE_MILLISECONDS;
       mNow = Calendar.getInstance().getTimeInMillis();
