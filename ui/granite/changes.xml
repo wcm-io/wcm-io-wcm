@@ -27,8 +27,11 @@
       <action type="update" dev="sseifert">
         Support factory configurations for Emulator Provider for Touch UI Responsive Mode.
       </action>
+      <action type="update" dev="sseifert">
+        Set AEM API and OSGi dependencies to provided scope.
+      </action>
     </release>
-    
+
     <release version="0.6.0" date="2015-09-03">
       <action type="add" dev="sseifert">
         Add Configurable Emulator Provider for Touch UI Responsive Mode.
