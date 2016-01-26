@@ -45,7 +45,7 @@ public class DenyWcmDisabled {
   private WCMMode wcmMode;
 
   @PostConstruct
-  private void activate() throws IOException {
+  protected void activate() throws IOException {
     if (wcmMode == WCMMode.DISABLED) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
