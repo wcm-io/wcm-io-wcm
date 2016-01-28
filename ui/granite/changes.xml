@@ -28,6 +28,9 @@
         Support factory configurations for Emulator Provider for Touch UI Responsive Mode.
       </action>
       <action type="update" dev="sseifert">
+        Checkbox: Default to "true" value.
+      </action>
+      <action type="update" dev="sseifert">
         Set AEM API and OSGi dependencies to provided scope.
       </action>
     </release>

@@ -17,17 +17,26 @@
   limitations under the License.
   #L%
   --%>
+<%@page import="org.apache.sling.api.resource.Resource"%>
+<%@page import="org.apache.sling.api.resource.ValueMap"%>
+<%@page import="org.apache.sling.api.request.RequestDispatcherOptions"%>
 <%@page import="com.adobe.granite.ui.components.Config"%>
-<%@page import="com.adobe.granite.ui.components.ComponentHelper.Options"%>
-<%@page import="com.adobe.granite.ui.components.Tag"%>
+<%@page import="io.wcm.sling.commons.resource.ImmutableValueMap"%>
+<%@page import="io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource"%>
 <%@include file="../../global/global.jsp" %><%
-
-Tag tag = cmp.consumeTag();
-
-cmp.include(resource, "/libs/granite/ui/components/foundation/form/checkbox", new Options().tag(tag));
 
 Config cfg = cmp.getConfig();
 String name = cfg.get("name", String.class);
+String value = cfg.get("value", "true");
+
+ValueMap overwriteProperties = ImmutableValueMap.of("value", value);
+//simulate resource for dialog field def with new value instead of configured one
+Resource resourceWrapper = GraniteUiSyntheticResource.wrapMerge(resource, overwriteProperties);
+
+RequestDispatcherOptions options = new RequestDispatcherOptions();
+options.setForceResourceType("/libs/granite/ui/components/foundation/form/checkbox");
+RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(resourceWrapper, options);
+dispatcher.include(slingRequest, slingResponse);
 
 %>
 <input type="hidden" name="<%=name%>@Delete" value="true" />
