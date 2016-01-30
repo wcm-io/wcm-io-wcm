@@ -85,7 +85,7 @@ You can set the following property in the component node of the paragraph system
 
 * **wcmio:parsysNewAreaCss**: Defines additional custom CSS classes to be set on the new area.
 
-* **wcmio:parsysParagraphElement**: Sets the element name to be used for the element wrapping each paragraph component. Defaults to "div" if not set.
+* **wcmio:parsysParagraphElement**: Sets the element name to be used for the element wrapping each paragraph component. Defaults to decoration tag name of the component.
 
 * **wcmio:parsysWrapperElement**: Sets the element name to be used for the element wrapping the whole paragraph system. If not set no wrapping element is generated for the paragraph system.
 

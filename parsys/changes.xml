@@ -24,6 +24,9 @@
   <body>
 
     <release version="0.6.2" date="not released">
+      <action type="fix" dev="sseifert">
+        Ensure only one decoration tag element is generated when cq:htmlTag is used in component definition.
+      </action>
       <action type="update" dev="sseifert">
         Set AEM API and OSGi dependencies to provided scope.
       </action>
