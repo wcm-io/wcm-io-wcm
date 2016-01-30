@@ -28,6 +28,7 @@ Differences to the AEM-builtin paragraph system:
 * It does not use the design mode to configure the allowed components. Instead the metadata that described which components are allowed in which template at which position is stored as nodes in the page components and delivered together with the application.
 * Allowed components can be defined based on path patterns and parent component relations.
 * Additional rules for allowing or denying components can be provided via OSGi factory configurations.
+* Via properties it is possible to change the decoration markup and CSS classes of the paragraph and paragraph items.
 * This parsys does not support column controls or iparsys inheritance, it is only a simple paragraph system which allows full control about the markup generated for the child resources and the new area.
 * Written in Sightly.
 
