@@ -92,6 +92,7 @@ You can set the following property in the component node of the paragraph system
 * **wcmio:parsysWrapperCss**: Defines custom CSS classes to be set on the wrapper element.
 
 Example:
+
 ```
 {
   "jcr:primaryType": "cq:Component",
