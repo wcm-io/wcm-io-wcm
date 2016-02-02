@@ -2,15 +2,8 @@
 
 AEM paragraph system based on path configuration in page components.
 
-### Maven Dependency
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.wcm.parsys/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.wcm.parsys)
 
-```xml
-<dependency>
-  <groupId>io.wcm</groupId>
-  <artifactId>io.wcm.wcm.parsys</artifactId>
-  <version>0.6.0</version>
-</dependency>
-```
 
 ### Documentation
 

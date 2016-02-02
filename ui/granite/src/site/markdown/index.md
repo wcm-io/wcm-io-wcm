@@ -2,16 +2,8 @@
 
 Granite UI Components for AEM Touch UI.
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.wcm.ui.granite/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.wcm.ui.granite)
 
-### Maven Dependency
-
-```xml
-<dependency>
-  <groupId>io.wcm</groupId>
-  <artifactId>io.wcm.wcm.ui.granite</artifactId>
-  <version>0.6.0</version>
-</dependency>
-```
 
 ### Documentation
 
