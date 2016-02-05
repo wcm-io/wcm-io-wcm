@@ -35,6 +35,7 @@ import com.google.common.collect.ImmutableList;
 label = "wcm.io Emulator Provider",
 description = "Provides emulators based on device groups in the pages with a configurable set of templates.")
 @Service(EmulatorProvider.class)
+@Property(name = "webconsole.configurationFactory.nameHint", value = "{templatePathPatterns}")
 public class EmulatorProviderImpl implements EmulatorProvider {
 
   @Property(cardinality = Integer.MAX_VALUE,
