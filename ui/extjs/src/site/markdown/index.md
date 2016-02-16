@@ -2,15 +2,8 @@
 
 ExtJS Widgets for AEM Classic UI.
 
-### Maven Dependency
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.wcm.ui.extjs/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.wcm.ui.extjs)
 
-```xml
-<dependency>
-  <groupId>io.wcm</groupId>
-  <artifactId>io.wcm.wcm.ui.extjs</artifactId>
-  <version>0.5.0</version>
-</dependency>
-```
 
 ### Documentation
 

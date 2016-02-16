@@ -25,10 +25,10 @@ import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_ELEMENT;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
-import io.wcm.sling.models.annotations.AemObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -42,8 +42,15 @@ import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.osgi.annotation.versioning.ProviderType;
 
+import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.WCMMode;
+import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentContext;
+import com.day.cq.wcm.api.components.ComponentManager;
+import com.google.common.collect.ImmutableMap;
+
+import io.wcm.sling.commons.adapter.AdaptTo;
+import io.wcm.sling.models.annotations.AemObject;
 
 /**
  * Controller for paragraph system.
@@ -62,6 +69,7 @@ public final class Parsys {
   static final String NEWAREA_CSS_CLASS_NAME = "new";
   static final String NEWAREA_CHILD_NAME = "newpar";
   static final String FALLBACK_NEWAREA_RESOURCE_TYPE = "/apps/wcm-io/wcm/parsys/components/parsys/newpar";
+  static final String DEFAULT_ELEMENT_NAME = "div";
 
   /**
    * Allows to override the resource which children are iterated to display the parsys.
@@ -77,6 +85,7 @@ public final class Parsys {
   private WCMMode wcmMode;
   @AemObject
   private ComponentContext componentContext;
+  private ComponentManager componentManager;
 
   private boolean generateDefaultCss;
   private String paragraphCss;
@@ -94,7 +103,7 @@ public final class Parsys {
     generateDefaultCss = props.get(PN_PARSYS_GENERATE_DEAFULT_CSS, true);
     paragraphCss = props.get(PN_PARSYS_PARAGRAPH_CSS, String.class);
     newAreaCss = props.get(PN_PARSYS_NEWAREA_CSS, String.class);
-    paragraphElementName = props.get(PN_PARSYS_PARAGRAPH_ELEMENT, "div");
+    paragraphElementName = props.get(PN_PARSYS_PARAGRAPH_ELEMENT, String.class);
     wrapperElementName = props.get(PN_PARSYS_WRAPPER_ELEMENT, String.class);
     wrapperCss = props.get(PN_PARSYS_WRAPPER_CSS, String.class);
 
@@ -117,7 +126,39 @@ public final class Parsys {
       css.add(SECTION_DEFAULT_CLASS_NAME);
     }
     css.add(paragraphCss);
-    return new Item(resource.getPath(), null, paragraphElementName, null, css.build(), false);
+
+    Map<String,String> htmlTagAttrs = getComponentHtmlTagAttributes(resource.getResourceType());
+
+    // apply html tag attributes from component definition
+    String itemElementName = paragraphElementName;
+    if (StringUtils.isEmpty(itemElementName)) {
+      itemElementName = StringUtils.defaultString(htmlTagAttrs.get(NameConstants.PN_TAG_NAME), DEFAULT_ELEMENT_NAME);
+    }
+    if (StringUtils.isEmpty(paragraphCss)) {
+      css.add(htmlTagAttrs.get("class"));
+    }
+
+    return new Item(resource.getPath(), null, itemElementName, null, css.build(), false);
+  }
+
+  /**
+   * Get HTML tag attributes from component.
+   * @param resourceType Component path
+   * @return Map (never null)
+   */
+  private Map<String, String> getComponentHtmlTagAttributes(String resourceType) {
+    if (StringUtils.isNotEmpty(resourceType)) {
+      Component component = componentManager().getComponent(resourceType);
+      if (component != null && component.getHtmlTagAttributes() != null) {
+        return component.getHtmlTagAttributes();
+      }
+    }
+    return ImmutableMap.of();
+  }
+
+  private ComponentManager componentManager() {
+    componentManager = AdaptTo.notNull(this.resolver, ComponentManager.class);
+    return componentManager;
   }
 
   private Item createNewAreaItem() {
@@ -129,8 +170,9 @@ public final class Parsys {
       css.add(SECTION_DEFAULT_CLASS_NAME);
     }
     css.add(newAreaCss);
+    String newAreaElementName = StringUtils.defaultString(paragraphElementName, DEFAULT_ELEMENT_NAME);
     String newAreaResourceType = getNewAreaResourceType(componentContext.getComponent().getPath());
-    return new Item(NEWAREA_RESOURCE_PATH, newAreaResourceType, paragraphElementName, style, css.build(), true);
+    return new Item(NEWAREA_RESOURCE_PATH, newAreaResourceType, newAreaElementName, style, css.build(), true);
   }
 
   /**
@@ -163,7 +205,7 @@ public final class Parsys {
    * @return Element name for wrapper element
    */
   public String getWrapperElementName() {
-    return StringUtils.defaultString(wrapperElementName, "div");
+    return StringUtils.defaultString(wrapperElementName, DEFAULT_ELEMENT_NAME);
   }
 
   /**

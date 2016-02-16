@@ -85,28 +85,28 @@ You can set the following property in the component node of the paragraph system
 
 * **wcmio:parsysNewAreaCss**: Defines additional custom CSS classes to be set on the new area.
 
-* **wcmio:parsysParagraphElement**: Sets the element name to be used for the element wrapping each paragraph component. Defaults to "div" if not set.
+* **wcmio:parsysParagraphElement**: Sets the element name to be used for the element wrapping each paragraph component. Defaults to decoration tag name of the component.
 
 * **wcmio:parsysWrapperElement**: Sets the element name to be used for the element wrapping the whole paragraph system. If not set no wrapping element is generated for the paragraph system.
 
 * **wcmio:parsysWrapperCss**: Defines custom CSS classes to be set on the wrapper element.
 
+Example:
 
-### Override markup of the paragraph system
-
-When customizing the markup (element names and CSS classes) of the paragraph system is not enough you can override the markup of the paragraph system.
-
-In this example the paragraph systems uses an UL with nested LIs for each component with some extra CSS classes:
-
-```html
-<ul class="link-list" data-sly-use.parsys="io.wcm.wcm.parsys.controller.Parsys"
-    data-sly-list.item="${parsys.items}">
-
-  <li class="link-list-item ${item.cssClassName}“
-      data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"></li>
-
-</ul>
 ```
+{
+  "jcr:primaryType": "cq:Component",
+  "sling:resourceSuperType": "/apps/wcm-io/wcm/parsys/components/parsys",
+  "cq:isContainer": true,
+  "wcmio:parsysWrapperElement": "ul",
+  "wcmio:parsysWrapperCss": "link-list",
+  "wcmio:parsysParagraphElement": "li",
+  "wcmio:parsysParagraphCss": "link-list-item",
+  "wcmio:parsysNewAreaCss": "link-list-item"
+}
+```
+
+Although technically possible it is not recommended to copy and overlay the Sightly script of the paragraph system, it may change in future versions.
 
 
 ### Paragraph system with editbar (Classic UI)

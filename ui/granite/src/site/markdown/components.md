@@ -30,8 +30,7 @@ Form checkbox for boolean data.
   "sling:resourceType": "/apps/wcm-io/wcm/ui/granite/components/form/checkbox",
   "name": "./field",
   "fieldDescription": "Description for checkbox",
-  "text": "Check this",
-  "value": "true"
+  "text": "Check this"
 }
 ```
 
@@ -39,6 +38,7 @@ Enhancements over AEM version:
 
 * Store with correct Boolean datatype via explicit @TypeHint
 * Always store value to repository (true or false), even if checkbox is not checked
+* Defaults to value 'true'
 
 
 ### Date Picker

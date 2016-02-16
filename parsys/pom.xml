@@ -31,7 +31,7 @@
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.parsys</artifactId>
-  <version>0.6.1-SNAPSHOT</version>
+  <version>0.6.2</version>
   <packaging>bundle</packaging>
 
   <name>WCM Parsys</name>
@@ -60,21 +60,21 @@
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.sling.commons</artifactId>
-      <version>0.6.0</version>
+      <version>0.6.4</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.wcm.commons</artifactId>
-      <version>0.5.4</version>
+      <version>0.6.0</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.testing.aem-mock</artifactId>
-      <version>1.4.0</version>
+      <version>1.7.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>

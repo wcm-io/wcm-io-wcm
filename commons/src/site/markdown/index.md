@@ -2,15 +2,8 @@
 
 Common WCM utility and helper functions.
 
-### Maven Dependency
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.wcm.commons/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.wcm.commons)
 
-```xml
-<dependency>
-  <groupId>io.wcm</groupId>
-  <artifactId>io.wcm.wcm.commons</artifactId>
-  <version>0.5.6</version>
-</dependency>
-```
 
 ### Documentation
 

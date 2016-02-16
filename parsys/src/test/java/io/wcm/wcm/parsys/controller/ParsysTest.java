@@ -25,6 +25,7 @@ import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_ELEMENT;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
+import static io.wcm.wcm.parsys.controller.Parsys.DEFAULT_ELEMENT_NAME;
 import static io.wcm.wcm.parsys.controller.Parsys.FALLBACK_NEWAREA_RESOURCE_TYPE;
 import static io.wcm.wcm.parsys.controller.Parsys.NEWAREA_CHILD_NAME;
 import static io.wcm.wcm.parsys.controller.Parsys.NEWAREA_CSS_CLASS_NAME;
@@ -37,10 +38,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.testing.mock.wcmio.sling.MockSlingExtensions;
-import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 import java.util.List;
 
@@ -53,16 +50,24 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentContext;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.wcmio.sling.MockSlingExtensions;
+import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParsysTest {
 
   private static final String RESOURCE_TYPE_SAMPLE = "/apps/sample/components/parsys";
   private static final String SUPER_RESOURCE_TYPE_SAMPLE = "/apps/sample/components/superParsys";
+  private static final String COMPONENT_PATH_1 = "/apps/sample/components/comp1";
+  private static final String COMPONENT_PATH_2 = "/apps/sample/components/comp2";
 
   @Rule
   public AemContext context = new AemContext();
@@ -72,6 +77,7 @@ public class ParsysTest {
   @Mock
   private Component component;
 
+  private Page page;
   private Resource parsysResource;
   private Resource par1Resource;
   private Resource par2Resource;
@@ -87,10 +93,13 @@ public class ParsysTest {
     when(component.getPath()).thenReturn(RESOURCE_TYPE_SAMPLE);
     when(component.getProperties()).thenReturn(ImmutableValueMap.of());
 
-    Page page = context.create().page("/content/page1", "/apps/sample/templates/test1");
+    page = context.create().page("/content/page1", "/apps/sample/templates/test1");
     parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsys");
-    par1Resource = context.create().resource(parsysResource.getPath() + "/par1");
-    par2Resource = context.create().resource(parsysResource.getPath() + "/par2");
+    par1Resource = context.create().resource(parsysResource.getPath() + "/par1",
+        ImmutableValueMap.of("sling:resourceType", COMPONENT_PATH_1));
+    par2Resource = context.create().resource(parsysResource.getPath() + "/par2",
+        ImmutableValueMap.of("sling:resourceType", COMPONENT_PATH_2));
+
     context.currentResource(parsysResource);
   }
 
@@ -101,7 +110,7 @@ public class ParsysTest {
 
     assertFalse(parsys.isWrapperElement());
     assertNull(parsys.getWrapperCss());
-    assertEquals("div", parsys.getWrapperElementName());
+    assertEquals(DEFAULT_ELEMENT_NAME, parsys.getWrapperElementName());
 
     List<Item> items = parsys.getItems();
     assertEquals(3, items.size());
@@ -111,7 +120,7 @@ public class ParsysTest {
     assertNull(item1.getResourceType());
     assertNull(item1.getStyle());
     assertEquals(SECTION_DEFAULT_CLASS_NAME, item1.getCssClassName());
-    assertEquals("div", item1.getElementName());
+    assertEquals(DEFAULT_ELEMENT_NAME, item1.getElementName());
     assertFalse(item1.isNewArea());
 
     Item item2 = items.get(1);
@@ -119,7 +128,7 @@ public class ParsysTest {
     assertNull(item2.getResourceType());
     assertNull(item2.getStyle());
     assertEquals(SECTION_DEFAULT_CLASS_NAME, item2.getCssClassName());
-    assertEquals("div", item2.getElementName());
+    assertEquals(DEFAULT_ELEMENT_NAME, item2.getElementName());
     assertFalse(item2.isNewArea());
 
     Item item3 = items.get(2);
@@ -127,7 +136,7 @@ public class ParsysTest {
     assertEquals(FALLBACK_NEWAREA_RESOURCE_TYPE, item3.getResourceType());
     assertEquals(NEWAREA_STYLE, item3.getStyle());
     assertEquals(NEWAREA_CSS_CLASS_NAME + " " + SECTION_DEFAULT_CLASS_NAME, item3.getCssClassName());
-    assertEquals("div", item3.getElementName());
+    assertEquals(DEFAULT_ELEMENT_NAME, item3.getElementName());
     assertTrue(item3.isNewArea());
   }
 
@@ -229,7 +238,7 @@ public class ParsysTest {
 
   @Test
   public void testOtherParentParsysResource() {
-    parsysResource = context.create().resource(context.currentPage().getContentResource().getPath() + "/parsysOther");
+    parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsysOther");
     par1Resource = context.create().resource(parsysResource.getPath() + "/par1");
 
     context.request().setAttribute(RA_PARSYS_PARENT_RESOURCE, parsysResource);
@@ -251,6 +260,41 @@ public class ParsysTest {
     assertEquals(FALLBACK_NEWAREA_RESOURCE_TYPE, item2.getResourceType());
     assertEquals(NEWAREA_CSS_CLASS_NAME + " " + SECTION_DEFAULT_CLASS_NAME, item2.getCssClassName());
     assertTrue(item2.isNewArea());
+  }
+
+  @Test
+  public void testComponentWithTagDecoration() {
+
+    // prepare tag decoration for one component
+    context.create().resource("/apps/sample/components/comp1/" + NameConstants.NN_HTML_TAG,
+        ImmutableValueMap.of(NameConstants.PN_TAG_NAME, "article", "class", "css1"));
+
+    WCMMode.EDIT.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+
+    List<Item> items = parsys.getItems();
+    assertEquals(3, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertNull(item1.getResourceType());
+    assertEquals("css1 section", item1.getCssClassName());
+    assertEquals("article", item1.getElementName());
+    assertFalse(item1.isNewArea());
+
+    Item item2 = items.get(1);
+    assertEquals(par2Resource.getPath(), item2.getResourcePath());
+    assertNull(item2.getResourceType());
+    assertEquals(SECTION_DEFAULT_CLASS_NAME, item2.getCssClassName());
+    assertEquals(DEFAULT_ELEMENT_NAME, item2.getElementName());
+    assertFalse(item2.isNewArea());
+
+    Item item3 = items.get(2);
+    assertEquals(NEWAREA_RESOURCE_PATH, item3.getResourcePath());
+    assertEquals(FALLBACK_NEWAREA_RESOURCE_TYPE, item3.getResourceType());
+    assertEquals(NEWAREA_CSS_CLASS_NAME + " " + SECTION_DEFAULT_CLASS_NAME, item3.getCssClassName());
+    assertEquals(DEFAULT_ELEMENT_NAME, item3.getElementName());
+    assertTrue(item3.isNewArea());
   }
 
 }

@@ -10,7 +10,7 @@
 	
 	</div>
 	
-	<!--/* Parsys variant without wrapper element */-->
+  <!--/* Parsys variant without wrapper element */-->
   <div data-sly-test="${!parsys.wrapperElement}"
 	    data-sly-list.parsysItem="${parsys.items}"
 	    data-sly-unwrap>
@@ -23,8 +23,18 @@
 
 <!--/* Render parsys item */-->
 <template data-sly-template.renderItem="${ @ item}">
-  <div style="${item.style @ context='unsafe'}"
-      class="${item.cssClassName}"
-      data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"
-      data-sly-element="${item.elementName}"></div>
+  
+  <!--/* Paragraph */-->
+  <div data-sly-test="${!item.newarea}"
+      data-sly-resource="${item.resourcePath @ resourceType=item.resourceType,
+      decorationTagName=item.elementName, cssClassName=item.cssClassName}"
+      data-sly-unwrap></div>
+  
+  <!--/* New area */-->
+  <div data-sly-test="${item.newarea}"
+        style="${item.style @ context='unsafe'}"
+        class="${item.cssClassName}"        
+        data-sly-element="${item.elementName}"
+        data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"></div>
+
 </template>
