@@ -116,7 +116,7 @@
             <Sling-Model-Packages>
               io.wcm.wcm.parsys.controller
             </Sling-Model-Packages>
-            <Sling-Namespaces>wcmio=http://wcm.io/ns</Sling-Namespaces>
+            <Sling-Nodetypes>SLING-INF/app-root/nodetypes/wcmio.cnd</Sling-Nodetypes>
           </instructions>
         </configuration>
       </plugin>
