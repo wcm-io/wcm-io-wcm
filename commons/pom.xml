@@ -115,9 +115,10 @@
               io.wcm.wcm.commons
             </Sling-Model-Packages>
 
-            <!-- Exported package versions differ in major version between AEM60 and AEM61 -->
+            <!-- Exported package versions differ in major version between AEM60, AEM61 and AEM62 -->
             <Import-Package>
               com.day.cq.wcm.undo;version="[0.0,2)",
+              javax.inject;version="[0.0,2)",
               *
             </Import-Package>
 

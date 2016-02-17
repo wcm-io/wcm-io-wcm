@@ -23,6 +23,12 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
+    <release version="0.6.2" date="not released">
+      <action type="update" dev="sseifert">
+        Relax package version dependency for javax.inject to support AEM60, AEM61 and AEM62.
+      </action>
+    </release>
+
     <release version="0.6.0" date="2016-01-20">
       <action type="add" dev="sseifert">
         Add Template and TemplatePathInfo for easier managing "AppTemplate" enums.
