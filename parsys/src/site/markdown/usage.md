@@ -28,7 +28,7 @@ To define which components are allowed in your paragraph system you create a nod
 
     /* Allowed components in jcr:content/leftcol/teasers node */
     "leftcol_teasers": {
-      "path": "jcr:content/lefcol/teasers",
+      "path": "jcr:content/leftcol/teasers",
       "allowedChildren": [
         "/apps/myapp/components/component1",
         "/apps/myapp/components/component2"
