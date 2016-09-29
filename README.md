@@ -1,6 +1,7 @@
 <img src="http://wcm.io/images/favicon-16@2x.png"/> wcm.io WCM
 ======
 [![Build Status](https://travis-ci.org/wcm-io/wcm-io-wcm.png?branch=develop)](https://travis-ci.org/wcm-io/wcm-io-wcm)
+[![Code Coverage](https://codecov.io/gh/wcm-io/wcm-io-wcm/branch/develop/graph/badge.svg)](https://codecov.io/gh/wcm-io/wcm-io-wcm)
 
 Extensions for AEM authoring and AEM applications.
 
