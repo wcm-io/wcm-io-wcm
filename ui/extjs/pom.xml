@@ -111,6 +111,13 @@
             <Sling-Initial-Content>
               SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/ui/extjs
             </Sling-Initial-Content>
+
+            <!-- Exported package versions differ in major version between AEM60, AEM61 and AEM62 -->
+            <Import-Package>
+              com.day.cq.commons;version="[5,7)",
+              *
+            </Import-Package>
+
           </instructions>
         </configuration>
       </plugin>

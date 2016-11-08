@@ -25,6 +25,9 @@
 
     <release version="0.5.2" date="not released">
       <action type="update" dev="sseifert">
+        Relax package version dependency for javax.inject to support AEM60, AEM61 and AEM62.
+      </action>
+      <action type="update" dev="sseifert">
         Set AEM API and OSGi dependencies to provided scope.
       </action>
     </release>
