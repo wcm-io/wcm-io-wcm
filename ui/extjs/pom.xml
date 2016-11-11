@@ -31,7 +31,7 @@
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.ui.extjs</artifactId>
-  <version>0.5.1-SNAPSHOT</version>
+  <version>0.5.2</version>
   <packaging>bundle</packaging>
 
   <name>WCM ExtJS UI Extensions</name>
@@ -111,6 +111,13 @@
             <Sling-Initial-Content>
               SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/ui/extjs
             </Sling-Initial-Content>
+
+            <!-- Exported package versions differ in major version between AEM60, AEM61 and AEM62 -->
+            <Import-Package>
+              com.day.cq.commons;version="[5,7)",
+              *
+            </Import-Package>
+
           </instructions>
         </configuration>
       </plugin>
