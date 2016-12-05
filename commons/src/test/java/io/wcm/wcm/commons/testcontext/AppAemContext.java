@@ -19,13 +19,15 @@
  */
 package io.wcm.wcm.commons.testcontext;
 
+import static io.wcm.testing.mock.wcmio.sling.ContextPlugins.WCMIO_SLING;
+
 import java.io.IOException;
 
 import org.apache.sling.api.resource.PersistenceException;
 
 import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit.AemContextBuilder;
 import io.wcm.testing.mock.aem.junit.AemContextCallback;
-import io.wcm.testing.mock.wcmio.sling.MockSlingExtensions;
 
 /**
  * Sets up {@link AemContext} for unit tests in this application.
@@ -37,24 +39,23 @@ public final class AppAemContext {
   }
 
   public static AemContext newAemContext() {
-    return new AemContext(new SetUpCallback());
+    return new AemContextBuilder()
+        .plugin(WCMIO_SLING)
+        .afterSetUp(SETUP_CALLBACK)
+        .build();
   }
 
   /**
    * Custom set up rules required in all unit tests.
    */
-  private static final class SetUpCallback implements AemContextCallback {
-
+  private static final AemContextCallback SETUP_CALLBACK = new AemContextCallback() {
     @Override
     public void execute(AemContext context) throws PersistenceException, IOException {
 
-      // wcm.io Sling extensions
-      MockSlingExtensions.setUp(context);
-
       // register sling models
       context.addModelsForPackage("io.wcm.wcm.commons");
-    }
 
-  }
+    }
+  };
 
 }

@@ -19,6 +19,7 @@
  */
 package io.wcm.wcm.parsys.controller;
 
+import static io.wcm.testing.mock.wcmio.sling.ContextPlugins.WCMIO_SLING;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_GENERATE_DEAFULT_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_NEWAREA_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
@@ -58,7 +59,7 @@ import com.day.cq.wcm.api.components.ComponentContext;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.testing.mock.wcmio.sling.MockSlingExtensions;
+import io.wcm.testing.mock.aem.junit.AemContextBuilder;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -70,7 +71,7 @@ public class ParsysTest {
   private static final String COMPONENT_PATH_2 = "/apps/sample/components/comp2";
 
   @Rule
-  public AemContext context = new AemContext();
+  public AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();
 
   @Mock
   private ComponentContext componentContext;
@@ -84,8 +85,6 @@ public class ParsysTest {
 
   @Before
   public void setUp() {
-    MockSlingExtensions.setUp(context);
-
     context.addModelsForPackage("io.wcm.wcm.parsys.controller");
 
     context.request().setAttribute(ComponentContext.CONTEXT_ATTR_NAME, componentContext);
