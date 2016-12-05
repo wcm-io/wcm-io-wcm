@@ -25,7 +25,7 @@
   <parent>
     <groupId>io.wcm</groupId>
     <artifactId>io.wcm.wcm.parent</artifactId>
-    <version>0.5.6</version>
+    <version>0.5.7-SNAPSHOT</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
 
@@ -49,6 +49,12 @@
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.scr.annotations</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>io.wcm</groupId>
@@ -98,8 +104,8 @@
     <plugins>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-eclipse-plugin</artifactId>
+        <groupId>io.wcm.devops.maven.plugins</groupId>
+        <artifactId>eclipse-maven-plugin</artifactId>
         <configuration>
           <addVersionToProjectName>false</addVersionToProjectName>
         </configuration>
@@ -119,24 +125,6 @@
             <Sling-Namespaces>wcmio=http://wcm.io/ns</Sling-Namespaces>
           </instructions>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-scr-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.sling</groupId>
-        <artifactId>maven-sling-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>validate-bundle</id>
-            <goals>
-              <goal>validate</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
     </plugins>
