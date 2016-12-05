@@ -21,38 +21,37 @@ package io.wcm.wcm.ui.extjs.provider.impl.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
 import com.google.common.collect.ImmutableList;
 
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+
 @RunWith(MockitoJUnitRunner.class)
 public class PageIteratorTest {
 
-  @Mock
+  @Rule
+  public AemContext context = new AemContext();
+
   private Resource resource1;
-  @Mock
   private Resource resource2;
-  @Mock
   private Resource resource3;
-  @Mock
   private Page page1;
-  @Mock
   private Page page2;
-  @Mock
   private Page page3;
   @Mock
   private PageFilter pageFilter;
@@ -61,18 +60,14 @@ public class PageIteratorTest {
 
   @Before
   public void setUp() {
-    when(resource1.getPath()).thenReturn("/path1");
-    when(resource2.getPath()).thenReturn("/path2");
-    when(resource3.getPath()).thenReturn("/path3");
-    when(resource1.getValueMap()).thenReturn(ValueMap.EMPTY);
-    when(resource2.getValueMap()).thenReturn(ValueMap.EMPTY);
-    when(resource3.getValueMap()).thenReturn(ValueMap.EMPTY);
-    when(resource1.adaptTo(Page.class)).thenReturn(page1);
-    when(resource2.adaptTo(Page.class)).thenReturn(page2);
-    when(resource3.adaptTo(Page.class)).thenReturn(page3);
-    when(page1.getPath()).thenReturn("/path1");
-    when(page2.getPath()).thenReturn("/path2");
-    when(page3.getPath()).thenReturn("/path3");
+    page1 = context.create().page("/path1");
+    page2 = context.create().page("/path2");
+    page3 = context.create().page("/path3");
+
+    resource1 = context.resourceResolver().getResource("/path1");
+    resource2 = context.resourceResolver().getResource("/path2");
+    resource3 = context.resourceResolver().getResource("/path3");
+
     resources = ImmutableList.of(resource1, resource2, resource3).iterator();
   }
 
@@ -92,17 +87,17 @@ public class PageIteratorTest {
 
   @Test
   public void testWithSlingFolder() {
-    when(resource1.adaptTo(Page.class)).thenReturn(null);
-    when(resource2.adaptTo(Page.class)).thenReturn(null);
-    when(resource3.adaptTo(Page.class)).thenReturn(null);
-
-    when(resource2.getValueMap()).thenReturn(ImmutableValueMap.of(JcrConstants.JCR_PRIMARYTYPE, "sling:Folder"));
-    when(resource3.getValueMap()).thenReturn(ImmutableValueMap.of(JcrConstants.JCR_PRIMARYTYPE, "sling:OrderedFolder"));
+    resource1 = context.create().resource("/another/path1");
+    resource2 = context.create().resource("/another/path2",
+        ImmutableValueMap.of(JcrConstants.JCR_PRIMARYTYPE, "sling:Folder"));
+    resource3 = context.create().resource("/another/path3",
+        ImmutableValueMap.of(JcrConstants.JCR_PRIMARYTYPE, "sling:OrderedFolder"));
+    resources = ImmutableList.of(resource1, resource2, resource3).iterator();
 
     List<Page> result = ImmutableList.copyOf(new PageIterator(resources, null));
     assertEquals(2, result.size());
-    assertEquals("/path2", result.get(0).getPath());
-    assertEquals("/path3", result.get(1).getPath());
+    assertEquals("/another/path2", result.get(0).getPath());
+    assertEquals("/another/path3", result.get(1).getPath());
   }
 
 }

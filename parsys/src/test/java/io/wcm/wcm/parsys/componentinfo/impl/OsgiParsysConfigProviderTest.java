@@ -22,9 +22,6 @@ package io.wcm.wcm.parsys.componentinfo.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -33,6 +30,10 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 
 public class OsgiParsysConfigProviderTest {
 

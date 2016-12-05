@@ -19,8 +19,6 @@
  */
 package io.wcm.wcm.ui.granite.resource;
 
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +35,8 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 /**
  * Extended version of {@link SyntheticResource} that allows to pass an own value map and optional child resources.

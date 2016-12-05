@@ -19,10 +19,6 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import io.wcm.sling.commons.osgi.RankedServices;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -40,6 +36,10 @@ import org.apache.sling.api.resource.ResourceResolver;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+
+import io.wcm.sling.commons.osgi.RankedServices;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
 /**
  * Collects paragraph system configurations from repository and OSGi configuration.

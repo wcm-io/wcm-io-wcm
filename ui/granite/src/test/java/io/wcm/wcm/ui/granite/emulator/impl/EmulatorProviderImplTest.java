@@ -24,8 +24,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +39,9 @@ import com.day.cq.wcm.emulator.EmulatorProvider;
 import com.day.cq.wcm.mobile.api.device.DeviceGroup;
 import com.day.cq.wcm.mobile.api.device.DeviceGroupList;
 import com.google.common.collect.ImmutableList;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 public class EmulatorProviderImplTest {
 

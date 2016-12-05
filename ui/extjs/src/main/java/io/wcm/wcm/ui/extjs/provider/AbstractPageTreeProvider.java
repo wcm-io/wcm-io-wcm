@@ -19,8 +19,6 @@
  */
 package io.wcm.wcm.ui.extjs.provider;
 
-import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
-
 import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +31,8 @@ import org.osgi.annotation.versioning.ConsumerType;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
+
+import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
 
 /**
  * Exports the resource tree at the addressed resource in JSON format to the response.

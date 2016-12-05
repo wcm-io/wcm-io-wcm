@@ -19,8 +19,6 @@
  */
 package io.wcm.wcm.commons.controller;
 
-import io.wcm.sling.models.annotations.AemObject;
-
 import java.io.IOException;
 import java.io.StringWriter;
 
@@ -34,6 +32,8 @@ import org.osgi.annotation.versioning.ProviderType;
 import com.day.cq.wcm.api.AuthoringUIMode;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.undo.UndoConfigService;
+
+import io.wcm.sling.models.annotations.AemObject;
 
 /**
  * Controller for wcmInit component.

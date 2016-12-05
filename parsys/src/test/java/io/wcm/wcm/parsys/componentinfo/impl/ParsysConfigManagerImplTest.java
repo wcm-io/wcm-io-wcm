@@ -22,10 +22,6 @@ package io.wcm.wcm.parsys.componentinfo.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -36,9 +32,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParsysConfigManagerImplTest {

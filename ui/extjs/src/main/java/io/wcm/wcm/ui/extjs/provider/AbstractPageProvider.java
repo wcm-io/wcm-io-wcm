@@ -19,10 +19,6 @@
  */
 package io.wcm.wcm.ui.extjs.provider;
 
-import io.wcm.sling.commons.request.RequestParam;
-import io.wcm.wcm.commons.contenttype.ContentType;
-import io.wcm.wcm.ui.extjs.provider.impl.util.PredicatePageFilter;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -43,6 +39,10 @@ import org.slf4j.LoggerFactory;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.commons.predicate.PredicateProvider;
 import com.day.cq.wcm.api.PageFilter;
+
+import io.wcm.sling.commons.request.RequestParam;
+import io.wcm.wcm.commons.contenttype.ContentType;
+import io.wcm.wcm.ui.extjs.provider.impl.util.PredicatePageFilter;
 
 /**
  * Common functionality for {@link AbstractPageListProvider} and {@link AbstractPageTreeProvider}.

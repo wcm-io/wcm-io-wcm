@@ -20,13 +20,9 @@
 package io.wcm.wcm.parsys.componentinfo.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.wcm.commons.util.RunMode;
-import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,10 +32,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableSortedSet;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.wcm.commons.util.RunMode;
+import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParsysComponentsServletTest {

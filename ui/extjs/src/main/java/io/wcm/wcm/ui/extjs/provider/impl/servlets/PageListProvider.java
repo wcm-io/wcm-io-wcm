@@ -19,9 +19,6 @@
  */
 package io.wcm.wcm.ui.extjs.provider.impl.servlets;
 
-import io.wcm.wcm.commons.contenttype.FileExtension;
-import io.wcm.wcm.ui.extjs.provider.AbstractPageListProvider;
-
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
@@ -30,6 +27,8 @@ import org.apache.sling.api.servlets.HttpConstants;
 import com.day.cq.commons.predicate.PredicateProvider;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.wcm.commons.contenttype.FileExtension;
+import io.wcm.wcm.ui.extjs.provider.AbstractPageListProvider;
 
 /**
  * Exports the list of child pages of the addressed resource in JSON format to the response.

@@ -26,7 +26,6 @@ import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.wrapMerg
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.List;
 
@@ -39,6 +38,8 @@ import org.junit.Test;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 public class GraniteUiSyntheticResourceTest {
 

@@ -19,11 +19,6 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import io.wcm.sling.commons.resource.ResourceType;
-import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
@@ -40,6 +35,11 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.sling.commons.resource.ResourceType;
+import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
 /**
  * Detects allowed components for authoring for a given page/resource context.

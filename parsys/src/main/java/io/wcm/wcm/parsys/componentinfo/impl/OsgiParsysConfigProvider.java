@@ -19,8 +19,6 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
-
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +38,8 @@ import org.slf4j.LoggerFactory;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 
 /**
  * Factory configuration provider for OSGi parsys configuration.

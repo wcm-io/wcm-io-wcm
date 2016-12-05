@@ -23,10 +23,6 @@ import static org.apache.sling.jcr.resource.JcrResourceConstants.SLING_RESOURCE_
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.testing.mock.wcmio.sling.MockSlingExtensions;
-import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
 import java.util.Set;
 
@@ -35,6 +31,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.day.cq.wcm.api.Page;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.wcmio.sling.MockSlingExtensions;
+import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
 public class AllowedComponentsProviderImplTest {
 
