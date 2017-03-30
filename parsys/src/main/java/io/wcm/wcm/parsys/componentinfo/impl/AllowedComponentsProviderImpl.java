@@ -25,11 +25,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
@@ -44,8 +43,7 @@ import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 /**
  * Detects allowed components for authoring for a given page/resource context.
  */
-@Component(immediate = true)
-@Service(AllowedComponentsProvider.class)
+@Component(service = AllowedComponentsProvider.class, immediate = true)
 public final class AllowedComponentsProviderImpl implements AllowedComponentsProvider {
 
   @Reference

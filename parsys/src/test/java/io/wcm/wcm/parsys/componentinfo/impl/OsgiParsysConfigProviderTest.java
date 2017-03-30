@@ -31,7 +31,6 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 
@@ -48,14 +47,12 @@ public class OsgiParsysConfigProviderTest {
   @Test
   public void testWithProperties_Path() {
     ParsysConfig underTest = context.registerInjectActivateService(new OsgiParsysConfigProvider(),
-        ImmutableValueMap.builder()
-        .put(OsgiParsysConfigProvider.PROPERTY_PAGE_COMPONENT_PATH, COMPONENT_PATH)
-        .put(OsgiParsysConfigProvider.PROPERTY_PATH, "localpath")
-        .put(OsgiParsysConfigProvider.PROPERTY_PARENT_ANCESTOR_LEVEL, 2)
-        .put(OsgiParsysConfigProvider.PROPERTY_ALLOWED_PARENTS, ALLOWED_PARENTS.toArray(new String[ALLOWED_PARENTS.size()]))
-        .put(OsgiParsysConfigProvider.PROPERTY_ALLOWED_CHILDREN, ALLOWED_CHILDREN.toArray(new String[ALLOWED_CHILDREN.size()]))
-        .put(OsgiParsysConfigProvider.PROPERTY_DENIED_CHILDREN, DENIED_CHILDREN.toArray(new String[DENIED_CHILDREN.size()]))
-        .build());
+        OsgiParsysConfigProvider.PROPERTY_PAGE_COMPONENT_PATH, COMPONENT_PATH,
+        OsgiParsysConfigProvider.PROPERTY_PATH, "localpath",
+        "parentAncestorLevel", 2,
+        OsgiParsysConfigProvider.PROPERTY_ALLOWED_PARENTS, ALLOWED_PARENTS.toArray(new String[ALLOWED_PARENTS.size()]),
+        OsgiParsysConfigProvider.PROPERTY_ALLOWED_CHILDREN, ALLOWED_CHILDREN.toArray(new String[ALLOWED_CHILDREN.size()]),
+        OsgiParsysConfigProvider.PROPERTY_DENIED_CHILDREN, DENIED_CHILDREN.toArray(new String[DENIED_CHILDREN.size()]));
 
     assertEquals(COMPONENT_PATH, underTest.getPageComponentPath());
     assertEquals("^" + Pattern.quote("jcr:content/localpath") + "$", underTest.getPathPattern().toString());
@@ -68,13 +65,11 @@ public class OsgiParsysConfigProviderTest {
   @Test
   public void testWithProperties_PathPattern() {
     ParsysConfig underTest = context.registerInjectActivateService(new OsgiParsysConfigProvider(),
-        ImmutableValueMap.builder()
-        .put(OsgiParsysConfigProvider.PROPERTY_PAGE_COMPONENT_PATH, COMPONENT_PATH)
-        .put(OsgiParsysConfigProvider.PROPERTY_PATH_PATTERN, ".*any.*")
-        .put(OsgiParsysConfigProvider.PROPERTY_PARENT_ANCESTOR_LEVEL, 1)
-        .put(OsgiParsysConfigProvider.PROPERTY_ALLOWED_PARENTS, ALLOWED_PARENTS.toArray(new String[ALLOWED_PARENTS.size()]))
-        .put(OsgiParsysConfigProvider.PROPERTY_ALLOWED_CHILDREN, ALLOWED_CHILDREN.toArray(new String[ALLOWED_CHILDREN.size()]))
-        .build());
+        OsgiParsysConfigProvider.PROPERTY_PAGE_COMPONENT_PATH, COMPONENT_PATH,
+        OsgiParsysConfigProvider.PROPERTY_PATH_PATTERN, ".*any.*",
+        "parentAncestorLevel", 1,
+        OsgiParsysConfigProvider.PROPERTY_ALLOWED_PARENTS, ALLOWED_PARENTS.toArray(new String[ALLOWED_PARENTS.size()]),
+        OsgiParsysConfigProvider.PROPERTY_ALLOWED_CHILDREN, ALLOWED_CHILDREN.toArray(new String[ALLOWED_CHILDREN.size()]));
 
     assertEquals(COMPONENT_PATH, underTest.getPageComponentPath());
     assertEquals(".*any.*", underTest.getPathPattern().toString());

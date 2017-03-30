@@ -32,15 +32,16 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.servlet.Servlet;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.HttpConstants;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 
 import com.day.cq.commons.predicate.PredicateProvider;
 import com.day.cq.wcm.api.Page;
@@ -55,11 +56,12 @@ import io.wcm.wcm.ui.extjs.provider.AbstractPageTreeProvider;
 /**
  * Page tree provider for tree nodes filtered by their templates
  */
-@SlingServlet(
-    extensions = FileExtension.JSON,
-    selectors = "wcm-io-wcm-ui-extjs-pagetree-templatefilter",
-    resourceTypes = "sling/servlet/default",
-    methods = HttpConstants.METHOD_GET)
+@Component(service = Servlet.class, immediate = true, property = {
+    "sling.servlet.extensions=" + FileExtension.JSON,
+    "sling.servlet.selectors=" + TemplateFilterPageTreeProvider.SELECTOR,
+    "sling.servlet.resourceTypes=sling/servlet/default",
+    "sling.servlet.methods=" + HttpConstants.METHOD_GET
+})
 @SuppressFBWarnings("SE_BAD_FIELD")
 public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
   private static final long serialVersionUID = 1L;
@@ -67,9 +69,11 @@ public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
   /**
    * Define one or multiple template paths to filter the page tree for.
    */
-  public static final String RP_TEMPLATE = "template";
+  static final String RP_TEMPLATE = "template";
 
-  @Reference(cardinality = ReferenceCardinality.OPTIONAL_UNARY)
+  static final String SELECTOR = "wcm-io-wcm-ui-extjs-pagetree-templatefilter";
+
+  @Reference(cardinality = ReferenceCardinality.OPTIONAL)
   private PredicateProvider predicateProvider;
 
   @Override

@@ -56,12 +56,8 @@ public class EmulatorProviderImplTest {
 
   @Before
   public void setUp() {
-    underTest = context.registerInjectActivateService(new EmulatorProviderImpl(), ImmutableValueMap.builder()
-        .put(EmulatorProviderImpl.PROPERYT_TEMPLATE_PATH_PATTERNS, new String[] {
-            "^/apps/app1/.*$",
-            "^/apps/app2/.*$"
-        })
-        .build());
+    underTest = context.registerInjectActivateService(new EmulatorProviderImpl(),
+        "templatePathPatterns", new String[] { "^/apps/app1/.*$", "^/apps/app2/.*$" });
 
     page1 = context.create().page("/content/page1", "/apps/app1/template1",
         ImmutableValueMap.of("cq:deviceGroups", new String[] {

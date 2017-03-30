@@ -25,19 +25,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
-import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.commons.osgi.RankedServices;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
-import io.wcm.sling.commons.osgi.RankedServices;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
@@ -45,12 +44,11 @@ import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
  * Collects paragraph system configurations from repository and OSGi configuration.
  * Apply super resource type based inheritance to both configuration types.
  */
-@Component(immediate = true, metatype = false)
-@Service(ParsysConfigManager.class)
+@Component(service = ParsysConfigManager.class, immediate = true)
 public final class ParsysConfigManagerImpl implements ParsysConfigManager {
 
-  @Reference(name = "parsysConfig", referenceInterface = ParsysConfig.class,
-      cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+  @Reference(name = "parsysConfig", service = ParsysConfig.class,
+      cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
   private final RankedServices<ParsysConfig> osgiParsysConfigs = new RankedServices<>();
 
   @Override
