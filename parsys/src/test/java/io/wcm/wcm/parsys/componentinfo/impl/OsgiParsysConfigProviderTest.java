@@ -47,12 +47,12 @@ public class OsgiParsysConfigProviderTest {
   @Test
   public void testWithProperties_Path() {
     ParsysConfig underTest = context.registerInjectActivateService(new OsgiParsysConfigProvider(),
-        OsgiParsysConfigProvider.PROPERTY_PAGE_COMPONENT_PATH, COMPONENT_PATH,
-        OsgiParsysConfigProvider.PROPERTY_PATH, "localpath",
+        "pageComponentPath", COMPONENT_PATH,
+        "path", "localpath",
         "parentAncestorLevel", 2,
-        OsgiParsysConfigProvider.PROPERTY_ALLOWED_PARENTS, ALLOWED_PARENTS.toArray(new String[ALLOWED_PARENTS.size()]),
-        OsgiParsysConfigProvider.PROPERTY_ALLOWED_CHILDREN, ALLOWED_CHILDREN.toArray(new String[ALLOWED_CHILDREN.size()]),
-        OsgiParsysConfigProvider.PROPERTY_DENIED_CHILDREN, DENIED_CHILDREN.toArray(new String[DENIED_CHILDREN.size()]));
+        "allowedParents", ALLOWED_PARENTS.toArray(new String[ALLOWED_PARENTS.size()]),
+        "allowedChildren", ALLOWED_CHILDREN.toArray(new String[ALLOWED_CHILDREN.size()]),
+        "deniedChildren", DENIED_CHILDREN.toArray(new String[DENIED_CHILDREN.size()]));
 
     assertEquals(COMPONENT_PATH, underTest.getPageComponentPath());
     assertEquals("^" + Pattern.quote("jcr:content/localpath") + "$", underTest.getPathPattern().toString());
@@ -65,11 +65,11 @@ public class OsgiParsysConfigProviderTest {
   @Test
   public void testWithProperties_PathPattern() {
     ParsysConfig underTest = context.registerInjectActivateService(new OsgiParsysConfigProvider(),
-        OsgiParsysConfigProvider.PROPERTY_PAGE_COMPONENT_PATH, COMPONENT_PATH,
-        OsgiParsysConfigProvider.PROPERTY_PATH_PATTERN, ".*any.*",
+        "pageComponentPath", COMPONENT_PATH,
+        "pathPattern", ".*any.*",
         "parentAncestorLevel", 1,
-        OsgiParsysConfigProvider.PROPERTY_ALLOWED_PARENTS, ALLOWED_PARENTS.toArray(new String[ALLOWED_PARENTS.size()]),
-        OsgiParsysConfigProvider.PROPERTY_ALLOWED_CHILDREN, ALLOWED_CHILDREN.toArray(new String[ALLOWED_CHILDREN.size()]));
+        "allowedParents", ALLOWED_PARENTS.toArray(new String[ALLOWED_PARENTS.size()]),
+        "allowedChildren", ALLOWED_CHILDREN.toArray(new String[ALLOWED_CHILDREN.size()]));
 
     assertEquals(COMPONENT_PATH, underTest.getPageComponentPath());
     assertEquals(".*any.*", underTest.getPathPattern().toString());

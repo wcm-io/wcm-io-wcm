@@ -19,13 +19,11 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -136,21 +134,15 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
   @Activate
   private void activate(Config config) {
-    @SuppressWarnings("unchecked")
-    final Dictionary<String, Object> props = componentContext.getProperties();
 
-    // read config properties
-    this.pageComponentPath = PropertiesUtil.toString(props.get(PROPERTY_PAGE_COMPONENT_PATH), null);
-    String path = PropertiesUtil.toString(props.get(PROPERTY_PATH), null);
-    String patternString = PropertiesUtil.toString(props.get(PROPERTY_PATH_PATTERN), null);
-    String[] allowedChildrenArray = PropertiesUtil.toStringArray(props.get(PROPERTY_ALLOWED_CHILDREN), null);
-    String[] deniedChildrenArray = PropertiesUtil.toStringArray(props.get(PROPERTY_DENIED_CHILDREN), null);
-    String[] allowedParentsArray = PropertiesUtil.toStringArray(props.get(PROPERTY_ALLOWED_PARENTS), null);
-    this.parentAncestorLevel = PropertiesUtil.toInteger(props.get(PROPERTY_PARENT_ANCESTOR_LEVEL), DEFAULT_PARENT_ANCESTOR_LEVEL);
+    this.pageComponentPath = config.pageComponentPath();
+    this.parentAncestorLevel = config.parentAncestorLevel();
 
     // set path pattern if any
-    if (StringUtils.isNotEmpty(patternString)) {
-      this.pathPattern = Pattern.compile(patternString);
+    String pathPatternString = config.pathPattern();
+    String path = config.path();
+    if (StringUtils.isNotEmpty(pathPatternString)) {
+      this.pathPattern = Pattern.compile(pathPatternString);
     }
     // alternative: use path to build a pattern
     else if (StringUtils.isNotBlank(path)) {
@@ -163,8 +155,8 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     // set allowed children
     Set<String> allowedChildrenSet = new HashSet<>();
-    if (allowedChildrenArray != null) {
-      for (String resourceType : allowedChildrenArray) {
+    if (config.allowedChildren() != null) {
+      for (String resourceType : config.allowedChildren()) {
         if (StringUtils.isNotBlank(resourceType)) {
           allowedChildrenSet.add(resourceType);
         }
@@ -174,8 +166,8 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     // set denied children
     Set<String> deniedChildrenSet = new HashSet<>();
-    if (deniedChildrenArray != null) {
-      for (String resourceType : deniedChildrenArray) {
+    if (config.deniedChildren() != null) {
+      for (String resourceType : config.deniedChildren()) {
         if (StringUtils.isNotBlank(resourceType)) {
           deniedChildrenSet.add(resourceType);
         }
@@ -185,8 +177,8 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     // set allowed parents
     Set<String> allowedParentsSet = new HashSet<>();
-    if (allowedParentsArray != null) {
-      for (String resourceType : allowedParentsArray) {
+    if (config.allowedParents() != null) {
+      for (String resourceType : config.allowedParents()) {
         if (StringUtils.isNotBlank(resourceType)) {
           allowedParentsSet.add(resourceType);
         }
@@ -196,12 +188,12 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     if (log.isDebugEnabled()) {
       log.debug(getClass().getSimpleName() + ": "
-          + PROPERTY_PAGE_COMPONENT_PATH + "={}, "
-          + PROPERTY_PATH + "={}, "
-          + PROPERTY_PATH_PATTERN + "={}, "
-          + PROPERTY_ALLOWED_CHILDREN + "={}, "
-          + PROPERTY_DENIED_CHILDREN + "={}, "
-          + PROPERTY_ALLOWED_PARENTS + "={}, "
+          + "pageComponentPath={}, "
+          + "path={}, "
+          + "pathPattern={}, "
+          + "allowedChildren={}, "
+          + "deniedChildren={}, "
+          + "allowedParents={}, "
           + "parentAncestorLevel={}",
           new Object[] {
         this.pageComponentPath,
@@ -217,10 +209,10 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     // validation messages
     if (StringUtils.isBlank(this.pageComponentPath)) {
-      log.warn(PROPERTY_PAGE_COMPONENT_PATH + " cannot be null or empty. This configuration will be ignored.");
+      log.warn("pageComponentPath cannot be null or empty. This configuration will be ignored.");
     }
     if (this.pathPattern == null) {
-      log.warn("Path pattern cannot be null. Please set the property " + PROPERTY_PATH_PATTERN + " or " + PROPERTY_PATH);
+      log.warn("Path pattern cannot be null. Please set the property pathPattern or path.");
     }
   }
 

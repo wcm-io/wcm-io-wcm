@@ -27,6 +27,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.commons.osgi.Order;
 import org.apache.sling.commons.osgi.RankedServices;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -44,12 +45,14 @@ import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
  * Collects paragraph system configurations from repository and OSGi configuration.
  * Apply super resource type based inheritance to both configuration types.
  */
-@Component(service = ParsysConfigManager.class, immediate = true)
+@Component(service = ParsysConfigManager.class, immediate = true, reference = {
+    @Reference(service = ParsysConfig.class, name = "parsysConfig",
+        bind = "bindParsysConfig", unbind = "unbindParsysConfig",
+        cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+})
 public final class ParsysConfigManagerImpl implements ParsysConfigManager {
 
-  @Reference(name = "parsysConfig", service = ParsysConfig.class,
-      cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-  private final RankedServices<ParsysConfig> osgiParsysConfigs = new RankedServices<>();
+  private final RankedServices<ParsysConfig> osgiParsysConfigs = new RankedServices<>(Order.ASCENDING);
 
   @Override
   public Iterable<ParsysConfig> getParsysConfigs(String pageComponentPath, ResourceResolver resolver) {
