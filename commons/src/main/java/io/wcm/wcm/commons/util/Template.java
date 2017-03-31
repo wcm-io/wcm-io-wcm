@@ -103,6 +103,7 @@ public final class Template {
   /**
    * Lookup a template by the given template path.
    * @param templatePath Path of template
+   * @param templates Templates
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
   public static TemplatePathInfo forTemplatePath(String templatePath, TemplatePathInfo... templates) {
@@ -120,6 +121,8 @@ public final class Template {
   /**
    * Lookup a template by the given template path.
    * @param templatePath Path of template
+   * @param templateEnums Templates
+   * @param <E> Template enum
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
   @SafeVarargs
@@ -140,6 +143,7 @@ public final class Template {
   /**
    * Lookup template for given page.
    * @param page Page
+   * @param templates Templates
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
   public static TemplatePathInfo forPage(Page page, TemplatePathInfo... templates) {
@@ -153,6 +157,8 @@ public final class Template {
   /**
    * Lookup template for given page.
    * @param page Page
+   * @param templateEnums Templates
+   * @param <E> Tempalte enum
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
   @SafeVarargs

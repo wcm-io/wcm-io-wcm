@@ -96,14 +96,15 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
    * Render result of provider servlet as JSON to string writer.
    * @param rootResource Root resource
    * @param pageFilter Page filter
-   * @throws JSONException
+   * @return JSON array
+   * @throws JSONException JSON exception
    */
   protected abstract JSONArray getJsonContent(Resource rootResource, PageFilter pageFilter) throws JSONException;
 
   /**
    * Determine root resource to list its children. (use resource for root page because root node does not have to be a
    * page but can be e.g. a nt:folder node)
-   * @param request
+   * @param request Request
    * @return Root resource or null if invalid resource was referenced
    */
   protected final Resource getRootResource(SlingHttpServletRequest request) {
@@ -121,7 +122,7 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
   /**
    * Can be overridden by subclasses to filter page list via page filter.
    * If not overridden it supports defining a page filter via "predicate" request attribute.
-   * @param request
+   * @param request Request
    * @return Page filter or null if no filtering applies
    */
   protected PageFilter getPageFilter(SlingHttpServletRequest request) {

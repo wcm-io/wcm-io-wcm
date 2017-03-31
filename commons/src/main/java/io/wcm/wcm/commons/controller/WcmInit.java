@@ -48,7 +48,10 @@ public final class WcmInit {
   private final String undoConfig;
 
   /**
-   * Constructor
+   * @param authoringUIMode Authoring UI mode
+   * @param componentContext Component context
+   * @param undoConfigService Undo Config Service
+   * @throws IOException I/O exception
    */
   @Inject
   public WcmInit(

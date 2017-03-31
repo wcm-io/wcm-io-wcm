@@ -132,7 +132,7 @@ public final class ModificationDate {
 
   /**
    * Returns the most recent of the specified dates
-   * @param dates
+   * @param dates Dates
    * @return the most recent (or null if all dates were null)
    */
   public static Date mostRecent(Date... dates) {

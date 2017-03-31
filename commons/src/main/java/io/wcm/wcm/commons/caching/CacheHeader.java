@@ -92,7 +92,7 @@ public final class CacheHeader {
    * @param response Response
    * @return true if the method send a 304 redirect, so that the caller shouldn't write any output to the response
    *         stream
-   * @throws IOException
+   * @throws IOException I/O exception
    */
   public static boolean isNotModified(Resource resource,
       SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
@@ -111,7 +111,7 @@ public final class CacheHeader {
    * @param setExpiresHeader Set expires header to -1 to ensure the browser checks for a new version on every request.
    * @return true if the method send a 304 redirect, so that the caller shouldn't write any output to the response
    *         stream
-   * @throws IOException
+   * @throws IOException I/O exception
    */
   public static boolean isNotModified(Resource resource,
       SlingHttpServletRequest request, SlingHttpServletResponse response, boolean setExpiresHeader) throws IOException {
@@ -132,7 +132,7 @@ public final class CacheHeader {
    * @param response Response
    * @return true if the method send a 304 redirect, so that the caller shouldn't write any output to the response
    *         stream
-   * @throws IOException
+   * @throws IOException I/O exception
    */
   public static boolean isNotModified(ModificationDateProvider dateProvider,
       SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
@@ -151,7 +151,7 @@ public final class CacheHeader {
    * @param setExpiresHeader Set expires header to -1 to ensure the browser checks for a new version on every request.
    * @return true if the method send a 304 redirect, so that the caller shouldn't write any output to the response
    *         stream
-   * @throws IOException
+   * @throws IOException I/O exception
    */
   public static boolean isNotModified(ModificationDateProvider dateProvider,
       SlingHttpServletRequest request, SlingHttpServletResponse response, boolean setExpiresHeader) throws IOException {
