@@ -45,9 +45,9 @@ public class AllowedComponentsProviderImplTest {
 
   private static final String CONTENT_ROOT_PATH = "/content/dummy";
   private static final String BASE_TEMPLATE = "/apps/dummy/templates/baseTemplate";
-  private static final String BASE_PAGE_COMPONENT = "/apps/dummy/components/page/basePage";
+  private static final String BASE_PAGE_COMPONENT = "dummy/components/page/basePage";
   private static final String INHERITED_TEMPLATE = "/apps/dummy/templates/inheritedTemplate";
-  private static final String INHERITED_PAGE_COMPONENT = "/apps/dummy/components/page/inheritedPage";
+  private static final String INHERITED_PAGE_COMPONENT = "dummy/components/page/inheritedPage";
 
   private AllowedComponentsProvider underTest;
 
@@ -71,7 +71,7 @@ public class AllowedComponentsProviderImplTest {
         ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, INHERITED_PAGE_COMPONENT));
     addDummyContent(inheritedPage);
     context.create().resource(inheritedPage.getContentResource().getPath() + "/special",
-        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/parsys"));
+        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "dummy/components/parsys"));
 
     underTest = context.getService(AllowedComponentsProvider.class);
   }
@@ -86,19 +86,19 @@ public class AllowedComponentsProviderImplTest {
 
     // positive tests
     assertTrue("Component 'comp1' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/comp1"));
+        allowedComponents.contains("dummy/components/comp1"));
     assertTrue("Component 'comp2' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/comp2"));
+        allowedComponents.contains("dummy/components/comp2"));
     assertTrue("Component 'linklist' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/linklist"));
+        allowedComponents.contains("dummy/components/linklist"));
     assertTrue("Component 'container2col' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/container2col"));
+        allowedComponents.contains("dummy/components/container2col"));
 
     // negative tests
     assertFalse("Component 'nestedComp2' should not be allowed in " + contentParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/nestedComp2"));
+        allowedComponents.contains("dummy/components/nestedComp2"));
     assertFalse("Component 'comp3' should not be allowed in " + contentParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/comp3"));
+        allowedComponents.contains("dummy/components/comp3"));
   }
 
   @Test
@@ -111,15 +111,15 @@ public class AllowedComponentsProviderImplTest {
 
     // positive tests
     assertTrue("Component 'nestedComp1' must be allowed in " + nested2ColParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/nestedComp1"));
+        allowedComponents.contains("dummy/components/nestedComp1"));
     assertTrue("Component 'nestedComp2' must be allowed in " + nested2ColParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/nestedComp2"));
+        allowedComponents.contains("dummy/components/nestedComp2"));
     assertTrue("Component 'linklist' must be allowed in " + nested2ColParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/linklist"));
+        allowedComponents.contains("dummy/components/linklist"));
 
     // negative tests
     assertFalse("Component 'comp1' should not be allowed in " + nested2ColParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/comp1"));
+        allowedComponents.contains("dummy/components/comp1"));
   }
 
   @Test
@@ -132,13 +132,13 @@ public class AllowedComponentsProviderImplTest {
 
     // positive tests
     assertTrue("Component 'linkItem' must be allowed in " + linklist + ".",
-        allowedComponents.contains("/apps/dummy/components/linkItem"));
+        allowedComponents.contains("dummy/components/linkItem"));
 
     // negative tests
     assertFalse("Component 'comp1' should not be allowed in " + linklist + ".",
-        allowedComponents.contains("/apps/dummy/components/comp1"));
+        allowedComponents.contains("dummy/components/comp1"));
     assertFalse("Component 'nestedComp1' must be allowed in " + linklist + ".",
-        allowedComponents.contains("/apps/dummy/components/nestedComp1"));
+        allowedComponents.contains("dummy/components/nestedComp1"));
   }
 
   @Test
@@ -150,13 +150,13 @@ public class AllowedComponentsProviderImplTest {
 
     // positive tests
     assertTrue("Component 'comp1' must be allowed in page " + BASE_PAGE_COMPONENT + ".",
-        allowedComponents.contains("/apps/dummy/components/comp1"));
+        allowedComponents.contains("dummy/components/comp1"));
     assertTrue("Component 'nestedComp2' must be allowed in page " + BASE_PAGE_COMPONENT + ".",
-        allowedComponents.contains("/apps/dummy/components/nestedComp2"));
+        allowedComponents.contains("dummy/components/nestedComp2"));
 
     // negative tests
     assertFalse("Component 'comp3' should not be allowed in page " + BASE_PAGE_COMPONENT + ".",
-        allowedComponents.contains("/apps/dummy/components/comp3"));
+        allowedComponents.contains("dummy/components/comp3"));
 
   }
 
@@ -171,15 +171,15 @@ public class AllowedComponentsProviderImplTest {
 
     // positive tests
     assertTrue("Component 'specialComp1' must be allowed in " + specialParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/specialComp1"));
+        allowedComponents.contains("dummy/components/specialComp1"));
     assertTrue("Component 'specialText' must be allowed in " + specialParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/specialText"));
+        allowedComponents.contains("dummy/components/specialText"));
 
     // negative tests
     assertFalse("Component 'comp1' should not be allowed in " + specialParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/comp1"));
+        allowedComponents.contains("dummy/components/comp1"));
     assertFalse("Component 'nestedComp2' should not be allowed in " + specialParsys + ".",
-        allowedComponents.contains("/apps/dummy/components/nestedComp2"));
+        allowedComponents.contains("dummy/components/nestedComp2"));
 
     // ---- content parsys (inherited) ----
     String contentParsys = CONTENT_ROOT_PATH + "/page-2/jcr:content/content";
@@ -190,19 +190,19 @@ public class AllowedComponentsProviderImplTest {
 
     // positive tests (inherited parsys config)
     assertTrue("Component 'comp1' must be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("/apps/dummy/components/comp1"));
+        inheritedAllowedComponents.contains("dummy/components/comp1"));
     assertTrue("Component 'comp2' must be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("/apps/dummy/components/comp2"));
+        inheritedAllowedComponents.contains("dummy/components/comp2"));
     assertTrue("Component 'linklist' must be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("/apps/dummy/components/linklist"));
+        inheritedAllowedComponents.contains("dummy/components/linklist"));
     assertTrue("Component 'container2col' must be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("/apps/dummy/components/container2col"));
+        inheritedAllowedComponents.contains("dummy/components/container2col"));
 
     // negative tests (inherited parsys config)
     assertFalse("Component 'nestedComp2' should not be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("/apps/dummy/components/nestedComp2"));
+        inheritedAllowedComponents.contains("dummy/components/nestedComp2"));
     assertFalse("Component 'comp3' should not be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("/apps/dummy/components/comp3"));
+        inheritedAllowedComponents.contains("dummy/components/comp3"));
 
   }
 
@@ -215,17 +215,17 @@ public class AllowedComponentsProviderImplTest {
 
     // positive tests
     assertTrue("Component 'specialComp1' must be allowed in page " + INHERITED_PAGE_COMPONENT + ".",
-        allowedComponents.contains("/apps/dummy/components/specialComp1"));
+        allowedComponents.contains("dummy/components/specialComp1"));
 
     // positive tests (inherited parsys config)
     assertTrue("Component 'comp1' must be allowed in page " + INHERITED_PAGE_COMPONENT + ".",
-        allowedComponents.contains("/apps/dummy/components/comp1"));
+        allowedComponents.contains("dummy/components/comp1"));
     assertTrue("Component 'nestedComp2' must be allowed in page " + INHERITED_PAGE_COMPONENT + ".",
-        allowedComponents.contains("/apps/dummy/components/nestedComp2"));
+        allowedComponents.contains("dummy/components/nestedComp2"));
 
     // negative tests
     assertFalse("Component 'comp3' should not be allowed in page " + INHERITED_PAGE_COMPONENT + ".",
-        allowedComponents.contains("/apps/dummy/components/comp3"));
+        allowedComponents.contains("dummy/components/comp3"));
 
   }
 
@@ -234,16 +234,16 @@ public class AllowedComponentsProviderImplTest {
 
     // content parsys
     context.create().resource(contentPath + "/content",
-        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/parsys"));
+        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "dummy/components/parsys"));
 
     // 2col-container (nested parsys )
     context.create().resource(contentPath + "/content/2colContainer",
-        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/container2Col"));
+        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "dummy/components/container2Col"));
     context.create().resource(contentPath + "/content/2colContainer/items");
 
     // link list (nested parsys)
     context.create().resource(contentPath + "/content/linklist",
-        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "/apps/dummy/components/linklist"));
+        ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "dummy/components/linklist"));
     context.create().resource(contentPath + "/content/linklist/links");
   }
 

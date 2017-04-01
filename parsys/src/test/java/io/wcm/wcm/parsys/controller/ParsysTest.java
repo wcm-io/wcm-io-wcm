@@ -65,10 +65,10 @@ import io.wcm.wcm.parsys.controller.Parsys.Item;
 @RunWith(MockitoJUnitRunner.class)
 public class ParsysTest {
 
-  private static final String RESOURCE_TYPE_SAMPLE = "/apps/sample/components/parsys";
-  private static final String SUPER_RESOURCE_TYPE_SAMPLE = "/apps/sample/components/superParsys";
-  private static final String COMPONENT_PATH_1 = "/apps/sample/components/comp1";
-  private static final String COMPONENT_PATH_2 = "/apps/sample/components/comp2";
+  private static final String RESOURCE_TYPE_SAMPLE = "sample/components/parsys";
+  private static final String SUPER_RESOURCE_TYPE_SAMPLE = "sample/components/superParsys";
+  private static final String COMPONENT_PATH_1 = "sample/components/comp1";
+  private static final String COMPONENT_PATH_2 = "sample/components/comp2";
 
   @Rule
   public AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();
@@ -92,7 +92,7 @@ public class ParsysTest {
     when(component.getPath()).thenReturn(RESOURCE_TYPE_SAMPLE);
     when(component.getProperties()).thenReturn(ImmutableValueMap.of());
 
-    page = context.create().page("/content/page1", "/apps/sample/templates/test1");
+    page = context.create().page("/content/page1", "sample/templates/test1");
     parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsys");
     par1Resource = context.create().resource(parsysResource.getPath() + "/par1",
         ImmutableValueMap.of("sling:resourceType", COMPONENT_PATH_1));
@@ -208,8 +208,8 @@ public class ParsysTest {
 
   @Test
   public void testNewAreaResourceTypeFromCurrentComponent() {
-    context.create().resource(RESOURCE_TYPE_SAMPLE);
-    context.create().resource(RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
 
     WCMMode.EDIT.toRequest(context.request());
     Parsys parsys = context.request().adaptTo(Parsys.class);
@@ -224,8 +224,8 @@ public class ParsysTest {
     context.create().resource(RESOURCE_TYPE_SAMPLE,
         ImmutableValueMap.of(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, SUPER_RESOURCE_TYPE_SAMPLE));
 
-    context.create().resource(SUPER_RESOURCE_TYPE_SAMPLE);
-    context.create().resource(SUPER_RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
+    context.create().resource("/apps/" + SUPER_RESOURCE_TYPE_SAMPLE);
+    context.create().resource("/apps/" + SUPER_RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
 
     WCMMode.EDIT.toRequest(context.request());
     Parsys parsys = context.request().adaptTo(Parsys.class);
@@ -265,7 +265,7 @@ public class ParsysTest {
   public void testComponentWithTagDecoration() {
 
     // prepare tag decoration for one component
-    context.create().resource("/apps/sample/components/comp1/" + NameConstants.NN_HTML_TAG,
+    context.create().resource("sample/components/comp1/" + NameConstants.NN_HTML_TAG,
         ImmutableValueMap.of(NameConstants.PN_TAG_NAME, "article", "class", "css1"));
 
     WCMMode.EDIT.toRequest(context.request());

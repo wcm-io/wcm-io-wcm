@@ -1,6 +1,6 @@
 {
   "jcr:primaryType": "cq:Component",
-  "sling:resourceSuperType": "/apps/wcm-io/wcm/parsys/components/parsys/newpar",
+  "sling:resourceSuperType": "wcm-io/wcm/parsys/components/parsys/newpar",
   "jcr:title": "New Paragraph (Editbar)",
   "componentGroup": ".hidden",
 
