@@ -10,7 +10,7 @@ Requires usage and proper configuration of [wcm.io Configuration](http://wcm.io/
 
 ```json
 "field": {
-  "sling:resourceType": "/apps/wcm-io/wcm/ui/granite/components/form/configScopePathBrowser",
+  "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/configScopePathBrowser",
   "name": "./field",
   "fieldLabel": "Internal Page"
 }
@@ -27,7 +27,7 @@ Form checkbox for boolean data.
 
 ```json
 "field": {
-  "sling:resourceType": "/apps/wcm-io/wcm/ui/granite/components/form/checkbox",
+  "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/checkbox",
   "name": "./field",
   "fieldDescription": "Description for checkbox",
   "text": "Check this"
@@ -47,7 +47,7 @@ Form field for date/time value.
 
 ```json
 "field": {
-  "sling:resourceType": "/apps/wcm-io/wcm/ui/granite/components/form/datepicker",
+  "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/datepicker",
   "displayedFormat": "DD.MM.YYYY HH:mm",
   "name": "./field",
   "type": "datetime",
@@ -66,7 +66,7 @@ Select form field.
 
 ```json
 "field": {
-  "sling:resourceType": "/apps/wcm-io/wcm/ui/granite/components/form/select",
+  "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/select",
   "name": "./field",
   "multiple": true,
   "fieldLabel": "Select"
