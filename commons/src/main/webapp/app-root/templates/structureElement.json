@@ -7,6 +7,6 @@
 
   "jcr:content": {
     "jcr:primaryType": "cq:PageContent",
-    "sling:resourceType": "/apps/wcm-io/wcm/commons/components/page/structureElement"
+    "sling:resourceType": "wcm-io/wcm/commons/components/page/structureElement"
   }
 }

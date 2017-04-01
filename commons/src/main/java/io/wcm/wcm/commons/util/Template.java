@@ -45,7 +45,7 @@ public final class Template {
    * Gets the resource type for a given template path.
    * This i based on the assumption that:
    * Given a template path is /apps/{app_path}/tempaltes/{optinal_path}/{template_path}
-   * then the resource path is at /apps/{app_path}/components/{optinal_path}/page/{template_path}
+   * then the resource path is at {app_path}/components/{optinal_path}/page/{template_path}
    * @param templatePath Template path
    * @return Resource type path or null if template path did not match expectations
    */
@@ -56,7 +56,7 @@ public final class Template {
     String resource = null;
     Matcher matcher = TEMPLATE_PATH_PATTERN.matcher(templatePath);
     if (matcher.matches()) {
-      resource = "/" + matcher.group(1) + "/" + matcher.group(2) + "/components"
+      resource = matcher.group(2) + "/components"
           + StringUtils.defaultString(matcher.group(3)) + "/page/" + matcher.group(4);
     }
     return resource;
