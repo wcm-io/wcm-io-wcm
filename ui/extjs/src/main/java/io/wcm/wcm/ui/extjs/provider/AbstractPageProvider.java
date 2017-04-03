@@ -86,7 +86,7 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
       JSONArray jsonContent = getJsonContent(rootResource, pageFilter);
       response.getWriter().write(jsonContent.toString());
     }
-    catch (Throwable ex) {
+    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/
       log.error("Unexpected error, rethrow as servlet exception.", ex);
       throw new ServletException(ex);
     }
