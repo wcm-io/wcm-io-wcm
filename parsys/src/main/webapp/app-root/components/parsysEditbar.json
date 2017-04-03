@@ -1,6 +1,6 @@
 {
   "jcr:primaryType": "cq:Component",
-  "sling:resourceSuperType": "/apps/wcm-io/wcm/parsys/components/parsys",
+  "sling:resourceSuperType": "wcm-io/wcm/parsys/components/parsys",
   "jcr:title": "wcm.io Paragraph system (Editbar)",
   "jcr:description": "Include components in a paragraph system. Allowed components are defined in the page components, not in design. Shows editbars for components.",
   "componentGroup": ".hidden",

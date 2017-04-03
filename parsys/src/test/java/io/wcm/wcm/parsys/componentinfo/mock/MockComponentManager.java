@@ -39,8 +39,8 @@ import com.google.common.collect.ImmutableList;
 @Model(adaptables = ResourceResolver.class, adapters = ComponentManager.class)
 public class MockComponentManager implements ComponentManager {
 
-  public static final String COMPONENT_PATH_1 = "/apps/sample/components/comp1";
-  public static final String COMPONENT_PATH_2 = "/apps/sample/components/comp2";
+  public static final String COMPONENT_PATH_1 = "sample/components/comp1";
+  public static final String COMPONENT_PATH_2 = "sample/components/comp2";
 
   @Override
   public Component getComponentOfResource(Resource resource) {

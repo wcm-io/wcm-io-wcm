@@ -6,7 +6,7 @@ To use the paragraph system in your sightly template:
 
 ```html
 <sly data-sly-resource="${'./content'
-    @ resourceType='/apps/wcm-io/wcm/parsys/components/parsys'}" />
+    @ resourceType='wcm-io/wcm/parsys/components/parsys'}" />
 ```
 
 
@@ -22,7 +22,7 @@ To define which components are allowed in your paragraph system you create a nod
     /* Allowed components in jcr:content/content node */
     "content": {
       "allowedChildren": [
-        "/apps/myapp/components/component1"
+        "myapp/components/component1"
       ]
     },
 
@@ -30,8 +30,8 @@ To define which components are allowed in your paragraph system you create a nod
     "leftcol_teasers": {
       "path": "jcr:content/leftcol/teasers",
       "allowedChildren": [
-        "/apps/myapp/components/component1",
-        "/apps/myapp/components/component2"
+        "myapp/components/component1",
+        "myapp/components/component2"
       ]
     },
 
@@ -40,11 +40,11 @@ To define which components are allowed in your paragraph system you create a nod
       "pattern": "^jcr:content/.*$",
       "parentAncestorLevel": 2,
       "allowedParents": [
-        "/apps/myapp/components/component1"
+        "myapp/components/component1"
       ],
       "allowedChildren": [
-        "/apps/myapp/components/subcomponent1",
-        "/apps/myapp/components/subcomponent2"
+        "myapp/components/subcomponent1",
+        "myapp/components/subcomponent2"
       ]
     }
 
@@ -96,7 +96,7 @@ Example:
 ```
 {
   "jcr:primaryType": "cq:Component",
-  "sling:resourceSuperType": "/apps/wcm-io/wcm/parsys/components/parsys",
+  "sling:resourceSuperType": "wcm-io/wcm/parsys/components/parsys",
   "cq:isContainer": true,
   "wcmio:parsysWrapperElement": "ul",
   "wcmio:parsysWrapperCss": "link-list",
@@ -115,7 +115,7 @@ If you want to use editbars instead of rollover edit mode for the paragraph syst
 
 ```html
 <sly data-sly-resource="${'./content'
-    @ resourceType='/apps/wcm-io/wcm/parsys/components/parsysEditbar'}" />
+    @ resourceType='wcm-io/wcm/parsys/components/parsysEditbar'}" />
 ```
 
 This is only supported in Classic UI.

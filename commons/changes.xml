@@ -27,6 +27,9 @@
       <action type="update" dev="sseifert">
         Switch to AEM 6.1 and Java 8 as minimum versions.
       </action>
+      <action type="update" dev="sseifert">
+        Do not add /apps/ prefix to resource type by default.
+      </action>
     </release>
 
     <release version="0.6.2" date="2016-04-29">
