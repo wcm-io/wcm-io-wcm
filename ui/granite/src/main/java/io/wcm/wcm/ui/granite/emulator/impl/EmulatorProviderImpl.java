@@ -130,7 +130,7 @@ public class EmulatorProviderImpl implements EmulatorProvider {
   /**
    * Delegates all calls to the given DeviceGroup.
    */
-  private final class EmulatorGroupImpl implements EmulatorGroup {
+  private static final class EmulatorGroupImpl implements EmulatorGroup {
 
     private final DeviceGroup deviceGroup;
 

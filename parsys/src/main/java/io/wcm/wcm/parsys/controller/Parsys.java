@@ -157,7 +157,9 @@ public final class Parsys {
   }
 
   private ComponentManager componentManager() {
-    componentManager = AdaptTo.notNull(this.resolver, ComponentManager.class);
+    if (componentManager == null) {
+      componentManager = AdaptTo.notNull(this.resolver, ComponentManager.class);
+    }
     return componentManager;
   }
 
