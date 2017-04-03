@@ -221,7 +221,7 @@ public class ParsysTest {
 
   @Test
   public void testNewAreaResourceTypeFromSuperComponent() {
-    context.create().resource(RESOURCE_TYPE_SAMPLE,
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
         ImmutableValueMap.of(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, SUPER_RESOURCE_TYPE_SAMPLE));
 
     context.create().resource("/apps/" + SUPER_RESOURCE_TYPE_SAMPLE);
@@ -265,7 +265,7 @@ public class ParsysTest {
   public void testComponentWithTagDecoration() {
 
     // prepare tag decoration for one component
-    context.create().resource("sample/components/comp1/" + NameConstants.NN_HTML_TAG,
+    context.create().resource("/apps/sample/components/comp1/" + NameConstants.NN_HTML_TAG,
         ImmutableValueMap.of(NameConstants.PN_TAG_NAME, "article", "class", "css1"));
 
     WCMMode.EDIT.toRequest(context.request());

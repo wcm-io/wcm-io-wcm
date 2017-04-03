@@ -78,7 +78,7 @@ public class ParsysConfigManagerImplTest {
   }
 
   @Test
-  public void testGetPageComponentFromOsgi() {
+  public void testGetPageComponentFromOsgi_RelativePath() {
     List<ParsysConfig> configs;
 
     configs = Lists.newArrayList(underTest.getParsysConfigs(RESOURCE_PATH_1, context.resourceResolver()));
@@ -86,6 +86,20 @@ public class ParsysConfigManagerImplTest {
     assertSame(parsysConfig1, configs.get(0));
 
     configs = Lists.newArrayList(underTest.getParsysConfigs(RESOURCE_PATH_2, context.resourceResolver()));
+    assertEquals(2, configs.size());
+    assertSame(parsysConfig2, configs.get(0));
+    assertSame(parsysConfig1, configs.get(1));
+  }
+
+  @Test
+  public void testGetPageComponentFromOsgi_AbsolutePath() {
+    List<ParsysConfig> configs;
+
+    configs = Lists.newArrayList(underTest.getParsysConfigs("/apps/" + RESOURCE_PATH_1, context.resourceResolver()));
+    assertEquals(1, configs.size());
+    assertSame(parsysConfig1, configs.get(0));
+
+    configs = Lists.newArrayList(underTest.getParsysConfigs("/apps/" + RESOURCE_PATH_2, context.resourceResolver()));
     assertEquals(2, configs.size());
     assertSame(parsysConfig2, configs.get(0));
     assertSame(parsysConfig1, configs.get(1));

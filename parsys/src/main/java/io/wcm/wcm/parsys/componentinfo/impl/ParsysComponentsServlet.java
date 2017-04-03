@@ -48,6 +48,7 @@ import com.day.cq.wcm.api.PageManager;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.sling.commons.request.RequestParam;
+import io.wcm.sling.commons.resource.ResourceType;
 import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 import io.wcm.wcm.commons.util.RunMode;
@@ -121,7 +122,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
       // create set with relative resource type paths
       Set<String> allowedComponentsRelative = new TreeSet<String>();
       for (String resourceType : allowed) {
-        allowedComponentsRelative.add(resourceType);
+        allowedComponentsRelative.add(ResourceType.makeAbsolute(resourceType, resolver));
       }
 
       allowedComponents = new JSONArray(allowedComponentsRelative);

@@ -38,6 +38,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
+import io.wcm.sling.commons.resource.ResourceType;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
@@ -90,7 +91,7 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
 
     // add osgi parsys configurations
     for (ParsysConfig osgiParsysConfig : osgiParsysConfigs) {
-      if (StringUtils.equals(pageComponentResource.getPath(), osgiParsysConfig.getPageComponentPath())) {
+      if (ResourceType.equals(pageComponentResource.getPath(), osgiParsysConfig.getPageComponentPath())) {
         configs.add(osgiParsysConfig);
       }
     }
