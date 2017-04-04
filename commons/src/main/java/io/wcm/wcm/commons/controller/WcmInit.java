@@ -19,8 +19,6 @@
  */
 package io.wcm.wcm.commons.controller;
 
-import io.wcm.sling.models.annotations.AemObject;
-
 import java.io.IOException;
 import java.io.StringWriter;
 
@@ -35,6 +33,8 @@ import com.day.cq.wcm.api.AuthoringUIMode;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.undo.UndoConfigService;
 
+import io.wcm.sling.models.annotations.AemObject;
+
 /**
  * Controller for wcmInit component.
  */
@@ -48,7 +48,10 @@ public final class WcmInit {
   private final String undoConfig;
 
   /**
-   * Constructor
+   * @param authoringUIMode Authoring UI mode
+   * @param componentContext Component context
+   * @param undoConfigService Undo Config Service
+   * @throws IOException I/O exception
    */
   @Inject
   public WcmInit(

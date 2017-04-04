@@ -19,10 +19,6 @@
  */
 package io.wcm.wcm.ui.extjs.provider;
 
-import io.wcm.sling.commons.request.RequestParam;
-import io.wcm.wcm.commons.contenttype.ContentType;
-import io.wcm.wcm.ui.extjs.provider.impl.util.PredicatePageFilter;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -43,6 +39,10 @@ import org.slf4j.LoggerFactory;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.commons.predicate.PredicateProvider;
 import com.day.cq.wcm.api.PageFilter;
+
+import io.wcm.sling.commons.request.RequestParam;
+import io.wcm.wcm.commons.contenttype.ContentType;
+import io.wcm.wcm.ui.extjs.provider.impl.util.PredicatePageFilter;
 
 /**
  * Common functionality for {@link AbstractPageListProvider} and {@link AbstractPageTreeProvider}.
@@ -86,7 +86,7 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
       JSONArray jsonContent = getJsonContent(rootResource, pageFilter);
       response.getWriter().write(jsonContent.toString());
     }
-    catch (Throwable ex) {
+    /*CHECKSTYLE:OFF*/ catch (Exception ex) { /*CHECKSTYLE:ON*/
       log.error("Unexpected error, rethrow as servlet exception.", ex);
       throw new ServletException(ex);
     }
@@ -96,14 +96,15 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
    * Render result of provider servlet as JSON to string writer.
    * @param rootResource Root resource
    * @param pageFilter Page filter
-   * @throws JSONException
+   * @return JSON array
+   * @throws JSONException JSON exception
    */
   protected abstract JSONArray getJsonContent(Resource rootResource, PageFilter pageFilter) throws JSONException;
 
   /**
    * Determine root resource to list its children. (use resource for root page because root node does not have to be a
    * page but can be e.g. a nt:folder node)
-   * @param request
+   * @param request Request
    * @return Root resource or null if invalid resource was referenced
    */
   protected final Resource getRootResource(SlingHttpServletRequest request) {
@@ -121,7 +122,7 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
   /**
    * Can be overridden by subclasses to filter page list via page filter.
    * If not overridden it supports defining a page filter via "predicate" request attribute.
-   * @param request
+   * @param request Request
    * @return Page filter or null if no filtering applies
    */
   protected PageFilter getPageFilter(SlingHttpServletRequest request) {

@@ -24,8 +24,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +40,9 @@ import com.day.cq.wcm.mobile.api.device.DeviceGroup;
 import com.day.cq.wcm.mobile.api.device.DeviceGroupList;
 import com.google.common.collect.ImmutableList;
 
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+
 public class EmulatorProviderImplTest {
 
   @Rule
@@ -55,12 +56,8 @@ public class EmulatorProviderImplTest {
 
   @Before
   public void setUp() {
-    underTest = context.registerInjectActivateService(new EmulatorProviderImpl(), ImmutableValueMap.builder()
-        .put(EmulatorProviderImpl.PROPERYT_TEMPLATE_PATH_PATTERNS, new String[] {
-            "^/apps/app1/.*$",
-            "^/apps/app2/.*$"
-        })
-        .build());
+    underTest = context.registerInjectActivateService(new EmulatorProviderImpl(),
+        "templatePathPatterns", new String[] { "^/apps/app1/.*$", "^/apps/app2/.*$" });
 
     page1 = context.create().page("/content/page1", "/apps/app1/template1",
         ImmutableValueMap.of("cq:deviceGroups", new String[] {

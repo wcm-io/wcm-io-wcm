@@ -19,6 +19,7 @@
  */
 package io.wcm.wcm.parsys.controller;
 
+import static io.wcm.testing.mock.wcmio.sling.ContextPlugins.WCMIO_SLING;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_GENERATE_DEAFULT_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_NEWAREA_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
@@ -48,7 +49,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
@@ -58,19 +59,19 @@ import com.day.cq.wcm.api.components.ComponentContext;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.testing.mock.wcmio.sling.MockSlingExtensions;
+import io.wcm.testing.mock.aem.junit.AemContextBuilder;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParsysTest {
 
-  private static final String RESOURCE_TYPE_SAMPLE = "/apps/sample/components/parsys";
-  private static final String SUPER_RESOURCE_TYPE_SAMPLE = "/apps/sample/components/superParsys";
-  private static final String COMPONENT_PATH_1 = "/apps/sample/components/comp1";
-  private static final String COMPONENT_PATH_2 = "/apps/sample/components/comp2";
+  private static final String RESOURCE_TYPE_SAMPLE = "sample/components/parsys";
+  private static final String SUPER_RESOURCE_TYPE_SAMPLE = "sample/components/superParsys";
+  private static final String COMPONENT_PATH_1 = "sample/components/comp1";
+  private static final String COMPONENT_PATH_2 = "sample/components/comp2";
 
   @Rule
-  public AemContext context = new AemContext();
+  public AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();
 
   @Mock
   private ComponentContext componentContext;
@@ -84,8 +85,6 @@ public class ParsysTest {
 
   @Before
   public void setUp() {
-    MockSlingExtensions.setUp(context);
-
     context.addModelsForPackage("io.wcm.wcm.parsys.controller");
 
     context.request().setAttribute(ComponentContext.CONTEXT_ATTR_NAME, componentContext);
@@ -93,7 +92,7 @@ public class ParsysTest {
     when(component.getPath()).thenReturn(RESOURCE_TYPE_SAMPLE);
     when(component.getProperties()).thenReturn(ImmutableValueMap.of());
 
-    page = context.create().page("/content/page1", "/apps/sample/templates/test1");
+    page = context.create().page("/content/page1", "sample/templates/test1");
     parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsys");
     par1Resource = context.create().resource(parsysResource.getPath() + "/par1",
         ImmutableValueMap.of("sling:resourceType", COMPONENT_PATH_1));
@@ -209,8 +208,8 @@ public class ParsysTest {
 
   @Test
   public void testNewAreaResourceTypeFromCurrentComponent() {
-    context.create().resource(RESOURCE_TYPE_SAMPLE);
-    context.create().resource(RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
 
     WCMMode.EDIT.toRequest(context.request());
     Parsys parsys = context.request().adaptTo(Parsys.class);
@@ -222,11 +221,11 @@ public class ParsysTest {
 
   @Test
   public void testNewAreaResourceTypeFromSuperComponent() {
-    context.create().resource(RESOURCE_TYPE_SAMPLE,
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
         ImmutableValueMap.of(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, SUPER_RESOURCE_TYPE_SAMPLE));
 
-    context.create().resource(SUPER_RESOURCE_TYPE_SAMPLE);
-    context.create().resource(SUPER_RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
+    context.create().resource("/apps/" + SUPER_RESOURCE_TYPE_SAMPLE);
+    context.create().resource("/apps/" + SUPER_RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
 
     WCMMode.EDIT.toRequest(context.request());
     Parsys parsys = context.request().adaptTo(Parsys.class);

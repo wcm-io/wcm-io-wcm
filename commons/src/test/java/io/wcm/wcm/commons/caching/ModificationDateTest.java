@@ -22,7 +22,6 @@ package io.wcm.wcm.commons.caching;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -33,10 +32,12 @@ import org.apache.sling.api.resource.ResourceMetadata;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ModificationDateTest {

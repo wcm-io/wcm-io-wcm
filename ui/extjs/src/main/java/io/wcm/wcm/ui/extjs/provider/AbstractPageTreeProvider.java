@@ -19,8 +19,6 @@
  */
 package io.wcm.wcm.ui.extjs.provider;
 
-import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
-
 import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +31,8 @@ import org.osgi.annotation.versioning.ConsumerType;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
+
+import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
 
 /**
  * Exports the resource tree at the addressed resource in JSON format to the response.
@@ -51,8 +51,10 @@ public abstract class AbstractPageTreeProvider extends AbstractPageProvider {
   /**
    * Generate JSON objects for pages.
    * @param pages Child page iterator
+   * @param depth Depth
+   * @param pageFilter Page filter
    * @return Page array
-   * @throws JSONException
+   * @throws JSONException JSON exception
    */
   protected final JSONArray getPages(Iterator<Page> pages, int depth, PageFilter pageFilter) throws JSONException {
     JSONArray pagesArray = new JSONArray();
@@ -94,7 +96,7 @@ public abstract class AbstractPageTreeProvider extends AbstractPageProvider {
    * Generate JSON object for page
    * @param page Page
    * @return JSON object
-   * @throws JSONException
+   * @throws JSONException JSON exception
    */
   protected final JSONObject getPage(Page page) throws JSONException {
     Resource resource = page.adaptTo(Resource.class);

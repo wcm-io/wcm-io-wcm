@@ -19,80 +19,79 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
-
-import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.ConfigurationPolicy;
-import org.apache.felix.scr.annotations.Property;
-import org.apache.felix.scr.annotations.PropertyOption;
-import org.apache.felix.scr.annotations.Service;
-import org.apache.sling.commons.osgi.PropertiesUtil;
-import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
+import org.osgi.service.metatype.annotations.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableSet;
 
+import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
+
 /**
  * Factory configuration provider for OSGi parsys configuration.
  */
-@Component(immediate = true, metatype = true, configurationFactory = true, policy = ConfigurationPolicy.REQUIRE,
-label = "wcm.io Paragraph System Configuration Extension",
-description = "Extends configurations of allowed components for wcm.io paragraph systems.")
-@Service(ParsysConfig.class)
-@Property(name = "webconsole.configurationFactory.nameHint", value = "{pageComponentPath}")
+@Component(service = ParsysConfig.class, immediate = true, configurationPolicy = ConfigurationPolicy.REQUIRE, property = {
+    "webconsole.configurationFactory.nameHint={pageComponentPath}"
+})
+@Designate(ocd = OsgiParsysConfigProvider.Config.class, factory = true)
 public final class OsgiParsysConfigProvider implements ParsysConfig {
 
   private static final Logger log = LoggerFactory.getLogger(OsgiParsysConfigProvider.class);
 
   static final int DEFAULT_PARENT_ANCESTOR_LEVEL = 1;
 
-  @Property(label = "Page Component Path",
-      description = "Resource type of the page component for this parsys config (required).")
-  static final String PROPERTY_PAGE_COMPONENT_PATH = "pageComponentPath";
+  @ObjectClassDefinition(name = "wcm.io Paragraph System Configuration Extension",
+      description = "Extends configurations of allowed components for wcm.io paragraph systems.")
+  @interface Config {
 
-  @Property(label = "Path",
-      description = "Parsys node name (e.g. 'content') or parsys path relative to page "
-          + "(should start with 'jcr:content/'). Path will be ignored if a pattern is defined.")
-  static final String PROPERTY_PATH = "path";
+    @AttributeDefinition(name = "Page Component Path",
+        description = "Resource type of the page component for this parsys config (required).")
+    String pageComponentPath();
 
-  @Property(label = "Path Pattern",
-      description = "Regular expression that matches parsys path within the page, "
-          + "e.g. '^jcr:content/.*$'. Leave empty if you want to use the Path property.")
-  static final String PROPERTY_PATH_PATTERN = "pathPattern";
+    @AttributeDefinition(name = "Path",
+        description = "Parsys node name (e.g. 'content') or parsys path relative to page "
+            + "(should start with 'jcr:content/'). Path will be ignored if a pattern is defined.")
+    String path();
 
-  @Property(label = "Allowed Children",
-      description = "Resource types of the allowed components in this paragraph system",
-      cardinality = Integer.MAX_VALUE)
-  static final String PROPERTY_ALLOWED_CHILDREN = "allowedChildren";
+    @AttributeDefinition(name = "Path Pattern",
+        description = "Regular expression that matches parsys path within the page, "
+            + "e.g. '^jcr:content/.*$'. Leave empty if you want to use the Path property.")
+    String pathPattern();
 
-  @Property(label = "Denied Children",
-      description = "Resource types of the denied components in this paragraph system",
-      cardinality = Integer.MAX_VALUE)
-  static final String PROPERTY_DENIED_CHILDREN = "deniedChildren";
+    @AttributeDefinition(name = "Allowed Children",
+        description = "Resource types of the allowed components in this paragraph system")
+    String[] allowedChildren();
 
-  @Property(label = "Allowed Parents",
-      description = "(optional) Resource types of parsys parent components. "
-          + "You can limit the context of parsys where child components can be added by configuratiion of allowed parent components.",
-          cardinality = Integer.MAX_VALUE)
-  static final String PROPERTY_ALLOWED_PARENTS = "allowedParents";
+    @AttributeDefinition(name = "Denied Children",
+        description = "Resource types of the denied components in this paragraph system")
+    String[] deniedChildren();
 
-  @Property(label = "Parent Ancestor Level",
-      description = "(optional) Indicates the ancestor level, where allowed parents should match.",
-      intValue = DEFAULT_PARENT_ANCESTOR_LEVEL,
-      options = {
-      @PropertyOption(name = "1", value = "Direct Parent (1)"),
-      @PropertyOption(name = "2", value = "Grand Parent (2)")
-  })
-  static final String PROPERTY_PARENT_ANCESTOR_LEVEL = "parentAncestorLevel";
+    @AttributeDefinition(name = "Allowed Parents",
+        description = "(optional) Resource types of parsys parent components. "
+            + "You can limit the context of parsys where child components can be added by configuratiion of allowed parent components.")
+    String[] allowedParents();
+
+    @AttributeDefinition(name = "Parent Ancestor Level",
+        description = "(optional) Indicates the ancestor level, where allowed parents should match.",
+        options = {
+            @Option(value = "1", label = "Direct Parent (1)"),
+            @Option(value = "2", label = "Grand Parent (2)")
+    })
+    int parentAncestorLevel() default DEFAULT_PARENT_ANCESTOR_LEVEL;
+
+  }
 
   private String pageComponentPath;
   private Pattern pathPattern;
@@ -134,22 +133,16 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
   // --- SCR Integration ---
 
   @Activate
-  private void activate(ComponentContext componentContext) {
-    @SuppressWarnings("unchecked")
-    final Dictionary<String, Object> props = componentContext.getProperties();
+  private void activate(Config config) {
 
-    // read config properties
-    this.pageComponentPath = PropertiesUtil.toString(props.get(PROPERTY_PAGE_COMPONENT_PATH), null);
-    String path = PropertiesUtil.toString(props.get(PROPERTY_PATH), null);
-    String patternString = PropertiesUtil.toString(props.get(PROPERTY_PATH_PATTERN), null);
-    String[] allowedChildrenArray = PropertiesUtil.toStringArray(props.get(PROPERTY_ALLOWED_CHILDREN), null);
-    String[] deniedChildrenArray = PropertiesUtil.toStringArray(props.get(PROPERTY_DENIED_CHILDREN), null);
-    String[] allowedParentsArray = PropertiesUtil.toStringArray(props.get(PROPERTY_ALLOWED_PARENTS), null);
-    this.parentAncestorLevel = PropertiesUtil.toInteger(props.get(PROPERTY_PARENT_ANCESTOR_LEVEL), DEFAULT_PARENT_ANCESTOR_LEVEL);
+    this.pageComponentPath = config.pageComponentPath();
+    this.parentAncestorLevel = config.parentAncestorLevel();
 
     // set path pattern if any
-    if (StringUtils.isNotEmpty(patternString)) {
-      this.pathPattern = Pattern.compile(patternString);
+    String pathPatternString = config.pathPattern();
+    String path = config.path();
+    if (StringUtils.isNotEmpty(pathPatternString)) {
+      this.pathPattern = Pattern.compile(pathPatternString);
     }
     // alternative: use path to build a pattern
     else if (StringUtils.isNotBlank(path)) {
@@ -162,8 +155,8 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     // set allowed children
     Set<String> allowedChildrenSet = new HashSet<>();
-    if (allowedChildrenArray != null) {
-      for (String resourceType : allowedChildrenArray) {
+    if (config.allowedChildren() != null) {
+      for (String resourceType : config.allowedChildren()) {
         if (StringUtils.isNotBlank(resourceType)) {
           allowedChildrenSet.add(resourceType);
         }
@@ -173,8 +166,8 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     // set denied children
     Set<String> deniedChildrenSet = new HashSet<>();
-    if (deniedChildrenArray != null) {
-      for (String resourceType : deniedChildrenArray) {
+    if (config.deniedChildren() != null) {
+      for (String resourceType : config.deniedChildren()) {
         if (StringUtils.isNotBlank(resourceType)) {
           deniedChildrenSet.add(resourceType);
         }
@@ -184,8 +177,8 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     // set allowed parents
     Set<String> allowedParentsSet = new HashSet<>();
-    if (allowedParentsArray != null) {
-      for (String resourceType : allowedParentsArray) {
+    if (config.allowedParents() != null) {
+      for (String resourceType : config.allowedParents()) {
         if (StringUtils.isNotBlank(resourceType)) {
           allowedParentsSet.add(resourceType);
         }
@@ -195,13 +188,13 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     if (log.isDebugEnabled()) {
       log.debug(getClass().getSimpleName() + ": "
-          + PROPERTY_PAGE_COMPONENT_PATH + "={}, "
-          + PROPERTY_PATH + "={}, "
-          + PROPERTY_PATH_PATTERN + "={}, "
-          + PROPERTY_ALLOWED_CHILDREN + "={}, "
-          + PROPERTY_DENIED_CHILDREN + "={}, "
-          + PROPERTY_ALLOWED_PARENTS + "={}, "
-          + PROPERTY_PARENT_ANCESTOR_LEVEL + "={}",
+          + "pageComponentPath={}, "
+          + "path={}, "
+          + "pathPattern={}, "
+          + "allowedChildren={}, "
+          + "deniedChildren={}, "
+          + "allowedParents={}, "
+          + "parentAncestorLevel={}",
           new Object[] {
         this.pageComponentPath,
         path,
@@ -216,10 +209,10 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     // validation messages
     if (StringUtils.isBlank(this.pageComponentPath)) {
-      log.warn(PROPERTY_PAGE_COMPONENT_PATH + " cannot be null or empty. This configuration will be ignored.");
+      log.warn("pageComponentPath cannot be null or empty. This configuration will be ignored.");
     }
     if (this.pathPattern == null) {
-      log.warn("Path pattern cannot be null. Please set the property " + PROPERTY_PATH_PATTERN + " or " + PROPERTY_PATH);
+      log.warn("Path pattern cannot be null. Please set the property pathPattern or path.");
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "jcr:primaryType": "cq:Component",
-  "sling:resourceSuperType":"/apps/dummy/components/page/basePage",
+  "sling:resourceSuperType":"dummy/components/page/basePage",
 
   "wcmio:parsysConfig": {
     "jcr:primaryType": "nt:unstructured",
@@ -8,8 +8,8 @@
 
       "special": {
         "allowedChildren": [
-          "/apps/dummy/components/specialComp1",
-          "/apps/dummy/components/specialText"
+          "dummy/components/specialComp1",
+          "dummy/components/specialText"
         ]
       }
 

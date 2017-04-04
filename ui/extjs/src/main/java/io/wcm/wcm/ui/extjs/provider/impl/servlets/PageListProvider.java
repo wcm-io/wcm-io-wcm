@@ -19,32 +19,36 @@
  */
 package io.wcm.wcm.ui.extjs.provider.impl.servlets;
 
-import io.wcm.wcm.commons.contenttype.FileExtension;
-import io.wcm.wcm.ui.extjs.provider.AbstractPageListProvider;
+import javax.servlet.Servlet;
 
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.servlets.HttpConstants;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 
 import com.day.cq.commons.predicate.PredicateProvider;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.wcm.commons.contenttype.FileExtension;
+import io.wcm.wcm.ui.extjs.provider.AbstractPageListProvider;
 
 /**
  * Exports the list of child pages of the addressed resource in JSON format to the response.
  * This can be used by the <code>io.wcm.wcm.ui.form.Selection</code> widget.
  */
-@SlingServlet(
-    extensions = FileExtension.JSON,
-    selectors = "wcm-io-wcm-ui-extjs-pagelist",
-    resourceTypes = "sling/servlet/default",
-    methods = HttpConstants.METHOD_GET)
+@Component(service = Servlet.class, immediate = true, property = {
+    "sling.servlet.extensions=" + FileExtension.JSON,
+    "sling.servlet.selectors=" + PageListProvider.SELECTOR,
+    "sling.servlet.resourceTypes=sling/servlet/default",
+    "sling.servlet.methods=" + HttpConstants.METHOD_GET
+})
 @SuppressFBWarnings("SE_BAD_FIELD")
 public final class PageListProvider extends AbstractPageListProvider {
   private static final long serialVersionUID = 1L;
 
-  @Reference(cardinality = ReferenceCardinality.OPTIONAL_UNARY)
+  static final String SELECTOR = "wcm-io-wcm-ui-extjs-pagelist";
+
+  @Reference(cardinality = ReferenceCardinality.OPTIONAL)
   private PredicateProvider predicateProvider;
 
   @Override

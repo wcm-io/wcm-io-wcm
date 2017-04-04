@@ -19,25 +19,15 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import io.wcm.sling.commons.adapter.AdaptTo;
-import io.wcm.sling.commons.request.RequestParam;
-import io.wcm.sling.commons.resource.ResourceType;
-import io.wcm.wcm.commons.contenttype.ContentType;
-import io.wcm.wcm.commons.contenttype.FileExtension;
-import io.wcm.wcm.commons.util.RunMode;
-import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
-
 import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -46,6 +36,9 @@ import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.settings.SlingSettingsService;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,20 +46,29 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.wcm.sling.commons.adapter.AdaptTo;
+import io.wcm.sling.commons.request.RequestParam;
+import io.wcm.sling.commons.resource.ResourceType;
+import io.wcm.wcm.commons.contenttype.ContentType;
+import io.wcm.wcm.commons.contenttype.FileExtension;
+import io.wcm.wcm.commons.util.RunMode;
+import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
 /**
  * Handles AJAX calls for updateComponentListHandler JS method to update list of allowed component lists dynamically.
  */
-@SlingServlet(
-    extensions = FileExtension.JSON,
-    selectors = "wcmio-parsys-components",
-    resourceTypes = "sling/servlet/default",
-    methods = HttpConstants.METHOD_GET)
+@Component(service = Servlet.class, immediate = true, property = {
+    "sling.servlet.extensions=" + FileExtension.JSON,
+    "sling.servlet.selectors=" + ParsysComponentsServlet.SELECTOR,
+    "sling.servlet.resourceTypes=sling/servlet/default",
+    "sling.servlet.methods=" + HttpConstants.METHOD_GET
+})
 @SuppressFBWarnings("SE_BAD_FIELD")
 public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
   private static final long serialVersionUID = 1L;
 
   static final String RP_PATH = "path";
+  static final String SELECTOR = "wcmio-parsys-components";
 
   private static final Logger log = LoggerFactory.getLogger(ParsysComponentsServlet.class);
 

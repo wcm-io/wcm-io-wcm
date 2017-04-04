@@ -21,9 +21,6 @@ package io.wcm.wcm.ui.extjs.provider.impl.servlets;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
 import java.util.List;
 
@@ -40,11 +37,15 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TemplateFilterPageTreeProviderTest {

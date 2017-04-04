@@ -9,7 +9,7 @@ Usage in your page component Sightly template:
 
 ```html
 <head>
-  <meta data-sly-resource="${'.' @ resourceType='/apps/adaptto/components/global/wcmInit' }"
+  <meta data-sly-resource="${'.' @ resourceType='adaptto/components/global/wcmInit' }"
       data-sly-unwrap></meta>
 </head>
 ```
@@ -24,7 +24,7 @@ Component definition for subcomponent:
 ```json
 {
   "jcr:primaryType": "cq:Component",
-  "sling:resourceSuperType": "/apps/wcm-io/wcm/commons/components/global/wcmInit"
+  "sling:resourceSuperType": "wcm-io/wcm/commons/components/global/wcmInit"
 }
 
 ```
@@ -50,7 +50,7 @@ You can inherit from this in you page components:
 ```json
 {
   "jcr:primaryType": "cq:Component",
-  "sling:resourceSuperType": "/apps/wcm-io/wcm/commons/components/global/page"
+  "sling:resourceSuperType": "wcm-io/wcm/commons/components/global/page"
 }
 
 ```

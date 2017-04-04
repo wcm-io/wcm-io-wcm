@@ -29,7 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
@@ -54,10 +54,10 @@ public class TemplateTest {
     assertNull(null, Template.getResourceTypeFromTemplatePath(""));
     assertNull(null, Template.getResourceTypeFromTemplatePath("/apps"));
 
-    assertEquals("/apps/app1/components/page/t1", Template.getResourceTypeFromTemplatePath("/apps/app1/templates/t1"));
-    assertEquals("/libs/app1/components/page/t1", Template.getResourceTypeFromTemplatePath("/libs/app1/templates/t1"));
-    assertEquals("/apps/aaa/app1/components/bbb/page/t1", Template.getResourceTypeFromTemplatePath("/apps/aaa/app1/templates/bbb/t1"));
-    assertEquals("/apps/aaa/ddd/app1/components/bbb/ccc/page/t1", Template.getResourceTypeFromTemplatePath("/apps/aaa/ddd/app1/templates/bbb/ccc/t1"));
+    assertEquals("app1/components/page/t1", Template.getResourceTypeFromTemplatePath("/apps/app1/templates/t1"));
+    assertEquals("app1/components/page/t1", Template.getResourceTypeFromTemplatePath("/libs/app1/templates/t1"));
+    assertEquals("aaa/app1/components/bbb/page/t1", Template.getResourceTypeFromTemplatePath("/apps/aaa/app1/templates/bbb/t1"));
+    assertEquals("aaa/ddd/app1/components/bbb/ccc/page/t1", Template.getResourceTypeFromTemplatePath("/apps/aaa/ddd/app1/templates/bbb/ccc/t1"));
 
   }
 

@@ -21,9 +21,6 @@ package io.wcm.wcm.ui.extjs.provider.impl.servlets;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,6 +32,10 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.day.cq.commons.predicate.PredicateProvider;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
 public class PageTreeProviderTest {
 

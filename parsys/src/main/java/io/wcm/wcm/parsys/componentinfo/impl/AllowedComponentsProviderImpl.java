@@ -19,33 +19,30 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import io.wcm.sling.commons.resource.ResourceType;
-import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.google.common.collect.ImmutableSet;
 
+import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
+
 /**
  * Detects allowed components for authoring for a given page/resource context.
  */
-@Component(immediate = true)
-@Service(AllowedComponentsProvider.class)
+@Component(service = AllowedComponentsProvider.class, immediate = true)
 public final class AllowedComponentsProviderImpl implements AllowedComponentsProvider {
 
   @Reference
@@ -97,14 +94,14 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
             checkResource = grandParentResource;
           }
           if (checkResource != null) {
-            String resourceType = ResourceType.makeAbsolute(checkResource.getResourceType(), resolver);
+            String resourceType = checkResource.getResourceType();
             includePathDef = pathDef.getAllowedParents().contains(resourceType);
           }
         }
 
         if (includePathDef) {
-          allowedComponents.addAll(makeAbsolute(pathDef.getAllowedChildren(), resolver));
-          deniedComponents.addAll(makeAbsolute(pathDef.getDeniedChildren(), resolver));
+          allowedComponents.addAll(pathDef.getAllowedChildren());
+          deniedComponents.addAll(pathDef.getDeniedChildren());
         }
 
       }
@@ -130,27 +127,13 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
 
       SortedSet<String> allowedChildren = new TreeSet<>();
       for (ParsysConfig parSysConfig : parSysConfigs) {
-        allowedChildren.addAll(makeAbsolute(parSysConfig.getAllowedChildren(), resolver));
+        allowedChildren.addAll(parSysConfig.getAllowedChildren());
       }
 
       return allowedChildren;
     }
     // fallback
     return ImmutableSet.of();
-  }
-
-  /**
-   * Ensures that all resource types in the set are resolved to absolute resource types.
-   * @param resourceTypes Resource types
-   * @param resourceResolver Resource resolver
-   * @return Absolute resource types
-   */
-  private static Set<String> makeAbsolute(Set<String> resourceTypes, ResourceResolver resourceResolver) {
-    Set<String> absoluteResourceTypes = new HashSet<>();
-    for (String resourceType : resourceTypes) {
-      absoluteResourceTypes.add(ResourceType.makeAbsolute(resourceType, resourceResolver));
-    }
-    return absoluteResourceTypes;
   }
 
 }

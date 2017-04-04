@@ -6,6 +6,6 @@
 
   "jcr:content": {
     "jcr:primaryType": "cq:PageContent",
-    "sling:resourceType": "/apps/dummy/components/page/inheritedPageComponent"
+    "sling:resourceType": "dummy/components/page/inheritedPageComponent"
   }
 }

@@ -25,13 +25,13 @@
   <parent>
     <groupId>io.wcm</groupId>
     <artifactId>io.wcm.wcm.parent</artifactId>
-    <version>0.5.6</version>
+    <version>1.0.0-SNAPSHOT</version>
     <relativePath>../../parent/pom.xml</relativePath>
   </parent>
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.ui.extjs</artifactId>
-  <version>0.5.2</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>WCM ExtJS UI Extensions</name>
@@ -53,14 +53,14 @@
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.sling.commons</artifactId>
-      <version>0.6.4</version>
+      <version>1.0.0</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.wcm.commons</artifactId>
-      <version>0.6.0</version>
+      <version>1.0.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
 
@@ -79,7 +79,13 @@
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.testing.aem-mock</artifactId>
-      <version>1.7.0</version>
+      <version>1.9.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.sling</groupId>
+      <artifactId>org.apache.sling.testing.osgi-mock</artifactId>
+      <version>2.2.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -96,8 +102,8 @@
     <plugins>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-eclipse-plugin</artifactId>
+        <groupId>io.wcm.devops.maven.plugins</groupId>
+        <artifactId>eclipse-maven-plugin</artifactId>
         <configuration>
           <addVersionToProjectName>false</addVersionToProjectName>
         </configuration>
@@ -120,24 +126,6 @@
 
           </instructions>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-scr-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.sling</groupId>
-        <artifactId>maven-sling-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>validate-bundle</id>
-            <goals>
-              <goal>validate</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
     </plugins>

@@ -22,10 +22,6 @@ package io.wcm.wcm.parsys.componentinfo.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
-import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -36,15 +32,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
+import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParsysConfigManagerImplTest {
 
-  private static final String RESOURCE_PATH_1 = "/apps/sample/components/component1";
-  private static final String RESOURCE_PATH_2 = "/apps/sample/components/component2";
+  private static final String RESOURCE_PATH_1 = "sample/components/component1";
+  private static final String RESOURCE_PATH_2 = "sample/components/component2";
 
   private static final Pattern PATH_PATTERN_1 = Pattern.compile("^" + Pattern.quote("jcr:content/path1") + "$");
   private static final Pattern PATH_PATTERN_2 = Pattern.compile("^.*/path2(/.*)?$");
@@ -61,8 +62,8 @@ public class ParsysConfigManagerImplTest {
 
   @Before
   public void setUp() {
-    context.create().resource(RESOURCE_PATH_1);
-    context.create().resource(RESOURCE_PATH_2,
+    context.create().resource("/apps/" + RESOURCE_PATH_1);
+    context.create().resource("/apps/" + RESOURCE_PATH_2,
         ImmutableValueMap.of(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, RESOURCE_PATH_1));
 
     when(parsysConfig1.getPageComponentPath()).thenReturn(RESOURCE_PATH_1);
@@ -77,7 +78,7 @@ public class ParsysConfigManagerImplTest {
   }
 
   @Test
-  public void testGetPageComponentFromOsgi() {
+  public void testGetPageComponentFromOsgi_RelativePath() {
     List<ParsysConfig> configs;
 
     configs = Lists.newArrayList(underTest.getParsysConfigs(RESOURCE_PATH_1, context.resourceResolver()));
@@ -85,6 +86,20 @@ public class ParsysConfigManagerImplTest {
     assertSame(parsysConfig1, configs.get(0));
 
     configs = Lists.newArrayList(underTest.getParsysConfigs(RESOURCE_PATH_2, context.resourceResolver()));
+    assertEquals(2, configs.size());
+    assertSame(parsysConfig2, configs.get(0));
+    assertSame(parsysConfig1, configs.get(1));
+  }
+
+  @Test
+  public void testGetPageComponentFromOsgi_AbsolutePath() {
+    List<ParsysConfig> configs;
+
+    configs = Lists.newArrayList(underTest.getParsysConfigs("/apps/" + RESOURCE_PATH_1, context.resourceResolver()));
+    assertEquals(1, configs.size());
+    assertSame(parsysConfig1, configs.get(0));
+
+    configs = Lists.newArrayList(underTest.getParsysConfigs("/apps/" + RESOURCE_PATH_2, context.resourceResolver()));
     assertEquals(2, configs.size());
     assertSame(parsysConfig2, configs.get(0));
     assertSame(parsysConfig1, configs.get(1));

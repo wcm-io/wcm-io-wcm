@@ -19,8 +19,6 @@
  */
 package io.wcm.wcm.ui.extjs.provider;
 
-import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
-
 import java.util.Iterator;
 
 import org.apache.sling.api.resource.Resource;
@@ -31,6 +29,8 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
+
+import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
 
 /**
  * Exports the list of child pages of the addressed resource in JSON format to the response.

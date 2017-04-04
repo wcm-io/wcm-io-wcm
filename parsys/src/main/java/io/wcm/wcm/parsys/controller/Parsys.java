@@ -68,7 +68,7 @@ public final class Parsys {
   static final String NEWAREA_STYLE = "clear:both";
   static final String NEWAREA_CSS_CLASS_NAME = "new";
   static final String NEWAREA_CHILD_NAME = "newpar";
-  static final String FALLBACK_NEWAREA_RESOURCE_TYPE = "/apps/wcm-io/wcm/parsys/components/parsys/newpar";
+  static final String FALLBACK_NEWAREA_RESOURCE_TYPE = "wcm-io/wcm/parsys/components/parsys/newpar";
   static final String DEFAULT_ELEMENT_NAME = "div";
 
   /**
@@ -157,7 +157,9 @@ public final class Parsys {
   }
 
   private ComponentManager componentManager() {
-    componentManager = AdaptTo.notNull(this.resolver, ComponentManager.class);
+    if (componentManager == null) {
+      componentManager = AdaptTo.notNull(this.resolver, ComponentManager.class);
+    }
     return componentManager;
   }
 
