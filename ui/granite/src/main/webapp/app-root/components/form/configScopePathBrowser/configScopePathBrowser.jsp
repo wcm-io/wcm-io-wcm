@@ -20,9 +20,9 @@
 <%@page import="org.apache.sling.api.resource.Resource"%>
 <%@page import="org.apache.sling.api.resource.ValueMap"%>
 <%@page import="org.apache.sling.api.request.RequestDispatcherOptions"%>
+<%@page import="org.apache.sling.caconfig.resource.ConfigurationResourceResolver"%>
 <%@page import="com.day.cq.commons.jcr.JcrConstants"%>
 <%@page import="com.day.cq.wcm.api.Page"%>
-<%@page import="io.wcm.config.api.Configuration"%>
 <%@page import="io.wcm.sling.commons.resource.ImmutableValueMap"%>
 <%@page import="io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource"%>
 <%@page import="io.wcm.wcm.ui.granite.util.GraniteUi"%>
@@ -31,11 +31,11 @@
 String rootPath = null;
 Page contentPage = GraniteUi.getContentPage(request);
 if (contentPage != null) {
-  // detect root path of current site via Configuration API
-  Configuration conf = contentPage.getContentResource().adaptTo(Configuration.class);
-  if (conf != null) {
-    // configuration id = root path
-    rootPath = conf.getConfigurationId();
+  // detect root path of current site via Sling Context-Aware Configuration API
+  ConfigurationResourceResolver configResolver = contentPage.getContentResource().adaptTo(ConfigurationResourceResolver.class);
+  if (configResolver != null) {
+    // get inner-most context path
+    rootPath = configResolver.getContextPath(contentPage.getContentResource());
   }
 }
 
