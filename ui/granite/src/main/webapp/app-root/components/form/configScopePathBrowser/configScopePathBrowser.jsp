@@ -32,7 +32,7 @@ String rootPath = null;
 Page contentPage = GraniteUi.getContentPage(request);
 if (contentPage != null) {
   // detect root path of current site via Sling Context-Aware Configuration API
-  ConfigurationResourceResolver configResolver = contentPage.getContentResource().adaptTo(ConfigurationResourceResolver.class);
+  ConfigurationResourceResolver configResolver = sling.getService(ConfigurationResourceResolver.class);
   if (configResolver != null) {
     // get inner-most context path
     rootPath = configResolver.getContextPath(contentPage.getContentResource());
