@@ -91,7 +91,7 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
 
     // add osgi parsys configurations
     for (ParsysConfig osgiParsysConfig : osgiParsysConfigs) {
-      if (ResourceType.equals(pageComponentResource.getPath(), osgiParsysConfig.getPageComponentPath())) {
+      if (ResourceType.equals(pageComponentResource.getPath(), osgiParsysConfig.getPageComponentPath(), pageComponentResource.getResourceResolver())) {
         configs.add(osgiParsysConfig);
       }
     }
