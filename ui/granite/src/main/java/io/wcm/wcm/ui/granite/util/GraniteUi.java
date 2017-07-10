@@ -44,15 +44,11 @@ public final class GraniteUi {
    * @return Current content resource or null
    */
   public static Resource getContentResource(HttpServletRequest request) {
-    SlingHttpServletRequest slingRequest = (SlingHttpServletRequest)request;
-    String contentPath = (String)request.getAttribute(Value.CONTENTPATH_ATTRIBUTE);
-    if (contentPath != null) {
-      return slingRequest.getResourceResolver().getResource(contentPath);
-    }
-    // fallback to suffix if CONTENTPATH_ATTRIBUTE is not set
-    // (e.g. in inside a /libs/granite/ui/components/foundation/form/multifield component)
-    contentPath = ((SlingHttpServletRequest)request).getRequestPathInfo().getSuffix();
+
+    String contentPath = getContentPath(request);
+
     if (StringUtils.isNotEmpty(contentPath)) {
+      SlingHttpServletRequest slingRequest = (SlingHttpServletRequest)request;
       return slingRequest.getResourceResolver().getResource(contentPath);
     }
     return null;
@@ -75,4 +71,20 @@ public final class GraniteUi {
     }
   }
 
+  /**
+   * Current content path
+   * @param request Request
+   * @return Current content path or null
+   */
+  private static String getContentPath(HttpServletRequest request){
+
+    String contentPath = (String)request.getAttribute(Value.CONTENTPATH_ATTRIBUTE);
+    if (contentPath == null) {
+      // fallback to suffix if CONTENTPATH_ATTRIBUTE is not set
+      // (e.g. in inside a /libs/granite/ui/components/foundation/form/multifield component)
+      contentPath = ((SlingHttpServletRequest)request).getRequestPathInfo().getSuffix();
+    }
+
+    return contentPath;
+  }
 }
