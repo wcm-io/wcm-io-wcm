@@ -36,8 +36,9 @@ import com.day.cq.wcm.api.WCMMode;
 import io.wcm.sling.models.annotations.AemObject;
 
 /**
- * Sets "HTTP 403 Forbidden" header if WCM mode is disabled. The status code can be changed by request attribute
- * {@code errorCode}.
+ * Set HTTP error code header if WCM mode is disabled.
+ * The status code can be changed by request attribute
+ * {@code errorCode} (defaults to HTTP 403 - access forbidden).
  */
 @Model(adaptables = SlingHttpServletRequest.class)
 public class DenyWcmDisabled {
@@ -46,6 +47,7 @@ public class DenyWcmDisabled {
   private SlingHttpServletResponse response;
   @AemObject
   private WCMMode wcmMode;
+
   @RequestAttribute
   @Default(intValues = HttpServletResponse.SC_FORBIDDEN)
   private int errorCode;
