@@ -87,4 +87,36 @@ public final class GraniteUi {
 
     return contentPath;
   }
+
+  /**
+   * Current content resource
+   * @param request Request
+   * @return Current content resource. If content resource does not exist its parent is returned
+   */
+  public static Resource getExistingContentResource(HttpServletRequest request) {
+    String contentPath = getContentPath(request);
+    return getContentResourceOrParentFromPath((SlingHttpServletRequest)request, contentPath);
+  }
+
+  private static Resource getContentResourceOrParentFromPath(SlingHttpServletRequest slingRequest, String contentPath) {
+    if (StringUtils.isNotEmpty(contentPath)) {
+      Resource contentResource = slingRequest.getResourceResolver().getResource(contentPath);
+      if (contentResource != null) {
+        return contentResource;
+      } else {
+        return getContentResourceOrParentFromPath(slingRequest, removeLastchild(contentPath));
+      }
+    }
+    return null;
+  }
+
+  private static String removeLastchild(String contentPath) {
+    int slashIndex = contentPath.lastIndexOf("/");
+    if(slashIndex != -1){
+      return contentPath.substring(0, slashIndex);
+    } else {
+      return "";
+    }
+  }
+
 }

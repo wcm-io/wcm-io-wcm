@@ -100,4 +100,27 @@ public class GraniteUiTest {
     assertNull(GraniteUi.getContentPage(request));
   }
 
+  @Test
+  public void shouldGetParentOfMissingContentResource() throws Exception {
+    when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(CONTENT_PATH + "/unavailable");
+    assertSame(resource, GraniteUi.getExistingContentResource(request));
+  }
+
+  @Test
+  public void shouldGetGrandParentOfMissingContentResource() throws Exception {
+    when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(CONTENT_PATH + "/not/existing");
+    assertSame(resource, GraniteUi.getExistingContentResource(request));
+  }
+
+  @Test
+  public void shouldGetExistingResource() throws Exception {
+    assertSame(resource, GraniteUi.getExistingContentResource(request));
+  }
+
+  @Test
+  public void shouldWorkOnToplevel() throws Exception {
+    when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn("not_a_single_slash");
+    assertNull(GraniteUi.getExistingContentResource(request));
+  }
+
 }
