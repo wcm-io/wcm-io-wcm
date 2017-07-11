@@ -53,4 +53,12 @@ public class DenyWcmDisabledTest {
     assertEquals(HttpServletResponse.SC_OK, context.response().getStatus());
   }
 
+  @Test
+  public void testWcmModeDisabledNotFound() {
+    WCMMode.DISABLED.toRequest(context.request());
+    context.request().setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+    context.request().adaptTo(DenyWcmDisabled.class);
+    assertEquals(HttpServletResponse.SC_NOT_FOUND, context.response().getStatus());
+  }
+
 }
