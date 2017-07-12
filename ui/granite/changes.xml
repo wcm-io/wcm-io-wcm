@@ -24,6 +24,12 @@
   <body>
 
     <release version="1.0.4" date="2017-04-07">
+      <action type="fix" dev="rdahlem" issue="WWCM-8">
+        GraniteUi class, Config-Scope Path Browser: Fallback to next-existing parent resource if current resource does not exist.
+      </action>
+    </release>
+
+    <release version="1.0.4" date="2017-04-07">
       <action type="fix" dev="sseifert">
         Config-Scope Path Browser: Use Context-Aware Configuration API instead of wcm.io Configuration API.
       </action>

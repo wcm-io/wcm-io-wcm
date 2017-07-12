@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceUtil;
 
 import com.adobe.granite.ui.components.Value;
 import com.day.cq.wcm.api.Page;
@@ -55,13 +56,25 @@ public final class GraniteUi {
   }
 
   /**
-   * Current content page
+   * Get current content resource
+   * If it does not exist, go up the content path and return the first resource that exists.
+   * @param request Request
+   * @return Current content resource or the first existing parent/ancestor.
+   */
+  public static Resource getContentResourceOrParent(HttpServletRequest request) {
+    String contentPath = getContentPath(request);
+    return getContentResourceOrParentFromPath((SlingHttpServletRequest)request, contentPath);
+  }
+
+  /**
+   * Current content page. If the current resource does not exist the content page
+   * of the next-existing parent resource is returned.
    * @param request Request
    * @return Current content page or null
    */
   public static Page getContentPage(HttpServletRequest request) {
     SlingHttpServletRequest slingRequest = (SlingHttpServletRequest)request;
-    Resource contentResource = getContentResource(request);
+    Resource contentResource = getContentResourceOrParent(request);
     if (contentResource != null) {
       PageManager pageManager = slingRequest.getResourceResolver().adaptTo(PageManager.class);
       return pageManager.getContainingPage(contentResource);
@@ -76,7 +89,7 @@ public final class GraniteUi {
    * @param request Request
    * @return Current content path or null
    */
-  private static String getContentPath(HttpServletRequest request){
+  private static String getContentPath(HttpServletRequest request) {
 
     String contentPath = (String)request.getAttribute(Value.CONTENTPATH_ATTRIBUTE);
     if (contentPath == null) {
@@ -88,35 +101,17 @@ public final class GraniteUi {
     return contentPath;
   }
 
-  /**
-   * Current content resource
-   * @param request Request
-   * @return Current content resource. If content resource does not exist its parent is returned
-   */
-  public static Resource getExistingContentResource(HttpServletRequest request) {
-    String contentPath = getContentPath(request);
-    return getContentResourceOrParentFromPath((SlingHttpServletRequest)request, contentPath);
-  }
-
   private static Resource getContentResourceOrParentFromPath(SlingHttpServletRequest slingRequest, String contentPath) {
     if (StringUtils.isNotEmpty(contentPath)) {
       Resource contentResource = slingRequest.getResourceResolver().getResource(contentPath);
       if (contentResource != null) {
         return contentResource;
-      } else {
-        return getContentResourceOrParentFromPath(slingRequest, removeLastchild(contentPath));
+      }
+      else {
+        return getContentResourceOrParentFromPath(slingRequest, ResourceUtil.getParent(contentPath));
       }
     }
     return null;
-  }
-
-  private static String removeLastchild(String contentPath) {
-    int slashIndex = contentPath.lastIndexOf("/");
-    if(slashIndex != -1){
-      return contentPath.substring(0, slashIndex);
-    } else {
-      return "";
-    }
   }
 
 }

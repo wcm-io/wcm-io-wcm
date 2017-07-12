@@ -28,7 +28,7 @@
 <%@include file="../../global/global.jsp" %><%
 
 String rootPath = null;
-Resource contentResource = GraniteUi.getExistingContentResource(request);
+Resource contentResource = GraniteUi.getContentResourceOrParent(request);
 if (contentResource != null) {
   // detect root path of current site via Sling Context-Aware Configuration API
   ConfigurationResourceResolver configResolver = sling.getService(ConfigurationResourceResolver.class);
