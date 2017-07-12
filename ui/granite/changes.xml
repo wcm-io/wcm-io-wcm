@@ -23,7 +23,7 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
-    <release version="1.0.4" date="2017-04-07">
+    <release version="1.0.6" date="not released">
       <action type="fix" dev="rdahlem" issue="WWCM-8">
         GraniteUi class, Config-Scope Path Browser: Fallback to next-existing parent resource if current resource does not exist.
       </action>
