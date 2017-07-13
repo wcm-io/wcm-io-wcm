@@ -41,6 +41,23 @@ Enhancements over AEM version:
 * Defaults to value 'true'
 
 
+### Number Field
+
+Number field for long value.
+
+```json
+"field": {
+  "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/numberfield",
+  "name": "./field",
+  "fieldLabel": "Number"
+}
+```
+
+Enhancements over AEM version:
+
+* Store with correct Long datatype via explicit @TypeHint
+
+
 ### Date Picker
 
 Form field for date/time value.
