@@ -20,8 +20,9 @@
 <%@page import="org.apache.sling.api.resource.Resource"%>
 <%@page import="org.apache.sling.api.resource.ValueMap"%>
 <%@page import="org.apache.sling.api.request.RequestDispatcherOptions"%>
+<%@page import="org.apache.sling.api.wrappers.ValueMapDecorator"%>
 <%@page import="com.adobe.granite.ui.components.Config"%>
-<%@page import="io.wcm.sling.commons.resource.ImmutableValueMap"%>
+<%@page import="com.google.common.collect.ImmutableMap"%>
 <%@page import="io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource"%>
 <%@include file="../../global/global.jsp" %><%
 
@@ -29,7 +30,7 @@ Config cfg = cmp.getConfig();
 String name = cfg.get("name", String.class);
 String value = cfg.get("value", "true");
 
-ValueMap overwriteProperties = ImmutableValueMap.of("value", value);
+ValueMap overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object>of("value", value));
 //simulate resource for dialog field def with new value instead of configured one
 Resource resourceWrapper = GraniteUiSyntheticResource.wrapMerge(resource, overwriteProperties);
 

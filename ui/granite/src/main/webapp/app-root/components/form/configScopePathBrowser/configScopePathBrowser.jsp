@@ -21,8 +21,9 @@
 <%@page import="org.apache.sling.api.resource.ValueMap"%>
 <%@page import="org.apache.sling.api.request.RequestDispatcherOptions"%>
 <%@page import="org.apache.sling.caconfig.resource.ConfigurationResourceResolver"%>
+<%@page import="org.apache.sling.api.wrappers.ValueMapDecorator"%>
 <%@page import="com.day.cq.commons.jcr.JcrConstants"%>
-<%@page import="io.wcm.sling.commons.resource.ImmutableValueMap"%>
+<%@page import="com.google.common.collect.ImmutableMap"%>
 <%@page import="io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource"%>
 <%@page import="io.wcm.wcm.ui.granite.util.GraniteUi"%>
 <%@include file="../../global/global.jsp" %><%
@@ -40,10 +41,10 @@ if (contentResource != null) {
 
 ValueMap overwriteProperties;
 if (rootPath != null) {
-  overwriteProperties = ImmutableValueMap.of("rootPath", rootPath);
+  overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object>of("rootPath", rootPath));
 }
 else {
-  overwriteProperties = ImmutableValueMap.of();
+  overwriteProperties = ValueMapDecorator.EMPTY;
 }
 
 // simulate resource for dialog field def with new rootPath instead of configured one
