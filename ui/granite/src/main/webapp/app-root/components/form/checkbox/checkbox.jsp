@@ -24,6 +24,7 @@
 <%@page import="com.adobe.granite.ui.components.Config"%>
 <%@page import="com.google.common.collect.ImmutableMap"%>
 <%@page import="io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource"%>
+<%@page import="io.wcm.wcm.ui.granite.util.GraniteUi"%>
 <%@include file="../../global/global.jsp" %><%
 
 Config cfg = cmp.getConfig();
@@ -35,7 +36,9 @@ ValueMap overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object
 Resource resourceWrapper = GraniteUiSyntheticResource.wrapMerge(resource, overwriteProperties);
 
 RequestDispatcherOptions options = new RequestDispatcherOptions();
-options.setForceResourceType("/libs/granite/ui/components/foundation/form/checkbox");
+options.setForceResourceType(GraniteUi.getExistingResourceType(resourceResolver,
+    "/libs/granite/ui/components/coral/foundation/form/checkbox",
+    "/libs/granite/ui/components/foundation/form/checkbox"));
 RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(resourceWrapper, options);
 dispatcher.include(slingRequest, slingResponse);
 

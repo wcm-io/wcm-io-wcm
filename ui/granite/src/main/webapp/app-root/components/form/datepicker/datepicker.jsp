@@ -20,11 +20,14 @@
 <%@page import="com.adobe.granite.ui.components.Config"%>
 <%@page import="com.adobe.granite.ui.components.ComponentHelper.Options"%>
 <%@page import="com.adobe.granite.ui.components.Tag"%>
+<%@page import="io.wcm.wcm.ui.granite.util.GraniteUi"%>
 <%@include file="../../global/global.jsp" %><%
 
 Tag tag = cmp.consumeTag();
 
-cmp.include(resource, "/libs/granite/ui/components/foundation/form/datepicker", new Options().tag(tag));
+cmp.include(resource, GraniteUi.getExistingResourceType(resourceResolver,
+    "/libs/granite/ui/components/coral/foundation/form/datepicker",
+    "/libs/granite/ui/components/foundation/form/datepicker"), new Options().tag(tag));
 
 Config cfg = cmp.getConfig();
 String name = cfg.get("name", String.class);

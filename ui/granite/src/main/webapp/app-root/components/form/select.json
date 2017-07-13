@@ -1,4 +1,3 @@
 {
-  "jcr:primaryType": "cq:Component",
-  "sling:resourceSuperType": "/libs/granite/ui/components/foundation/form/select"
+  "jcr:primaryType": "cq:Component"
 }

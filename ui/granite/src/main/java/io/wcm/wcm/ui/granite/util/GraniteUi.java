@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;
 
 import com.adobe.granite.ui.components.Value;
@@ -82,6 +83,21 @@ public final class GraniteUi {
     else {
       return null;
     }
+  }
+
+  /**
+   * From the list of resource types get the first one that exists.
+   * @param resourceResolver Resource resolver
+   * @param resourceTypes ResourceTypes
+   * @return Existing resource type
+   */
+  public static String getExistingResourceType(ResourceResolver resourceResolver, String... resourceTypes) {
+    for (String path : resourceTypes) {
+      if (resourceResolver.getResource(path) != null) {
+        return path;
+      }
+    }
+    return null;
   }
 
   /**

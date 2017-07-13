@@ -30,6 +30,9 @@
       <action type="add" dev="sseifert">
         Add "numberfield" GraniteUI component with TypeHint.
       </action>
+      <action type="update" dev="sseifert">
+        Use Coral 3 GraniteUI widgets if available (AEM 6.2 and up), fallback to Coral 2 widgets.
+      </action>
     </release>
 
     <release version="1.0.4" date="2017-04-07">
