@@ -39,8 +39,8 @@ import com.day.cq.wcm.emulator.EmulatorProvider;
 import com.day.cq.wcm.mobile.api.device.DeviceGroup;
 import com.day.cq.wcm.mobile.api.device.DeviceGroupList;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 public class EmulatorProviderImplTest {
@@ -59,8 +59,8 @@ public class EmulatorProviderImplTest {
     underTest = context.registerInjectActivateService(new EmulatorProviderImpl(),
         "templatePathPatterns", new String[] { "^/apps/app1/.*$", "^/apps/app2/.*$" });
 
-    page1 = context.create().page("/content/page1", "/apps/app1/template1",
-        ImmutableValueMap.of("cq:deviceGroups", new String[] {
+    page1 = context.create().page("/content/page1", "/apps/app1/template1", ImmutableMap.<String, Object>of(
+        "cq:deviceGroups", new String[] {
             "/etc/mobile/groups/responsive"
         }));
     page2 = context.create().page("/content/page1/page2", "/apps/app2/template2");

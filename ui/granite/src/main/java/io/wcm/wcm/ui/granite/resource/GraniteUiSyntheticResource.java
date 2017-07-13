@@ -36,7 +36,6 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 /**
  * Extended version of {@link SyntheticResource} that allows to pass an own value map and optional child resources.
@@ -124,7 +123,7 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
    * @return Resource
    */
   public static Resource create(ResourceResolver resourceResolver, String path, String resourceType) {
-    return create(resourceResolver, path, resourceType, ImmutableValueMap.of());
+    return create(resourceResolver, path, resourceType, ValueMap.EMPTY);
   }
 
   /**
@@ -192,7 +191,7 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
    * @return Resource
    */
   public static Resource child(Resource parentResource, String name, String resourceType) {
-    return child(parentResource, name, resourceType, ImmutableValueMap.of());
+    return child(parentResource, name, resourceType, ValueMap.EMPTY);
   }
 
   /**
