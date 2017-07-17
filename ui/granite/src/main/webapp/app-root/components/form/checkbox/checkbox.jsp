@@ -31,7 +31,10 @@ Config cfg = cmp.getConfig();
 String name = cfg.get("name", String.class);
 String value = cfg.get("value", "true");
 
-ValueMap overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object>of("value", value));
+ValueMap overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object>of(
+    "value", value,
+    // is already generated below - do not generated twice
+    "deleteHint", false));
 //simulate resource for dialog field def with new value instead of configured one
 Resource resourceWrapper = GraniteUiSyntheticResource.wrapMerge(resource, overwriteProperties);
 
