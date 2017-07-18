@@ -24,11 +24,14 @@
   <body>
 
     <release version="1.1.0" date="not released">
-      <action type="fix" dev="rdahlem" issue="WWCM-8">
-        GraniteUi class, Config-Scope Path Browser: Fallback to next-existing parent resource if current resource does not exist.
+      <action type="add" dev="sseifert">
+        Add CoralUI 3 validators: E-Mail, URL and custom regex pattern.
       </action>
       <action type="add" dev="sseifert">
         Add "numberfield" GraniteUI component with TypeHint.
+      </action>
+      <action type="fix" dev="rdahlem" issue="WWCM-8">
+        GraniteUi class, Config-Scope Path Browser: Fallback to next-existing parent resource if current resource does not exist.
       </action>
       <action type="update" dev="sseifert">
         Use Coral 3 GraniteUI widgets if available (AEM 6.2 and up), fallback to Coral 2 widgets.
