@@ -106,7 +106,21 @@ Example:
 }
 ```
 
-Although technically possible it is not recommended to copy and overlay the Sightly script of the paragraph system, it may change in future versions.
+Notes:
+
+* The properties **wcmio:parsysParagraphCss** and **wcmio:parsysParagraphElement** do not work properly when inserting or editing components without configuring a REFRESH_PARENT event on the `afterinsert` and `afteredit` events for the child components. It is recommended to use `cq:htmlTag` definition on the parsys child components instead - example:
+
+```
+{
+  "jcr:primaryType": "cq:Component",
+  "jcr:title": "My Component",
+  "cq:htmlTag": {
+    "cq:tagName": "li",
+    "class": "link-list-item"
+  }
+}
+```
+* Although technically possible it is not recommended to copy and overlay the Sightly script of the paragraph system, it may change in future versions.
 
 
 ### Paragraph system with editbar (Classic UI)

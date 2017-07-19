@@ -26,12 +26,11 @@
 Tag tag = cmp.consumeTag();
 
 cmp.include(resource, GraniteUi.getExistingResourceType(resourceResolver,
-    "/libs/granite/ui/components/coral/foundation/form/select",
-    "/libs/granite/ui/components/foundation/form/select"), new Options().tag(tag));
+    "/libs/granite/ui/components/coral/foundation/form/numberfield",
+    "/libs/granite/ui/components/foundation/form/numberfield"), new Options().tag(tag));
 
 Config cfg = cmp.getConfig();
 String name = cfg.get("name", String.class);
-boolean multiple = cfg.get("multiple", false);
 
 %>
-<% if (multiple) { %><input type="hidden" name="<%=name%>@TypeHint" value="String[]" /><% } %>
+<input type="hidden" name="<%=name%>@TypeHint" value="Long" />

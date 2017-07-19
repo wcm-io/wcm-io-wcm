@@ -20,21 +20,28 @@
 <%@page import="org.apache.sling.api.resource.Resource"%>
 <%@page import="org.apache.sling.api.resource.ValueMap"%>
 <%@page import="org.apache.sling.api.request.RequestDispatcherOptions"%>
+<%@page import="org.apache.sling.api.wrappers.ValueMapDecorator"%>
 <%@page import="com.adobe.granite.ui.components.Config"%>
-<%@page import="io.wcm.sling.commons.resource.ImmutableValueMap"%>
+<%@page import="com.google.common.collect.ImmutableMap"%>
 <%@page import="io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource"%>
+<%@page import="io.wcm.wcm.ui.granite.util.GraniteUi"%>
 <%@include file="../../global/global.jsp" %><%
 
 Config cfg = cmp.getConfig();
 String name = cfg.get("name", String.class);
 String value = cfg.get("value", "true");
 
-ValueMap overwriteProperties = ImmutableValueMap.of("value", value);
+ValueMap overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object>of(
+    "value", value,
+    // is already generated below - do not generated twice
+    "deleteHint", false));
 //simulate resource for dialog field def with new value instead of configured one
 Resource resourceWrapper = GraniteUiSyntheticResource.wrapMerge(resource, overwriteProperties);
 
 RequestDispatcherOptions options = new RequestDispatcherOptions();
-options.setForceResourceType("/libs/granite/ui/components/foundation/form/checkbox");
+options.setForceResourceType(GraniteUi.getExistingResourceType(resourceResolver,
+    "/libs/granite/ui/components/coral/foundation/form/checkbox",
+    "/libs/granite/ui/components/foundation/form/checkbox"));
 RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(resourceWrapper, options);
 dispatcher.include(slingRequest, slingResponse);
 

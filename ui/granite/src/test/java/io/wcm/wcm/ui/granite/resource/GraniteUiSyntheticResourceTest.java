@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Rule;
@@ -38,21 +39,20 @@ import org.junit.Test;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
-
-import io.wcm.sling.commons.resource.ImmutableValueMap;
+import com.google.common.collect.ImmutableMap;
 
 public class GraniteUiSyntheticResourceTest {
 
-  private static final ValueMap SAMPLE_PROPERTES = ImmutableValueMap.builder()
+  private static final ValueMap SAMPLE_PROPERTES = new ValueMapDecorator(ImmutableMap.<String, Object>builder()
       .put("sling:resourceType", "/sample/type")
       .put("prop1", "value1")
       .put("prop2", 25)
-      .build();
+      .build());
 
-  private static final ValueMap OTHER_SAMPLE_PROPERTES = ImmutableValueMap.builder()
+  private static final ValueMap OTHER_SAMPLE_PROPERTES = new ValueMapDecorator(ImmutableMap.<String, Object>builder()
       .put("prop1", "value2")
       .put("prop3", 55)
-      .build();
+      .build());
 
   @Rule
   public SlingContext context = new SlingContext(ResourceResolverType.JCR_MOCK);

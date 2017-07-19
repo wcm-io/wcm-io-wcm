@@ -19,6 +19,7 @@
  */
 package io.wcm.wcm.ui.granite.util;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
@@ -90,14 +91,49 @@ public class GraniteUiTest {
   }
 
   @Test
-  public void testGetContentPage() throws Exception {
+  public void testGetContentPage() {
     assertSame(page, GraniteUi.getContentPage(request));
   }
 
   @Test
-  public void testGetContentPage_NoResource() throws Exception {
+  public void testGetContentPage_NoResource() {
     when(resourceResolver.getResource(CONTENT_PATH)).thenReturn(null);
     assertNull(GraniteUi.getContentPage(request));
+  }
+
+  @Test
+  public void shouldGetParentOfMissingContentResource() {
+    when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(CONTENT_PATH + "/unavailable");
+    assertSame(resource, GraniteUi.getContentResourceOrParent(request));
+    assertSame(page, GraniteUi.getContentPage(request));
+  }
+
+  @Test
+  public void shouldGetGrandParentOfMissingContentResource() {
+    when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(CONTENT_PATH + "/not/existing");
+    assertSame(resource, GraniteUi.getContentResourceOrParent(request));
+    assertSame(page, GraniteUi.getContentPage(request));
+  }
+
+  @Test
+  public void shouldGetExistingResource() {
+    assertSame(resource, GraniteUi.getContentResourceOrParent(request));
+  }
+
+  @Test
+  public void shouldWorkOnToplevel() {
+    when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn("not_a_single_slash");
+    assertNull(GraniteUi.getContentResourceOrParent(request));
+    assertNull(GraniteUi.getContentPage(request));
+  }
+
+  @Test
+  public void testGetExistingResourceType() {
+    when(resourceResolver.getResource("/type/1")).thenReturn(resource);
+
+    assertEquals("/type/1", GraniteUi.getExistingResourceType(resourceResolver, "/type/2", "/type/1"));
+    assertNull(GraniteUi.getExistingResourceType(resourceResolver, "/non/existing"));
+    assertNull(GraniteUi.getExistingResourceType(resourceResolver));
   }
 
 }

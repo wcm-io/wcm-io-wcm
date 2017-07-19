@@ -21,37 +21,39 @@
 <%@page import="org.apache.sling.api.resource.ValueMap"%>
 <%@page import="org.apache.sling.api.request.RequestDispatcherOptions"%>
 <%@page import="org.apache.sling.caconfig.resource.ConfigurationResourceResolver"%>
+<%@page import="org.apache.sling.api.wrappers.ValueMapDecorator"%>
 <%@page import="com.day.cq.commons.jcr.JcrConstants"%>
-<%@page import="com.day.cq.wcm.api.Page"%>
-<%@page import="io.wcm.sling.commons.resource.ImmutableValueMap"%>
+<%@page import="com.google.common.collect.ImmutableMap"%>
 <%@page import="io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource"%>
 <%@page import="io.wcm.wcm.ui.granite.util.GraniteUi"%>
 <%@include file="../../global/global.jsp" %><%
 
 String rootPath = null;
-Page contentPage = GraniteUi.getContentPage(request);
-if (contentPage != null) {
+Resource contentResource = GraniteUi.getContentResourceOrParent(request);
+if (contentResource != null) {
   // detect root path of current site via Sling Context-Aware Configuration API
   ConfigurationResourceResolver configResolver = sling.getService(ConfigurationResourceResolver.class);
   if (configResolver != null) {
     // get inner-most context path
-    rootPath = configResolver.getContextPath(contentPage.getContentResource());
+    rootPath = configResolver.getContextPath(contentResource);
   }
 }
 
 ValueMap overwriteProperties;
 if (rootPath != null) {
-  overwriteProperties = ImmutableValueMap.of("rootPath", rootPath);
+  overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object>of("rootPath", rootPath));
 }
 else {
-  overwriteProperties = ImmutableValueMap.of();
+  overwriteProperties = ValueMapDecorator.EMPTY;
 }
 
 // simulate resource for dialog field def with new rootPath instead of configured one
 Resource resourceWrapper = GraniteUiSyntheticResource.wrapMerge(resource, overwriteProperties);
 
 RequestDispatcherOptions options = new RequestDispatcherOptions();
-options.setForceResourceType("/libs/granite/ui/components/foundation/form/pathbrowser");
+options.setForceResourceType(GraniteUi.getExistingResourceType(resourceResolver,
+    "/libs/granite/ui/components/coral/foundation/form/pathfield",
+    "/libs/granite/ui/components/foundation/form/pathbrowser"));
 RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(resourceWrapper, options);
 dispatcher.include(slingRequest, slingResponse);
 
