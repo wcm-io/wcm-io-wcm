@@ -28,9 +28,14 @@ import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 
 /**
- * Sling run mode utility methods
+ * Sling run mode utility methods.
+ * @deprecated Instead of directly using the run modes, it is better to make the component in question require a
+ *             configuration (see OSGI Declarative Services Spec: configuration policy). In this case, a component gets
+ *             only active if a configuration is available. Such a configuration can be put into the repository for the
+ *             specific run mode.
  */
 @ProviderType
+@Deprecated
 public final class RunMode {
 
   /**
