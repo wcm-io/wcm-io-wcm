@@ -16,7 +16,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   #L%
-  --%>
+--%>
+<%@page import="com.adobe.granite.ui.components.Config"%>
 <%@page import="org.apache.sling.api.resource.Resource"%>
 <%@page import="org.apache.sling.api.resource.ValueMap"%>
 <%@page import="org.apache.sling.api.request.RequestDispatcherOptions"%>
@@ -41,6 +42,12 @@ if (contentResource != null) {
 
 ValueMap overwriteProperties;
 if (rootPath != null) {
+  // check for optional appendix
+  Config cfg = cmp.getConfig();
+  String appendPath = cfg.get("appendPath", String.class);
+  if(appendPath != null){
+    rootPath += appendPath;
+  }
   overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object>of("rootPath", rootPath));
 }
 else {
