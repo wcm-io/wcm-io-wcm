@@ -45,7 +45,7 @@ if (rootPath != null) {
   // check for optional appendix
   Config cfg = cmp.getConfig();
   String appendPath = cfg.get("appendPath", String.class);
-  if(appendPath != null){
+  if (appendPath != null) {
     rootPath += appendPath;
   }
   overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object>of("rootPath", rootPath));

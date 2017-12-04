@@ -19,7 +19,7 @@ Requires usage and proper configuration of [wcm.io Configuration](http://wcm.io/
 Enhancements over AEM version:
 
 * Dynamically sets the `rootPath` to the configuration scope root.
-* Optional config `appendPath` to select subfolders of the scope root (e.g. "appendPath": "/foo")
+* Optional config parameter `appendPath`: provides a relative path (starting with "/") which is appended to the detected root path
 
 
 ### Checkbox
