@@ -110,11 +110,37 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
     if (StringUtils.isNotEmpty(resourceSuperType)) {
       Resource superResource = resolver.getResource(resourceSuperType);
       if (superResource != null) {
-        configs.addAll(getParsysConfigsWithInheritance(superResource, resolver));
+        Collection<ParsysConfig> configsFromSupertype = getParsysConfigsWithInheritance(superResource, resolver);
+        List<ParsysConfig> inheritedConfigs = new ArrayList<>();
+        for (ParsysConfig configFromSupertype : configsFromSupertype) {
+          if (existingPathParentConfigAllowsInheritance(configFromSupertype, configs)) {
+            inheritedConfigs.add(configFromSupertype);
+          }
+        }
+        configs.addAll(inheritedConfigs);
       }
     }
 
     return configs;
+  }
+
+  private boolean existingPathParentConfigAllowsInheritance(ParsysConfig item, List<ParsysConfig> existingItems) {
+    for (ParsysConfig existingItem : existingItems) {
+      if (matchesPathParent(item, existingItem)) {
+        if (!existingItem.isInherit()) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private boolean matchesPathParent(ParsysConfig item1, ParsysConfig item2) {
+    String pathPattern1 = item1.getPathPattern() != null ? item1.getPathPattern().pattern() : "";
+    String pathPattern2 = item2.getPathPattern() != null ? item2.getPathPattern().pattern() : "";
+    return pathPattern1.equals(pathPattern2)
+        && item1.getParentAncestorLevel() == item2.getParentAncestorLevel()
+        && item1.getAllowedParents().equals(item2.getAllowedParents());
   }
 
   void bindParsysConfig(ParsysConfig service, Map<String, Object> props) {

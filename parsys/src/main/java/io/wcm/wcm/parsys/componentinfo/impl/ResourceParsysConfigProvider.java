@@ -22,12 +22,12 @@ package io.wcm.wcm.parsys.componentinfo.impl;
 import static io.wcm.wcm.parsys.ParsysNameConstants.NN_PARSYS_CONFIG;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
@@ -49,8 +49,10 @@ final class ResourceParsysConfigProvider {
   private static final String PN_PATH = "path";
   private static final String PN_PATTERN = "pattern";
   private static final String PN_ALLOWEDCHILDREN = "allowedChildren";
+  private static final String PN_DENIEDDCHILDREN = "deniedChildren";
   private static final String PN_ALLOWEDPARENTS = "allowedParents";
   private static final String PN_PARENTANCESTORLEVEL = "parentAncestorLevel";
+  private static final String PN_INHERIT = "inherit";
 
   private final List<ParsysConfig> pathDefs;
 
@@ -95,6 +97,7 @@ final class ResourceParsysConfigProvider {
     private final Set<String> deniedChildren;
     private final Set<String> allowedParents;
     private final int parentAncestorLevel;
+    private final boolean inheritFromSuperType;
 
     /**
      * @param pathDefResource Path definition resource
@@ -118,29 +121,16 @@ final class ResourceParsysConfigProvider {
         this.pathPattern = Pattern.compile("^" + Pattern.quote(JcrConstants.JCR_CONTENT + "/" + name) + "$");
       }
 
-      // get allowed children/parents
-      String[] allowedChildrenArray = pathDefProps.get(PN_ALLOWEDCHILDREN, String[].class);
-      Set<String> allowedChildrenSet = new HashSet<>();
-      if (allowedChildrenArray != null) {
-        for (String resourceType : allowedChildrenArray) {
-          allowedChildrenSet.add(resourceType);
-        }
-      }
-      this.allowedChildren = ImmutableSet.copyOf(allowedChildrenSet);
-      String[] allowedParentsArray = pathDefProps.get(PN_ALLOWEDPARENTS, String[].class);
-      Set<String> allowedParentsSet = new HashSet<>();
-      if (allowedParentsArray != null) {
-        for (String resourceType : allowedParentsArray) {
-          allowedParentsSet.add(resourceType);
-        }
-      }
-      this.allowedParents = ImmutableSet.copyOf(allowedParentsSet);
+      // get allowed children/denied children/parents
+      this.allowedChildren = ImmutableSet.copyOf(pathDefProps.get(PN_ALLOWEDCHILDREN, ArrayUtils.EMPTY_STRING_ARRAY));
+      this.deniedChildren = ImmutableSet.copyOf(pathDefProps.get(PN_DENIEDDCHILDREN, ArrayUtils.EMPTY_STRING_ARRAY));
+      this.allowedParents = ImmutableSet.copyOf(pathDefProps.get(PN_ALLOWEDPARENTS, ArrayUtils.EMPTY_STRING_ARRAY));
 
       // ancestor level
       this.parentAncestorLevel = pathDefProps.get(PN_PARENTANCESTORLEVEL, 1);
 
-      // no denied children - this is supported only in OsgiParsysConfig
-      this.deniedChildren = ImmutableSet.of();
+      // inherit from supertype
+      this.inheritFromSuperType = pathDefProps.get(PN_INHERIT, true);
 
     }
 
@@ -154,9 +144,6 @@ final class ResourceParsysConfigProvider {
       return this.pathPattern;
     }
 
-    /**
-     * @return All allowed child component resource types
-     */
     @Override
     public Set<String> getAllowedChildren() {
       return this.allowedChildren;
@@ -167,28 +154,29 @@ final class ResourceParsysConfigProvider {
       return this.deniedChildren;
     }
 
-    /**
-     * @return All allowed parent component resource types
-     */
     @Override
     public Set<String> getAllowedParents() {
       return this.allowedParents;
     }
 
-    /**
-     * @return Parent ancestor level
-     */
     @Override
     public int getParentAncestorLevel() {
       return this.parentAncestorLevel;
     }
 
     @Override
+    public boolean isInherit() {
+      return this.inheritFromSuperType;
+    }
+
+    @Override
     public String toString() {
       return this.pathPattern.toString() + ", "
-          + "children=[" + StringUtils.join(this.allowedChildren, ",") + "], "
-          + "parents=[" + StringUtils.join(this.allowedParents, ",") + "], "
-          + "parentAncestorLevel=" + this.parentAncestorLevel;
+          + "allowedChildren=[" + StringUtils.join(this.allowedChildren, ",") + "], "
+          + "deniedChildren=[" + StringUtils.join(this.deniedChildren, ",") + "], "
+          + "allowedParents=[" + StringUtils.join(this.allowedParents, ",") + "], "
+          + "parentAncestorLevel=" + this.parentAncestorLevel + ","
+          + "inheritFromSuperType=" + this.inheritFromSuperType;
     }
 
   }

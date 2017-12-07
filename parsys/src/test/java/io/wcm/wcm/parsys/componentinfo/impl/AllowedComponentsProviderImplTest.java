@@ -183,26 +183,40 @@ public class AllowedComponentsProviderImplTest {
 
     // ---- content parsys (inherited) ----
     String contentParsys = CONTENT_ROOT_PATH + "/page-2/jcr:content/content";
-    Set<String> inheritedAllowedComponents = underTest.getAllowedComponents(contentParsys, context.resourceResolver());
+    allowedComponents = underTest.getAllowedComponents(contentParsys, context.resourceResolver());
 
     // null check
-    assertNotNull("Allowed component for parsys cannot be null", inheritedAllowedComponents);
+    assertNotNull("Allowed component for parsys cannot be null", allowedComponents);
 
     // positive tests (inherited parsys config)
     assertTrue("Component 'comp1' must be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("dummy/components/comp1"));
+        allowedComponents.contains("dummy/components/comp1"));
     assertTrue("Component 'comp2' must be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("dummy/components/comp2"));
+        allowedComponents.contains("dummy/components/comp2"));
+    assertTrue("Component 'comp2a' must be allowed in " + contentParsys + ".",
+        allowedComponents.contains("dummy/components/comp2a"));
     assertTrue("Component 'linklist' must be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("dummy/components/linklist"));
-    assertTrue("Component 'container2col' must be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("dummy/components/container2col"));
+        allowedComponents.contains("dummy/components/linklist"));
 
     // negative tests (inherited parsys config)
     assertFalse("Component 'nestedComp2' should not be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("dummy/components/nestedComp2"));
+        allowedComponents.contains("dummy/components/nestedComp2"));
+    assertFalse("Component 'container2col' must not be allowed in " + contentParsys + ".",
+        allowedComponents.contains("dummy/components/container2col"));
     assertFalse("Component 'comp3' should not be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("dummy/components/comp3"));
+        allowedComponents.contains("dummy/components/comp3"));
+
+    // ---- linklist (inheritance canceled) ----
+    String linklistParsys = CONTENT_ROOT_PATH + "/page-2/jcr:content/content/links";
+    allowedComponents = underTest.getAllowedComponents(linklistParsys, context.resourceResolver());
+
+    // positive tests
+    assertTrue("Component 'comp2b' must be allowed in " + linklistParsys + ".",
+        allowedComponents.contains("dummy/components/comp2b"));
+
+    // negative tests
+    assertFalse("Component 'linkItem' should not be allowed in " + linklistParsys + ".",
+        allowedComponents.contains("dummy/components/linkItem"));
 
   }
 

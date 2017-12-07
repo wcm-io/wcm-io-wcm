@@ -5,6 +5,22 @@
   "wcmio:parsysConfig": {
     "jcr:primaryType": "nt:unstructured",
     "paths": {
+      "content": {
+        "allowedChildren": [
+          "dummy/components/comp2a"
+        ],
+        "deniedChildren": [
+          "dummy/components/container2col"
+        ]
+      },
+
+      "linklist": {
+        "pattern":"^jcr:content/(?!megaFlyout).*/links$",
+        "allowedChildren":[
+          "dummy/components/comp2b"
+        ],
+        "inherit": false
+      },
 
       "special": {
         "allowedChildren": [
@@ -15,4 +31,5 @@
 
     }
   }
+
 }

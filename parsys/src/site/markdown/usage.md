@@ -56,6 +56,8 @@ A `wcmio:parsysConfig` contains always a `paths` node defining the allowance def
 
 * **allowedChildren**: Array with resource types of the components allowed for this path definition.
 
+* **deniedChildren**: Array with resource types not allowed at the defined position. This allows neglecting allowances defined in super resource types.
+
 * **path**: Optional. Defines the exact relative of the paragraph system inside the page relative to page root node (without leading slash but including `jcr:content`). If this property is not set it is derived from the node name of the path definition. In this case the node name is prefixed with `jcr:content/`. If you want to define a deeper path you have to specify the `path` property.
 
 * **pattern**: Optional. Instead of the `path` property you can define a regular expression for matching the relative path (again, without leading slash, but including `jcr:content`). The component is allowed for all paragraph systems for which the path pattern matches.
@@ -66,13 +68,12 @@ A `wcmio:parsysConfig` contains always a `paths` node defining the allowance def
     * **1**: `allowedParents` restriction is applied to the paragraph system component itself (the direct parent of the component)
     * **2**: `allowedParents` restriction is applied to the component that contains the paragraph system (the grand-parent of the component)
 
-If you have an inheritance hierarchy of page components using `sling:resourceSuperType` you can define a `wcmio:parsysConfig` on each level of this hierarchy. The definitions are merged together according to the inheritance hierarchy. Thus it is possible to centrally define global allowed components rules for all page components in your application.
+* **inherit**: If you have an inheritance hierarchy of page components using `sling:resourceSuperType` you can define a `wcmio:parsysConfig` on each level of this hierarchy. The definitions are merged together according to the inheritance hierarchy. Thus it is possible to centrally define global allowed components rules for all page components in your application. If you want to disabled this behavior add this this property and set it to false.
+
 
 Via the OSGi factory configuration _wcm.io Paragraph System Configuration Extension_ it is possible to define additional allowed components definitions via the Felix Console. It supports the same properties as listed above, and additionally:
 
 * **pageComponentPath**: Resource type of the page component this configuration should apply to
-
-* **deniedChildren**: List of components not allowed at the defined position. This allows neglecting allowances defined in the page component itself.
 
 
 ### Customize the paragraph system markup

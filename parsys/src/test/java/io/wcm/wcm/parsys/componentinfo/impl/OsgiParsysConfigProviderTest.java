@@ -60,6 +60,7 @@ public class OsgiParsysConfigProviderTest {
     assertEquals(ALLOWED_PARENTS, underTest.getAllowedParents());
     assertEquals(ALLOWED_CHILDREN, underTest.getAllowedChildren());
     assertEquals(DENIED_CHILDREN, underTest.getDeniedChildren());
+    assertEquals(true, underTest.isInherit());
   }
 
   @Test
@@ -69,13 +70,15 @@ public class OsgiParsysConfigProviderTest {
         "pathPattern", ".*any.*",
         "parentAncestorLevel", 1,
         "allowedParents", ALLOWED_PARENTS.toArray(new String[ALLOWED_PARENTS.size()]),
-        "allowedChildren", ALLOWED_CHILDREN.toArray(new String[ALLOWED_CHILDREN.size()]));
+        "allowedChildren", ALLOWED_CHILDREN.toArray(new String[ALLOWED_CHILDREN.size()]),
+        "inherit", false);
 
     assertEquals(COMPONENT_PATH, underTest.getPageComponentPath());
     assertEquals(".*any.*", underTest.getPathPattern().toString());
     assertEquals(1, underTest.getParentAncestorLevel());
     assertEquals(ALLOWED_PARENTS, underTest.getAllowedParents());
     assertEquals(ALLOWED_CHILDREN, underTest.getAllowedChildren());
+    assertEquals(false, underTest.isInherit());
   }
 
   @Test
@@ -88,6 +91,7 @@ public class OsgiParsysConfigProviderTest {
     assertTrue(underTest.getAllowedParents().isEmpty());
     assertTrue(underTest.getAllowedChildren().isEmpty());
     assertTrue(underTest.getDeniedChildren().isEmpty());
+    assertEquals(true, underTest.isInherit());
   }
 
 }
