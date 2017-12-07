@@ -22,12 +22,12 @@ package io.wcm.wcm.parsys.componentinfo.impl;
 import static io.wcm.wcm.parsys.ParsysNameConstants.NN_PARSYS_CONFIG;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
@@ -49,6 +49,7 @@ final class ResourceParsysConfigProvider {
   private static final String PN_PATH = "path";
   private static final String PN_PATTERN = "pattern";
   private static final String PN_ALLOWEDCHILDREN = "allowedChildren";
+  private static final String PN_DENIEDDCHILDREN = "deniedChildren";
   private static final String PN_ALLOWEDPARENTS = "allowedParents";
   private static final String PN_PARENTANCESTORLEVEL = "parentAncestorLevel";
 
@@ -118,29 +119,13 @@ final class ResourceParsysConfigProvider {
         this.pathPattern = Pattern.compile("^" + Pattern.quote(JcrConstants.JCR_CONTENT + "/" + name) + "$");
       }
 
-      // get allowed children/parents
-      String[] allowedChildrenArray = pathDefProps.get(PN_ALLOWEDCHILDREN, String[].class);
-      Set<String> allowedChildrenSet = new HashSet<>();
-      if (allowedChildrenArray != null) {
-        for (String resourceType : allowedChildrenArray) {
-          allowedChildrenSet.add(resourceType);
-        }
-      }
-      this.allowedChildren = ImmutableSet.copyOf(allowedChildrenSet);
-      String[] allowedParentsArray = pathDefProps.get(PN_ALLOWEDPARENTS, String[].class);
-      Set<String> allowedParentsSet = new HashSet<>();
-      if (allowedParentsArray != null) {
-        for (String resourceType : allowedParentsArray) {
-          allowedParentsSet.add(resourceType);
-        }
-      }
-      this.allowedParents = ImmutableSet.copyOf(allowedParentsSet);
+      // get allowed children/denied children/parents
+      this.allowedChildren = ImmutableSet.copyOf(pathDefProps.get(PN_ALLOWEDCHILDREN, ArrayUtils.EMPTY_STRING_ARRAY));
+      this.deniedChildren = ImmutableSet.copyOf(pathDefProps.get(PN_DENIEDDCHILDREN, ArrayUtils.EMPTY_STRING_ARRAY));
+      this.allowedParents = ImmutableSet.copyOf(pathDefProps.get(PN_ALLOWEDPARENTS, ArrayUtils.EMPTY_STRING_ARRAY));
 
       // ancestor level
       this.parentAncestorLevel = pathDefProps.get(PN_PARENTANCESTORLEVEL, 1);
-
-      // no denied children - this is supported only in OsgiParsysConfig
-      this.deniedChildren = ImmutableSet.of();
 
     }
 

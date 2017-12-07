@@ -193,14 +193,16 @@ public class AllowedComponentsProviderImplTest {
         inheritedAllowedComponents.contains("dummy/components/comp1"));
     assertTrue("Component 'comp2' must be allowed in " + contentParsys + ".",
         inheritedAllowedComponents.contains("dummy/components/comp2"));
+    assertTrue("Component 'comp2a' must be allowed in " + contentParsys + ".",
+        inheritedAllowedComponents.contains("dummy/components/comp2a"));
     assertTrue("Component 'linklist' must be allowed in " + contentParsys + ".",
         inheritedAllowedComponents.contains("dummy/components/linklist"));
-    assertTrue("Component 'container2col' must be allowed in " + contentParsys + ".",
-        inheritedAllowedComponents.contains("dummy/components/container2col"));
 
     // negative tests (inherited parsys config)
     assertFalse("Component 'nestedComp2' should not be allowed in " + contentParsys + ".",
         inheritedAllowedComponents.contains("dummy/components/nestedComp2"));
+    assertFalse("Component 'container2col' must not be allowed in " + contentParsys + ".",
+        inheritedAllowedComponents.contains("dummy/components/container2col"));
     assertFalse("Component 'comp3' should not be allowed in " + contentParsys + ".",
         inheritedAllowedComponents.contains("dummy/components/comp3"));
 
