@@ -27,13 +27,14 @@
         ]
       },
 
-      "linklist":{
+      "linklist": {
         "pattern":"^jcr:content/(?!megaFlyout).*/links$",
         "allowedChildren":[
-           "dummy/components/linkItem"
+          "dummy/components/linkItem"
         ]
       }
 
     }
   }
+
 }

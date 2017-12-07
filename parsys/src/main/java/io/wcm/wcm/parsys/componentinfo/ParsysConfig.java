@@ -68,7 +68,7 @@ public interface ParsysConfig {
   /**
    * @return if true, parsys configurations from super types are inherited and merged.
    */
-  default boolean isInheritFromSupertype() {
+  default boolean isInherit() {
     return true;
   }
 

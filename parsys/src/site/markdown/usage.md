@@ -68,7 +68,7 @@ A `wcmio:parsysConfig` contains always a `paths` node defining the allowance def
     * **1**: `allowedParents` restriction is applied to the paragraph system component itself (the direct parent of the component)
     * **2**: `allowedParents` restriction is applied to the component that contains the paragraph system (the grand-parent of the component)
 
-* **inheritFromSupertype**: If you have an inheritance hierarchy of page components using `sling:resourceSuperType` you can define a `wcmio:parsysConfig` on each level of this hierarchy. The definitions are merged together according to the inheritance hierarchy. Thus it is possible to centrally define global allowed components rules for all page components in your application. If you want to disabled this behavior add this this property and set it to false.
+* **inherit**: If you have an inheritance hierarchy of page components using `sling:resourceSuperType` you can define a `wcmio:parsysConfig` on each level of this hierarchy. The definitions are merged together according to the inheritance hierarchy. Thus it is possible to centrally define global allowed components rules for all page components in your application. If you want to disabled this behavior add this this property and set it to false.
 
 
 Via the OSGi factory configuration _wcm.io Paragraph System Configuration Extension_ it is possible to define additional allowed components definitions via the Felix Console. It supports the same properties as listed above, and additionally:

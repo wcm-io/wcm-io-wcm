@@ -52,7 +52,7 @@ final class ResourceParsysConfigProvider {
   private static final String PN_DENIEDDCHILDREN = "deniedChildren";
   private static final String PN_ALLOWEDPARENTS = "allowedParents";
   private static final String PN_PARENTANCESTORLEVEL = "parentAncestorLevel";
-  private static final String PN_INHERIT_FROM_SUPERTYPE = "inheritFromSupertype";
+  private static final String PN_INHERIT = "inherit";
 
   private final List<ParsysConfig> pathDefs;
 
@@ -130,7 +130,7 @@ final class ResourceParsysConfigProvider {
       this.parentAncestorLevel = pathDefProps.get(PN_PARENTANCESTORLEVEL, 1);
 
       // inherit from supertype
-      this.inheritFromSuperType = pathDefProps.get(PN_INHERIT_FROM_SUPERTYPE, true);
+      this.inheritFromSuperType = pathDefProps.get(PN_INHERIT, true);
 
     }
 
@@ -165,7 +165,7 @@ final class ResourceParsysConfigProvider {
     }
 
     @Override
-    public boolean isInheritFromSupertype() {
+    public boolean isInherit() {
       return this.inheritFromSuperType;
     }
 

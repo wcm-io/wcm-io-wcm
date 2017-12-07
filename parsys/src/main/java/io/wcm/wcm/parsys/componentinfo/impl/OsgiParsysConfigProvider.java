@@ -93,7 +93,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
 
     @AttributeDefinition(name = "Inherit",
         description = "Inherit paragraph system configurations from super resource types.")
-    boolean inheritFromSupertype() default true;
+    boolean inherit() default true;
 
   }
 
@@ -103,7 +103,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
   private Set<String> allowedParents;
   private Set<String> allowedChildren;
   private Set<String> deniedChildren;
-  private boolean inheritFromSupertype;
+  private boolean inherit;
 
   @Override
   public String getPageComponentPath() {
@@ -136,8 +136,8 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
   }
 
   @Override
-  public boolean isInheritFromSupertype() {
-    return this.inheritFromSupertype;
+  public boolean isInherit() {
+    return this.inherit;
   }
 
   // --- SCR Integration ---
@@ -196,7 +196,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
     }
     this.allowedParents = ImmutableSet.copyOf(allowedParentsSet);
 
-    this.inheritFromSupertype = config.inheritFromSupertype();
+    this.inherit = config.inherit();
 
     if (log.isDebugEnabled()) {
       log.debug(getClass().getSimpleName() + ": "
@@ -207,7 +207,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
           + "deniedChildren={}, "
           + "allowedParents={}, "
           + "parentAncestorLevel={},"
-          + "inheritFromSupertype={}",
+          + "inherit={}",
           new Object[] {
               this.pageComponentPath,
               path,
@@ -216,7 +216,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
               this.deniedChildren,
               this.allowedParents,
               this.parentAncestorLevel,
-              this.inheritFromSupertype
+              this.inherit
           }
       );
     }
