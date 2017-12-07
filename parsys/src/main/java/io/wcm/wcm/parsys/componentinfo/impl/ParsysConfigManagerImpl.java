@@ -110,11 +110,35 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
     if (StringUtils.isNotEmpty(resourceSuperType)) {
       Resource superResource = resolver.getResource(resourceSuperType);
       if (superResource != null) {
-        configs.addAll(getParsysConfigsWithInheritance(superResource, resolver));
+        Collection<ParsysConfig> configsFromSupertype = getParsysConfigsWithInheritance(superResource, resolver);
+        List<ParsysConfig> addedConfigs = new ArrayList<>();
+        for (ParsysConfig configFromSupertype : configsFromSupertype) {
+          if (existingPathParentConfigAllowsInheritance(configFromSupertype, configs)) {
+            addedConfigs.add(configFromSupertype);
+          }
+        }
+        configs.addAll(addedConfigs);
       }
     }
 
     return configs;
+  }
+
+  private boolean existingPathParentConfigAllowsInheritance(ParsysConfig item, List<ParsysConfig> existingItems) {
+    for (ParsysConfig existingItem : existingItems) {
+      if (matchesPathParent(item, existingItem)) {
+        if (!existingItem.isInheritFromSupertype()) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private boolean matchesPathParent(ParsysConfig item1, ParsysConfig item2) {
+    return item1.getPathPattern().equals(item2.getPathPattern())
+        && item1.getParentAncestorLevel() == item2.getParentAncestorLevel()
+        && item1.getAllowedParents().equals(item2.getAllowedParents());
   }
 
   void bindParsysConfig(ParsysConfig service, Map<String, Object> props) {

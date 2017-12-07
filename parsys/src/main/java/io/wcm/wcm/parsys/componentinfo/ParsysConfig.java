@@ -65,4 +65,11 @@ public interface ParsysConfig {
    */
   Set<String> getDeniedChildren();
 
+  /**
+   * @return if true, parsys configurations from super types are inherited and merged.
+   */
+  default boolean isInheritFromSupertype() {
+    return true;
+  }
+
 }
