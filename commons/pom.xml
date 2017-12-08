@@ -36,6 +36,7 @@
 
   <name>WCM Commons</name>
   <description>Common WCM utility and helper functions.</description>
+  <url>${site.url}/${site.url.module.prefix}/</url>
 
   <scm>
     <connection>scm:git:https://github.com/wcm-io/wcm-io-wcm.git</connection>

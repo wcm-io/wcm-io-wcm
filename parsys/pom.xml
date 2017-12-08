@@ -36,6 +36,7 @@
 
   <name>WCM Parsys</name>
   <description>AEM paragraph system based on path configuration in page components.</description>
+  <url>${site.url}/${site.url.module.prefix}/</url>
 
   <scm>
     <connection>scm:git:https://github.com/wcm-io/wcm-io-wcm.git</connection>
