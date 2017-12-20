@@ -91,6 +91,10 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
     })
     int parentAncestorLevel() default DEFAULT_PARENT_ANCESTOR_LEVEL;
 
+    @AttributeDefinition(name = "Inherit",
+        description = "Inherit paragraph system configurations from super resource types.")
+    boolean inherit() default true;
+
   }
 
   private String pageComponentPath;
@@ -99,6 +103,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
   private Set<String> allowedParents;
   private Set<String> allowedChildren;
   private Set<String> deniedChildren;
+  private boolean inherit;
 
   @Override
   public String getPageComponentPath() {
@@ -128,6 +133,11 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
   @Override
   public Set<String> getDeniedChildren() {
     return this.deniedChildren;
+  }
+
+  @Override
+  public boolean isInherit() {
+    return this.inherit;
   }
 
   // --- SCR Integration ---
@@ -186,6 +196,8 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
     }
     this.allowedParents = ImmutableSet.copyOf(allowedParentsSet);
 
+    this.inherit = config.inherit();
+
     if (log.isDebugEnabled()) {
       log.debug(getClass().getSimpleName() + ": "
           + "pageComponentPath={}, "
@@ -194,17 +206,19 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
           + "allowedChildren={}, "
           + "deniedChildren={}, "
           + "allowedParents={}, "
-          + "parentAncestorLevel={}",
+          + "parentAncestorLevel={},"
+          + "inherit={}",
           new Object[] {
-        this.pageComponentPath,
-        path,
-        this.pathPattern,
-        this.allowedChildren,
-        this.deniedChildren,
-        this.allowedParents,
-        this.parentAncestorLevel
-      }
-          );
+              this.pageComponentPath,
+              path,
+              this.pathPattern,
+              this.allowedChildren,
+              this.deniedChildren,
+              this.allowedParents,
+              this.parentAncestorLevel,
+              this.inherit
+          }
+      );
     }
 
     // validation messages
