@@ -35,6 +35,7 @@ import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.wcm.commons.testcontext.AppTemplate;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TemplateTest {
@@ -104,34 +105,4 @@ public class TemplateTest {
     assertEquals(AppTemplate.TEMPLATE_1, Template.forPage(page, AppTemplate.class));
     assertNull(Template.forPage(null, AppTemplate.class));
   }
-
-
-  private enum AppTemplate implements TemplatePathInfo {
-
-    TEMPLATE_1("/apps/app1/templates/t1"),
-
-    TEMPLATE_2("/apps/app1/templates/t2"),
-
-    TEMPLATE_3("/apps/app1/templates/t3");
-
-    private final String templatePath;
-    private final String resourceType;
-
-    AppTemplate(String templatePath) {
-      this.templatePath = templatePath;
-      this.resourceType = Template.getResourceTypeFromTemplatePath(templatePath);
-    }
-
-    @Override
-    public String getTemplatePath() {
-      return templatePath;
-    }
-
-    @Override
-    public String getResourceType() {
-      return resourceType;
-    }
-
-  }
-
 }
