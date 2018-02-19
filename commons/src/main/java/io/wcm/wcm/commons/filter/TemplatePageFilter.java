@@ -17,45 +17,51 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.commons.util;
+package io.wcm.wcm.commons.filter;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
 
-/**
- * Extension of {@link PageFilter} allowing usage of {@link TemplatePathInfo}
- *
- */
-public class TemplatePageFilter extends PageFilter {
+import io.wcm.wcm.commons.util.TemplatePathInfo;
 
-  private final Set<String> allowedTemplates;
+/**
+ * Extension of {@link PageFilter} allowing usage of {@link TemplatePathInfo}.
+ */
+@ProviderType
+public final class TemplatePageFilter extends PageFilter {
+
+  private final Set<String> allowedTemplatePaths;
 
   /**
-   * @param templatePath
+   * @param templates The templates to be included
    */
-  public TemplatePageFilter(TemplatePathInfo... templatePath) {
-    this(false, false, templatePath);
+  public TemplatePageFilter(TemplatePathInfo... templates) {
+    this(false, false, templates);
   }
 
   /**
    * @param includeInvalid if <code>true</code> invalid pages are included.
    * @param includeHidden if <code>true</code> hidden pages are included.
-   * @param templatePaths The resource types to be included
+   * @param templates The templates to be included
    */
-  public TemplatePageFilter(boolean includeInvalid, boolean includeHidden, TemplatePathInfo... templatePaths) {
+  public TemplatePageFilter(boolean includeInvalid, boolean includeHidden, TemplatePathInfo... templates) {
     super(includeInvalid, includeHidden);
-    allowedTemplates = Arrays.stream(templatePaths).map(TemplatePathInfo::getTemplatePath).collect(Collectors.toSet());
+    allowedTemplatePaths = Arrays.stream(templates)
+        .map(TemplatePathInfo::getTemplatePath)
+        .collect(Collectors.toSet());
   }
 
   @Override
   public boolean includes(Page page) {
     return super.includes(page)
-        && allowedTemplates.contains(page.getProperties().get(NameConstants.PN_TEMPLATE, String.class));
+        && allowedTemplatePaths.contains(page.getProperties().get(NameConstants.PN_TEMPLATE, String.class));
   }
 
 }

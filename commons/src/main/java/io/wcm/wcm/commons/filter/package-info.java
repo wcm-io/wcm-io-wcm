@@ -2,7 +2,7 @@
  * #%L
  * wcm.io
  * %%
- * Copyright (C) 2014 wcm.io
+ * Copyright (C) 2018 wcm.io
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  * #L%
  */
 /**
- * Miscellaneous WCM helper classes.
+ * Filter implementations for the WCM API.
  */
 @org.osgi.annotation.versioning.Version("1.0.0")
-package io.wcm.wcm.commons.util;
+package io.wcm.wcm.commons.filter;

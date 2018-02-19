@@ -17,9 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.commons.util;
+package io.wcm.wcm.commons.filter;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -30,8 +31,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
-
-import static org.junit.Assert.assertTrue;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.wcm.commons.testcontext.AppTemplate;
@@ -70,4 +69,5 @@ public class TemplatePageFilterTest {
     assertTrue(pageFilter.includes(pageTemplate2));
     assertFalse(pageFilter.includes(pageTemplate3));
   }
+
 }
