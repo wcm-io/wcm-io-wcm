@@ -44,7 +44,7 @@ public final class Template {
   /**
    * Gets the resource type for a given template path.
    * This i based on the assumption that:
-   * Given a template path is /apps/{app_path}/tempaltes/{optinal_path}/{template_path}
+   * Given a template path is /apps/{app_path}/templates/{optinal_path}/{template_path}
    * then the resource path is at {app_path}/components/{optinal_path}/page/{template_path}
    * @param templatePath Template path
    * @return Resource type path or null if template path did not match expectations
