@@ -43,9 +43,13 @@ public final class Template {
 
   /**
    * Gets the resource type for a given template path.
-   * This i based on the assumption that:
-   * Given a template path is /apps/{app_path}/templates/{optinal_path}/{template_path}
-   * then the resource path is at {app_path}/components/{optinal_path}/page/{template_path}
+   * <p>
+   * This is based on the assumption that:
+   * </p>
+   * <ul>
+   * <li>Given a template path is <code>/apps/{app_path}/templates/{optional_path}/{template_path}</code></li>
+   * <li>Then the resource path is at <code>{app_path}/components/{optional_path}/page/{template_path}</code></li>
+   * </ul>
    * @param templatePath Template path
    * @return Resource type path or null if template path did not match expectations
    */
@@ -158,7 +162,7 @@ public final class Template {
    * Lookup template for given page.
    * @param page Page
    * @param templateEnums Templates
-   * @param <E> Tempalte enum
+   * @param <E> Template enum
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
   @SafeVarargs
