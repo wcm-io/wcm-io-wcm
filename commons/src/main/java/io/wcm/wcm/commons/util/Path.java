@@ -35,7 +35,7 @@ import com.day.cq.wcm.api.PageManager;
  * Handling of paths and absolute parents in AEM.
  * <p>
  * The methods implement special handling for AEM features:
- * <p>
+ * </p>
  * <ul>
  * <li>Side-by-side version comparison (at <code>/content/versionhistory</code>)</li>
  * <li>Launches (at <code>/content/launches</code>)</li>
@@ -46,13 +46,12 @@ import com.day.cq.wcm.api.PageManager;
 @ProviderType
 public final class Path {
 
-  /**
-   * Path for storing version history for side-by-side comparison.
-   */
-  public static final String VERSION_HISTORY = "/content/versionhistory";
+  private static final String VERSION_HISTORY_PATH = "/content/versionhistory";
+  private static final String LAUNCHES_PATH = "/content/launches";
 
-  private static final Pattern VERSION_HISTORY_PATTERN = Pattern.compile(VERSION_HISTORY + "/[^/]+(/.*)");
-  private static final Pattern VERSION_HISTORY_TENANT_PATTERN = Pattern.compile(VERSION_HISTORY + "/[^/]+/[^/]+(/.*)");
+  private static final Pattern VERSION_HISTORY_PATTERN = Pattern.compile(VERSION_HISTORY_PATH + "/[^/]+(/.*)?");
+  private static final Pattern VERSION_HISTORY_TENANT_PATTERN = Pattern.compile(VERSION_HISTORY_PATH + "/[^/]+/[^/]+(/.*)?");
+  private static final Pattern LAUNCHES_PATTERN = Pattern.compile(LAUNCHES_PATH + "/\\d+/\\d+/\\d+/[^/]+(/.*)?");
 
   private Path() {
     // static methods only
@@ -97,49 +96,59 @@ public final class Path {
 
   /**
    * Gets level from parent use same logic (but reverse) as {@link #getAbsoluteParent(Page, int, ResourceResolver)}.
+   * If the path points to <code>/content/versionhistory</code> or <code>/content/launches</code> the original
+   * path returned by {@link #getOriginalPath(String, ResourceResolver)} is used to calculate the level.
    * @param path Path
-   * @return level &gt;= 0 if path is value, -1 if path is invalid
+   * @param resourceResolver Resource resolver
+   * @return level &gt;= 0 if path is valid, -1 if path is invalid
    */
   public static int getAbsoluteLevel(String path, ResourceResolver resourceResolver) {
-    // TODO: respect version history etc.
     if (StringUtils.isEmpty(path) || StringUtils.equals(path, "/")) {
       return -1;
     }
-    return StringUtils.countMatches(path, "/") - 1;
+    String originalPath = getOriginalPath(path, resourceResolver);
+    return StringUtils.countMatches(originalPath, "/") - 1;
   }
 
   /**
-   * Gets original path if the given path points to /content/versionhistory/*.
+   * Resolve original path if path points to <code>/content/versionhistory</code> or <code>/content/launches</code>.
+   * If the path does not point to any of these locations it is returned unchanged.
    * @param path Path
    * @param resourceResolver Resource resolver
-   * @return Path without /content/versionhistory rewriting
+   * @return Path that is not located below <code>/content/versionhistory</code> or <code>/content/launches</code>
    */
   public static String getOriginalPath(String path, ResourceResolver resourceResolver) {
-    boolean isTenant = isTenant(resourceResolver);
-    Matcher matcher = isTenant ? VERSION_HISTORY_TENANT_PATTERN.matcher(path) : VERSION_HISTORY_PATTERN.matcher(path);
-    if (matcher.matches()) {
-      return "/content" + matcher.group(1);
+    if (StringUtils.isEmpty(path)) {
+      return null;
     }
-    else {
-      return path;
+    Matcher versionHistoryMatcher = getVersionHistoryPattern(resourceResolver).matcher(path);
+    if (versionHistoryMatcher.matches()) {
+      return "/content" + versionHistoryMatcher.group(1);
     }
+    Matcher launchesMatcher = LAUNCHES_PATTERN.matcher(path);
+    if (launchesMatcher.matches()) {
+      return launchesMatcher.group(1);
+    }
+    return path;
   }
 
   /**
-   * Calculates offset for parent level if path points ot /content/versionhistory.
+   * Calculates offset for parent level if path points to <code>/content/versionhistory</code> or
+   * <code>/content/launches</code>.
    * @param path Path
    * @param resourceResolver Resource resolver
-   * @return 0 or offset if in /content/versionhistory
+   * @return 0 or offset if in <code>/content/versionhistory</code> or <code>/content/launches</code>
    */
   private static int getParentLevelOffset(String path, ResourceResolver resourceResolver) {
-    boolean isTenant = isTenant(resourceResolver);
-    Matcher matcher = isTenant ? VERSION_HISTORY_TENANT_PATTERN.matcher(path) : VERSION_HISTORY_PATTERN.matcher(path);
-    if (matcher.matches()) {
-      return isTenant ? 3 : 2;
+    Matcher versionHistoryMatcher = getVersionHistoryPattern(resourceResolver).matcher(path);
+    if (versionHistoryMatcher.matches()) {
+      return isTenant(resourceResolver) ? 3 : 2;
     }
-    else {
-      return 0;
+    Matcher launchesMatcher = LAUNCHES_PATTERN.matcher(path);
+    if (launchesMatcher.matches()) {
+      return 6;
     }
+    return 0;
   }
 
   /**
@@ -150,6 +159,20 @@ public final class Path {
   private static boolean isTenant(ResourceResolver resourceResolver) {
     Tenant tenant = resourceResolver.adaptTo(Tenant.class);
     return tenant != null;
+  }
+
+  /**
+   * Get version history pattern depending if current user has a tenant or not.
+   * @param resourceResolver Resource resolver
+   * @return Pattern
+   */
+  private static Pattern getVersionHistoryPattern(ResourceResolver resourceResolver) {
+    if (isTenant(resourceResolver)) {
+      return VERSION_HISTORY_TENANT_PATTERN;
+    }
+    else {
+      return VERSION_HISTORY_PATTERN;
+    }
   }
 
 }
