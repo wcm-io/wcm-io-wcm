@@ -27,6 +27,12 @@
       <action type="add" dev="amuthmann">
         Add TemplatePageFilter to filter by TemplatePathInfo.
       </action>
+      <action type="add" dev="sseifert" issue="WCON-49">
+        Add Path utility class to get handle path structures in combination with AEM side-by-side comparison and launches.
+      </action>
+      <action type="update" dev="sseifert" issue="WCON-49">
+        Apply path rewrites from Path utility class before they are matched against Cotnext-Aware services patterns.
+      </action>
     </release>
 
     <release version="1.0.4" date="2017-11-28">
