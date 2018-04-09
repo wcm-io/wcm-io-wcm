@@ -52,6 +52,11 @@ public final class FileExtension {
   public static final String JSON = "json";
 
   /**
+   * JSON, configured as non-caching
+   */
+  public static final String JSON_UNCACHED = "jsonx";
+
+  /**
    * Plain text
    */
   public static final String PLAINTEXT = "txt";
