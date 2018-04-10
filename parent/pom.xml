@@ -47,9 +47,9 @@
   <properties>
     <site.url.module.prefix>wcm</site.url.module.prefix>
   </properties>
-  
+
   <dependencies>
-  
+
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi.core</artifactId>
@@ -66,13 +66,13 @@
       <artifactId>javax.inject</artifactId>
       <scope>compile</scope>
     </dependency>
-  
+
     <dependency>
       <groupId>com.adobe.aem</groupId>
       <artifactId>aem-api</artifactId>
       <scope>provided</scope>
     </dependency>
-  
+
   </dependencies>
 
   <distributionManagement>
