@@ -31,7 +31,7 @@
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.parent</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.4</version>
   <packaging>pom</packaging>
 
   <name>WCM Extensions</name>
@@ -47,9 +47,9 @@
   <properties>
     <site.url.module.prefix>wcm</site.url.module.prefix>
   </properties>
-  
+
   <dependencies>
-  
+
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi.core</artifactId>
@@ -64,15 +64,15 @@
     <dependency>
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
-  
+
     <dependency>
       <groupId>com.adobe.aem</groupId>
       <artifactId>aem-api</artifactId>
       <scope>provided</scope>
     </dependency>
-  
+
   </dependencies>
 
   <distributionManagement>
