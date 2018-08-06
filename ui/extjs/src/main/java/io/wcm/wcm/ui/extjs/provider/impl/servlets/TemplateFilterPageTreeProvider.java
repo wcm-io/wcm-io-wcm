@@ -48,7 +48,6 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
 import com.day.text.ISO9075;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.sling.commons.request.RequestParam;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 import io.wcm.wcm.ui.extjs.provider.AbstractPageTreeProvider;
@@ -62,7 +61,6 @@ import io.wcm.wcm.ui.extjs.provider.AbstractPageTreeProvider;
     "sling.servlet.resourceTypes=sling/servlet/default",
     "sling.servlet.methods=" + HttpConstants.METHOD_GET
 })
-@SuppressFBWarnings("SE_BAD_FIELD")
 public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
   private static final long serialVersionUID = 1L;
 

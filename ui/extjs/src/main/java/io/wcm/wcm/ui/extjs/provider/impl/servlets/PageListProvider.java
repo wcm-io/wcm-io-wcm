@@ -28,7 +28,6 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 
 import com.day.cq.commons.predicate.PredicateProvider;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 import io.wcm.wcm.ui.extjs.provider.AbstractPageListProvider;
 
@@ -42,7 +41,6 @@ import io.wcm.wcm.ui.extjs.provider.AbstractPageListProvider;
     "sling.servlet.resourceTypes=sling/servlet/default",
     "sling.servlet.methods=" + HttpConstants.METHOD_GET
 })
-@SuppressFBWarnings("SE_BAD_FIELD")
 public final class PageListProvider extends AbstractPageListProvider {
   private static final long serialVersionUID = 1L;
 
