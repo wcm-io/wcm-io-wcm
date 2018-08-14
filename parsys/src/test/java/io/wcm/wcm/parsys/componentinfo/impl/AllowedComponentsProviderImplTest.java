@@ -38,6 +38,7 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.testing.mock.aem.junit.AemContextBuilder;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
+@SuppressWarnings("null")
 public class AllowedComponentsProviderImplTest {
 
   @Rule

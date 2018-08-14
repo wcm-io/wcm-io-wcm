@@ -22,6 +22,7 @@ package io.wcm.wcm.parsys.componentinfo;
 import java.util.Set;
 
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -36,7 +37,8 @@ public interface AllowedComponentsProvider {
    * @param resolver Resource resolver
    * @return Component paths
    */
-  Set<String> getAllowedComponents(String resourcePath, ResourceResolver resolver);
+  @NotNull
+  Set<String> getAllowedComponents(@NotNull String resourcePath, @NotNull ResourceResolver resolver);
 
   /**
    * Get allowed components anywhere inside a page.
@@ -44,6 +46,7 @@ public interface AllowedComponentsProvider {
    * @param resolver Resource resolver
    * @return Component paths
    */
-  Set<String> getAllowedComponentsForTemplate(String pageComponentPath, ResourceResolver resolver);
+  @NotNull
+  Set<String> getAllowedComponentsForTemplate(@NotNull String pageComponentPath, @NotNull ResourceResolver resolver);
 
 }

@@ -29,6 +29,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.commons.osgi.Order;
 import org.apache.sling.commons.osgi.RankedServices;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -55,8 +56,9 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
 
   private final RankedServices<ParsysConfig> osgiParsysConfigs = new RankedServices<>(Order.ASCENDING);
 
+  @SuppressWarnings("null")
   @Override
-  public Iterable<ParsysConfig> getParsysConfigs(String pageComponentPath, ResourceResolver resolver) {
+  public @NotNull Iterable<ParsysConfig> getParsysConfigs(@NotNull String pageComponentPath, @NotNull ResourceResolver resolver) {
     Resource pageComponentResource = resolver.getResource(pageComponentPath);
     if (pageComponentResource != null) {
       return ImmutableList.copyOf(getParsysConfigsWithInheritance(pageComponentResource, resolver));
@@ -66,9 +68,10 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
     }
   }
 
+  @SuppressWarnings("null")
   @Override
-  public Iterable<ParsysConfig> getParsysConfigs(final String pageComponentPath, final String relativePath,
-      final ResourceResolver resolver) {
+  public @NotNull Iterable<ParsysConfig> getParsysConfigs(@NotNull final String pageComponentPath, @NotNull final String relativePath,
+      @NotNull final ResourceResolver resolver) {
     Iterable<ParsysConfig> configs = getParsysConfigs(pageComponentPath, resolver);
     return Iterables.filter(configs, new Predicate<ParsysConfig>() {
       @Override
@@ -135,6 +138,7 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
     return true;
   }
 
+  @SuppressWarnings("null")
   private boolean matchesPathParent(ParsysConfig item1, ParsysConfig item2) {
     String pathPattern1 = item1.getPathPattern() != null ? item1.getPathPattern().pattern() : "";
     String pathPattern2 = item2.getPathPattern() != null ? item2.getPathPattern().pattern() : "";

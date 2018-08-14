@@ -33,6 +33,7 @@ import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.jetbrains.annotations.NotNull;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableSet;
@@ -89,6 +90,7 @@ final class ResourceParsysConfigProvider {
   /**
    * Paragraph System configuration path definition.
    */
+  @SuppressWarnings("null")
   private static class PathDef implements ParsysConfig {
 
     private final String pageComponentPath;
@@ -135,7 +137,7 @@ final class ResourceParsysConfigProvider {
     }
 
     @Override
-    public String getPageComponentPath() {
+    public @NotNull String getPageComponentPath() {
       return this.pageComponentPath;
     }
 
@@ -145,17 +147,17 @@ final class ResourceParsysConfigProvider {
     }
 
     @Override
-    public Set<String> getAllowedChildren() {
+    public @NotNull Set<String> getAllowedChildren() {
       return this.allowedChildren;
     }
 
     @Override
-    public Set<String> getDeniedChildren() {
+    public @NotNull Set<String> getDeniedChildren() {
       return this.deniedChildren;
     }
 
     @Override
-    public Set<String> getAllowedParents() {
+    public @NotNull Set<String> getAllowedParents() {
       return this.allowedParents;
     }
 

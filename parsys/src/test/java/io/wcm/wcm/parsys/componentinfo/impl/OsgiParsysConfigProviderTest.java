@@ -34,6 +34,7 @@ import com.google.common.collect.ImmutableSet;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 
+@SuppressWarnings("null")
 public class OsgiParsysConfigProviderTest {
 
   private static final String COMPONENT_PATH = "/component/path";
@@ -82,6 +83,7 @@ public class OsgiParsysConfigProviderTest {
   }
 
   @Test
+  @SuppressWarnings("unused")
   public void testWithoutProperties() {
     ParsysConfig underTest = context.registerInjectActivateService(new OsgiParsysConfigProvider());
 
