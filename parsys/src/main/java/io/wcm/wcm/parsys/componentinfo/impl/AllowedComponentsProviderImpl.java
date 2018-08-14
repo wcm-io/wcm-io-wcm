@@ -27,6 +27,7 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -53,8 +54,9 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
    * @param resourcePath Resource path inside content page
    * @return Set of component paths (absolute resource types)
    */
+  @SuppressWarnings("null")
   @Override
-  public Set<String> getAllowedComponents(String resourcePath, ResourceResolver resolver) {
+  public @NotNull Set<String> getAllowedComponents(@NotNull String resourcePath, @NotNull ResourceResolver resolver) {
     Set<String> allowedComponents = new HashSet<>();
     Set<String> deniedComponents = new HashSet<>();
 
@@ -119,8 +121,9 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
    * @param pageComponentPath Path of template's page component
    * @return Set of component paths (absolute resource types)
    */
+  @SuppressWarnings("null")
   @Override
-  public Set<String> getAllowedComponentsForTemplate(String pageComponentPath, ResourceResolver resolver) {
+  public @NotNull Set<String> getAllowedComponentsForTemplate(@NotNull String pageComponentPath, @NotNull ResourceResolver resolver) {
     Resource pageComponentResource = resolver.getResource(pageComponentPath);
     if (pageComponentResource != null) {
       Iterable<ParsysConfig> parSysConfigs = parsysConfigManager.getParsysConfigs(pageComponentResource.getPath(), resolver);

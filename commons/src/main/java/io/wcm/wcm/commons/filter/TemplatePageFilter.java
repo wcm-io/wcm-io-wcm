@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.wcm.api.NameConstants;
@@ -42,7 +43,7 @@ public final class TemplatePageFilter extends PageFilter {
   /**
    * @param templates The templates to be included
    */
-  public TemplatePageFilter(TemplatePathInfo... templates) {
+  public TemplatePageFilter(@NotNull TemplatePathInfo @NotNull... templates) {
     this(false, false, templates);
   }
 
@@ -51,7 +52,7 @@ public final class TemplatePageFilter extends PageFilter {
    * @param includeHidden if <code>true</code> hidden pages are included.
    * @param templates The templates to be included
    */
-  public TemplatePageFilter(boolean includeInvalid, boolean includeHidden, TemplatePathInfo... templates) {
+  public TemplatePageFilter(boolean includeInvalid, boolean includeHidden, @NotNull TemplatePathInfo @NotNull... templates) {
     super(includeInvalid, includeHidden);
     allowedTemplatePaths = Arrays.stream(templates)
         .map(TemplatePathInfo::getTemplatePath)

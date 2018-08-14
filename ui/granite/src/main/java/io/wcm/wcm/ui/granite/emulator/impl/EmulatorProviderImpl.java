@@ -81,6 +81,7 @@ public class EmulatorProviderImpl implements EmulatorProvider {
     }
   }
 
+  @SuppressWarnings("null")
   @Override
   public boolean handles(Resource resource) {
     // check if resource is a page, and if the page uses a configured template
@@ -109,6 +110,7 @@ public class EmulatorProviderImpl implements EmulatorProvider {
     return emulators;
   }
 
+  @SuppressWarnings({ "null", "unused" })
   @Override
   public List<EmulatorGroup> getEmulatorGroups(Resource resource) {
     // convert device groups defined in page props to emulator groups

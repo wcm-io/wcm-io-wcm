@@ -61,6 +61,7 @@ import org.mockito.stubbing.Answer;
 import com.day.cq.wcm.api.WCMMode;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("null")
 public class CacheHeaderTest {
 
   @Mock

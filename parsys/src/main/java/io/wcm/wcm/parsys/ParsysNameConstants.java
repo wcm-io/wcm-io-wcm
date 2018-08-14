@@ -19,6 +19,8 @@
  */
 package io.wcm.wcm.parsys;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Names used for the parsys.
  * <p>
@@ -38,46 +40,46 @@ public final class ParsysNameConstants {
    * Defines the resource-based allowed components.
    * To be used as name of a node in the parsys component defintion.
    */
-  public static final String NN_PARSYS_CONFIG = "wcmio:parsysConfig";
+  public static final @NotNull String NN_PARSYS_CONFIG = "wcmio:parsysConfig";
 
   /**
    * Generates CSS classes by default: "section" on each paragraph/new area and "clear:both" on a new area.
    * This is a boolean property and defaults to true if not set.
    * To be used as property in the parsys component definition.
    */
-  public static final String PN_PARSYS_GENERATE_DEAFULT_CSS = "wcmio:parsysGenerateDefaultCss";
+  public static final @NotNull String PN_PARSYS_GENERATE_DEAFULT_CSS = "wcmio:parsysGenerateDefaultCss";
 
   /**
    * Defines additional custom CSS classes to be set on each paragraph.
    * To be used as property in the parsys component definition.
    */
-  public static final String PN_PARSYS_PARAGRAPH_CSS = "wcmio:parsysParagraphCss";
+  public static final @NotNull String PN_PARSYS_PARAGRAPH_CSS = "wcmio:parsysParagraphCss";
 
   /**
    * Defines additional custom CSS classes to be set on the new area.
    * To be used as property in the parsys component definition.
    */
-  public static final String PN_PARSYS_NEWAREA_CSS = "wcmio:parsysNewAreaCss";
+  public static final @NotNull String PN_PARSYS_NEWAREA_CSS = "wcmio:parsysNewAreaCss";
 
   /**
    * Sets the element name to be used for the element wrapping each pagraph component.
    * Defaults to "div" if not set.
    * To be used as property in the parsys component definition.
    */
-  public static final String PN_PARSYS_PARAGRAPH_ELEMENT = "wcmio:parsysParagraphElement";
+  public static final @NotNull String PN_PARSYS_PARAGRAPH_ELEMENT = "wcmio:parsysParagraphElement";
 
   /**
    * Sets the element name to be used for the element wrapping the whole paragraph system.
    * If not set no wrapping element is generated for the paragraph system.
    * To be used as property in the parsys component definition.
    */
-  public static final String PN_PARSYS_WRAPPER_ELEMENT = "wcmio:parsysWrapperElement";
+  public static final @NotNull String PN_PARSYS_WRAPPER_ELEMENT = "wcmio:parsysWrapperElement";
 
   /**
    * Defines custom CSS classes to be set on the wrapper element.
    * To be used as property in the parsys component definition.
    */
-  public static final String PN_PARSYS_WRAPPER_CSS = "wcmio:parsysWrapperCss";
+  public static final @NotNull String PN_PARSYS_WRAPPER_CSS = "wcmio:parsysWrapperCss";
 
   private ParsysNameConstants() {
     // constants only

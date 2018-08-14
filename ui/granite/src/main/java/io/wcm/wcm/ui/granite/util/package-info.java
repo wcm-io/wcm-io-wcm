@@ -20,5 +20,5 @@
 /**
  * Helper methods for Granite UI components.
  */
-@org.osgi.annotation.versioning.Version("1.1.0")
+@org.osgi.annotation.versioning.Version("1.1.1")
 package io.wcm.wcm.ui.granite.util;

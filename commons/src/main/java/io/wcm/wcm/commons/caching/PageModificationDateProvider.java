@@ -21,6 +21,7 @@ package io.wcm.wcm.commons.caching;
 
 import java.util.Date;
 
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.wcm.api.Page;
@@ -36,12 +37,12 @@ public final class PageModificationDateProvider implements ModificationDateProvi
   /**
    * @param page Resource
    */
-  public PageModificationDateProvider(Page page) {
+  public PageModificationDateProvider(@Nullable Page page) {
     this.page = page;
   }
 
   @Override
-  public Date getModificationDate() {
+  public @Nullable Date getModificationDate() {
     return ModificationDate.get(this.page);
   }
 

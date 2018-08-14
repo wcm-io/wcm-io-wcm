@@ -20,6 +20,7 @@
 package io.wcm.wcm.parsys.componentinfo;
 
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -34,7 +35,8 @@ public interface ParsysConfigManager {
    * @param resolver Resource resolver
    * @return All configurations defined in any source
    */
-  Iterable<ParsysConfig> getParsysConfigs(String pageComponentPath, ResourceResolver resolver);
+  @NotNull
+  Iterable<ParsysConfig> getParsysConfigs(@NotNull String pageComponentPath, @NotNull ResourceResolver resolver);
 
   /**
    * Get all paragraph system configurations for a certain path inside a page with the given template/page component.
@@ -43,6 +45,8 @@ public interface ParsysConfigManager {
    * @param resolver Resource resolver
    * @return All configurations defined in any source
    */
-  Iterable<ParsysConfig> getParsysConfigs(String pageComponentPath, String relativePath, ResourceResolver resolver);
+  @NotNull
+  Iterable<ParsysConfig> getParsysConfigs(@NotNull String pageComponentPath, @NotNull String relativePath,
+      @NotNull ResourceResolver resolver);
 
 }

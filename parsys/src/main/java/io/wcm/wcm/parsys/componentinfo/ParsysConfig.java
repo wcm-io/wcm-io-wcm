@@ -22,6 +22,8 @@ package io.wcm.wcm.parsys.componentinfo;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -34,6 +36,7 @@ public interface ParsysConfig {
    * Resource type of the page component for which this parsys configuration is defined.
    * @return resource type of page component
    */
+  @NotNull
   String getPageComponentPath();
 
   /**
@@ -43,6 +46,7 @@ public interface ParsysConfig {
    * Example: {@code ^jcr:content/(?!megaFlyout).*$}
    * @return parsys path pattern
    */
+  @Nullable
   Pattern getPathPattern();
 
   /**
@@ -53,16 +57,19 @@ public interface ParsysConfig {
   /**
    * @return resource types of allowed parent components
    */
+  @NotNull
   Set<String> getAllowedParents();
 
   /**
    * @return resource types of allowed child components
    */
+  @NotNull
   Set<String> getAllowedChildren();
 
   /**
    * @return resource types of denied child components
    */
+  @NotNull
   Set<String> getDeniedChildren();
 
   /**

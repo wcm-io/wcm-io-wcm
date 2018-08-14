@@ -84,6 +84,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
     enabled = !RunMode.disableIfNotAuthor(slingSettings.getRunModes(), componentContext, log);
   }
 
+  @SuppressWarnings("null")
   @Override
   protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
     if (!enabled) {

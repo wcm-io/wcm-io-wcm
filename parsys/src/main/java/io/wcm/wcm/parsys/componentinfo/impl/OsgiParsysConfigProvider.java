@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -46,6 +47,7 @@ import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
     "webconsole.configurationFactory.nameHint={pageComponentPath}"
 })
 @Designate(ocd = OsgiParsysConfigProvider.Config.class, factory = true)
+@SuppressWarnings("null")
 public final class OsgiParsysConfigProvider implements ParsysConfig {
 
   private static final Logger log = LoggerFactory.getLogger(OsgiParsysConfigProvider.class);
@@ -57,7 +59,8 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
   @interface Config {
 
     @AttributeDefinition(name = "Page Component Path",
-        description = "Resource type of the page component for this parsys config (required).")
+        description = "Resource type of the page component for this parsys config (required).",
+        required = true)
     String pageComponentPath();
 
     @AttributeDefinition(name = "Path",
@@ -106,7 +109,7 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
   private boolean inherit;
 
   @Override
-  public String getPageComponentPath() {
+  public @NotNull String getPageComponentPath() {
     return this.pageComponentPath;
   }
 
@@ -121,17 +124,17 @@ public final class OsgiParsysConfigProvider implements ParsysConfig {
   }
 
   @Override
-  public Set<String> getAllowedParents() {
+  public @NotNull Set<String> getAllowedParents() {
     return this.allowedParents;
   }
 
   @Override
-  public Set<String> getAllowedChildren() {
+  public @NotNull Set<String> getAllowedChildren() {
     return this.allowedChildren;
   }
 
   @Override
-  public Set<String> getDeniedChildren() {
+  public @NotNull Set<String> getDeniedChildren() {
     return this.deniedChildren;
   }
 

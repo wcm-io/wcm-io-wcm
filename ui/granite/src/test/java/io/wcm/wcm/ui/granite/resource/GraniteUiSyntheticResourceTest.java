@@ -41,6 +41,7 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+@SuppressWarnings("null")
 public class GraniteUiSyntheticResourceTest {
 
   private static final ValueMap SAMPLE_PROPERTES = new ValueMapDecorator(ImmutableMap.<String, Object>builder()

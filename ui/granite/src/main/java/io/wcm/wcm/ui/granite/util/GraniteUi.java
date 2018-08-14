@@ -26,6 +26,8 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.granite.ui.components.Value;
 import com.day.cq.wcm.api.Page;
@@ -45,7 +47,7 @@ public final class GraniteUi {
    * @param request Request
    * @return Current content resource or null
    */
-  public static Resource getContentResource(HttpServletRequest request) {
+  public static @Nullable Resource getContentResource(@NotNull HttpServletRequest request) {
 
     String contentPath = getContentPath(request);
 
@@ -62,7 +64,7 @@ public final class GraniteUi {
    * @param request Request
    * @return Current content resource or the first existing parent/ancestor.
    */
-  public static Resource getContentResourceOrParent(HttpServletRequest request) {
+  public static @Nullable Resource getContentResourceOrParent(@NotNull HttpServletRequest request) {
     String contentPath = getContentPath(request);
     return getContentResourceOrParentFromPath((SlingHttpServletRequest)request, contentPath);
   }
@@ -73,7 +75,7 @@ public final class GraniteUi {
    * @param request Request
    * @return Current content page or null
    */
-  public static Page getContentPage(HttpServletRequest request) {
+  public static @Nullable Page getContentPage(@NotNull HttpServletRequest request) {
     SlingHttpServletRequest slingRequest = (SlingHttpServletRequest)request;
     Resource contentResource = getContentResourceOrParent(request);
     if (contentResource != null) {
@@ -91,7 +93,7 @@ public final class GraniteUi {
    * @param resourceTypes ResourceTypes
    * @return Existing resource type
    */
-  public static String getExistingResourceType(ResourceResolver resourceResolver, String... resourceTypes) {
+  public static @Nullable String getExistingResourceType(@NotNull ResourceResolver resourceResolver, @NotNull String @NotNull... resourceTypes) {
     for (String path : resourceTypes) {
       if (resourceResolver.getResource(path) != null) {
         return path;

@@ -22,6 +22,8 @@ package io.wcm.wcm.commons.contenttype;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 import com.google.common.collect.ImmutableSet;
@@ -30,6 +32,7 @@ import com.google.common.collect.ImmutableSet;
  * Frequently used file extensions.
  */
 @ProviderType
+@SuppressWarnings("null")
 public final class FileExtension {
 
   private FileExtension() {
@@ -39,76 +42,76 @@ public final class FileExtension {
   /**
    * HTML
    */
-  public static final String HTML = "html";
+  public static final @NotNull String HTML = "html";
 
   /**
    * HTML, configured as non-caching
    */
-  public static final String HTML_UNCACHED = "htx";
+  public static final @NotNull String HTML_UNCACHED = "htx";
 
   /**
    * JSON
    */
-  public static final String JSON = "json";
+  public static final @NotNull String JSON = "json";
 
   /**
    * Plain text
    */
-  public static final String PLAINTEXT = "txt";
+  public static final @NotNull String PLAINTEXT = "txt";
 
   /**
    * CSS
    */
-  public static final String CSS = "css";
+  public static final @NotNull String CSS = "css";
 
   /**
    * JavaScript
    */
-  public static final String JAVASCRIPT = "js";
+  public static final @NotNull String JAVASCRIPT = "js";
 
   /**
    * XML
    */
-  public static final String XML = "xml";
+  public static final @NotNull String XML = "xml";
 
   /**
    * XHTML
    */
-  public static final String XHTML = "html";
+  public static final @NotNull String XHTML = "html";
 
   /**
    * ZIP
    */
-  public static final String ZIP = "zip";
+  public static final @NotNull String ZIP = "zip";
 
   /**
    * GIF image
    */
-  public static final String GIF = "gif";
+  public static final @NotNull String GIF = "gif";
 
   /**
    * JPEG image
    */
-  public static final String JPEG = "jpg";
+  public static final @NotNull String JPEG = "jpg";
 
   /**
    * PNG image
    */
-  public static final String PNG = "png";
+  public static final @NotNull String PNG = "png";
 
   /**
    * Flash file
    */
-  public static final String SWF = "swf";
+  public static final @NotNull String SWF = "swf";
 
   /**
    * CSV
    */
-  public static final String CSV = "csv";
+  public static final @NotNull String CSV = "csv";
 
 
   /** all file extensions that will be displayed by an image tag */
-  private static final Set<String> IMAGE_FILE_EXTENSIONS = ImmutableSet.of(
+  private static final @NotNull Set<String> IMAGE_FILE_EXTENSIONS = ImmutableSet.of(
       GIF,
       JPEG,
       PNG,
@@ -116,7 +119,7 @@ public final class FileExtension {
       );
 
   /** all file extensions that will be displayed as flash */
-  private static final Set<String> FLASH_FILE_EXTENSIONS = ImmutableSet.of(
+  private static final @NotNull Set<String> FLASH_FILE_EXTENSIONS = ImmutableSet.of(
       SWF
       );
 
@@ -126,7 +129,7 @@ public final class FileExtension {
    * @param fileExtension File extension
    * @return true if image
    */
-  public static boolean isImage(String fileExtension) {
+  public static boolean isImage(@Nullable String fileExtension) {
     if (StringUtils.isEmpty(fileExtension)) {
       return false;
     }
@@ -136,7 +139,7 @@ public final class FileExtension {
   /**
    * @return Image file extensions for standard image formats supported by web browsers and AEM Layer implementations.
    */
-  public static Set<String> getImageFileExtensions() {
+  public static @NotNull Set<String> getImageFileExtensions() {
     return IMAGE_FILE_EXTENSIONS;
   }
 
@@ -145,7 +148,7 @@ public final class FileExtension {
    * @param fileExtension File extension
    * @return true if flash
    */
-  public static boolean isFlash(String fileExtension) {
+  public static boolean isFlash(@Nullable String fileExtension) {
     if (StringUtils.isEmpty(fileExtension)) {
       return false;
     }
@@ -155,7 +158,7 @@ public final class FileExtension {
   /**
    * @return Flash file extensions
    */
-  public static Set<String> getFlashFileExtensions() {
+  public static @NotNull Set<String> getFlashFileExtensions() {
     return FLASH_FILE_EXTENSIONS;
   }
 
