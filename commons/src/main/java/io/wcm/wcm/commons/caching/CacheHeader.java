@@ -34,6 +34,8 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,8 +96,8 @@ public final class CacheHeader {
    *         stream
    * @throws IOException I/O exception
    */
-  public static boolean isNotModified(Resource resource,
-      SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
+  public static boolean isNotModified(@NotNull Resource resource,
+      @NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
     ResourceModificationDateProvider dateProvider = new ResourceModificationDateProvider(resource);
     return isNotModified(dateProvider, request, response);
   }
@@ -113,8 +115,8 @@ public final class CacheHeader {
    *         stream
    * @throws IOException I/O exception
    */
-  public static boolean isNotModified(Resource resource,
-      SlingHttpServletRequest request, SlingHttpServletResponse response, boolean setExpiresHeader) throws IOException {
+  public static boolean isNotModified(@NotNull Resource resource,
+      @NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response, boolean setExpiresHeader) throws IOException {
     ResourceModificationDateProvider dateProvider = new ResourceModificationDateProvider(resource);
     return isNotModified(dateProvider, request, response, setExpiresHeader);
   }
@@ -134,8 +136,8 @@ public final class CacheHeader {
    *         stream
    * @throws IOException I/O exception
    */
-  public static boolean isNotModified(ModificationDateProvider dateProvider,
-      SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
+  public static boolean isNotModified(@NotNull ModificationDateProvider dateProvider,
+      @NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
     boolean isAuthor = WCMMode.fromRequest(request) != WCMMode.DISABLED;
     return isNotModified(dateProvider, request, response, isAuthor);
   }
@@ -153,8 +155,8 @@ public final class CacheHeader {
    *         stream
    * @throws IOException I/O exception
    */
-  public static boolean isNotModified(ModificationDateProvider dateProvider,
-      SlingHttpServletRequest request, SlingHttpServletResponse response, boolean setExpiresHeader) throws IOException {
+  public static boolean isNotModified(@NotNull ModificationDateProvider dateProvider,
+      @NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response, boolean setExpiresHeader) throws IOException {
 
     // assume the resource *was* modified until we know better
     boolean isModified = true;
@@ -201,7 +203,7 @@ public final class CacheHeader {
    * Set headers to disallow caching in browser, proxy servers and dispatcher for the current response.
    * @param response Current response
    */
-  public static void setNonCachingHeaders(HttpServletResponse response) {
+  public static void setNonCachingHeaders(@NotNull HttpServletResponse response) {
     response.setHeader(HEADER_PRAGMA, "no-cache");
     response.setHeader(HEADER_CACHE_CONTROL, "no-cache");
     response.setHeader(HEADER_EXPIRES, "0");
@@ -213,7 +215,7 @@ public final class CacheHeader {
    * @param response Response
    * @param date Expires date
    */
-  public static void setExpires(HttpServletResponse response, Date date) {
+  public static void setExpires(@NotNull HttpServletResponse response, @Nullable Date date) {
     if (date == null) {
       response.setHeader(HEADER_EXPIRES, "-1");
     }
@@ -227,7 +229,7 @@ public final class CacheHeader {
    * @param response Response
    * @param seconds Seconds to expire
    */
-  public static void setExpiresSeconds(HttpServletResponse response, int seconds) {
+  public static void setExpiresSeconds(@NotNull HttpServletResponse response, int seconds) {
     Date expiresDate = DateUtils.addSeconds(new Date(), seconds);
     setExpires(response, expiresDate);
   }
@@ -237,7 +239,7 @@ public final class CacheHeader {
    * @param response Response
    * @param hours Hours to expire
    */
-  public static void setExpiresHours(HttpServletResponse response, int hours) {
+  public static void setExpiresHours(@NotNull HttpServletResponse response, int hours) {
     Date expiresDate = DateUtils.addHours(new Date(), hours);
     setExpires(response, expiresDate);
   }
@@ -247,7 +249,7 @@ public final class CacheHeader {
    * @param response Response
    * @param days Days to expire
    */
-  public static void setExpiresDays(HttpServletResponse response, int days) {
+  public static void setExpiresDays(@NotNull HttpServletResponse response, int days) {
     Date expiresDate = DateUtils.addDays(new Date(), days);
     setExpires(response, expiresDate);
   }

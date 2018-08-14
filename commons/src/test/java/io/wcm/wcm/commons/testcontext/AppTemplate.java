@@ -19,6 +19,9 @@
  */
 package io.wcm.wcm.commons.testcontext;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import io.wcm.wcm.commons.util.Template;
 import io.wcm.wcm.commons.util.TemplatePathInfo;
 
@@ -31,21 +34,21 @@ public enum AppTemplate implements TemplatePathInfo {
   TEMPLATE_2("/apps/app1/templates/t2"),
   TEMPLATE_3("/apps/app1/templates/t3");
 
-  private final String templatePath;
+  private final @NotNull String templatePath;
   private final String resourceType;
 
-  AppTemplate(String templatePath) {
+  AppTemplate(@NotNull String templatePath) {
     this.templatePath = templatePath;
     this.resourceType = Template.getResourceTypeFromTemplatePath(templatePath);
   }
 
   @Override
-  public String getTemplatePath() {
+  public @NotNull String getTemplatePath() {
     return templatePath;
   }
 
   @Override
-  public String getResourceType() {
+  public @Nullable String getResourceType() {
     return resourceType;
   }
 

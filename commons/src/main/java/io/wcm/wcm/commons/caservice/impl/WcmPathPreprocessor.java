@@ -32,6 +32,7 @@ import io.wcm.wcm.commons.util.Path;
 @Component(service = PathPreprocessor.class)
 public class WcmPathPreprocessor implements PathPreprocessor {
 
+  @SuppressWarnings("null")
   @Override
   public String apply(String path, ResourceResolver resourceResolver) {
     return Path.getOriginalPath(path, resourceResolver);

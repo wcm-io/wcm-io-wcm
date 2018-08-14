@@ -19,6 +19,8 @@
  */
 package io.wcm.wcm.commons.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -31,12 +33,14 @@ public interface TemplatePathInfo {
    * Template path
    * @return Path
    */
+  @NotNull
   String getTemplatePath();
 
   /**
    * Resource type
    * @return Path
    */
+  @Nullable
   String getResourceType();
 
 }
