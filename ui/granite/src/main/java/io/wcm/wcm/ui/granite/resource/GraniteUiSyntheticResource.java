@@ -32,11 +32,11 @@ import org.apache.sling.api.resource.SyntheticResource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-
 
 /**
  * Extended version of {@link SyntheticResource} that allows to pass an own value map and optional child resources.
@@ -58,8 +58,10 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
   }
 
   private GraniteUiSyntheticResource(ResourceResolver resourceResolver,
-      String path, String resourceType,
-      ValueMap props, Iterable<Resource> children) {
+      String path,
+      String resourceType,
+      ValueMap props,
+      Iterable<Resource> children) {
     super(resourceResolver, path, resourceType);
     this.props = props;
     this.children = Lists.newArrayList(children);
@@ -112,7 +114,6 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
    * @param valueMap Properties
    * @return Resource
    */
-  @SuppressWarnings("null")
   public static Resource create(@NotNull ResourceResolver resourceResolver, @NotNull ValueMap valueMap) {
     return create(resourceResolver, null, JcrConstants.NT_UNSTRUCTURED, valueMap);
   }
@@ -124,8 +125,7 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
    * @param resourceType Resource type
    * @return Resource
    */
-  @SuppressWarnings("null")
-  public static Resource create(@NotNull ResourceResolver resourceResolver, @NotNull String path, @NotNull String resourceType) {
+  public static Resource create(@NotNull ResourceResolver resourceResolver, @Nullable String path, @NotNull String resourceType) {
     return create(resourceResolver, path, resourceType, ValueMap.EMPTY);
   }
 
@@ -137,7 +137,7 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
    * @param valueMap Properties
    * @return Resource
    */
-  public static Resource create(@NotNull ResourceResolver resourceResolver, @NotNull String path, @NotNull String resourceType,
+  public static Resource create(@NotNull ResourceResolver resourceResolver, @Nullable String path, @NotNull String resourceType,
       @NotNull ValueMap valueMap) {
     return new GraniteUiSyntheticResource(resourceResolver,
         path,
@@ -194,7 +194,6 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
    * @param resourceType Resource type
    * @return Resource
    */
-  @SuppressWarnings("null")
   public static Resource child(@NotNull Resource parentResource, @NotNull String name, @NotNull String resourceType) {
     return child(parentResource, name, resourceType, ValueMap.EMPTY);
   }

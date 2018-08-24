@@ -43,6 +43,7 @@ import com.google.common.collect.ImmutableMap;
 
 import io.wcm.testing.mock.aem.junit.AemContext;
 
+@SuppressWarnings("null")
 public class EmulatorProviderImplTest {
 
   @Rule

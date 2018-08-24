@@ -42,7 +42,6 @@ import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
 @RunWith(MockitoJUnitRunner.class)
-@SuppressWarnings("null")
 public class ParsysConfigManagerImplTest {
 
   private static final String RESOURCE_PATH_1 = "sample/components/component1";

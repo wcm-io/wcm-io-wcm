@@ -125,6 +125,7 @@ public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
    * @return results node iterator
    * @throws RepositoryException
    */
+  @SuppressWarnings("null")
   private NodeIterator searchNodesByTemplate(String[] templates, String rootPath, SlingHttpServletRequest request) throws RepositoryException {
     String queryString = "/jcr:root" + ISO9075.encodePath(rootPath) + "//*"
         + "[@cq:template='" + StringUtils.join(escapeXPathQueryExpressions(templates), "' or @cq:template='") + "']";

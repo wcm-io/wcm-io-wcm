@@ -49,6 +49,7 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("null")
 public class TemplateFilterPageTreeProviderTest {
 
   private static final String TEMPLATE_1 = "/apps/app1/templates/template1";

@@ -66,6 +66,7 @@ public final class ModificationDate {
    * @param resource a resource with a cq:lastModified property *and/or* a file/jcr:content subnode with a jcr:lastModified property
    * @return the date or null if last modified property could not be found
    */
+  @SuppressWarnings("null")
   public static @Nullable Date get(@Nullable Resource resource) {
     if (resource == null) {
       return null;

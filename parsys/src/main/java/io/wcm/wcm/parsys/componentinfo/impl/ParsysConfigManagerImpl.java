@@ -56,7 +56,6 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
 
   private final RankedServices<ParsysConfig> osgiParsysConfigs = new RankedServices<>(Order.ASCENDING);
 
-  @SuppressWarnings("null")
   @Override
   public @NotNull Iterable<ParsysConfig> getParsysConfigs(@NotNull String pageComponentPath, @NotNull ResourceResolver resolver) {
     Resource pageComponentResource = resolver.getResource(pageComponentPath);

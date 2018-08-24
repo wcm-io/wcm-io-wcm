@@ -43,7 +43,6 @@ import io.wcm.wcm.commons.util.RunMode;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
 @RunWith(MockitoJUnitRunner.class)
-@SuppressWarnings("null")
 public class ParsysComponentsServletTest {
 
   private static final String PAGE_PATH = "/content/sample/page1";

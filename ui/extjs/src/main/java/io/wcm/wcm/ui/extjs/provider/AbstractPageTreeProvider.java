@@ -98,6 +98,7 @@ public abstract class AbstractPageTreeProvider extends AbstractPageProvider {
    * @return JSON object
    * @throws JSONException JSON exception
    */
+  @SuppressWarnings("null")
   protected final JSONObject getPage(Page page) throws JSONException {
     Resource resource = page.adaptTo(Resource.class);
 

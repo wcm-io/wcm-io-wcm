@@ -39,7 +39,6 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
 @RunWith(MockitoJUnitRunner.class)
-@SuppressWarnings("null")
 public class GraniteUiTest {
 
   private static final String CONTENT_PATH = "/my/path";

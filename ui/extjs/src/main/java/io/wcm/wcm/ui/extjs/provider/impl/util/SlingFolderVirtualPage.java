@@ -69,6 +69,7 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
+  @SuppressWarnings("null")
   public Page getAbsoluteParent(int level) {
     String parentPath = Text.getAbsoluteParent(resource.getPath(), level - 1);
     Resource parentResource = resource.getResourceResolver().getResource(parentPath);
@@ -139,6 +140,7 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
+  @SuppressWarnings("null")
   public PageManager getPageManager() {
     return resource.getResourceResolver().adaptTo(PageManager.class);
   }
@@ -149,12 +151,14 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
+  @SuppressWarnings("null")
   public Page getParent() {
     Resource parentResource = resource.getParent();
     return parentResource.adaptTo(Page.class);
   }
 
   @Override
+  @SuppressWarnings("null")
   public Page getParent(int level) {
     String parentPath = Text.getRelativeParent(resource.getPath(), level);
     Resource parentResource = resource.getResourceResolver().getResource(parentPath);

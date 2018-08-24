@@ -121,7 +121,6 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
    * @param pageComponentPath Path of template's page component
    * @return Set of component paths (absolute resource types)
    */
-  @SuppressWarnings("null")
   @Override
   public @NotNull Set<String> getAllowedComponentsForTemplate(@NotNull String pageComponentPath, @NotNull ResourceResolver resolver) {
     Resource pageComponentResource = resolver.getResource(pageComponentPath);

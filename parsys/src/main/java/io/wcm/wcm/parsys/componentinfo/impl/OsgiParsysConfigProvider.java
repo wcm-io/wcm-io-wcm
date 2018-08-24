@@ -47,7 +47,6 @@ import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
     "webconsole.configurationFactory.nameHint={pageComponentPath}"
 })
 @Designate(ocd = OsgiParsysConfigProvider.Config.class, factory = true)
-@SuppressWarnings("null")
 public final class OsgiParsysConfigProvider implements ParsysConfig {
 
   private static final Logger log = LoggerFactory.getLogger(OsgiParsysConfigProvider.class);

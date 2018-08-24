@@ -75,6 +75,7 @@ public final class GraniteUi {
    * @param request Request
    * @return Current content page or null
    */
+  @SuppressWarnings("null")
   public static @Nullable Page getContentPage(@NotNull HttpServletRequest request) {
     SlingHttpServletRequest slingRequest = (SlingHttpServletRequest)request;
     Resource contentResource = getContentResourceOrParent(request);
