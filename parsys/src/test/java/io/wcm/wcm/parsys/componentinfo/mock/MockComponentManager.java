@@ -37,6 +37,7 @@ import com.google.common.collect.ImmutableList;
  * Mocked WCM API component manager returning two mocked components.
  */
 @Model(adaptables = ResourceResolver.class, adapters = ComponentManager.class)
+@SuppressWarnings("null")
 public class MockComponentManager implements ComponentManager {
 
   public static final String COMPONENT_PATH_1 = "sample/components/comp1";

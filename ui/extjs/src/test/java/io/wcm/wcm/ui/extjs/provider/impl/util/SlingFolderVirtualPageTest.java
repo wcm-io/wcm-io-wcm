@@ -40,6 +40,7 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.WCMException;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("null")
 public class SlingFolderVirtualPageTest {
 
   @Mock

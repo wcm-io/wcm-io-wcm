@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.sling.commons.request.RequestParam;
 import io.wcm.sling.commons.resource.ResourceType;
@@ -63,7 +62,6 @@ import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
     "sling.servlet.resourceTypes=sling/servlet/default",
     "sling.servlet.methods=" + HttpConstants.METHOD_GET
 })
-@SuppressFBWarnings("SE_BAD_FIELD")
 public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
   private static final long serialVersionUID = 1L;
 
@@ -86,6 +84,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
     enabled = !RunMode.disableIfNotAuthor(slingSettings.getRunModes(), componentContext, log);
   }
 
+  @SuppressWarnings("null")
   @Override
   protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
     if (!enabled) {

@@ -25,6 +25,8 @@ import java.util.Date;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ValueMap;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.wcm.api.NameConstants;
@@ -45,7 +47,7 @@ public final class ModificationDate {
    * @param page CQ page
    * @return Modification date or null if none set
    */
-  public static Date get(Page page) {
+  public static @Nullable Date get(@Nullable Page page) {
     if (page == null) {
       return null;
     }
@@ -64,7 +66,8 @@ public final class ModificationDate {
    * @param resource a resource with a cq:lastModified property *and/or* a file/jcr:content subnode with a jcr:lastModified property
    * @return the date or null if last modified property could not be found
    */
-  public static Date get(Resource resource) {
+  @SuppressWarnings("null")
+  public static @Nullable Date get(@Nullable Resource resource) {
     if (resource == null) {
       return null;
     }
@@ -96,7 +99,7 @@ public final class ModificationDate {
    * @param resources multiple resources (typically jcr:content nodes of cq-pages or rendition resources)
    * @return the most recent date (or null if none of the resources has a modification date)
    */
-  public static Date mostRecent(Resource... resources) {
+  public static @Nullable Date mostRecent(@Nullable Resource @NotNull... resources) {
     Date[] dates = new Date[resources.length];
     for (int i = 0; i < resources.length; i++) {
       dates[i] = get(resources[i]);
@@ -109,7 +112,7 @@ public final class ModificationDate {
    * @param pages multiple cq pages
    * @return the most recent date (or null if none of the pages has a modification date)
    */
-  public static Date mostRecent(Page... pages) {
+  public static @Nullable Date mostRecent(@Nullable Page @NotNull... pages) {
     Date[] dates = new Date[pages.length];
     for (int i = 0; i < pages.length; i++) {
       dates[i] = get(pages[i]);
@@ -122,7 +125,7 @@ public final class ModificationDate {
    * @param dateProviders Multiple modification date providers
    * @return the most recent modification date (or null if none of the objects has a modification date)
    */
-  public static Date mostRecent(ModificationDateProvider... dateProviders) {
+  public static @Nullable Date mostRecent(@NotNull ModificationDateProvider @NotNull... dateProviders) {
     Date[] dates = new Date[dateProviders.length];
     for (int i = 0; i < dateProviders.length; i++) {
       dates[i] = dateProviders[i].getModificationDate();
@@ -135,7 +138,7 @@ public final class ModificationDate {
    * @param dates Dates
    * @return the most recent (or null if all dates were null)
    */
-  public static Date mostRecent(Date... dates) {
+  public static @Nullable Date mostRecent(Date @NotNull... dates) {
     Date mostRecentDate = null;
     for (Date date : dates) {
       if (date != null && (mostRecentDate == null || date.after(mostRecentDate))) {

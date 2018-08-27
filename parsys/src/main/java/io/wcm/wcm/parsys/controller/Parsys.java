@@ -97,6 +97,7 @@ public final class Parsys {
   private List<Item> items;
 
   @PostConstruct
+  @SuppressWarnings("null")
   private void activate() {
     // read customize properties from parsys component
     final ValueMap props = componentContext.getComponent().getProperties();
@@ -156,6 +157,7 @@ public final class Parsys {
     return ImmutableMap.of();
   }
 
+  @SuppressWarnings("null")
   private ComponentManager componentManager() {
     if (componentManager == null) {
       componentManager = AdaptTo.notNull(this.resolver, ComponentManager.class);

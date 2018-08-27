@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.tenant.Tenant;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.wcm.api.Page;
@@ -67,7 +68,7 @@ public final class Path {
    * @param resourceResolver Resource resolver
    * @return Absolute parent path or empty string if path is invalid
    */
-  public static String getAbsoluteParent(String path, int parentLevel, ResourceResolver resourceResolver) {
+  public static String getAbsoluteParent(@NotNull String path, int parentLevel, @NotNull ResourceResolver resourceResolver) {
     if (parentLevel < 0) {
       return "";
     }
@@ -85,7 +86,8 @@ public final class Path {
    * @param resourceResolver Resource resolver
    * @return Absolute parent page or null if path is invalid
    */
-  public static Page getAbsoluteParent(Page page, int parentLevel, ResourceResolver resourceResolver) {
+  @SuppressWarnings("null")
+  public static Page getAbsoluteParent(@NotNull Page page, int parentLevel, @NotNull ResourceResolver resourceResolver) {
     PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
     String absoluteParentPath = getAbsoluteParent(page.getPath(), parentLevel, resourceResolver);
     if (StringUtils.isEmpty(absoluteParentPath)) {
@@ -102,7 +104,7 @@ public final class Path {
    * @param resourceResolver Resource resolver
    * @return level &gt;= 0 if path is valid, -1 if path is invalid
    */
-  public static int getAbsoluteLevel(String path, ResourceResolver resourceResolver) {
+  public static int getAbsoluteLevel(@NotNull String path, @NotNull ResourceResolver resourceResolver) {
     if (StringUtils.isEmpty(path) || StringUtils.equals(path, "/")) {
       return -1;
     }
@@ -117,7 +119,7 @@ public final class Path {
    * @param resourceResolver Resource resolver
    * @return Path that is not located below <code>/content/versionhistory</code> or <code>/content/launches</code>
    */
-  public static String getOriginalPath(String path, ResourceResolver resourceResolver) {
+  public static String getOriginalPath(@NotNull String path, @NotNull ResourceResolver resourceResolver) {
     if (StringUtils.isEmpty(path)) {
       return null;
     }
@@ -139,7 +141,7 @@ public final class Path {
    * @param resourceResolver Resource resolver
    * @return 0 or offset if in <code>/content/versionhistory</code> or <code>/content/launches</code>
    */
-  private static int getParentLevelOffset(String path, ResourceResolver resourceResolver) {
+  private static int getParentLevelOffset(@NotNull String path, @NotNull ResourceResolver resourceResolver) {
     Matcher versionHistoryMatcher = getVersionHistoryPattern(resourceResolver).matcher(path);
     if (versionHistoryMatcher.matches()) {
       return isTenant(resourceResolver) ? 3 : 2;
@@ -156,7 +158,8 @@ public final class Path {
    * @param resourceResolver Resource resolver
    * @return true if tenant is active
    */
-  private static boolean isTenant(ResourceResolver resourceResolver) {
+  @SuppressWarnings("null")
+  private static boolean isTenant(@NotNull ResourceResolver resourceResolver) {
     Tenant tenant = resourceResolver.adaptTo(Tenant.class);
     return tenant != null;
   }
@@ -166,7 +169,7 @@ public final class Path {
    * @param resourceResolver Resource resolver
    * @return Pattern
    */
-  private static Pattern getVersionHistoryPattern(ResourceResolver resourceResolver) {
+  private static Pattern getVersionHistoryPattern(@NotNull ResourceResolver resourceResolver) {
     if (isTenant(resourceResolver)) {
       return VERSION_HISTORY_TENANT_PATTERN;
     }

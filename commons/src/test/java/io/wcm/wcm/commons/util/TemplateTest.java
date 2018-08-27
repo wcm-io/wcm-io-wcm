@@ -38,6 +38,7 @@ import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.wcm.commons.testcontext.AppTemplate;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("null")
 public class TemplateTest {
 
   @Mock

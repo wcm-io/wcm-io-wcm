@@ -21,6 +21,7 @@ package io.wcm.wcm.commons.caching;
 
 import java.util.Date;
 
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -33,6 +34,7 @@ public interface ModificationDateProvider {
   /**
    * @return The date of the last modification
    */
+  @Nullable
   Date getModificationDate();
 
 }

@@ -22,6 +22,7 @@ package io.wcm.wcm.commons.caching;
 import java.util.Date;
 
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -35,12 +36,12 @@ public final class ResourceModificationDateProvider implements ModificationDateP
   /**
    * @param resource Resource
    */
-  public ResourceModificationDateProvider(Resource resource) {
+  public ResourceModificationDateProvider(@Nullable Resource resource) {
     this.resource = resource;
   }
 
   @Override
-  public Date getModificationDate() {
+  public @Nullable Date getModificationDate() {
     return ModificationDate.get(this.resource);
   }
 

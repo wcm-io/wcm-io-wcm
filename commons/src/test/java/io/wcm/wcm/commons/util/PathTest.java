@@ -37,6 +37,7 @@ import com.day.jcr.vault.util.Text;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("null")
 public class PathTest {
 
   @Rule

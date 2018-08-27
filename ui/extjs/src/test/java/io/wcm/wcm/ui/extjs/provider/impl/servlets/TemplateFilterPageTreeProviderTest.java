@@ -33,6 +33,7 @@ import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
 import org.apache.sling.testing.mock.jcr.MockJcr;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,6 +49,7 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("null")
 public class TemplateFilterPageTreeProviderTest {
 
   private static final String TEMPLATE_1 = "/apps/app1/templates/template1";
@@ -151,7 +153,7 @@ public class TemplateFilterPageTreeProviderTest {
     List<String> resultPaths = ImmutableList.copyOf(paths);
     List<Node> resultNodes = Lists.transform(resultPaths, new Function<String, Node>() {
       @Override
-      public Node apply(String path) {
+      public Node apply(@Nullable String path) {
         return context.resourceResolver().getResource(path).adaptTo(Node.class);
       }
     });

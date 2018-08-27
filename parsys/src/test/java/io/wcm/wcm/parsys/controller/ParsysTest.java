@@ -63,6 +63,7 @@ import io.wcm.testing.mock.aem.junit.AemContextBuilder;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("null")
 public class ParsysTest {
 
   private static final String RESOURCE_TYPE_SAMPLE = "sample/components/parsys";

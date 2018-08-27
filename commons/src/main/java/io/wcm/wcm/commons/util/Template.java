@@ -24,6 +24,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.wcm.api.NameConstants;
@@ -33,6 +35,7 @@ import com.day.cq.wcm.api.Page;
  * Template utility methods
  */
 @ProviderType
+@SuppressWarnings("null")
 public final class Template {
 
   static final Pattern TEMPLATE_PATH_PATTERN = Pattern.compile("^/(apps|libs)/(.+)/templates(/.*)?/([^/]+)$");
@@ -53,7 +56,8 @@ public final class Template {
    * @param templatePath Template path
    * @return Resource type path or null if template path did not match expectations
    */
-  public static String getResourceTypeFromTemplatePath(String templatePath) {
+  @SuppressWarnings("unused")
+  public static @Nullable String getResourceTypeFromTemplatePath(@NotNull String templatePath) {
     if (templatePath == null) {
       return null;
     }
@@ -72,7 +76,7 @@ public final class Template {
    * @param templates Template(s)
    * @return true if the page uses the template
    */
-  public static boolean is(Page page, TemplatePathInfo... templates) {
+  public static boolean is(@NotNull Page page, @NotNull TemplatePathInfo @NotNull... templates) {
     if (page == null || templates == null || templates.length == 0) {
       return false;
     }
@@ -91,7 +95,7 @@ public final class Template {
    * @param templatePaths Template path(s)
    * @return true if the page uses the template
    */
-  public static boolean is(Page page, String... templatePaths) {
+  public static boolean is(@NotNull Page page, @NotNull String @NotNull... templatePaths) {
     if (page == null || templatePaths == null || templatePaths.length == 0) {
       return false;
     }
@@ -110,7 +114,7 @@ public final class Template {
    * @param templates Templates
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
-  public static TemplatePathInfo forTemplatePath(String templatePath, TemplatePathInfo... templates) {
+  public static TemplatePathInfo forTemplatePath(@NotNull String templatePath, @NotNull TemplatePathInfo @NotNull... templates) {
     if (templatePath == null || templates == null || templates.length == 0) {
       return null;
     }
@@ -130,7 +134,8 @@ public final class Template {
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
   @SafeVarargs
-  public static <E extends Enum<E> & TemplatePathInfo> TemplatePathInfo forTemplatePath(String templatePath, Class<E>... templateEnums) {
+  public static <E extends Enum<E> & TemplatePathInfo> TemplatePathInfo forTemplatePath(@NotNull String templatePath,
+      @NotNull Class<E> @NotNull... templateEnums) {
     if (templatePath == null || templateEnums == null) {
       return null;
     }
@@ -150,7 +155,7 @@ public final class Template {
    * @param templates Templates
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
-  public static TemplatePathInfo forPage(Page page, TemplatePathInfo... templates) {
+  public static TemplatePathInfo forPage(@NotNull Page page, @NotNull TemplatePathInfo @NotNull... templates) {
     if (page == null || templates == null) {
       return null;
     }
@@ -166,7 +171,7 @@ public final class Template {
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
   @SafeVarargs
-  public static <E extends Enum<E> & TemplatePathInfo> TemplatePathInfo forPage(Page page, Class<E>... templateEnums) {
+  public static <E extends Enum<E> & TemplatePathInfo> TemplatePathInfo forPage(@NotNull Page page, @NotNull Class<E> @NotNull... templateEnums) {
     if (page == null || templateEnums == null) {
       return null;
     }
