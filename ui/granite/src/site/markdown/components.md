@@ -3,9 +3,9 @@
 
 ### Config-Scope Path Browser
 
-This is a customized Miller Column Path Browser that always sets the root path to the inner-most configuration scope root. That is usually the root page of the current site, allowing selection only pages from the current site.
+This is a customized Path Field/Browser that always sets the root path to the inner-most configuration scope root. If you want to show only pages of the current site, consider using the Site Root Path Picker from [wcm.io URL Handler Granite UI components][url-handler-graniteui-components].
 
-Requires usage and proper configuration of [wcm.io Configuration](http://wcm.io/config/).
+Requires proper configuration of Apache Sling Context-Aware configuration, see also [wcm.io Context-Aware Configuration][caconfig].
 
 
 ```json
@@ -94,3 +94,8 @@ Select form field.
 Enhancements over AEM version:
 
 * Always stores values as array if "multiple" mode is activated, regardless how many entries are selected.
+
+
+
+[wcmio-caconfig]: http://wcm.io/caconfig/
+[url-handler-graniteui-components]: http://wcm.io/handler/url/graniteui-components.html
