@@ -5,7 +5,7 @@
 
 This is a customized Path Field/Browser that always sets the root path to the inner-most configuration scope root. If you want to show only pages of the current site, consider using the Site Root Path Picker from [wcm.io URL Handler Granite UI components][url-handler-graniteui-components].
 
-Requires proper configuration of Apache Sling Context-Aware configuration, see also [wcm.io Context-Aware Configuration][caconfig].
+Requires proper configuration of Apache Sling Context-Aware configuration, see also [wcm.io Context-Aware Configuration][wcmio-caconfig].
 
 
 ```json
