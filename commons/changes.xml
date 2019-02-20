@@ -27,6 +27,9 @@
       <action type="add" dev="sseifert">
         Add Path.isExperienceFragment method.
       </action>
+      <action type="fix" dev="sseifert">
+        Path: Support new version history path at /tmp/versionhistory used since AEM 6.3.2.2, 6.4.3 and 6.5.
+      </action>
     </release>
 
     <release version="1.1.4" date="2018-08-27">
