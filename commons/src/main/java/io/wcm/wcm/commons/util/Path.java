@@ -49,10 +49,13 @@ public final class Path {
 
   private static final String VERSION_HISTORY_PATH = "/content/versionhistory";
   private static final String LAUNCHES_PATH = "/content/launches";
+  private static final String EXPERIENCE_FRAGMENTS_PATH = "/content/experience-fragments";
 
   private static final Pattern VERSION_HISTORY_PATTERN = Pattern.compile(VERSION_HISTORY_PATH + "/[^/]+(/.*)?");
   private static final Pattern VERSION_HISTORY_TENANT_PATTERN = Pattern.compile(VERSION_HISTORY_PATH + "/[^/]+/[^/]+(/.*)?");
   private static final Pattern LAUNCHES_PATTERN = Pattern.compile(LAUNCHES_PATH + "/\\d+/\\d+/\\d+/[^/]+(/.*)?");
+
+  private static final Pattern EXPERIENCE_FRAGMENTS_PATTERN = Pattern.compile("^" + EXPERIENCE_FRAGMENTS_PATH + "/.*$");
 
   private Path() {
     // static methods only
@@ -176,6 +179,14 @@ public final class Path {
     else {
       return VERSION_HISTORY_PATTERN;
     }
+  }
+
+  /**
+   * @param path Content path
+   * @return true if content path is inside experience fragements path.
+   */
+  public static boolean isExperienceFragmentPath(@NotNull String path) {
+    return EXPERIENCE_FRAGMENTS_PATTERN.matcher(path).matches();
   }
 
 }

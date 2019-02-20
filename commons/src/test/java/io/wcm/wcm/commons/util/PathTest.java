@@ -20,7 +20,9 @@
 package io.wcm.wcm.commons.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.tenant.Tenant;
@@ -212,6 +214,15 @@ public class PathTest {
   @Test
   public void testGetOriginalPath_Launches() {
     assertEquals("/content/a/b/c", Path.getOriginalPath("/content/launches/2018/01/01/launch1/content/a/b/c", resolver));
+  }
+
+  @Test
+  public void testIsExperienceFragmentPath() {
+    assertTrue(Path.isExperienceFragmentPath("/content/experience-fragments/xf1"));
+    assertTrue(Path.isExperienceFragmentPath("/content/experience-fragments/level1/level2/xf2"));
+
+    assertFalse(Path.isExperienceFragmentPath("/content/experience-fragments"));
+    assertFalse(Path.isExperienceFragmentPath("/content/other-path"));
   }
 
 }
