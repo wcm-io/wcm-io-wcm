@@ -5,7 +5,6 @@
   "jcr:description": "Include components in a paragraph system. Allowed components are defined in the page components, not in design. Shows editbars for components.",
   "componentGroup": ".hidden",
   "cq:isContainer": true,
-  "allowedChildren": ["*"],
 
   "cq:childEditConfig": {
     "jcr:primaryType": "cq:EditConfig",

@@ -20,7 +20,9 @@
 package io.wcm.wcm.commons.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.tenant.Tenant;
@@ -55,6 +57,9 @@ public class PathTest {
     context.create().page("/content/versionhistory");
     context.create().page("/content/versionhistory/user1");
     context.create().page("/content/versionhistory/tenant1/user1");
+    context.create().page("/tmp/versionhistory");
+    context.create().page("/tmp/versionhistory/user1");
+    context.create().page("/tmp/versionhistory/user1/version1");
     context.create().page("/content/launches");
   }
 
@@ -74,13 +79,20 @@ public class PathTest {
 
   @Test
   public void testGetAbsoluteLevel_VersionHistory() {
+    assertEquals(2, Path.getAbsoluteLevel("/tmp/versionhistory/user1/version1/a/b", resolver));
+    assertEquals(1, Path.getAbsoluteLevel("/tmp/versionhistory/user1/version1/a", resolver));
+    assertEquals(0, Path.getAbsoluteLevel("/tmp/versionhistory/user1/version1", resolver));
+  }
+
+  @Test
+  public void testGetAbsoluteLevel_LegacyVersionHistory() {
     assertEquals(2, Path.getAbsoluteLevel("/content/versionhistory/user1/a/b", resolver));
     assertEquals(1, Path.getAbsoluteLevel("/content/versionhistory/user1/a", resolver));
     assertEquals(0, Path.getAbsoluteLevel("/content/versionhistory/user1", resolver));
   }
 
   @Test
-  public void testGetAbsoluteLevel_VersionHistory_Tenant() {
+  public void testGetAbsoluteLevel_LegacyVersionHistory_Tenant() {
     context.registerAdapter(ResourceResolver.class, Tenant.class, tenant);
     assertEquals(2, Path.getAbsoluteLevel("/content/versionhistory/tenant1/user1/a/b", resolver));
     assertEquals(1, Path.getAbsoluteLevel("/content/versionhistory/tenant1/user1/a", resolver));
@@ -107,6 +119,16 @@ public class PathTest {
 
   @Test
   public void testGetAbsoluteParent_VersionHistory() {
+    assertEquals("/tmp/versionhistory/user1/version1", Path.getAbsoluteParent("/tmp/versionhistory/user1/version1/a/b/c", 0, resolver));
+    assertEquals("/tmp/versionhistory/user1/version1/a", Path.getAbsoluteParent("/tmp/versionhistory/user1/version1/a/b/c", 1, resolver));
+    assertEquals("/tmp/versionhistory/user1/version1/a/b", Path.getAbsoluteParent("/tmp/versionhistory/user1/version1/a/b/c", 2, resolver));
+    assertEquals("/tmp/versionhistory/user1/version1/a/b/c", Path.getAbsoluteParent("/tmp/versionhistory/user1/version1/a/b/c", 3, resolver));
+    assertEquals("", Path.getAbsoluteParent("/tmp/versionhistory/user1/version1/a/b/c", 4, resolver));
+    assertEquals("", Path.getAbsoluteParent("/tmp/versionhistory/user1/version1/a/b/c", -1, resolver));
+  }
+
+  @Test
+  public void testGetAbsoluteParent_LegacyVersionHistory() {
     assertEquals("/content/versionhistory/user1", Path.getAbsoluteParent("/content/versionhistory/user1/a/b/c", 0, resolver));
     assertEquals("/content/versionhistory/user1/a", Path.getAbsoluteParent("/content/versionhistory/user1/a/b/c", 1, resolver));
     assertEquals("/content/versionhistory/user1/a/b", Path.getAbsoluteParent("/content/versionhistory/user1/a/b/c", 2, resolver));
@@ -116,7 +138,7 @@ public class PathTest {
   }
 
   @Test
-  public void testGetAbsoluteParent_VersionHistory_Tenant() {
+  public void testGetAbsoluteParent_LegacyVersionHistory_Tenant() {
     context.registerAdapter(ResourceResolver.class, Tenant.class, tenant);
     assertEquals("/content/versionhistory/tenant1/user1", Path.getAbsoluteParent("/content/versionhistory/tenant1/user1/a/b/c", 0, resolver));
     assertEquals("/content/versionhistory/tenant1/user1/a", Path.getAbsoluteParent("/content/versionhistory/tenant1/user1/a/b/c", 1, resolver));
@@ -153,6 +175,18 @@ public class PathTest {
 
   @Test
   public void testGetAbsoluteParent_Page_VersionHistory() {
+    context.create().page("/tmp/versionhistory/user1/version1/a");
+    context.create().page("/tmp/versionhistory/user1/version1/a/b");
+    Page pageC = context.create().page("/tmp/versionhistory/user1/version1/a/b/c");
+
+    assertEquals("/tmp/versionhistory/user1/version1", Path.getAbsoluteParent(pageC, 0, resolver).getPath());
+    assertEquals("/tmp/versionhistory/user1/version1/a", Path.getAbsoluteParent(pageC, 1, resolver).getPath());
+    assertEquals("/tmp/versionhistory/user1/version1/a/b", Path.getAbsoluteParent(pageC, 2, resolver).getPath());
+    assertEquals("/tmp/versionhistory/user1/version1/a/b/c", Path.getAbsoluteParent(pageC, 3, resolver).getPath());
+  }
+
+  @Test
+  public void testGetAbsoluteParent_Page_LegacyVersionHistory() {
     context.create().page("/content/versionhistory/user1/a");
     context.create().page("/content/versionhistory/user1/a/b");
     Page pageC = context.create().page("/content/versionhistory/user1/a/b/c");
@@ -164,7 +198,7 @@ public class PathTest {
   }
 
   @Test
-  public void testGetAbsoluteParent_Page_VersionHistory_Tenant() {
+  public void testGetAbsoluteParent_Page_LegacyVersionHistory_Tenant() {
     context.registerAdapter(ResourceResolver.class, Tenant.class, tenant);
     context.create().page("/content/versionhistory/tenant1/user1/a");
     context.create().page("/content/versionhistory/tenant1/user1/a/b");
@@ -200,11 +234,16 @@ public class PathTest {
 
   @Test
   public void testGetOriginalPath_VersionHistory() {
+    assertEquals("/content/a/b/c", Path.getOriginalPath("/tmp/versionhistory/user1/version1/a/b/c", resolver));
+  }
+
+  @Test
+  public void testGetOriginalPath_LegacyVersionHistory() {
     assertEquals("/content/a/b/c", Path.getOriginalPath("/content/versionhistory/user1/a/b/c", resolver));
   }
 
   @Test
-  public void testGetOriginalPath_VersionHistory_Tenant() {
+  public void testGetOriginalPath_LegacyVersionHistory_Tenant() {
     context.registerAdapter(ResourceResolver.class, Tenant.class, tenant);
     assertEquals("/content/a/b/c", Path.getOriginalPath("/content/versionhistory/tenant1/user1/a/b/c", resolver));
   }
@@ -212,6 +251,15 @@ public class PathTest {
   @Test
   public void testGetOriginalPath_Launches() {
     assertEquals("/content/a/b/c", Path.getOriginalPath("/content/launches/2018/01/01/launch1/content/a/b/c", resolver));
+  }
+
+  @Test
+  public void testIsExperienceFragmentPath() {
+    assertTrue(Path.isExperienceFragmentPath("/content/experience-fragments/xf1"));
+    assertTrue(Path.isExperienceFragmentPath("/content/experience-fragments/level1/level2/xf2"));
+
+    assertFalse(Path.isExperienceFragmentPath("/content/experience-fragments"));
+    assertFalse(Path.isExperienceFragmentPath("/content/other-path"));
   }
 
 }

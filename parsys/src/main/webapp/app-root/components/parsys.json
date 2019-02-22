@@ -4,7 +4,6 @@
   "jcr:description": "Include components in a paragraph system. Allowed components are defined in the page components, not in design.",
   "componentGroup": ".hidden",
   "cq:isContainer": true,
-  "allowedChildren": ["*"],
 
   // define custom css class for decoration div to avoid conflicts with cell id-based css classes
   "cq:htmlTag": {
@@ -16,9 +15,7 @@
     "cq:disableTargeting": true,
     "cq:listeners": {
       "updatecomponentlist": "wcmio.wcm.parsys.updateComponentListHandler"
-    },
-    // workaround for implicit rollover-edit mode on parsys
-    "cq:actions": ["text:No actions"]
+    }
   },
 
   "cq:childEditConfig": {
