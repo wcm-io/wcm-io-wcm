@@ -88,6 +88,8 @@ You can set the following property in the component node of the paragraph system
 
 * **wcmio:parsysParagraphElement**: Sets the element name to be used for the element wrapping each paragraph component. Defaults to decoration tag name of the component.
 
+* **wcmio:parsysParagraphNoDecorationWcmMode**: Can be set to a list of WCM modes. When one of the given WCM modes is active, the decoration tag for the paragraph items is not rendered.
+
 * **wcmio:parsysWrapperElement**: Sets the element name to be used for the element wrapping the whole paragraph system. If not set no wrapping element is generated for the paragraph system.
 
 * **wcmio:parsysWrapperCss**: Defines custom CSS classes to be set on the wrapper element.

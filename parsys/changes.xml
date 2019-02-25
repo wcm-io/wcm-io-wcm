@@ -24,6 +24,9 @@
   <body>
 
     <release version="1.2.0" date="not released">
+      <action type="add" dev="sseifert">
+        Add new parsys component property 'wcmio:parsysParagraphNoDecorationWcmMode'.
+      </action>
       <action type="update" dev="sseifert">
         Simplify Parsys HTL markup by using HTL features available since AEM 6.1.
       </action>
