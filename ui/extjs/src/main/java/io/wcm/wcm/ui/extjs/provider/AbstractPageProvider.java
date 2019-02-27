@@ -32,6 +32,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +70,7 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
   protected abstract PredicateProvider getPredicateProvider();
 
   @Override
-  protected final void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response)
+  protected final void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
       throws ServletException, IOException {
 
     // determine root resource
@@ -107,6 +108,7 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
    * @param request Request
    * @return Root resource or null if invalid resource was referenced
    */
+  @SuppressWarnings("null")
   protected final Resource getRootResource(SlingHttpServletRequest request) {
     String path = RequestParam.get(request, RP_PATH);
     if (StringUtils.isEmpty(path) && request.getResource() != null) {

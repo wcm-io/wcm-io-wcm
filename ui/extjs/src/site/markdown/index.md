@@ -19,6 +19,15 @@ This library provides a selection of ExtJS widgets usable in any projects. Some 
 The widgets are accompanied by a set of servlets serving as JSON providers.
 
 
+### AEM Version Support Matrix
+
+|Handler Commons version |AEM version supported
+|------------------------|----------------------
+|1.1.x or higher         |AEM 6.2 or up
+|1.0.x                   |AEM 6.1 or up
+|0.x                     |AEM 6.0 or up
+
+
 ### Dependencies
 
 To use this module you have to deploy also:

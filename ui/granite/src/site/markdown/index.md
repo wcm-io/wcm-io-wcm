@@ -13,6 +13,15 @@ Granite UI Components for AEM Touch UI.
 * [Changelog][changelog]
 
 
+### AEM Version Support Matrix
+
+|Handler Commons version |AEM version supported
+|------------------------|----------------------
+|1.2.x or higher         |AEM 6.2 or up
+|1.0.x, 1.1.x            |AEM 6.1 or up
+|0.x                     |AEM 6.0 or up
+
+
 ### Overview
 
 This library provides a selection of [Granite UI components][components] usable in any projects. Some components are subclasses of Granite UI components shipped with AEM Touch UI, overriding and extending some of its features.

@@ -21,6 +21,15 @@ The WCM Commons library contains:
 * Other useful helper classes, see [API documentation][apidocs]
 
 
+### AEM Version Support Matrix
+
+|Handler Commons version |AEM version supported
+|------------------------|----------------------
+|1.3.x or higher         |AEM 6.2 or up
+|1.0.x - 1.2.x           |AEM 6.1 or up
+|0.x                     |AEM 6.0 or up
+
+
 ### Dependencies
 
 To use this module you have to deploy also:
