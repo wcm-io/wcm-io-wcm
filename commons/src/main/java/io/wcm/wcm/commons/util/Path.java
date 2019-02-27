@@ -181,7 +181,6 @@ public final class Path {
    * @param resourceResolver Resource resolver
    * @return true if tenant is active
    */
-  @SuppressWarnings("null")
   private static boolean isTenant(@NotNull ResourceResolver resourceResolver) {
     Tenant tenant = resourceResolver.adaptTo(Tenant.class);
     return tenant != null;

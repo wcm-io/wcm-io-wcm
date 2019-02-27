@@ -57,6 +57,7 @@ public class GraniteUiTest {
   private Page page;
 
   @Before
+  @SuppressWarnings("null")
   public void setUp() {
     when(request.getResourceResolver()).thenReturn(resourceResolver);
     when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(CONTENT_PATH);

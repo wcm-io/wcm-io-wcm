@@ -115,6 +115,7 @@ public class GraniteUiSyntheticResourceTest {
   }
 
   @Test
+  @SuppressWarnings("null")
   public void testChild() {
     Resource parent = create(context.resourceResolver(), "/my/path", "/my/type");
 

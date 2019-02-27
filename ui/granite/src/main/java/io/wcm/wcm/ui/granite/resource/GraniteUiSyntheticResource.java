@@ -67,7 +67,7 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
     this.children = Lists.newArrayList(children);
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "null" })
   @Override
   public <Type> Type adaptTo(Class<Type> type) {
     if (ValueMap.class.equals(type)) {

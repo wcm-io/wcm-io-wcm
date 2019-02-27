@@ -101,6 +101,7 @@ public final class ParsysConfigManagerImpl implements ParsysConfigManager {
     return configs;
   }
 
+  @SuppressWarnings("null")
   private Collection<ParsysConfig> getParsysConfigsWithInheritance(Resource pageComponentResource, ResourceResolver resolver) {
     List<ParsysConfig> configs = new ArrayList<>();
 

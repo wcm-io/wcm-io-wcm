@@ -99,7 +99,6 @@ public final class Parsys {
   private List<Item> items;
 
   @PostConstruct
-  @SuppressWarnings("null")
   private void activate() {
     // read customize properties from parsys component
     final ValueMap props = componentContext.getComponent().getProperties();
