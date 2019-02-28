@@ -113,6 +113,7 @@ Enhancements over AEM version:
 * Keep repository order for orderable parent nodes (e.g. pages)
 * Always display root path in an extra column, so it can be selected as well
 * Path field always displays only the subtree of the configure root path, regardless if the given path value has a path outside the root path
+* Limit search result to pages and assets
 
 
 [wcmio-caconfig]: http://wcm.io/caconfig/

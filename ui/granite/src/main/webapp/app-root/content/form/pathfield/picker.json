@@ -39,6 +39,21 @@
         "fieldLabel": "Path",
         "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield"
       },
+      "group_or": {
+        "name": "group.p.or",
+        "value": "true",
+        "sling:resourceType": "granite/ui/components/coral/foundation/form/hidden"
+      },
+      "group_1_type": {
+        "name": "group.1_type",
+        "value": "cq:Page",
+        "sling:resourceType": "granite/ui/components/coral/foundation/form/hidden"
+      },
+      "group_2_type": {
+        "name": "group.2_type",
+        "value": "dam:Asset",
+        "sling:resourceType": "granite/ui/components/coral/foundation/form/hidden"
+      },
       "orderby": {
         "name": "orderby",
         "value": "@jcr:score",
@@ -68,7 +83,7 @@
         "selectionCount": "${requestPathInfo.selectors[1]}",
         "datasource": {
           "offset": "${requestPathInfo.selectors[2]}",
-          "itemResourceType": "granite/ui/components/coral/foundation/form/pathfield/card",
+          "itemResourceType": "cq/gui/components/coral/admin/page/card",
           "limit": "${empty requestPathInfo.selectors[3] ? \"21\" : requestPathInfo.selectors[3] + 1}",
           "sling:resourceType": "granite/ui/components/coral/foundation/querybuilder/datasource"
         }
