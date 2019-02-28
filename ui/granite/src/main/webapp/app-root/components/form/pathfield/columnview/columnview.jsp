@@ -18,7 +18,7 @@
   #L%
 --%>
 <%@include file="/libs/granite/ui/global.jsp"%><%
-  
+
 %><%@page session="false"
           import="org.apache.sling.commons.json.io.JSONStringer,
                   com.adobe.granite.ui.components.AttrBuilder,
@@ -83,7 +83,7 @@ attrs.add("selectionmode", isSelectionMode ? selectionCount : "none");
 %><coral-columnview <%= attrs %>><%
 
 for (Column column : model.getColumns()) {
-    
+
   AttrBuilder columnAttrs = new AttrBuilder(request, xssAPI);
   columnAttrs.add("data-foundation-layout-columnview-columnid", column.getColumnId());
   if (column.isHasMore()) {
@@ -94,7 +94,7 @@ for (Column column : model.getColumns()) {
     columnAttrs.add("data-foundation-layout-columnview-activeitem", column.getActiveId());
   }
   %><coral-columnview-column <%= columnAttrs %>><coral-columnview-column-content><%
-  
+
   if (column.isLazy()) {
     %><coral-wait size="L" centered></coral-wait><%
   }
@@ -107,17 +107,17 @@ for (Column column : model.getColumns()) {
       cmp.include(columnItem.getResource(), columnItem.getResourceType(), new Options().tag(new Tag(itemAttrs)));
     }
   }
-  
+
   if (column.isMetaElement()) {
     // Put meta element here instead of under <coral-columnview-column>,
     // as somehow Coral is moving all the elements under <coral-columnview-column> to be under <coral-columnview-column-content>
-    // even though <coral-columnview-column-content> is already given. 
+    // even though <coral-columnview-column-content> is already given.
     String metaResourceType = cfg.get("metaResourceType", String.class);
     if (metaResourceType != null) {
         %><sling:include resource="<%=model.getCurrentResource()%>" resourceType="<%=metaResourceType%>" /><%
-    }      
+    }
   }
-  
+
   %></coral-columnview-column-content></coral-columnview-column><%
 }
 
