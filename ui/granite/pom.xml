@@ -168,22 +168,13 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-
             <Sling-Initial-Content>
               SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/ui/granite,
               SLING-INF/clientlibs-root;overwrite:=true;ignoreImportProviders:=xml;path:=/etc/clientlibs/wcm-io/ui/granite
             </Sling-Initial-Content>
-
             <Sling-Model-Packages>
               io.wcm.wcm.ui.granite
             </Sling-Model-Packages>
-
-            <!-- Exported package versions differ in major version between AEM60 and AEM61 -->
-            <Import-Package>
-              com.day.cq.wcm.emulator;version="[0.0,2)",
-              *
-            </Import-Package>
-
           </instructions>
         </configuration>
       </plugin>
