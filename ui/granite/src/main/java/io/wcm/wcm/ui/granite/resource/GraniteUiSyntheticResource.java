@@ -33,6 +33,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
@@ -44,6 +45,7 @@ import com.google.common.collect.Lists;
  * not when calling the same method on resourceResolver. This breaks the contract of the resource API, but should
  * work at least for the Granite UI implementation which seems to always use this method.
  */
+@ProviderType
 public final class GraniteUiSyntheticResource extends SyntheticResource {
 
   private final ValueMap props;
