@@ -27,6 +27,9 @@
       <action type="add" dev="sseifert">
         Add extended version of pathfield Granite UI component.
       </action>
+      <action type="add" dev="sseifert">
+        Add GraniteUiSyntheticResource.copySubtree.
+      </action>
       <action type="update" dev="sseifert">
         Switch to AEM 6.2 as minimum version.
       </action>
