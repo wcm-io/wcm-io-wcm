@@ -96,6 +96,24 @@ Enhancements over AEM version:
 * Always stores values as array if "multiple" mode is activated, regardless how many entries are selected.
 
 
+### Pathfield
+
+A field that allows the user to enter path. This path field can be used for both picking page paths or asset paths.
+
+```json
+"field": {
+  "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/pathfield",
+  "name": "./field",
+  "rootPath": "/content"
+}
+```
+
+Enhancements over AEM version:
+
+* Keep repository order for orderable parent nodes (e.g. pages)
+* Always display root path in an extra column, so it can be selected as well
+* Path field always displays only the subtree of the configure root path, regardless if the given path value has a path outside the root path
+
 
 [wcmio-caconfig]: http://wcm.io/caconfig/
 [url-handler-graniteui-components]: http://wcm.io/handler/url/graniteui-components.html

@@ -2,7 +2,7 @@
   #%L
   wcm.io
   %%
-  Copyright (C) 2014 - 2015 wcm.io
+  Copyright (C) 2019 wcm.io
   %%
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
   #L%
 --%>
 <%@page import="com.adobe.granite.ui.components.Config"%>
+<%@page import="com.adobe.granite.ui.components.ExpressionHelper"%>
+<%@page import="org.apache.jackrabbit.util.Text"%>
 <%@page import="org.apache.sling.api.resource.Resource"%>
 <%@page import="org.apache.sling.api.resource.ValueMap"%>
 <%@page import="org.apache.sling.api.request.RequestDispatcherOptions"%>
@@ -29,36 +31,34 @@
 <%@page import="io.wcm.wcm.ui.granite.util.GraniteUi"%>
 <%@include file="../../global/global.jsp" %><%
 
-String rootPath = null;
-Resource contentResource = GraniteUi.getContentResourceOrParent(request);
-if (contentResource != null) {
-  // detect root path of current site via Sling Context-Aware Configuration API
-  ConfigurationResourceResolver configResolver = sling.getService(ConfigurationResourceResolver.class);
-  if (configResolver != null) {
-    // get inner-most context path
-    rootPath = configResolver.getContextPath(contentResource);
-  }
-}
+Config cfg = cmp.getConfig();
+ExpressionHelper ex = cmp.getExpressionHelper();
 
-ValueMap overwriteProperties;
-if (rootPath != null) {
-  // check for optional appendix
-  Config cfg = cmp.getConfig();
-  String appendPath = cfg.get("appendPath", String.class);
-  if (appendPath != null) {
-    rootPath += appendPath;
-  }
-  overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object>of("rootPath", rootPath));
-}
-else {
-  overwriteProperties = ValueMapDecorator.EMPTY;
-}
+String rootPath = ex.getString(cfg.get("rootPath", "/"));
+String filter = cfg.get("filter", "hierarchyNotFile");
+boolean multiple = cfg.get("multiple", false);
+String selectionCount = multiple ? "multiple" : "single";
+
+// build path to picker and suggestion src based on overlayed pathfield content from wcm.io
+String defaultPickerSrc = "/mnt/overlay/wcm-io/wcm/ui/granite/content/form/pathfield/picker.html"
+    + "?_charset_=utf-8&path={value}&root=" + Text.escape(rootPath) + "&filter=" + Text.escape(filter) + "&selectionCount=" + Text.escape(selectionCount);
+String pickerSrc = ex.getString(cfg.get("pickerSrc", defaultPickerSrc));
+
+String defaultSuggestionSrc = "/mnt/overlay/wcm-io/wcm/ui/granite/content/form/pathfield/suggestion{.offset,limit}.html"
+    + "?_charset_=utf-8&root=" + Text.escape(rootPath) + "&filter=" + Text.escape(filter) + "{&query}";
+String suggestionSrc = ex.getString(cfg.get("suggestionSrc", defaultSuggestionSrc));
+
+ValueMap overwriteProperties = new ValueMapDecorator(ImmutableMap.<String,Object>of(
+    "pickerSrc", pickerSrc,
+    "suggestionSrc", suggestionSrc));
 
 // simulate resource for dialog field def with new rootPath instead of configured one
 Resource resourceWrapper = GraniteUiSyntheticResource.wrapMerge(resource, overwriteProperties);
 
 RequestDispatcherOptions options = new RequestDispatcherOptions();
-options.setForceResourceType("wcm-io/wcm/ui/granite/components/form/pathfield");
+options.setForceResourceType(GraniteUi.getExistingResourceType(resourceResolver,
+    "granite/ui/components/coral/foundation/form/pathfield",
+    "granite/ui/components/foundation/form/pathbrowser"));
 RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(resourceWrapper, options);
 dispatcher.include(slingRequest, slingResponse);
 
