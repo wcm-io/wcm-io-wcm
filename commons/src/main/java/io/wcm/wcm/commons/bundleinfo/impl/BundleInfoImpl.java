@@ -29,6 +29,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 
 import io.wcm.wcm.commons.bundleinfo.BundleInfo;
+import io.wcm.wcm.commons.bundleinfo.BundleState;
 
 /**
  * Provides meta-information about a installed bundle.
@@ -68,13 +69,13 @@ class BundleInfoImpl implements BundleInfo {
   }
 
   @Override
-  public @NotNull String getVersionString() {
+  public @NotNull String getVersion() {
     return StringUtils.defaultString((String)headers.get(Constants.BUNDLE_VERSION));
   }
 
   @Override
-  public @NotNull String getState() {
-    return state.name();
+  public @NotNull BundleState getState() {
+    return state;
   }
 
   @Override
@@ -87,7 +88,7 @@ class BundleInfoImpl implements BundleInfo {
 
   @Override
   public boolean isFragment() {
-    String fragmentHost = (String)headers.get("Fragment-Host");
+    String fragmentHost = (String)headers.get(Constants.FRAGMENT_HOST);
     return StringUtils.isNotBlank(fragmentHost);
   }
 
@@ -112,7 +113,7 @@ class BundleInfoImpl implements BundleInfo {
 
   @Override
   public int compareTo(BundleInfo obj) {
-    return getName().toLowerCase().compareTo(obj.getName().toLowerCase());
+    return getSymbolicName().compareTo(obj.getSymbolicName());
   }
 
 }

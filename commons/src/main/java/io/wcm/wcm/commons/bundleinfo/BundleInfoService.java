@@ -22,10 +22,12 @@ package io.wcm.wcm.commons.bundleinfo;
 import java.util.Collection;
 
 import org.jetbrains.annotations.NotNull;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Provides meta-information for all bundles in the system.
  */
+@ProviderType
 public interface BundleInfoService {
 
   /**

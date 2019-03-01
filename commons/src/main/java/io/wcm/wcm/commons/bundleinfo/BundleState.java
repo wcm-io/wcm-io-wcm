@@ -17,14 +17,17 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.commons.bundleinfo.impl;
+package io.wcm.wcm.commons.bundleinfo;
 
+import org.jetbrains.annotations.NotNull;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 
 /**
  * Bundle state
  */
-enum BundleState {
+@ProviderType
+public enum BundleState {
 
   /**
    * This bundle is uninstalled and may not be used.
@@ -73,10 +76,17 @@ enum BundleState {
   }
 
   /**
-   * @param stateValue State value
-   * @return Bundle state matching state value - or null if none found
+   * @return OSGi framework state value
    */
-  public static BundleState valueOf(int stateValue) {
+  public int getStateValue() {
+    return stateValue;
+  }
+
+  /**
+   * @param stateValue OSGi framework state value
+   * @return Bundle state matching state value - or UNKNOWN if no match found
+   */
+  public static @NotNull BundleState valueOf(int stateValue) {
     for (BundleState state : BundleState.values()) {
       if (state.stateValue == stateValue) {
         return state;

@@ -125,6 +125,7 @@
             <Sling-Model-Packages>
               io.wcm.wcm.commons
             </Sling-Model-Packages>
+            <Sling-Namespaces>wcmio=http://wcm.io/ns</Sling-Namespaces>
           </instructions>
         </configuration>
       </plugin>

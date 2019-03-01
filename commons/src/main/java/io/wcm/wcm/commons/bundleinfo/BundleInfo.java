@@ -23,11 +23,13 @@ import java.util.Date;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 
 /**
  * Provides meta-information about an bundle in the system.
  */
+@ProviderType
 public interface BundleInfo extends Comparable<BundleInfo> {
 
   /**
@@ -52,13 +54,13 @@ public interface BundleInfo extends Comparable<BundleInfo> {
    * @return Version string
    */
   @NotNull
-  String getVersionString();
+  String getVersion();
 
   /**
    * @return Bundle state
    */
   @NotNull
-  String getState();
+  BundleState getState();
 
   /**
    * @return Last modified date
