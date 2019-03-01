@@ -2,7 +2,7 @@
  * #%L
  * wcm.io
  * %%
- * Copyright (C) 2014 wcm.io
+ * Copyright (C) 2019 wcm.io
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,8 @@
  * #L%
  */
 /**
- * Sling models controller for common sightly components.
+ * Provides information about installed bundles and their state with an API that is easier to consume
+ * than using the OSGi API directly.
  */
-@org.osgi.annotation.versioning.Version("1.1")
-package io.wcm.wcm.commons.controller;
+@org.osgi.annotation.versioning.Version("1.0")
+package io.wcm.wcm.commons.bundleinfo;
