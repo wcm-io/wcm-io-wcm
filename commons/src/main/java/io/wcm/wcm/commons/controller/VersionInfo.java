@@ -57,7 +57,7 @@ public final class VersionInfo {
   /**
    * Property name to define the regex for the symbolic name.
    */
-  public static final String PN_FILTER_REGEX = "wcmio:versionInfoBundleFilter";
+  public static final String PN_FILTER_REGEX = "wcmio:versionInfoBundleSymbolicNameRegex";
 
   @OSGiService
   private BundleInfoService bundleInfoService;
