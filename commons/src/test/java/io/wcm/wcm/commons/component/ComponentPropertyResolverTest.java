@@ -26,6 +26,8 @@ import org.apache.sling.api.resource.Resource;
 import org.junit.Rule;
 import org.junit.Test;
 
+import com.day.cq.wcm.api.Page;
+
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 public class ComponentPropertyResolverTest {
@@ -34,10 +36,12 @@ public class ComponentPropertyResolverTest {
   public AemContext context = new AemContext();
 
   @Test
-  public void testResourceWithoutResourceType() {
+  public void testResourceWithoutResourceTypeWithoutPage() {
     Resource resource = context.create().resource("/content/r1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
+        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
     assertNull(underTest.get("prop1", String.class));
     assertEquals("def", underTest.get("prop1", "def"));
   }
@@ -55,17 +59,126 @@ public class ComponentPropertyResolverTest {
   }
 
   @Test
-  public void testResourceWithSuperComponent() {
+  public void testResourceWithComponent_Ignore() {
+    Resource component = context.create().resource("/apps/app1/components/comp1",
+        "prop1", "value1");
+    Resource resource = context.create().resource("/content/r1",
+        "sling:resourceType", component.getPath());
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .componentPropertiesResolution(ComponentPropertyResolution.IGNORE);
+    assertNull(underTest.get("prop1", String.class));
+    assertEquals("def", underTest.get("prop1", "def"));
+  }
+
+  @Test
+  public void testResourceWithSuperComponent_Inheritance() {
     Resource superComponent = context.create().resource("/apps/app1/components/comp2",
         "prop1", "value1");
     Resource component = context.create().resource("/apps/app1/components/comp1",
-        "sling:resourceSuperType", superComponent.getPath());
+        "sling:resourceSuperType", superComponent.getPath(),
+        "prop2", "value2");
     Resource resource = context.create().resource("/content/r1",
         "sling:resourceType", component.getPath());
 
     ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals("value1", underTest.get("prop1", "def"));
+    assertEquals("value2", underTest.get("prop2", String.class));
+    assertEquals("value2", underTest.get("prop2", "def"));
+  }
+
+  @Test
+  public void testResourceWithSuperComponent_NoInheritance() {
+    Resource superComponent = context.create().resource("/apps/app1/components/comp2",
+        "prop1", "value1");
+    Resource component = context.create().resource("/apps/app1/components/comp1",
+        "sling:resourceSuperType", superComponent.getPath(),
+        "prop2", "value2");
+    Resource resource = context.create().resource("/content/r1",
+        "sling:resourceType", component.getPath());
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE);
+    assertNull(underTest.get("prop1", String.class));
+    assertEquals("def", underTest.get("prop1", "def"));
+    assertEquals("value2", underTest.get("prop2", String.class));
+    assertEquals("value2", underTest.get("prop2", "def"));
+  }
+
+  @Test
+  public void testPage() {
+    Page page = context.create().page("/content/page1", null,
+        "prop1", "value1");
+    Resource resource = context.create().resource(page, "r1");
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
+    assertEquals("value1", underTest.get("prop1", String.class));
+    assertEquals("value1", underTest.get("prop1", "def"));
+  }
+
+  @Test
+  public void testPage_Inheritance() {
+    context.create().page("/content/page1", null,
+        "prop1", "value1");
+    Page page2 = context.create().page("/content/page1/page2", null,
+        "prop2", "value2");
+    Resource resource = context.create().resource(page2, "r1");
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
+    assertEquals("value1", underTest.get("prop1", String.class));
+    assertEquals("value1", underTest.get("prop1", "def"));
+    assertEquals("value2", underTest.get("prop2", String.class));
+    assertEquals("value2", underTest.get("prop2", "def"));
+  }
+
+  @Test
+  public void testPage_NoInheritance() {
+    context.create().page("/content/page1", null,
+        "prop1", "value1");
+    Page page2 = context.create().page("/content/page1/page2", null,
+        "prop2", "value2");
+    Resource resource = context.create().resource(page2, "r1");
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE);
+    assertNull(underTest.get("prop1", String.class));
+    assertEquals("def", underTest.get("prop1", "def"));
+    assertEquals("value2", underTest.get("prop2", String.class));
+    assertEquals("value2", underTest.get("prop2", "def"));
+  }
+
+  @Test
+  public void testPageAndComponent_Inheritance() {
+    context.create().page("/content/page1", null,
+        "prop1", "value1");
+    Page page2 = context.create().page("/content/page1/page2", null,
+        "prop2", "value2");
+
+    Resource superComponent = context.create().resource("/apps/app1/components/comp2",
+        "prop3", "value3");
+    Resource component = context.create().resource("/apps/app1/components/comp1",
+        "sling:resourceSuperType", superComponent.getPath(),
+        "prop4", "value4");
+
+    Resource resource = context.create().resource(page2, "r1",
+        "sling:resourceType", component.getPath());
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
+        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
+    assertEquals("value1", underTest.get("prop1", String.class));
+    assertEquals("value1", underTest.get("prop1", "def"));
+    assertEquals("value2", underTest.get("prop2", String.class));
+    assertEquals("value2", underTest.get("prop2", "def"));
+    assertEquals("value3", underTest.get("prop3", String.class));
+    assertEquals("value3", underTest.get("prop3", "def"));
+    assertEquals("value4", underTest.get("prop4", String.class));
+    assertEquals("value4", underTest.get("prop4", "def"));
+    assertNull(underTest.get("prop5", String.class));
+    assertEquals("def5", underTest.get("prop5", "def5"));
   }
 
 }

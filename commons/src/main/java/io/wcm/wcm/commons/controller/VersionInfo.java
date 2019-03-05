@@ -44,6 +44,7 @@ import com.day.cq.wcm.api.Page;
 import io.wcm.sling.models.annotations.AemObject;
 import io.wcm.wcm.commons.bundleinfo.BundleInfo;
 import io.wcm.wcm.commons.bundleinfo.BundleInfoService;
+import io.wcm.wcm.commons.component.ComponentPropertyResolution;
 import io.wcm.wcm.commons.component.ComponentPropertyResolver;
 
 /**
@@ -98,13 +99,10 @@ public final class VersionInfo {
   }
 
   private Stream<String> getFilterRegex() {
-    // try to read from page properties
-    String[] regex = currentPage.getProperties().get(PN_FILTER_REGEX, String[].class);
-    if (regex == null) {
-      // alternatively read from page component property
-      ComponentPropertyResolver componentPropertyResolver = new ComponentPropertyResolver(currentPage.getContentResource());
-      regex = componentPropertyResolver.get(PN_FILTER_REGEX, String[].class);
-    }
+    ComponentPropertyResolver componentPropertyResolver = new ComponentPropertyResolver(currentPage)
+        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
+        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
+    String[] regex = componentPropertyResolver.get(PN_FILTER_REGEX, String[].class);
     if (regex != null) {
       return Arrays.stream(regex);
     }

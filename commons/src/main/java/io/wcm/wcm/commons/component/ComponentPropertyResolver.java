@@ -20,31 +20,71 @@
 package io.wcm.wcm.commons.component;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
 
 /**
- * Resolves properties set on component associated with the given resource.
- * Super components of the component are taken into account as well.
+ * Resolves properties set on component associated with the given resource or pages the current resource is contained
+ * in, with or without inheritance in both cases.
+ * By default, only component properties are resolved with inheritance.
  */
 @ProviderType
 public final class ComponentPropertyResolver {
 
-  private final Component component;
+  private ComponentPropertyResolution componentPropertiesResolution = ComponentPropertyResolution.RESOLVE_INHERIT;
+  private ComponentPropertyResolution pagePropertiesResolution = ComponentPropertyResolution.IGNORE;
+  private final Page currentPage;
+  private final Component currentComponent;
+
+  /**
+   * Content resource associated with a component (resource type).
+   * @param page Content page
+   */
+  public ComponentPropertyResolver(@NotNull Page page) {
+    this(page.getContentResource());
+  }
 
   /**
    * Content resource associated with a component (resource type).
    * @param resource Content resource
    */
-  public ComponentPropertyResolver(Resource resource) {
-    ComponentManager componentManager = AdaptTo.notNull(resource.getResourceResolver(), ComponentManager.class);
-    this.component = componentManager.getComponentOfResource(resource);
+  public ComponentPropertyResolver(@NotNull Resource resource) {
+    ResourceResolver resourceResolver = resource.getResourceResolver();
+    PageManager pageManager = AdaptTo.notNull(resourceResolver, PageManager.class);
+    this.currentPage = pageManager.getContainingPage(resource);
+    ComponentManager componentManager = AdaptTo.notNull(resourceResolver, ComponentManager.class);
+    this.currentComponent = componentManager.getComponentOfResource(resource);
+  }
+
+  /**
+   * Configure if properties should be resolved in component properties, and with or without inheritance.
+   * Default mode is {@link ComponentPropertyResolution#RESOLVE_INHERIT}.
+   * @param resolution Resolution mode
+   * @return this
+   */
+  public ComponentPropertyResolver componentPropertiesResolution(ComponentPropertyResolution resolution) {
+    this.componentPropertiesResolution = resolution;
+    return this;
+  }
+
+  /**
+   * Configure if properties should be resolved in content page properties, and with or without inheritance.
+   * Default mode is {@link ComponentPropertyResolution#IGNORE}.
+   * @param resolution Resolution mode
+   * @return this
+   */
+  public ComponentPropertyResolver pagePropertiesResolution(ComponentPropertyResolution resolution) {
+    this.pagePropertiesResolution = resolution;
+    return this;
   }
 
   /**
@@ -55,7 +95,12 @@ public final class ComponentPropertyResolver {
    * @return Property value or null if not set
    */
   public @Nullable <T> T get(@NotNull String name, @NotNull Class<T> type) {
-    return getForComponent(component, name, type);
+    @Nullable
+    T value = getPageProperty(currentPage, name, type);
+    if (value == null) {
+      value = getComponentProperty(currentComponent, name, type);
+    }
+    return value;
   }
 
   /**
@@ -65,39 +110,42 @@ public final class ComponentPropertyResolver {
    * @param <T> Parameter type
    * @return Property value or default value if not set
    */
-  public <T> T get(@NotNull String name, @NotNull T defaultValue) {
-    return getForComponent(component, name, defaultValue);
+  public @NotNull <T> T get(@NotNull String name, @NotNull T defaultValue) {
+    @Nullable
+    @SuppressWarnings("unchecked")
+    T value = get(name, (Class<T>)defaultValue.getClass());
+    if (value != null) {
+      return value;
+    }
+    else {
+      return defaultValue;
+    }
   }
 
-  private static @Nullable <T> T getForComponent(@Nullable Component component,
+  private @Nullable <T> T getComponentProperty(@Nullable Component component,
       @NotNull String name, @NotNull Class<T> type) {
-    if (component == null) {
+    if (componentPropertiesResolution == ComponentPropertyResolution.IGNORE || component == null) {
       return null;
     }
     @Nullable
     T result = component.getProperties().get(name, type);
-    if (result != null) {
-      return result;
+    if (result == null && componentPropertiesResolution == ComponentPropertyResolution.RESOLVE_INHERIT) {
+      result = getComponentProperty(component.getSuperComponent(), name, type);
     }
-    else {
-      return getForComponent(component.getSuperComponent(), name, type);
-    }
+    return result;
   }
 
-  private static <T> T getForComponent(@Nullable Component component,
-      @NotNull String name, @NotNull T defaultValue) {
-    if (component == null) {
-      return defaultValue;
+  private @Nullable <T> T getPageProperty(@Nullable Page page,
+      @NotNull String name, @NotNull Class<T> type) {
+    if (pagePropertiesResolution == ComponentPropertyResolution.IGNORE || page == null) {
+      return null;
     }
-    @SuppressWarnings("unchecked")
     @Nullable
-    T result = component.getProperties().get(name, (Class<T>)defaultValue.getClass());
-    if (result != null) {
-      return result;
+    T result = page.getProperties().get(name, type);
+    if (result == null && pagePropertiesResolution == ComponentPropertyResolution.RESOLVE_INHERIT) {
+      result = getPageProperty(page.getParent(), name, type);
     }
-    else {
-      return getForComponent(component.getSuperComponent(), name, defaultValue);
-    }
+    return result;
   }
 
 }
