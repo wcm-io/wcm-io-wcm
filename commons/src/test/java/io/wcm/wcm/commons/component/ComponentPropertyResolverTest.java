@@ -27,6 +27,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.components.ComponentContext;
+import com.day.cq.wcm.commons.WCMUtils;
 
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -167,6 +169,39 @@ public class ComponentPropertyResolverTest {
         "sling:resourceType", component.getPath());
 
     ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
+        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
+    assertEquals("value1", underTest.get("prop1", String.class));
+    assertEquals("value1", underTest.get("prop1", "def"));
+    assertEquals("value2", underTest.get("prop2", String.class));
+    assertEquals("value2", underTest.get("prop2", "def"));
+    assertEquals("value3", underTest.get("prop3", String.class));
+    assertEquals("value3", underTest.get("prop3", "def"));
+    assertEquals("value4", underTest.get("prop4", String.class));
+    assertEquals("value4", underTest.get("prop4", "def"));
+    assertNull(underTest.get("prop5", String.class));
+    assertEquals("def5", underTest.get("prop5", "def5"));
+  }
+
+  @Test
+  public void testPageAndComponent_Inheritance_ComponentContext() {
+    context.create().page("/content/page1", null,
+        "prop1", "value1");
+    Page page2 = context.create().page("/content/page1/page2", null,
+        "prop2", "value2");
+
+    Resource superComponent = context.create().resource("/apps/app1/components/comp2",
+        "prop3", "value3");
+    Resource component = context.create().resource("/apps/app1/components/comp1",
+        "sling:resourceSuperType", superComponent.getPath(),
+        "prop4", "value4");
+
+    Resource resource = context.create().resource(page2, "r1",
+        "sling:resourceType", component.getPath());
+    context.currentResource(resource);
+
+    ComponentContext wcmComponentContext = WCMUtils.getComponentContext(context.request());
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(wcmComponentContext)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
     assertEquals("value1", underTest.get("prop1", String.class));

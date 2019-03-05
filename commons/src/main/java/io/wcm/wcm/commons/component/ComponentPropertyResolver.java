@@ -28,6 +28,7 @@ import org.osgi.annotation.versioning.ProviderType;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.components.ComponentManager;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
@@ -63,6 +64,15 @@ public final class ComponentPropertyResolver {
     this.currentPage = pageManager.getContainingPage(resource);
     ComponentManager componentManager = AdaptTo.notNull(resourceResolver, ComponentManager.class);
     this.currentComponent = componentManager.getComponentOfResource(resource);
+  }
+
+  /**
+   * Content resource associated with a component (resource type).
+   * @param wcmComponentContext WCM component context
+   */
+  public ComponentPropertyResolver(@NotNull ComponentContext wcmComponentContext) {
+    this.currentPage = wcmComponentContext.getPage();
+    this.currentComponent = wcmComponentContext.getComponent();
   }
 
   /**
