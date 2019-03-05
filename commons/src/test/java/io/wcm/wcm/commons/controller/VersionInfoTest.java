@@ -60,14 +60,14 @@ public class VersionInfoTest {
     List<BundleInfo> bundles = ImmutableList.of(
         bundle("aaa.bundle1"),
         bundle("aaa.bundle2"),
-        bundle("bbb.bundle1"));
+        bundle("bbb.bundle3"));
     when(bundleInfoService.getBundles()).thenReturn(bundles);
   }
 
   @Test
   public void testUnfiltered() {
     context.currentPage(context.create().page("/content/page1"));
-    assertBundles("aaa.bundle1", "aaa.bundle2", "bbb.bundle1");
+    assertBundles("aaa.bundle1", "aaa.bundle2", "bbb.bundle3");
   }
 
   @Test
@@ -78,12 +78,28 @@ public class VersionInfoTest {
   }
 
   @Test
+  public void testFiltered_PageProperties_Array() {
+    context.currentPage(context.create().page("/content/page1", null, ImmutableValueMap.of(
+        PN_FILTER_REGEX, new String[] { "^.*\\.bundle2$", "^.*\\.bundle3$" })));
+    assertBundles("aaa.bundle2", "bbb.bundle3");
+  }
+
+  @Test
   public void testFiltered_PageComponent() {
     context.create().resource("/apps/app1/components/comp1",
         PN_FILTER_REGEX, "^aaa\\..*$");
     context.currentPage(context.create().page("/content/page1", null, ImmutableValueMap.of(
         "sling:resourceType", "/apps/app1/components/comp1")));
     assertBundles("aaa.bundle1", "aaa.bundle2");
+  }
+
+  @Test
+  public void testFiltered_PageComponent_Array() {
+    context.create().resource("/apps/app1/components/comp1",
+        PN_FILTER_REGEX, new String[] { "^.*\\.bundle2$", "^.*\\.bundle3$" });
+    context.currentPage(context.create().page("/content/page1", null, ImmutableValueMap.of(
+        "sling:resourceType", "/apps/app1/components/comp1")));
+    assertBundles("aaa.bundle2", "bbb.bundle3");
   }
 
   private BundleInfo bundle(String symbolicName) {

@@ -19,14 +19,17 @@
  */
 package io.wcm.wcm.commons.controller;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
@@ -72,51 +75,63 @@ public final class VersionInfo {
 
   @PostConstruct
   private void activate() {
-    Pattern filterPattern = toPattern(getFilterRegex());
-    this.bundles = getFilteredBundles(filterPattern);
+    List<Pattern> filterPatterns = toPattern(getFilterRegex());
+    this.bundles = getFilteredBundles(filterPatterns);
   }
 
   public Collection<BundleInfo> getBundles() {
     return this.bundles;
   }
 
-  private Collection<BundleInfo> getFilteredBundles(Pattern filterPattern) {
+  private Collection<BundleInfo> getFilteredBundles(List<Pattern> filterPatterns) {
     Collection<BundleInfo> allBundles = bundleInfoService.getBundles();
-    if (filterPattern != null) {
-      return allBundles.stream()
-          .filter(bundle -> filterPattern.matcher(bundle.getSymbolicName()).matches())
-          .collect(Collectors.toList());
-    }
-    else {
-      return allBundles;
-    }
+    return allBundles.stream()
+        .filter(bundle -> matchesFilterPatterns(bundle, filterPatterns))
+        .collect(Collectors.toList());
   }
 
-  private String getFilterRegex() {
+  private boolean matchesFilterPatterns(BundleInfo bundle, List<Pattern> filterPatterns) {
+    if (filterPatterns.isEmpty()) {
+      return true;
+    }
+    return filterPatterns.stream()
+        .filter(pattern -> pattern.matcher(bundle.getSymbolicName()).matches())
+        .findAny().isPresent();
+  }
+
+  private Stream<String> getFilterRegex() {
     // try to read from page properties
-    String regex = currentPage.getProperties().get(PN_FILTER_REGEX, String.class);
-    if (StringUtils.isBlank(regex)) {
+    String[] regex = currentPage.getProperties().get(PN_FILTER_REGEX, String[].class);
+    if (regex == null) {
       // alternatively read from page component property
       @SuppressWarnings("null")
       ComponentManager componentManager = AdaptTo.notNull(resourceResolver, ComponentManager.class);
       Component pageComponent = componentManager.getComponentOfResource(currentPage.getContentResource());
       if (pageComponent != null) {
-        regex = pageComponent.getProperties().get(PN_FILTER_REGEX, String.class);
+        regex = pageComponent.getProperties().get(PN_FILTER_REGEX, String[].class);
       }
     }
-    return regex;
+    if (regex != null) {
+      return Arrays.stream(regex);
+    }
+    else {
+      return Stream.empty();
+    }
   }
 
-  private Pattern toPattern(String regex) {
-    if (regex != null) {
-      try {
-        return Pattern.compile(regex);
-      }
-      catch (PatternSyntaxException ex) {
-        log.warn("Invalid pattern for version info filtering: " + regex + " in " + currentPage.getPath(), ex);
-      }
-    }
-    return null;
+  private List<Pattern> toPattern(Stream<String> regex) {
+    return regex
+        .map(regExString -> {
+          try {
+            return Pattern.compile(regExString);
+          }
+          catch (PatternSyntaxException ex) {
+            log.warn("Invalid pattern for version info filtering: " + regex + " in " + currentPage.getPath(), ex);
+            return null;
+          }
+        })
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
   }
 
 }
