@@ -37,7 +37,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
@@ -52,6 +51,8 @@ import com.google.common.collect.ImmutableMap;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.sling.models.annotations.AemObject;
+import io.wcm.wcm.commons.component.ComponentPropertyResolution;
+import io.wcm.wcm.commons.component.ComponentPropertyResolver;
 
 /**
  * Controller for paragraph system.
@@ -101,16 +102,17 @@ public final class Parsys {
   @PostConstruct
   private void activate() {
     // read customize properties from parsys component
-    final ValueMap props = componentContext.getComponent().getProperties();
-    generateDefaultCss = props.get(PN_PARSYS_GENERATE_DEAFULT_CSS, true);
-    paragraphCss = props.get(PN_PARSYS_PARAGRAPH_CSS, String.class);
-    newAreaCss = props.get(PN_PARSYS_NEWAREA_CSS, String.class);
-    paragraphElementName = props.get(PN_PARSYS_PARAGRAPH_ELEMENT, String.class);
-    wrapperElementName = props.get(PN_PARSYS_WRAPPER_ELEMENT, String.class);
-    wrapperCss = props.get(PN_PARSYS_WRAPPER_CSS, String.class);
+    ComponentPropertyResolver componentPropertyResolver = new ComponentPropertyResolver(componentContext)
+        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
+    generateDefaultCss = componentPropertyResolver.get(PN_PARSYS_GENERATE_DEAFULT_CSS, true);
+    paragraphCss = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_CSS, String.class);
+    newAreaCss = componentPropertyResolver.get(PN_PARSYS_NEWAREA_CSS, String.class);
+    paragraphElementName = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_ELEMENT, String.class);
+    wrapperElementName = componentPropertyResolver.get(PN_PARSYS_WRAPPER_ELEMENT, String.class);
+    wrapperCss = componentPropertyResolver.get(PN_PARSYS_WRAPPER_CSS, String.class);
 
     // check decoration
-    String[] paragraphNoDecorationWcmMode = props.get(PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE, String[].class);
+    String[] paragraphNoDecorationWcmMode = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE, String[].class);
     paragraphDecoration = getDecoration(paragraphNoDecorationWcmMode, wcmMode);
 
     // prepare paragraph items
@@ -173,7 +175,6 @@ public final class Parsys {
     return ImmutableMap.of();
   }
 
-  @SuppressWarnings("null")
   private ComponentManager componentManager() {
     if (componentManager == null) {
       componentManager = AdaptTo.notNull(this.resolver, ComponentManager.class);

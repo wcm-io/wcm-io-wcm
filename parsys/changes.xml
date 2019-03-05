@@ -28,6 +28,9 @@
         Add new parsys component property 'wcmio:parsysParagraphNoDecorationWcmMode'.
       </action>
       <action type="update" dev="sseifert">
+        Resolve parsys customization component properties with inheritance from super components.
+      </action>
+      <action type="update" dev="sseifert">
         Simplify Parsys HTL markup by using HTL features available since AEM 6.1.
       </action>
       <action type="update" dev="sseifert">
