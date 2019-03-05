@@ -27,6 +27,9 @@
       <action type="add" dev="sseifert">
         Add bundle info service and version info model.
       </action>
+      <action type="add" dev="sseifert">
+        Add component property resolver.
+      </action>
       <action type="update" dev="sseifert">
         Switch to AEM 6.2 as minimum version.
       </action>

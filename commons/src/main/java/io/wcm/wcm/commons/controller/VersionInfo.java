@@ -40,13 +40,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.components.Component;
-import com.day.cq.wcm.api.components.ComponentManager;
 
-import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.sling.models.annotations.AemObject;
 import io.wcm.wcm.commons.bundleinfo.BundleInfo;
 import io.wcm.wcm.commons.bundleinfo.BundleInfoService;
+import io.wcm.wcm.commons.component.ComponentPropertyResolver;
 
 /**
  * Provides access to a list of OSGi bundles present in the system.
@@ -104,12 +102,8 @@ public final class VersionInfo {
     String[] regex = currentPage.getProperties().get(PN_FILTER_REGEX, String[].class);
     if (regex == null) {
       // alternatively read from page component property
-      @SuppressWarnings("null")
-      ComponentManager componentManager = AdaptTo.notNull(resourceResolver, ComponentManager.class);
-      Component pageComponent = componentManager.getComponentOfResource(currentPage.getContentResource());
-      if (pageComponent != null) {
-        regex = pageComponent.getProperties().get(PN_FILTER_REGEX, String[].class);
-      }
+      ComponentPropertyResolver componentPropertyResolver = new ComponentPropertyResolver(currentPage.getContentResource());
+      regex = componentPropertyResolver.get(PN_FILTER_REGEX, String[].class);
     }
     if (regex != null) {
       return Arrays.stream(regex);
