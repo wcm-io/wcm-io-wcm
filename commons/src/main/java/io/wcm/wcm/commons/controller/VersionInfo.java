@@ -100,8 +100,8 @@ public final class VersionInfo {
 
   private Stream<String> getFilterRegex() {
     ComponentPropertyResolver componentPropertyResolver = new ComponentPropertyResolver(currentPage)
-        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
-        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
+        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE)
+        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE);
     String[] regex = componentPropertyResolver.get(PN_FILTER_REGEX, String[].class);
     if (regex != null) {
       return Arrays.stream(regex);
