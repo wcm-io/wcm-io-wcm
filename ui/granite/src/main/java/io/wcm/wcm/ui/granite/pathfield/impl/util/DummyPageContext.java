@@ -51,6 +51,7 @@ public class DummyPageContext extends PageContext {
 
   /**
    * @param slingRequest Request
+   * @param slingResponse Response
    */
   public DummyPageContext(SlingHttpServletRequest slingRequest, SlingHttpServletResponse slingResponse) {
     this.slingRequest = slingRequest;

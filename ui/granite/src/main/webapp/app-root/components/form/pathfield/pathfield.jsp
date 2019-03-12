@@ -26,6 +26,7 @@
 <%@page import="com.adobe.granite.license.ProductInfoProvider"%>
 <%@page import="org.apache.jackrabbit.util.Text"%>
 <%@page import="org.apache.sling.api.resource.Resource"%>
+<%@page import="org.apache.sling.api.resource.ResourceResolver"%>
 <%@page import="org.apache.sling.api.request.RequestDispatcherOptions"%>
 <%@page import="org.apache.sling.api.wrappers.ValueMapDecorator"%>
 <%@page import="com.day.cq.commons.jcr.JcrConstants"%>
@@ -50,7 +51,7 @@ if (isPathField) {
   Config cfg = cmp.getConfig();
   ExpressionHelper ex = cmp.getExpressionHelper();
   
-  String rootPath = ex.getString(cfg.get("rootPath", "/"));
+  String rootPath = getExistingRootPath(ex.getString(cfg.get("rootPath", "/")), resourceResolver);
   String filter = cfg.get("filter", "hierarchyNotFile");
   boolean multiple = cfg.get("multiple", false);
   String selectionCount = multiple ? "multiple" : "single";
@@ -78,5 +79,21 @@ RequestDispatcherOptions options = new RequestDispatcherOptions();
 options.setForceResourceType(resourceType);
 RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(resourceWrapper, options);
 dispatcher.include(slingRequest, slingResponse);
+
+%><%!
+
+/**
+ * Make sure the root path exists. If it does not exist go up to parent hierarchy until it returns an
+ * existing resource path.
+ */
+String getExistingRootPath(String rootPath, ResourceResolver resourceResolver) {
+  if (resourceResolver.getResource(rootPath) == null) {
+    String parentPath = Text.getRelativeParent(rootPath, 1);
+    return getExistingRootPath(parentPath, resourceResolver);
+  }
+  else {
+    return rootPath;
+  }
+}
 
 %>
