@@ -58,6 +58,7 @@ import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.EmptyDataSource;
 
 import io.wcm.wcm.ui.granite.pathfield.impl.predicate.FolderPredicate;
+import io.wcm.wcm.ui.granite.pathfield.impl.predicate.HideInternalContentPathsPredicate;
 import io.wcm.wcm.ui.granite.pathfield.impl.predicate.HierarchyNotFilePredicate;
 import io.wcm.wcm.ui.granite.pathfield.impl.predicate.HierarchyPredicate;
 import io.wcm.wcm.ui.granite.pathfield.impl.predicate.NoSystemPredicate;
@@ -130,6 +131,7 @@ public class PathFieldChildrenDatasourceServlet extends SlingSafeMethodsServlet 
       final String filter = ex.getString(cfg.get("filter"));
 
       final Collection<Predicate> predicates = new ArrayList<>();
+      predicates.add(new HideInternalContentPathsPredicate());
       predicates.add(toPredicate(filter));
 
       if (searchName != null) {

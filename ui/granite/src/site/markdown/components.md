@@ -114,6 +114,7 @@ Enhancements over AEM version:
 * Always display root path in an extra column, so it can be selected as well
 * Path field always displays only the subtree of the configure root path, regardless if the given path value has a path outside the root path
 * Limit search result to pages and assets
+* Hides certain "AEM-internal" content paths which should not be shown when picking pages or assets
 
 
 [wcmio-caconfig]: http://wcm.io/caconfig/
