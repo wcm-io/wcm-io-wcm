@@ -19,13 +19,14 @@
  */
 package io.wcm.wcm.ui.granite.pathfield.impl.predicate;
 
+import static com.day.cq.commons.jcr.JcrConstants.NT_FILE;
+import static com.day.cq.commons.jcr.JcrConstants.NT_HIERARCHYNODE;
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.collections.Predicate;
 import org.apache.sling.api.resource.Resource;
-
-import com.day.cq.commons.jcr.JcrConstants;
 
 /**
  * Resources with primary type nt:hierarchyNode that are not nt:file.
@@ -44,7 +45,7 @@ public class HierarchyNotFilePredicate implements Predicate {
       return false;
     }
     try {
-      return node.isNodeType(JcrConstants.NT_HIERARCHYNODE) && !node.isNodeType(JcrConstants.NT_FILE);
+      return node.isNodeType(NT_HIERARCHYNODE) && !node.isNodeType(NT_FILE);
     }
     catch (RepositoryException e) {
       throw new RuntimeException(e);

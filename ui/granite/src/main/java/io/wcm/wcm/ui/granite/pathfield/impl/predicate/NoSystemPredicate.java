@@ -19,14 +19,14 @@
  */
 package io.wcm.wcm.ui.granite.pathfield.impl.predicate;
 
+import static com.day.cq.commons.jcr.JcrConstants.JCR_SYSTEM;
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-
-import com.day.cq.commons.jcr.JcrConstants;
 
 /**
  * Resources that have no system resource type.
@@ -45,7 +45,7 @@ public class NoSystemPredicate implements Predicate {
       return false;
     }
     try {
-      return !StringUtils.startsWith(node.getName(), "rep:") && !StringUtils.equals(node.getName(), JcrConstants.JCR_SYSTEM);
+      return !StringUtils.startsWith(node.getName(), "rep:") && !StringUtils.equals(node.getName(), JCR_SYSTEM);
     }
     catch (RepositoryException e) {
       throw new RuntimeException(e);

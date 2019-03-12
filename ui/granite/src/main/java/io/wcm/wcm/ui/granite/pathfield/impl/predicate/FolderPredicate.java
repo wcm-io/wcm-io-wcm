@@ -19,13 +19,13 @@
  */
 package io.wcm.wcm.ui.granite.pathfield.impl.predicate;
 
+import static com.day.cq.commons.jcr.JcrConstants.NT_FOLDER;
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.collections.Predicate;
 import org.apache.sling.api.resource.Resource;
-
-import com.day.cq.commons.jcr.JcrConstants;
 
 /**
  * Resources with primary type nt:folder.
@@ -44,7 +44,7 @@ public class FolderPredicate implements Predicate {
       return false;
     }
     try {
-      return node.isNodeType(JcrConstants.NT_FOLDER);
+      return node.isNodeType(NT_FOLDER);
     }
     catch (RepositoryException e) {
       throw new RuntimeException(e);
