@@ -20,6 +20,7 @@
 package io.wcm.wcm.commons.caservice.impl;
 
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
 import io.wcm.sling.commons.caservice.PathPreprocessor;
@@ -33,7 +34,7 @@ import io.wcm.wcm.commons.util.Path;
 public class WcmPathPreprocessor implements PathPreprocessor {
 
   @Override
-  public String apply(String path, ResourceResolver resourceResolver) {
+  public @NotNull String apply(@NotNull String path, @NotNull ResourceResolver resourceResolver) {
     return Path.getOriginalPath(path, resourceResolver);
   }
 

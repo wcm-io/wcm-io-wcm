@@ -24,6 +24,7 @@ import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_GENERATE_DEAFULT_C
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_NEWAREA_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_ELEMENT;
+import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
 import static io.wcm.wcm.parsys.controller.Parsys.DEFAULT_ELEMENT_NAME;
@@ -38,7 +39,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -47,22 +47,15 @@ import org.apache.sling.api.resource.Resource;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
-import com.day.cq.wcm.api.components.Component;
-import com.day.cq.wcm.api.components.ComponentContext;
 
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.testing.mock.aem.junit.AemContextBuilder;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
-@RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("null")
 public class ParsysTest {
 
@@ -70,14 +63,10 @@ public class ParsysTest {
   private static final String SUPER_RESOURCE_TYPE_SAMPLE = "sample/components/superParsys";
   private static final String COMPONENT_PATH_1 = "sample/components/comp1";
   private static final String COMPONENT_PATH_2 = "sample/components/comp2";
+  private static final String SUPERCOMPONENT_PATH = "sample/components/super";
 
   @Rule
   public AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();
-
-  @Mock
-  private ComponentContext componentContext;
-  @Mock
-  private Component component;
 
   private Page page;
   private Resource parsysResource;
@@ -88,23 +77,21 @@ public class ParsysTest {
   public void setUp() {
     context.addModelsForPackage("io.wcm.wcm.parsys.controller");
 
-    context.request().setAttribute(ComponentContext.CONTEXT_ATTR_NAME, componentContext);
-    when(componentContext.getComponent()).thenReturn(component);
-    when(component.getPath()).thenReturn(RESOURCE_TYPE_SAMPLE);
-    when(component.getProperties()).thenReturn(ImmutableValueMap.of());
-
     page = context.create().page("/content/page1", "sample/templates/test1");
-    parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsys");
+    parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsys",
+        "sling:resourceType", RESOURCE_TYPE_SAMPLE);
     par1Resource = context.create().resource(parsysResource.getPath() + "/par1",
-        ImmutableValueMap.of("sling:resourceType", COMPONENT_PATH_1));
+        "sling:resourceType", COMPONENT_PATH_1);
     par2Resource = context.create().resource(parsysResource.getPath() + "/par2",
-        ImmutableValueMap.of("sling:resourceType", COMPONENT_PATH_2));
+        "sling:resourceType", COMPONENT_PATH_2);
 
     context.currentResource(parsysResource);
   }
 
   @Test
   public void testEditMode() {
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
+
     WCMMode.EDIT.toRequest(context.request());
     Parsys parsys = context.request().adaptTo(Parsys.class);
 
@@ -142,14 +129,60 @@ public class ParsysTest {
 
   @Test
   public void testEditMode_Customized() {
-    when(component.getProperties()).thenReturn(ImmutableValueMap.builder()
-        .put(PN_PARSYS_GENERATE_DEAFULT_CSS, false)
-        .put(PN_PARSYS_PARAGRAPH_CSS, "paracss")
-        .put(PN_PARSYS_NEWAREA_CSS, "newareacss")
-        .put(PN_PARSYS_PARAGRAPH_ELEMENT, "li")
-        .put(PN_PARSYS_WRAPPER_ELEMENT, "ul")
-        .put(PN_PARSYS_WRAPPER_CSS, "wrappercss")
-        .build());
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
+        PN_PARSYS_GENERATE_DEAFULT_CSS, false,
+        PN_PARSYS_PARAGRAPH_CSS, "paracss",
+        PN_PARSYS_NEWAREA_CSS, "newareacss",
+        PN_PARSYS_PARAGRAPH_ELEMENT, "li",
+        PN_PARSYS_WRAPPER_ELEMENT, "ul",
+        PN_PARSYS_WRAPPER_CSS, "wrappercss");
+
+    WCMMode.EDIT.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+
+    assertTrue(parsys.isWrapperElement());
+    assertEquals("wrappercss", parsys.getWrapperCss());
+    assertEquals("ul", parsys.getWrapperElementName());
+
+    List<Item> items = parsys.getItems();
+    assertEquals(3, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertNull(item1.getResourceType());
+    assertNull(item1.getStyle());
+    assertEquals("paracss", item1.getCssClassName());
+    assertEquals("li", item1.getElementName());
+    assertFalse(item1.isNewArea());
+
+    Item item2 = items.get(1);
+    assertEquals(par2Resource.getPath(), item2.getResourcePath());
+    assertNull(item2.getResourceType());
+    assertNull(item2.getStyle());
+    assertEquals("paracss", item2.getCssClassName());
+    assertEquals("li", item2.getElementName());
+    assertFalse(item2.isNewArea());
+
+    Item item3 = items.get(2);
+    assertEquals(NEWAREA_RESOURCE_PATH, item3.getResourcePath());
+    assertEquals(FALLBACK_NEWAREA_RESOURCE_TYPE, item3.getResourceType());
+    assertNull(item3.getStyle());
+    assertEquals(NEWAREA_CSS_CLASS_NAME + " newareacss", item3.getCssClassName());
+    assertEquals("li", item3.getElementName());
+    assertTrue(item3.isNewArea());
+  }
+
+  @Test
+  public void testEditMode_Customized_Inheritance() {
+    context.create().resource("/apps/" + SUPERCOMPONENT_PATH,
+        PN_PARSYS_GENERATE_DEAFULT_CSS, false,
+        PN_PARSYS_PARAGRAPH_CSS, "paracss",
+        PN_PARSYS_NEWAREA_CSS, "newareacss",
+        PN_PARSYS_PARAGRAPH_ELEMENT, "li",
+        PN_PARSYS_WRAPPER_ELEMENT, "ul",
+        PN_PARSYS_WRAPPER_CSS, "wrappercss");
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
+        "sling:resourceSuperType", SUPERCOMPONENT_PATH);
 
     WCMMode.EDIT.toRequest(context.request());
     Parsys parsys = context.request().adaptTo(Parsys.class);
@@ -188,6 +221,7 @@ public class ParsysTest {
 
   @Test
   public void testWcmDisabledMode() {
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
     WCMMode.DISABLED.toRequest(context.request());
     Parsys parsys = context.request().adaptTo(Parsys.class);
 
@@ -217,13 +251,13 @@ public class ParsysTest {
     List<Item> items = parsys.getItems();
 
     Item item3 = items.get(2);
-    assertEquals(RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME, item3.getResourceType());
+    assertEquals("/apps/" + RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME, item3.getResourceType());
   }
 
   @Test
   public void testNewAreaResourceTypeFromSuperComponent() {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
-        ImmutableValueMap.of(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, SUPER_RESOURCE_TYPE_SAMPLE));
+        SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, SUPER_RESOURCE_TYPE_SAMPLE);
 
     context.create().resource("/apps/" + SUPER_RESOURCE_TYPE_SAMPLE);
     context.create().resource("/apps/" + SUPER_RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
@@ -238,6 +272,7 @@ public class ParsysTest {
 
   @Test
   public void testOtherParentParsysResource() {
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
     parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsysOther");
     par1Resource = context.create().resource(parsysResource.getPath() + "/par1");
 
@@ -264,10 +299,11 @@ public class ParsysTest {
 
   @Test
   public void testComponentWithTagDecoration() {
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
 
     // prepare tag decoration for one component
     context.create().resource("/apps/sample/components/comp1/" + NameConstants.NN_HTML_TAG,
-        ImmutableValueMap.of(NameConstants.PN_TAG_NAME, "article", "class", "css1"));
+        NameConstants.PN_TAG_NAME, "article", "class", "css1");
 
     WCMMode.EDIT.toRequest(context.request());
     Parsys parsys = context.request().adaptTo(Parsys.class);
@@ -280,6 +316,7 @@ public class ParsysTest {
     assertNull(item1.getResourceType());
     assertEquals("css1 section", item1.getCssClassName());
     assertEquals("article", item1.getElementName());
+    assertTrue(item1.isDecorate());
     assertFalse(item1.isNewArea());
 
     Item item2 = items.get(1);
@@ -287,6 +324,7 @@ public class ParsysTest {
     assertNull(item2.getResourceType());
     assertEquals(SECTION_DEFAULT_CLASS_NAME, item2.getCssClassName());
     assertEquals(DEFAULT_ELEMENT_NAME, item2.getElementName());
+    assertTrue(item2.isDecorate());
     assertFalse(item2.isNewArea());
 
     Item item3 = items.get(2);
@@ -294,6 +332,47 @@ public class ParsysTest {
     assertEquals(FALLBACK_NEWAREA_RESOURCE_TYPE, item3.getResourceType());
     assertEquals(NEWAREA_CSS_CLASS_NAME + " " + SECTION_DEFAULT_CLASS_NAME, item3.getCssClassName());
     assertEquals(DEFAULT_ELEMENT_NAME, item3.getElementName());
+    assertTrue(item3.isDecorate());
+    assertTrue(item3.isNewArea());
+  }
+
+  @Test
+  public void testComponentWithNoTagDecoration() {
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
+        PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE, new String[] { "edit" });
+
+    // prepare tag decoration for one component
+    context.create().resource("/apps/sample/components/comp1/" + NameConstants.NN_HTML_TAG,
+        NameConstants.PN_TAG_NAME, "article", "class", "css1");
+
+    WCMMode.EDIT.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+
+    List<Item> items = parsys.getItems();
+    assertEquals(3, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertNull(item1.getResourceType());
+    assertEquals("css1 section", item1.getCssClassName());
+    assertEquals("article", item1.getElementName());
+    assertFalse(item1.isDecorate());
+    assertFalse(item1.isNewArea());
+
+    Item item2 = items.get(1);
+    assertEquals(par2Resource.getPath(), item2.getResourcePath());
+    assertNull(item2.getResourceType());
+    assertEquals(SECTION_DEFAULT_CLASS_NAME, item2.getCssClassName());
+    assertEquals(DEFAULT_ELEMENT_NAME, item2.getElementName());
+    assertFalse(item2.isDecorate());
+    assertFalse(item2.isNewArea());
+
+    Item item3 = items.get(2);
+    assertEquals(NEWAREA_RESOURCE_PATH, item3.getResourcePath());
+    assertEquals(FALLBACK_NEWAREA_RESOURCE_TYPE, item3.getResourceType());
+    assertEquals(NEWAREA_CSS_CLASS_NAME + " " + SECTION_DEFAULT_CLASS_NAME, item3.getCssClassName());
+    assertEquals(DEFAULT_ELEMENT_NAME, item3.getElementName());
+    assertTrue(item3.isDecorate());
     assertTrue(item3.isNewArea());
   }
 

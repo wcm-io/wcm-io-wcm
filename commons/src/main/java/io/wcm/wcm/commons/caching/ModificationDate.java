@@ -83,6 +83,7 @@ public final class ModificationDate {
     return mostRecent(cqModified, resourceModified);
   }
 
+  @SuppressWarnings("null")
   private static Date getResourceMetadataModificationTime(Resource resource) {
     ResourceMetadata metadata = resource.getResourceMetadata();
     if (metadata != null) {

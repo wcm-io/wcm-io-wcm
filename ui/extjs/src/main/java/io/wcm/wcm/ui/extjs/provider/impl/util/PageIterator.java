@@ -66,7 +66,6 @@ public final class PageIterator implements Iterator<Page> {
    * Seeks the next available page
    * @return the previous element
    */
-  @SuppressWarnings("null")
   private Page seek() {
     Page prev = next;
     next = null;

@@ -79,6 +79,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
   private boolean enabled;
 
   @Activate
+  @SuppressWarnings("deprecation")
   protected void activate(ComponentContext componentContext) {
     // Activate only in author mode
     enabled = !RunMode.disableIfNotAuthor(slingSettings.getRunModes(), componentContext, log);

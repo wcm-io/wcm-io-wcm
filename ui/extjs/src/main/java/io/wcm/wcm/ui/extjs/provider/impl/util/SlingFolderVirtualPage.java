@@ -52,7 +52,7 @@ class SlingFolderVirtualPage implements Page {
     return null;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "null" })
   @Override
   public <AdapterType> AdapterType adaptTo(Class<AdapterType> type) {
     if (type == Resource.class) {
@@ -69,7 +69,6 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
-  @SuppressWarnings("null")
   public Page getAbsoluteParent(int level) {
     String parentPath = Text.getAbsoluteParent(resource.getPath(), level - 1);
     Resource parentResource = resource.getResourceResolver().getResource(parentPath);
@@ -140,7 +139,6 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
-  @SuppressWarnings("null")
   public PageManager getPageManager() {
     return resource.getResourceResolver().adaptTo(PageManager.class);
   }
@@ -158,7 +156,6 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
-  @SuppressWarnings("null")
   public Page getParent(int level) {
     String parentPath = Text.getRelativeParent(resource.getPath(), level);
     Resource parentResource = resource.getResourceResolver().getResource(parentPath);
@@ -264,6 +261,16 @@ class SlingFolderVirtualPage implements Page {
 
   @Override
   public void unlock() throws WCMException {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Calendar getDeleted() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public String getDeletedBy() {
     throw new UnsupportedOperationException();
   }
 

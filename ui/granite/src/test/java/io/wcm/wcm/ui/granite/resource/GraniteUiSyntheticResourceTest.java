@@ -20,6 +20,7 @@
 package io.wcm.wcm.ui.granite.resource;
 
 import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.child;
+import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.copySubtree;
 import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.create;
 import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.wrap;
 import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.wrapMerge;
@@ -115,6 +116,7 @@ public class GraniteUiSyntheticResourceTest {
   }
 
   @Test
+  @SuppressWarnings("null")
   public void testChild() {
     Resource parent = create(context.resourceResolver(), "/my/path", "/my/type");
 
@@ -146,6 +148,39 @@ public class GraniteUiSyntheticResourceTest {
     assertEquals("/my/child/type", child1.getResourceType());
     assertEquals("value1", child1.getValueMap().get("prop1", String.class));
     assertEquals(25, (int)child1.getValueMap().get("prop2", 0));
+  }
+
+  @Test
+  public void testCopySubtree() {
+    Resource parent = create(context.resourceResolver(), "/target/path", "/my/type");
+
+    Resource source = context.create().resource("/source",
+        "sling:resourceType", "/my/type2",
+        "prop1", "value1");
+    context.create().resource("/source/child1",
+        "sling:resourceType", "/my/type3",
+        "prop1", "value2");
+    context.create().resource("/source/child1/child11");
+    context.create().resource("/source/child1/child12");
+    context.create().resource("/source/child2");
+
+    copySubtree(parent, source);
+
+    List<Resource> children1 = ImmutableList.copyOf(parent.getChildren());
+    assertEquals(1, children1.size());
+    assertEquals("/target/path/source", children1.get(0).getPath());
+    assertEquals("value1", children1.get(0).getValueMap().get("prop1", String.class));
+
+    List<Resource> children2 = ImmutableList.copyOf(children1.get(0).getChildren());
+    assertEquals(2, children2.size());
+    assertEquals("/target/path/source/child1", children2.get(0).getPath());
+    assertEquals("value2", children2.get(0).getValueMap().get("prop1", String.class));
+    assertEquals("/target/path/source/child2", children2.get(1).getPath());
+
+    List<Resource> children3 = ImmutableList.copyOf(children2.get(0).getChildren());
+    assertEquals(2, children3.size());
+    assertEquals("/target/path/source/child1/child11", children3.get(0).getPath());
+    assertEquals("/target/path/source/child1/child12", children3.get(1).getPath());
   }
 
 }

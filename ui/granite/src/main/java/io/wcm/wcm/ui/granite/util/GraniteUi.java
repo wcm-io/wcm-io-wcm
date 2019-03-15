@@ -28,6 +28,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.annotation.versioning.ProviderType;
 
 import com.adobe.granite.ui.components.Value;
 import com.day.cq.wcm.api.Page;
@@ -36,6 +37,7 @@ import com.day.cq.wcm.api.PageManager;
 /**
  * Helper methods for GraniteUI components.
  */
+@ProviderType
 public final class GraniteUi {
 
   private GraniteUi() {

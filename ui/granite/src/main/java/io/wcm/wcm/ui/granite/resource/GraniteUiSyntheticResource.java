@@ -33,6 +33,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
@@ -44,6 +45,7 @@ import com.google.common.collect.Lists;
  * not when calling the same method on resourceResolver. This breaks the contract of the resource API, but should
  * work at least for the Granite UI implementation which seems to always use this method.
  */
+@ProviderType
 public final class GraniteUiSyntheticResource extends SyntheticResource {
 
   private final ValueMap props;
@@ -67,7 +69,7 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
     this.children = Lists.newArrayList(children);
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "null" })
   @Override
   public <Type> Type adaptTo(Class<Type> type) {
     if (ValueMap.class.equals(type)) {
@@ -220,6 +222,18 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
       throw new IllegalArgumentException("Resource is not a GraniteUiSyntheticResource.");
     }
     return child;
+  }
+
+  /**
+   * Copy the given source resource as synthetic child under the target parent resource, including all children.
+   * @param targetParent Target parent resource
+   * @param source Source resource
+   */
+  public static void copySubtree(@NotNull Resource targetParent, @NotNull Resource source) {
+    Resource targetChild = GraniteUiSyntheticResource.child(targetParent, source.getName(), source.getResourceType(), source.getValueMap());
+    for (Resource sourceChild : source.getChildren()) {
+      copySubtree(targetChild, sourceChild);
+    }
   }
 
 }

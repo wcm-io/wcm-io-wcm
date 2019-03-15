@@ -1,0 +1,93 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "rootPath": "${empty param.root ? \"/\" : param.root}",
+  "path": "${empty param.path ? (empty param.root ? \"/\" : param.root) : param.path}",
+  "sling:resourceType": "granite/ui/components/coral/foundation/picker",
+  "targetCollection": "#granite-ui-pathfield-picker-collection",
+  "selectionCount": "${empty param.selectionCount ? \"single\" : param.selectionCount}",
+  "views": {
+    "column": {
+      "jcr:title": "Column View",
+      "itemResourceType": "granite/ui/components/coral/foundation/form/pathfield/columnitem",
+      "showRoot": true,
+      "rootPath": "${empty param.root ? \"/\" : param.root}",
+      "src": "/mnt/overlay/wcm-io/wcm/ui/granite/content/form/pathfield/picker/views/column{.offset,limit}.html?path={id}&root=${granite:encodeURIComponent(empty param.root ? \"/\" : param.root)}&filter=${granite:encodeURIComponent(param.filter)}",
+      "icon": "viewColumn",
+      "path": "${empty param.path ? (empty param.root ? \"/\" : param.root) : param.path}",
+      "size": "${empty requestPathInfo.selectors[1] ? \"40\" : requestPathInfo.selectors[1]}",
+      "limit": 40,
+      "granite:id": "granite-ui-pathfield-picker-collection",
+      "loadAncestors": true,
+      "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/pathfield/columnview",
+      "selectionCount": "${empty param.selectionCount ? \"single\" : param.selectionCount}",
+      "datasource": {
+        "filter": "${param.filter}",
+        "offset": "${requestPathInfo.selectors[0]}",
+        "path": "${empty param.path ? (empty param.root ? \"/\" : param.root) : param.path}",
+        "limit": "${empty requestPathInfo.selectors[1] ? \"41\" : requestPathInfo.selectors[1] + 1}",
+        "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/pathfield/datasources/children"
+      }
+    }
+  },
+  "search": {
+    "name": "fulltext",
+    "targetCollection": "#granite-ui-pathfield-picker-search-collection",
+    "form": {
+      "rootpath": {
+        "name": "path",
+        "value": "${empty param.root ? \"/\" : param.root}",
+        "fieldLabel": "Path",
+        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield"
+      },
+      "group_or": {
+        "name": "group.p.or",
+        "value": "true",
+        "sling:resourceType": "granite/ui/components/coral/foundation/form/hidden"
+      },
+      "group_1_type": {
+        "name": "group.1_type",
+        "value": "cq:Page",
+        "sling:resourceType": "granite/ui/components/coral/foundation/form/hidden"
+      },
+      "group_2_type": {
+        "name": "group.2_type",
+        "value": "dam:Asset",
+        "sling:resourceType": "granite/ui/components/coral/foundation/form/hidden"
+      },
+      "orderby": {
+        "name": "orderby",
+        "value": "@jcr:score",
+        "sling:resourceType": "granite/ui/components/coral/foundation/form/hidden"
+      },
+      "orderby.sort": {
+        "name": "orderby.sort",
+        "value": "desc",
+        "sling:resourceType": "granite/ui/components/coral/foundation/form/hidden"
+      },
+      "charset": {
+        "name": "_charset_",
+        "value": "utf-8",
+        "sling:resourceType": "granite/ui/components/coral/foundation/form/hidden"
+      }
+    },
+    "views": {
+      "card": {
+        "jcr:title": "Card View",
+        "src": "/mnt/overlay/wcm-io/wcm/ui/granite/content/form/pathfield/picker/search/views/card.result.${requestPathInfo.selectors[1]}{.offset,limit}.html?${querystring}",
+        "icon": "viewCard",
+        "size": "${empty requestPathInfo.selectors[3] ? \"20\" : requestPathInfo.selectors[3]}",
+        "limit": 20,
+        "granite:id": "granite-ui-pathfield-picker-search-collection",
+        "selectionMode": true,
+        "sling:resourceType": "granite/ui/components/coral/foundation/masonry",
+        "selectionCount": "${requestPathInfo.selectors[1]}",
+        "datasource": {
+          "offset": "${requestPathInfo.selectors[2]}",
+          "itemResourceType": "cq/gui/components/coral/admin/page/card",
+          "limit": "${empty requestPathInfo.selectors[3] ? \"21\" : requestPathInfo.selectors[3] + 1}",
+          "sling:resourceType": "granite/ui/components/coral/foundation/querybuilder/datasource"
+        }
+      }
+    }
+  }
+}

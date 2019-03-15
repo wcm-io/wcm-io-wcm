@@ -58,9 +58,7 @@ else {
 Resource resourceWrapper = GraniteUiSyntheticResource.wrapMerge(resource, overwriteProperties);
 
 RequestDispatcherOptions options = new RequestDispatcherOptions();
-options.setForceResourceType(GraniteUi.getExistingResourceType(resourceResolver,
-    "/libs/granite/ui/components/coral/foundation/form/pathfield",
-    "/libs/granite/ui/components/foundation/form/pathbrowser"));
+options.setForceResourceType("wcm-io/wcm/ui/granite/components/form/pathfield");
 RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(resourceWrapper, options);
 dispatcher.include(slingRequest, slingResponse);
 

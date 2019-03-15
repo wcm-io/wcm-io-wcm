@@ -20,5 +20,5 @@
 /**
  * Helper for building virtual resource trees for Granite UI components.
  */
-@org.osgi.annotation.versioning.Version("1.0.1")
+@org.osgi.annotation.versioning.Version("1.1")
 package io.wcm.wcm.ui.granite.resource;

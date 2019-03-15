@@ -1,34 +1,31 @@
-<div data-sly-use.parsys="io.wcm.wcm.parsys.controller.Parsys" data-sly-unwrap>
+<sly data-sly-use.parsys="io.wcm.wcm.parsys.controller.Parsys"/>
 
-  <!--/* Parsys variant with wrapper element */-->
-  <div data-sly-test="${parsys.wrapperElement}"
-      data-sly-list.parsysItem="${parsys.items}"
-      data-sly-element="${parsys.wrapperElementName}"
-      class="${parsys.wrapperCss}">
-
-    <div data-sly-call="${renderItem @ item=parsysItem}" data-sly-unwrap></div>
-
-  </div>
-
-  <!--/* Parsys variant without wrapper element */-->
-  <div data-sly-test="${!parsys.wrapperElement}"
-      data-sly-list.parsysItem="${parsys.items}"
-      data-sly-unwrap>
-
-    <div data-sly-call="${renderItem @ item=parsysItem}" data-sly-unwrap></div>
-
-  </div>
-
+<!--/* Parsys variant with wrapper element */-->
+<div data-sly-test="${parsys.wrapperElement}"
+    data-sly-list.parsysItem="${parsys.items}"
+    data-sly-element="${parsys.wrapperElementName}"
+    class="${parsys.wrapperCss}">
+  <sly data-sly-call="${renderItem @ item=parsysItem}"/>
 </div>
+
+<!--/* Parsys variant without wrapper element */-->
+<sly data-sly-test="${!parsys.wrapperElement}"
+    data-sly-list.parsysItem="${parsys.items}">
+  <sly data-sly-call="${renderItem @ item=parsysItem}"/>
+</sly>
 
 <!--/* Render parsys item */-->
 <template data-sly-template.renderItem="${ @ item}">
 
-  <!--/* Paragraph */-->
-  <div data-sly-test="${!item.newarea}"
+  <!--/* Paragraph - with decoration */-->
+  <sly data-sly-test="${item.decorate && !item.newarea}"
       data-sly-resource="${item.resourcePath @ resourceType=item.resourceType,
-      decorationTagName=item.elementName, cssClassName=item.cssClassName}"
-      data-sly-unwrap></div>
+      decorationTagName=item.elementName, cssClassName=item.cssClassName}"/>
+
+  <!--/* Paragraph - without decoration */-->
+  <sly data-sly-test="${!item.decorate && !item.newarea}"
+      data-sly-resource="${item.resourcePath @ resourceType=item.resourceType,
+      decorate=false}"/>
 
   <!--/* New area */-->
   <div data-sly-test="${item.newarea}"
