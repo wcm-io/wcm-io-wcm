@@ -19,9 +19,12 @@
  */
 package io.wcm.wcm.commons.component;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * Resolution mode for resolving component properties.
  */
+@ProviderType
 public enum ComponentPropertyResolution {
 
   /**
