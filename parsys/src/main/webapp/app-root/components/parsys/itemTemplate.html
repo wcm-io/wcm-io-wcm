@@ -1,0 +1,21 @@
+<!--/* Render parsys item */-->
+<template data-sly-template.renderItem="${@ item}">
+
+  <!--/* Paragraph - with decoration */-->
+  <sly data-sly-test="${item.decorate && !item.newarea}"
+      data-sly-resource="${item.resourcePath @ resourceType=item.resourceType,
+      decorationTagName=item.elementName, cssClassName=item.cssClassName}"/>
+
+  <!--/* Paragraph - without decoration */-->
+  <sly data-sly-test="${!item.decorate && !item.newarea}"
+      data-sly-resource="${item.resourcePath @ resourceType=item.resourceType,
+      decorate=false}"/>
+
+  <!--/* New area */-->
+  <div data-sly-test="${item.newarea}"
+        style="${item.style @ context='unsafe'}"
+        class="${item.cssClassName}"
+        data-sly-element="${item.elementName}"
+        data-sly-resource="${item.resourcePath @ resourceType=item.resourceType}"></div>
+
+</template>
