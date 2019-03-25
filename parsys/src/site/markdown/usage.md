@@ -90,6 +90,8 @@ You can set the following property in the component node of the paragraph system
 
 * **wcmio:parsysParagraphNoDecorationWcmMode**: Can be set to a list of WCM modes. When one of the given WCM modes is active, the decoration tag for the paragraph items is not rendered.
 
+* **wcmio:parsysParagraphValidate**: If set to true, each paragraph item is validated. If it is not valid, it's hidden when `wcmmode=disabled`. To validate the paragraph item a Sling Model has to be implemented registered to the adapter `io.wcm.wcm.parsys.ParsysItem` and the resource type of the paragraph item's resource.
+
 * **wcmio:parsysWrapperElement**: Sets the element name to be used for the element wrapping the whole paragraph system. If not set no wrapping element is generated for the paragraph system.
 
 * **wcmio:parsysWrapperCss**: Defines custom CSS classes to be set on the wrapper element.

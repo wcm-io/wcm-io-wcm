@@ -24,6 +24,9 @@
   <body>
 
     <release version="1.3.0" date="not released">
+      <action type="add" dev="sseifert">
+        Add new parsys component property 'wcmio:parsysParagraphValidate'.
+      </action>
       <action type="update" dev="sseifert">
         Parsys markup: Move 'renderItem' HTL template to separate file.
       </action>

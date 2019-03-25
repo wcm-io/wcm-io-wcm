@@ -25,6 +25,7 @@ import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_NEWAREA_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_ELEMENT;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE;
+import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_VALIDATE;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
 import static io.wcm.wcm.parsys.controller.Parsys.DEFAULT_ELEMENT_NAME;
@@ -44,6 +45,7 @@ import java.util.List;
 
 import org.apache.sling.api.SlingConstants;
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -51,9 +53,11 @@ import org.junit.Test;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
+import com.google.common.base.Function;
 
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.testing.mock.aem.junit.AemContextBuilder;
+import io.wcm.wcm.parsys.ParsysItem;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 @SuppressWarnings("null")
@@ -81,9 +85,11 @@ public class ParsysTest {
     parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsys",
         "sling:resourceType", RESOURCE_TYPE_SAMPLE);
     par1Resource = context.create().resource(parsysResource.getPath() + "/par1",
-        "sling:resourceType", COMPONENT_PATH_1);
+        "sling:resourceType", COMPONENT_PATH_1,
+        "valid", true);
     par2Resource = context.create().resource(parsysResource.getPath() + "/par2",
-        "sling:resourceType", COMPONENT_PATH_2);
+        "sling:resourceType", COMPONENT_PATH_2,
+        "valid", false);
 
     context.currentResource(parsysResource);
   }
@@ -374,6 +380,82 @@ public class ParsysTest {
     assertEquals(DEFAULT_ELEMENT_NAME, item3.getElementName());
     assertTrue(item3.isDecorate());
     assertTrue(item3.isNewArea());
+  }
+
+  @Test
+  public void testParagraphValidate_DisabledMode() {
+    context.registerAdapter(Resource.class, ParsysItem.class, new ValidatedParsysItem());
+
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
+        PN_PARSYS_PARAGRAPH_VALIDATE, true);
+
+    WCMMode.DISABLED.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+
+    List<Item> items = parsys.getItems();
+    assertEquals(1, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertTrue(item1.isValid());
+  }
+
+  @Test
+  public void testParagraphValidate_DisabledMode_NoAdapter() {
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
+        PN_PARSYS_PARAGRAPH_VALIDATE, true);
+
+    WCMMode.DISABLED.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+
+    List<Item> items = parsys.getItems();
+    assertEquals(2, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertTrue(item1.isValid());
+
+    Item item2 = items.get(1);
+    assertEquals(par2Resource.getPath(), item2.getResourcePath());
+    assertTrue(item2.isValid());
+  }
+
+  @Test
+  public void testParagraphValidate_EditMode() {
+    context.registerAdapter(Resource.class, ParsysItem.class, new ValidatedParsysItem());
+
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
+        PN_PARSYS_PARAGRAPH_VALIDATE, true);
+
+    WCMMode.EDIT.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+
+    List<Item> items = parsys.getItems();
+    assertEquals(3, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertTrue(item1.isValid());
+
+    Item item2 = items.get(1);
+    assertEquals(par2Resource.getPath(), item2.getResourcePath());
+    assertFalse(item2.isValid());
+
+    Item item3 = items.get(2);
+    assertEquals(NEWAREA_RESOURCE_PATH, item3.getResourcePath());
+    assertFalse(item3.isValid());
+  }
+
+  private static class ValidatedParsysItem implements Function<Resource, ParsysItem> {
+    @Override
+    public @Nullable ParsysItem apply(@Nullable Resource resource) {
+      return new ParsysItem() {
+        @Override
+        public boolean isValid() {
+          return resource.getValueMap().get("valid", false);
+        }
+      };
+    }
   }
 
 }

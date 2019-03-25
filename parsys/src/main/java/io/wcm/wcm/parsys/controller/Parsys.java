@@ -24,6 +24,7 @@ import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_NEWAREA_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_ELEMENT;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE;
+import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_VALIDATE;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
 
@@ -53,6 +54,7 @@ import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.sling.models.annotations.AemObject;
 import io.wcm.wcm.commons.component.ComponentPropertyResolution;
 import io.wcm.wcm.commons.component.ComponentPropertyResolver;
+import io.wcm.wcm.parsys.ParsysItem;
 
 /**
  * Controller for paragraph system.
@@ -94,6 +96,7 @@ public final class Parsys {
   private String newAreaCss;
   private String paragraphElementName;
   private boolean paragraphDecoration;
+  private boolean paragraphValidate;
   private String wrapperElementName;
   private String wrapperCss;
 
@@ -110,6 +113,7 @@ public final class Parsys {
     paragraphElementName = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_ELEMENT, String.class);
     wrapperElementName = componentPropertyResolver.get(PN_PARSYS_WRAPPER_ELEMENT, String.class);
     wrapperCss = componentPropertyResolver.get(PN_PARSYS_WRAPPER_CSS, String.class);
+    paragraphValidate = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_VALIDATE, false);
 
     // check decoration
     String[] paragraphNoDecorationWcmMode = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE, String[].class);
@@ -121,7 +125,10 @@ public final class Parsys {
       parsysParentResource = currentResource;
     }
     for (Resource childResource : parsysParentResource.getChildren()) {
-      items.add(createResourceItem(childResource));
+      Item item = createResourceItem(childResource);
+      if (wcmMode != WCMMode.DISABLED || item.isValid()) {
+        items.add(item);
+      }
     }
     if (wcmMode != WCMMode.DISABLED) {
       items.add(createNewAreaItem());
@@ -157,7 +164,20 @@ public final class Parsys {
       css.add(htmlTagAttrs.get("class"));
     }
 
-    return new Item(resource.getPath(), null, itemElementName, null, css.build(), paragraphDecoration, false);
+    // try to check valid state of paragraph item
+    boolean valid = true;
+    if (paragraphValidate) {
+      ParsysItem parsysItem = resource.adaptTo(ParsysItem.class);
+      if (parsysItem != null) {
+        valid = parsysItem.isValid();
+      }
+    }
+
+    return new Item(resource.getPath())
+        .elementName(itemElementName)
+        .cssClassName(css.build())
+        .decorate(paragraphDecoration)
+        .valid(valid);
   }
 
   /**
@@ -193,7 +213,13 @@ public final class Parsys {
     css.add(newAreaCss);
     String newAreaElementName = StringUtils.defaultString(paragraphElementName, DEFAULT_ELEMENT_NAME);
     String newAreaResourceType = getNewAreaResourceType(componentContext.getComponent().getPath());
-    return new Item(NEWAREA_RESOURCE_PATH, newAreaResourceType, newAreaElementName, style, css.build(), true, true);
+    return new Item(NEWAREA_RESOURCE_PATH)
+        .newArea(true)
+        .resourceType(newAreaResourceType)
+        .elementName(newAreaElementName)
+        .style(style)
+        .cssClassName(css.build())
+        .decorate(true);
   }
 
   /**
@@ -250,22 +276,51 @@ public final class Parsys {
   public static final class Item {
 
     private final String resourcePath;
-    private final String resourceType;
-    private final String elementName;
-    private final String style;
-    private final String cssClassName;
-    private final boolean decorate;
-    private final boolean newArea;
+    private String resourceType;
+    private String elementName;
+    private String style;
+    private String cssClassName;
+    private boolean decorate;
+    private boolean newArea;
+    private boolean valid;
 
-    Item(String resourcePath, String resourceType, String elementName, String style, String cssClassName,
-        boolean decorate, boolean newArea) {
+    Item(String resourcePath) {
       this.resourcePath = resourcePath;
-      this.resourceType = resourceType;
-      this.elementName = elementName;
-      this.style = style;
-      this.cssClassName = cssClassName;
-      this.decorate = decorate;
-      this.newArea = newArea;
+    }
+
+    Item resourceType(String value) {
+      this.resourceType = value;
+      return this;
+    }
+
+    Item elementName(String value) {
+      this.elementName = value;
+      return this;
+    }
+
+    Item style(String value) {
+      this.style = value;
+      return this;
+    }
+
+    Item cssClassName(String value) {
+      this.cssClassName = value;
+      return this;
+    }
+
+    Item decorate(boolean value) {
+      this.decorate = value;
+      return this;
+    }
+
+    Item newArea(boolean value) {
+      this.newArea = value;
+      return this;
+    }
+
+    Item valid(boolean value) {
+      this.valid = value;
+      return this;
     }
 
     /**
@@ -315,6 +370,14 @@ public final class Parsys {
      */
     public boolean isNewArea() {
       return newArea;
+    }
+
+    /**
+     * @return true if content of this paragraph item is valid.
+     *         If not it should be hidded when wcmmode=disabled.
+     */
+    public boolean isValid() {
+      return this.valid;
     }
 
   }

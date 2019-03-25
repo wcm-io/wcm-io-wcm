@@ -2,7 +2,7 @@
  * #%L
  * wcm.io
  * %%
- * Copyright (C) 2014 wcm.io
+ * Copyright (C) 2019 wcm.io
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,21 @@
  * limitations under the License.
  * #L%
  */
-/**
- * AEM paragraph system based on path configuration in page components.
- */
-@org.osgi.annotation.versioning.Version("1.2")
 package io.wcm.wcm.parsys;
+
+import org.osgi.annotation.versioning.ConsumerType;
+
+/**
+ * Interface that has to be implemented by Sling Models referenced to be used in combination with the
+ * {@link ParsysNameConstants#PN_PARSYS_PARAGRAPH_VALIDATE} parameter.
+ */
+@ConsumerType
+public interface ParsysItem {
+
+  /**
+   * Checks if the content of this paragraph item is valid. If not the paragraph item is hidden if wcmmode=disabled.
+   * @return true if content of this paragraph item is valid.
+   */
+  boolean isValid();
+
+}

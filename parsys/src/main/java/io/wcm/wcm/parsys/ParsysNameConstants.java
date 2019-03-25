@@ -77,6 +77,13 @@ public final class ParsysNameConstants {
   public static final String PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE = "wcmio:parsysParagraphNoDecorationWcmMode";
 
   /**
+   * If set to true, each paragraph item is validated. If it is not valid, it's hidden when
+   * <code>wcmmode=disabled</code>. To validate the paragraph item a Sling Model has to be implemented registered to the
+   * adapter {@link ParsysItem} and the resource type of the paragraph item's resource.
+   */
+  public static final String PN_PARSYS_PARAGRAPH_VALIDATE = "wcmio:parsysParagraphValidate";
+
+  /**
    * Sets the element name to be used for the element wrapping the whole paragraph system.
    * If not set no wrapping element is generated for the paragraph system.
    * To be used as property in the parsys component definition.
