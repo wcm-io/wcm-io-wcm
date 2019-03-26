@@ -23,7 +23,10 @@ import java.util.Set;
 
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
+
+import com.day.cq.wcm.api.Page;
 
 /**
  * Detects allowed components for authoring for a given page/resource context.
@@ -39,6 +42,18 @@ public interface AllowedComponentsProvider {
    */
   @NotNull
   Set<String> getAllowedComponents(@NotNull String resourcePath, @NotNull ResourceResolver resolver);
+
+  /**
+   * Get allowed components for a specific resource path inside a page.
+   * @param page Page
+   * @param relativeResourcePath Relative resource path inside the page
+   * @param resourceType Resource type of the paragraph system
+   * @param resolver Resource resolver
+   * @return Component paths
+   */
+  @NotNull
+  Set<String> getAllowedComponents(@NotNull Page page, @NotNull String relativeResourcePath,
+      @Nullable String resourceType, @NotNull ResourceResolver resolver);
 
   /**
    * Get allowed components anywhere inside a page.

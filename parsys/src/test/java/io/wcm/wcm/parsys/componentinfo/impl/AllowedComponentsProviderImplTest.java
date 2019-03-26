@@ -51,6 +51,9 @@ public class AllowedComponentsProviderImplTest {
 
   private AllowedComponentsProvider underTest;
 
+  private Page basePage;
+  private Page inheritedPage;
+
   @Before
   public void setUp() {
     context.registerInjectActivateService(new ParsysConfigManagerImpl());
@@ -63,11 +66,11 @@ public class AllowedComponentsProviderImplTest {
     context.load().json("/parsys/inheritedPageComponent.json", INHERITED_PAGE_COMPONENT);
 
     // create pages with dummy content
-    Page basePage = context.create().page(CONTENT_ROOT_PATH + "/page-1", BASE_TEMPLATE,
+    basePage = context.create().page(CONTENT_ROOT_PATH + "/page-1", BASE_TEMPLATE,
         ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, BASE_PAGE_COMPONENT));
     addDummyContent(basePage);
 
-    Page inheritedPage = context.create().page(CONTENT_ROOT_PATH + "/page-2", INHERITED_TEMPLATE,
+    inheritedPage = context.create().page(CONTENT_ROOT_PATH + "/page-2", INHERITED_TEMPLATE,
         ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, INHERITED_PAGE_COMPONENT));
     addDummyContent(inheritedPage);
     context.create().resource(inheritedPage.getContentResource().getPath() + "/special",
@@ -243,6 +246,51 @@ public class AllowedComponentsProviderImplTest {
 
   }
 
+  @Test
+  public void testGetAllowedComponentsForParsys_NonexistingResource_ResourceType_Ancestor1() {
+    String relativePath = "jcr:content/nonExistingResource";
+    Set<String> allowedComponents = underTest.getAllowedComponents(basePage, relativePath,
+        "dummy/components/parentWithAncestorLevel1", context.resourceResolver());
+
+    // null check
+    assertNotNull("Allowed component for parsys cannot be null", allowedComponents);
+
+    // positive tests
+    assertTrue("Component 'nestedComp1' must be allowed in " + relativePath + ".",
+        allowedComponents.contains("dummy/components/nestedComp1"));
+    assertTrue("Component 'nestedComp2' must be allowed in " + relativePath + ".",
+        allowedComponents.contains("dummy/components/nestedComp2"));
+    assertTrue("Component 'nestedComp3' must be allowed in " + relativePath + ".",
+        allowedComponents.contains("dummy/components/nestedComp3"));
+
+    // negative tests
+    assertFalse("Component 'comp1' should not be allowed in " + relativePath + ".",
+        allowedComponents.contains("dummy/components/comp1"));
+  }
+
+  @Test
+  public void testGetAllowedComponentsForParsys_NonexistingResource_ResourceType_NoAncestor() {
+    String relativePath = "jcr:content/nonExistingResource";
+    Set<String> allowedComponents = underTest.getAllowedComponents(basePage, relativePath,
+        "dummy/components/parentWithoutAncestorLevel", context.resourceResolver());
+
+    // null check
+    assertNotNull("Allowed component for parsys cannot be null", allowedComponents);
+
+    // positive tests
+    assertTrue("Component 'nestedComp1' must be allowed in " + relativePath + ".",
+        allowedComponents.contains("dummy/components/nestedComp1"));
+    assertTrue("Component 'nestedComp2' must be allowed in " + relativePath + ".",
+        allowedComponents.contains("dummy/components/nestedComp2"));
+
+    // negative tests
+    assertFalse("Component 'comp1' should not be allowed in " + relativePath + ".",
+        allowedComponents.contains("dummy/components/comp1"));
+    assertFalse("Component 'nestedComp3' should not be allowed in " + relativePath + ".",
+        allowedComponents.contains("dummy/components/nestedComp3"));
+  }
+
+
   private void addDummyContent(Page page) {
     String contentPath = page.getContentResource().getPath();
 
@@ -250,7 +298,7 @@ public class AllowedComponentsProviderImplTest {
     context.create().resource(contentPath + "/content",
         ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "dummy/components/parsys"));
 
-    // 2col-container (nested parsys )
+    // 2col-container (nested parsys)
     context.create().resource(contentPath + "/content/2colContainer",
         ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "dummy/components/container2Col"));
     context.create().resource(contentPath + "/content/2colContainer/items");

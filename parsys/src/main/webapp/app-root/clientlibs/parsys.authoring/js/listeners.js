@@ -44,7 +44,11 @@
 
       // get allowed components based on relative path from backend
       $.ajax({
-        url: pagePath + ".wcmio-parsys-components.json?path=" + encodeURI(localPath),
+        url: pagePath + ".wcmio-parsys-components.json",
+        data: {
+          "path": localPath,
+          "resourceType": this.config ? this.config.type : null,
+        },
         success: function(result) {
           if (result) {
             // remove all elements

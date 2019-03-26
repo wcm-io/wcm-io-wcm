@@ -32,6 +32,30 @@
         "allowedChildren":[
           "dummy/components/linkItem"
         ]
+      },
+
+      "allowedParentsWithAncestorLevel1": {
+        "pattern": "^jcr:content/.*$",
+        "parentAncestorLevel": 1,
+        "allowedParents": [
+          "dummy/components/parentWithAncestorLevel1"
+        ],
+        "allowedChildren": [
+          "dummy/components/nestedComp1",
+          "dummy/components/nestedComp2",
+          "dummy/components/nestedComp3"
+        ]
+      },
+
+      "allowedParentsWithoutAncestorLevel": {
+        "pattern": "^jcr:content/.*$",
+        "allowedParents": [
+          "dummy/components/parentWithoutAncestorLevel"
+        ],
+        "allowedChildren": [
+          "dummy/components/nestedComp1",
+          "dummy/components/nestedComp2"
+        ]
       }
 
     }

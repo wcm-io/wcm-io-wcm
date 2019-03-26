@@ -28,6 +28,9 @@
         Add new parsys component property 'wcmio:parsysParagraphValidate'.
       </action>
       <action type="update" dev="sseifert">
+        Support allowed component detection with ancestor parent level 1 for non-existing resources.
+      </action>
+      <action type="update" dev="sseifert">
         Parsys markup: Move 'renderItem' HTL template to separate file.
       </action>
     </release>

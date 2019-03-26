@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -36,6 +37,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.google.common.collect.ImmutableSet;
 
+import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
@@ -54,58 +56,77 @@ public final class AllowedComponentsProviderImpl implements AllowedComponentsPro
    * @param resourcePath Resource path inside content page
    * @return Set of component paths (absolute resource types)
    */
-  @SuppressWarnings("null")
   @Override
   public @NotNull Set<String> getAllowedComponents(@NotNull String resourcePath, @NotNull ResourceResolver resolver) {
-    Set<String> allowedComponents = new HashSet<>();
-    Set<String> deniedComponents = new HashSet<>();
-
-    PageManager pageManager = resolver.adaptTo(PageManager.class);
+    PageManager pageManager = AdaptTo.notNull(resolver, PageManager.class);
     Page page = pageManager.getContainingPage(resourcePath);
     if (page == null && StringUtils.contains(resourcePath, "/" + JcrConstants.JCR_CONTENT)) {
       // if resource does not exist (e.g. inherited parsys) get page from resource path manually
       page = pageManager.getPage(StringUtils.substringBefore(resourcePath, "/" + JcrConstants.JCR_CONTENT));
     }
-    if (page != null) {
-      String pageComponentPath = page.getContentResource().getResourceType();
-      String relativePath = resourcePath.substring(page.getPath().length() + 1);
+    if (page == null) {
+      return ImmutableSet.of();
+    }
+    String relativePath = StringUtils.substringAfter(resourcePath, page.getPath() + "/");
+    return getAllowedComponents(page, relativePath, null, resolver);
+  }
 
-      Iterable<ParsysConfig> parSysConfigs = parsysConfigManager.getParsysConfigs(pageComponentPath, relativePath, resolver);
+  /**
+   * Get allowed components for a specific resource path inside a page.
+   * @param page Page
+   * @param relativeResourcePath Relative resource path inside the page
+   * @param resourceType Resource type of the paragraph system
+   * @param resolver Resource resolver
+   * @return Component paths
+   */
+  @Override
+  public @NotNull Set<String> getAllowedComponents(@NotNull Page page, @NotNull String relativeResourcePath,
+      @Nullable String resourceType, @NotNull ResourceResolver resolver) {
+    Set<String> allowedComponents = new HashSet<>();
+    Set<String> deniedComponents = new HashSet<>();
 
-      Resource parentResource = null;
-      Resource grandParentResource = null;
+    String pageComponentPath = page.getContentResource().getResourceType();
 
-      for (ParsysConfig pathDef : parSysConfigs) {
+    Iterable<ParsysConfig> parSysConfigs = parsysConfigManager.getParsysConfigs(pageComponentPath, relativeResourcePath, resolver);
 
-        boolean includePathDef = false;
-        if (pathDef.getAllowedParents().size() == 0) {
-          includePathDef = true;
-        }
-        else {
-          Resource checkResource = null;
-          if (pathDef.getParentAncestorLevel() == 1) {
-            if (parentResource == null) {
-              parentResource = resolver.getResource(resourcePath);
+    Resource parentResource = null;
+    Resource grandParentResource = null;
+
+    for (ParsysConfig pathDef : parSysConfigs) {
+
+      boolean includePathDef = false;
+      if (pathDef.getAllowedParents().size() == 0) {
+        includePathDef = true;
+      }
+      else {
+        String checkResourceType = null;
+        if (pathDef.getParentAncestorLevel() == 1) {
+          if (resourceType != null) {
+            checkResourceType = resourceType;
+          }
+          else if (parentResource == null) {
+            parentResource = resolver.getResource(page.getPath() + "/" + relativeResourcePath);
+            if (parentResource != null) {
+              checkResourceType = parentResource.getResourceType();
             }
-            checkResource = parentResource;
-          }
-          if (pathDef.getParentAncestorLevel() == 2) {
-            if (grandParentResource == null) {
-              grandParentResource = resolver.getResource(resourcePath + "/..");
-            }
-            checkResource = grandParentResource;
-          }
-          if (checkResource != null) {
-            String resourceType = checkResource.getResourceType();
-            includePathDef = pathDef.getAllowedParents().contains(resourceType);
           }
         }
-
-        if (includePathDef) {
-          allowedComponents.addAll(pathDef.getAllowedChildren());
-          deniedComponents.addAll(pathDef.getDeniedChildren());
+        else if (pathDef.getParentAncestorLevel() == 2) {
+          if (grandParentResource == null) {
+            grandParentResource = resolver.getResource(page.getPath() + "/" + relativeResourcePath + "/..");
+          }
+          if (grandParentResource != null) {
+            checkResourceType = grandParentResource.getResourceType();
+          }
         }
+        if (checkResourceType != null) {
+          includePathDef = pathDef.getAllowedParents().contains(checkResourceType);
+        }
+      }
 
+      if (includePathDef) {
+        allowedComponents.addAll(pathDef.getAllowedChildren());
+        deniedComponents.addAll(pathDef.getDeniedChildren());
       }
 
     }

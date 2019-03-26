@@ -47,6 +47,7 @@ public class ParsysComponentsServletTest {
 
   private static final String PAGE_PATH = "/content/sample/page1";
   private static final String LOCAL_PATH = "jcr:content/sample";
+  private static final String RESOURCE_TYPE = "/sample/components/parsys";
 
   @Rule
   public AemContext context = new AemContext();
@@ -61,10 +62,12 @@ public class ParsysComponentsServletTest {
     currentPage = context.create().page(PAGE_PATH);
     context.currentPage(currentPage);
 
-    context.request().setParameterMap(ImmutableValueMap.of(ParsysComponentsServlet.RP_PATH, LOCAL_PATH));
+    context.request().setParameterMap(ImmutableValueMap.of(
+        ParsysComponentsServlet.RP_PATH, LOCAL_PATH,
+        ParsysComponentsServlet.RP_RESOURCE_TYPE, RESOURCE_TYPE));
 
-    when(allowedComponentsProvider.getAllowedComponents(
-        eq(PAGE_PATH + "/" + LOCAL_PATH), any(ResourceResolver.class)))
+    when(allowedComponentsProvider.getAllowedComponents(any(Page.class),
+        eq(LOCAL_PATH), eq(RESOURCE_TYPE), any(ResourceResolver.class)))
         .thenReturn(ImmutableSortedSet.of("sample/components/comp1", "sample/components/comp2"));
 
     context.registerService(AllowedComponentsProvider.class, allowedComponentsProvider);
