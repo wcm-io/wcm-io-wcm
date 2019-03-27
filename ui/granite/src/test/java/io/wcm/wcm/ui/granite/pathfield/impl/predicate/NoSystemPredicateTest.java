@@ -22,31 +22,32 @@ package io.wcm.wcm.ui.granite.pathfield.impl.predicate;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_PRIMARYTYPE;
 import static com.day.cq.commons.jcr.JcrConstants.NT_FOLDER;
 import static com.day.cq.commons.jcr.JcrConstants.NT_UNSTRUCTURED;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.collections.Predicate;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-public class NoSystemPredicateTest {
+@ExtendWith(AemContextExtension.class)
+class NoSystemPredicateTest {
 
-  @Rule
-  public AemContext context = new AemContext(ResourceResolverType.JCR_MOCK);
+  private final AemContext context = new AemContext(ResourceResolverType.JCR_MOCK);
 
   private Predicate underTest;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     underTest = new NoSystemPredicate();
   }
 
   @Test
-  public void testMatch() {
+  void testMatch() {
     assertTrue(underTest.evaluate(context.create().resource("/content/test1",
         JCR_PRIMARYTYPE, NT_FOLDER)));
     assertTrue(underTest.evaluate(context.create().resource("/content/test2",
@@ -54,7 +55,7 @@ public class NoSystemPredicateTest {
   }
 
   @Test
-  public void testNoMatch() {
+  void testNoMatch() {
     assertFalse(underTest.evaluate(context.create().resource("/content/rep:test1",
         JCR_PRIMARYTYPE, NT_UNSTRUCTURED)));
     assertFalse(underTest.evaluate(context.create().resource("/content/jcr:system",

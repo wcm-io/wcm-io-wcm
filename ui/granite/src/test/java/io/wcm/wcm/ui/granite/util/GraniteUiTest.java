@@ -19,27 +19,30 @@
  */
 package io.wcm.wcm.ui.granite.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.when;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import com.adobe.granite.ui.components.Value;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
-@RunWith(MockitoJUnitRunner.class)
-public class GraniteUiTest {
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class GraniteUiTest {
 
   private static final String CONTENT_PATH = "/my/path";
 
@@ -56,9 +59,9 @@ public class GraniteUiTest {
   @Mock
   private Page page;
 
-  @Before
+  @BeforeEach
   @SuppressWarnings("null")
-  public void setUp() {
+  void setUp() {
     when(request.getResourceResolver()).thenReturn(resourceResolver);
     when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(CONTENT_PATH);
     when(request.getRequestPathInfo()).thenReturn(requestPathInfo);
@@ -68,68 +71,68 @@ public class GraniteUiTest {
   }
 
   @Test
-  public void testGetContentResource() {
+  void testGetContentResource() {
     assertSame(resource, GraniteUi.getContentResource(request));
   }
 
   @Test
-  public void testGetContentResource_NoContentPath() {
+  void testGetContentResource_NoContentPath() {
     when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(null);
     assertNull(GraniteUi.getContentResource(request));
   }
 
   @Test
-  public void testGetContentResource_NoContentPath_FallbackToSuffix() {
+  void testGetContentResource_NoContentPath_FallbackToSuffix() {
     when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(null);
     when(requestPathInfo.getSuffix()).thenReturn(CONTENT_PATH);
     assertSame(resource, GraniteUi.getContentResource(request));
   }
 
   @Test
-  public void testGetContentResource_NoResource() {
+  void testGetContentResource_NoResource() {
     when(resourceResolver.getResource(CONTENT_PATH)).thenReturn(null);
     assertNull(GraniteUi.getContentResource(request));
   }
 
   @Test
-  public void testGetContentPage() {
+  void testGetContentPage() {
     assertSame(page, GraniteUi.getContentPage(request));
   }
 
   @Test
-  public void testGetContentPage_NoResource() {
+  void testGetContentPage_NoResource() {
     when(resourceResolver.getResource(CONTENT_PATH)).thenReturn(null);
     assertNull(GraniteUi.getContentPage(request));
   }
 
   @Test
-  public void shouldGetParentOfMissingContentResource() {
+  void shouldGetParentOfMissingContentResource() {
     when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(CONTENT_PATH + "/unavailable");
     assertSame(resource, GraniteUi.getContentResourceOrParent(request));
     assertSame(page, GraniteUi.getContentPage(request));
   }
 
   @Test
-  public void shouldGetGrandParentOfMissingContentResource() {
+  void shouldGetGrandParentOfMissingContentResource() {
     when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(CONTENT_PATH + "/not/existing");
     assertSame(resource, GraniteUi.getContentResourceOrParent(request));
     assertSame(page, GraniteUi.getContentPage(request));
   }
 
   @Test
-  public void shouldGetExistingResource() {
+  void shouldGetExistingResource() {
     assertSame(resource, GraniteUi.getContentResourceOrParent(request));
   }
 
   @Test
-  public void shouldWorkOnToplevel() {
+  void shouldWorkOnToplevel() {
     when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn("not_a_single_slash");
     assertNull(GraniteUi.getContentResourceOrParent(request));
     assertNull(GraniteUi.getContentPage(request));
   }
 
   @Test
-  public void testGetExistingResourceType() {
+  void testGetExistingResourceType() {
     when(resourceResolver.getResource("/type/1")).thenReturn(resource);
 
     assertEquals("/type/1", GraniteUi.getExistingResourceType(resourceResolver, "/type/2", "/type/1"));

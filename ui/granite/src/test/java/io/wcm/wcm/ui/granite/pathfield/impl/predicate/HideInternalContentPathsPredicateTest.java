@@ -19,30 +19,31 @@
  */
 package io.wcm.wcm.ui.granite.pathfield.impl.predicate;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.collections.Predicate;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-public class HideInternalContentPathsPredicateTest {
+@ExtendWith(AemContextExtension.class)
+class HideInternalContentPathsPredicateTest {
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
   private Predicate underTest;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     underTest = new HideInternalContentPathsPredicate();
   }
 
   @Test
-  public void testEvaluate() {
+  void testEvaluate() {
     assertTrue(underTest.evaluate(context.resourceResolver().getResource("/")));
     assertTrue(underTest.evaluate(context.create().resource("/content")));
     assertFalse(underTest.evaluate(context.create().resource("/system")));

@@ -23,37 +23,38 @@ import static com.day.cq.commons.jcr.JcrConstants.JCR_PRIMARYTYPE;
 import static com.day.cq.commons.jcr.JcrConstants.NT_FILE;
 import static com.day.cq.commons.jcr.JcrConstants.NT_HIERARCHYNODE;
 import static com.day.cq.commons.jcr.JcrConstants.NT_UNSTRUCTURED;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.collections.Predicate;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-public class HierarchyNotFilePredicateTest {
+@ExtendWith(AemContextExtension.class)
+class HierarchyNotFilePredicateTest {
 
-  @Rule
-  public AemContext context = new AemContext(ResourceResolverType.JCR_MOCK);
+  private final AemContext context = new AemContext(ResourceResolverType.JCR_MOCK);
 
   private Predicate underTest;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     underTest = new HierarchyNotFilePredicate();
   }
 
   @Test
-  public void testMatch() {
+  void testMatch() {
     assertTrue(underTest.evaluate(context.create().resource("/content/test",
         JCR_PRIMARYTYPE, NT_HIERARCHYNODE)));
   }
 
   @Test
-  public void testNoMatch() {
+  void testNoMatch() {
     assertFalse(underTest.evaluate(context.create().resource("/content/test",
         JCR_PRIMARYTYPE, NT_UNSTRUCTURED)));
     assertFalse(underTest.evaluate(context.create().resource("/content/test",

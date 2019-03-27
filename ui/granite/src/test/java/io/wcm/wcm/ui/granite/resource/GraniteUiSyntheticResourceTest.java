@@ -24,9 +24,9 @@ import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.copySubt
 import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.create;
 import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.wrap;
 import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.wrapMerge;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -34,15 +34,18 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
-import org.apache.sling.testing.mock.sling.junit.SlingContext;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-public class GraniteUiSyntheticResourceTest {
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+
+@ExtendWith(AemContextExtension.class)
+class GraniteUiSyntheticResourceTest {
 
   private static final ValueMap SAMPLE_PROPERTES = new ValueMapDecorator(ImmutableMap.<String, Object>builder()
       .put("sling:resourceType", "/sample/type")
@@ -55,18 +58,17 @@ public class GraniteUiSyntheticResourceTest {
       .put("prop3", 55)
       .build());
 
-  @Rule
-  public SlingContext context = new SlingContext(ResourceResolverType.JCR_MOCK);
+  private final AemContext context = new AemContext(ResourceResolverType.JCR_MOCK);
 
   @Test
-  public void testCreate() {
+  void testCreate() {
     Resource underTest = create(context.resourceResolver(), "/my/path", "/my/type");
     assertEquals("/my/path", underTest.getPath());
     assertEquals("/my/type", underTest.getResourceType());
   }
 
   @Test
-  public void testCreateProperties() {
+  void testCreateProperties() {
     Resource underTest = create(context.resourceResolver(), "/my/path", "/my/type", SAMPLE_PROPERTES);
     assertEquals("/my/path", underTest.getPath());
     assertEquals("/my/type", underTest.getResourceType());
@@ -75,7 +77,7 @@ public class GraniteUiSyntheticResourceTest {
   }
 
   @Test
-  public void testCreateProperitesWithoutPath() {
+  void testCreateProperitesWithoutPath() {
     Resource underTest = create(context.resourceResolver(), SAMPLE_PROPERTES);
     assertEquals(null, underTest.getPath());
     assertEquals(JcrConstants.NT_UNSTRUCTURED, underTest.getResourceType());
@@ -84,7 +86,7 @@ public class GraniteUiSyntheticResourceTest {
   }
 
   @Test
-  public void testWrap() {
+  void testWrap() {
     Resource original = context.create().resource("/original/path", SAMPLE_PROPERTES);
 
     Resource underTest = wrap(original);
@@ -94,7 +96,7 @@ public class GraniteUiSyntheticResourceTest {
   }
 
   @Test
-  public void testWrapProperties() {
+  void testWrapProperties() {
     Resource original = context.create().resource("/original/path", SAMPLE_PROPERTES);
 
     Resource underTest = wrap(original, OTHER_SAMPLE_PROPERTES);
@@ -105,7 +107,7 @@ public class GraniteUiSyntheticResourceTest {
   }
 
   @Test
-  public void testWrapMerge() throws Exception {
+  void testWrapMerge() throws Exception {
     Resource original = context.create().resource("/original/path", SAMPLE_PROPERTES);
 
     Resource underTest = wrapMerge(original, OTHER_SAMPLE_PROPERTES);
@@ -117,7 +119,7 @@ public class GraniteUiSyntheticResourceTest {
 
   @Test
   @SuppressWarnings("null")
-  public void testChild() {
+  void testChild() {
     Resource parent = create(context.resourceResolver(), "/my/path", "/my/type");
 
     Resource child1 = child(parent, "child1", "/my/child/type");
@@ -140,7 +142,7 @@ public class GraniteUiSyntheticResourceTest {
   }
 
   @Test
-  public void testChildWithPropeties() {
+  void testChildWithPropeties() {
     Resource parent = create(context.resourceResolver(), "/my/path", "/my/type");
 
     Resource child1 = child(parent, "child1", "/my/child/type", SAMPLE_PROPERTES);
@@ -151,7 +153,7 @@ public class GraniteUiSyntheticResourceTest {
   }
 
   @Test
-  public void testCopySubtree() {
+  void testCopySubtree() {
     Resource parent = create(context.resourceResolver(), "/target/path", "/my/type");
 
     Resource source = context.create().resource("/source",

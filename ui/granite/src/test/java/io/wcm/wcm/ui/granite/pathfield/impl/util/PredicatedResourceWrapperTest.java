@@ -19,31 +19,32 @@
  */
 package io.wcm.wcm.ui.granite.pathfield.impl.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.ImmutableList;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-public class PredicatedResourceWrapperTest {
+@ExtendWith(AemContextExtension.class)
+class PredicatedResourceWrapperTest {
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
   @Test
-  public void testPredicateMixed() {
+  void testPredicateMixed() {
 
     Resource resource = context.create().resource("/content/r1");
     context.create().resource("/content/r1/child1");
@@ -65,7 +66,7 @@ public class PredicatedResourceWrapperTest {
   }
 
   @Test
-  public void testPredicateOneChild() {
+  void testPredicateOneChild() {
 
     Resource resource = context.create().resource("/content/r1");
     context.create().resource("/content/r1/child2");
@@ -81,7 +82,7 @@ public class PredicatedResourceWrapperTest {
   }
 
   @Test
-  public void testPredicateNoChild() {
+  void testPredicateNoChild() {
 
     Resource resource = context.create().resource("/content/r1");
 
