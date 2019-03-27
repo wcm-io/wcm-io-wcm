@@ -19,34 +19,35 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.common.collect.ImmutableSet;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 
+@ExtendWith(AemContextExtension.class)
 @SuppressWarnings("null")
-public class OsgiParsysConfigProviderTest {
+class OsgiParsysConfigProviderTest {
 
   private static final String COMPONENT_PATH = "/component/path";
   private static final Set<String> ALLOWED_PARENTS = ImmutableSet.of("/parent1", "/parent2");
   private static final Set<String> ALLOWED_CHILDREN = ImmutableSet.of("/child1", "/child2");
   private static final Set<String> DENIED_CHILDREN = ImmutableSet.of("/child3");
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
   @Test
-  public void testWithProperties_Path() {
+  void testWithProperties_Path() {
     ParsysConfig underTest = context.registerInjectActivateService(new OsgiParsysConfigProvider(),
         "pageComponentPath", COMPONENT_PATH,
         "path", "localpath",
@@ -65,7 +66,7 @@ public class OsgiParsysConfigProviderTest {
   }
 
   @Test
-  public void testWithProperties_PathPattern() {
+  void testWithProperties_PathPattern() {
     ParsysConfig underTest = context.registerInjectActivateService(new OsgiParsysConfigProvider(),
         "pageComponentPath", COMPONENT_PATH,
         "pathPattern", ".*any.*",
@@ -83,8 +84,7 @@ public class OsgiParsysConfigProviderTest {
   }
 
   @Test
-  @SuppressWarnings("unused")
-  public void testWithoutProperties() {
+  void testWithoutProperties() {
     ParsysConfig underTest = context.registerInjectActivateService(new OsgiParsysConfigProvider());
 
     assertNull(underTest.getPageComponentPath());

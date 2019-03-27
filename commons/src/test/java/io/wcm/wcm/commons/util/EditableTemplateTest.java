@@ -26,28 +26,29 @@ import static io.wcm.wcm.commons.util.EditableTemplate.NN_EDITABLE_TEMPLATE_POLI
 import static io.wcm.wcm.commons.util.EditableTemplate.NN_EDITABLE_TEMPLATE_STRUCTURE;
 import static io.wcm.wcm.commons.util.EditableTemplate.PN_EDITABLE;
 import static io.wcm.wcm.commons.util.EditableTemplate.isEditRestricted;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import org.apache.sling.api.resource.Resource;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.commons.WCMUtils;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.commons.controller.EditableTemplateSupport;
 import io.wcm.wcm.commons.testcontext.AppAemContext;
 
-public class EditableTemplateTest {
+@ExtendWith(AemContextExtension.class)
+class EditableTemplateTest {
 
-  @Rule
-  public AemContext context = AppAemContext.newAemContext();
+  private final AemContext context = AppAemContext.newAemContext();
 
   private Resource editableTemplate;
   private Resource classicTemplate;
@@ -56,8 +57,8 @@ public class EditableTemplateTest {
   private Resource editableComponentStructure;
   private Resource lockedComponentStructure;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     // prepare editable template
     editableTemplate = context.create().resource("/conf/app1/settings/wcm/templates/template1",
         JCR_PRIMARYTYPE, NT_TEMPLATE);
@@ -77,7 +78,7 @@ public class EditableTemplateTest {
 
   @Test
   @SuppressWarnings("null")
-  public void testNoPage() {
+  void testNoPage() {
     ComponentContext componentContext = mock(ComponentContext.class);
     assertFalse(isEditRestricted(componentContext));
 
@@ -88,7 +89,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testPageWithoutTemplate() {
+  void testPageWithoutTemplate() {
     Page page = context.create().page("/content/mypage");
     Resource resource = context.create().resource(page, "resource1");
     context.currentResource(resource);
@@ -99,7 +100,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testPageWitInvalidTemplate() {
+  void testPageWitInvalidTemplate() {
     Page page = context.create().page("/content/mypage", "/apps/app1/templates/invalidTemplate");
     Resource resource = context.create().resource(page, "resource1");
     context.currentResource(resource);
@@ -110,7 +111,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testPageWithClassicTemplate() {
+  void testPageWithClassicTemplate() {
     Page page = context.create().page("/content/mypage", classicTemplate.getPath());
     Resource resource = context.create().resource(page, "resource1");
     context.currentResource(resource);
@@ -121,7 +122,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testResourceInEditableTemplate_EditableComponentInitial() {
+  void testResourceInEditableTemplate_EditableComponentInitial() {
     context.currentResource(editableComponentInitial);
     assertFalse(isEditRestricted(WCMUtils.getComponentContext(context.request())));
 
@@ -130,7 +131,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testResourceInEditableTemplate_EditableComponentStructure() {
+  void testResourceInEditableTemplate_EditableComponentStructure() {
     context.currentResource(editableComponentStructure);
     assertFalse(isEditRestricted(WCMUtils.getComponentContext(context.request())));
 
@@ -139,7 +140,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testResourceInEditableTemplate_LockedComponentStructure() {
+  void testResourceInEditableTemplate_LockedComponentStructure() {
     context.currentResource(lockedComponentStructure);
     assertFalse(isEditRestricted(WCMUtils.getComponentContext(context.request())));
 
@@ -148,7 +149,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testPageWithEditableTemplate_EditableComponent() {
+  void testPageWithEditableTemplate_EditableComponent() {
     Page page = context.create().page("/content/mypage", editableTemplate.getPath());
     Resource resource = context.create().resource(page, editableComponentStructure.getName());
     context.currentResource(resource);
@@ -159,7 +160,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testPageWithEditableTemplate_LockedComponent() {
+  void testPageWithEditableTemplate_LockedComponent() {
     Page page = context.create().page("/content/mypage", editableTemplate.getPath());
     Resource resource = context.create().resource(page, lockedComponentStructure.getName());
     context.currentResource(resource);
@@ -170,7 +171,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testPageWithEditableTemplate_OtherComponent() {
+  void testPageWithEditableTemplate_OtherComponent() {
     Page page = context.create().page("/content/mypage", editableTemplate.getPath());
     Resource resource = context.create().resource(page, "resource1");
     context.currentResource(resource);
@@ -181,7 +182,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testPageWithEditableTemplate_EditableComponent_ResourceInStructure() {
+  void testPageWithEditableTemplate_EditableComponent_ResourceInStructure() {
     Page page = context.create().page("/content/mypage", editableTemplate.getPath());
     context.currentPage(page);
     context.currentResource(editableComponentStructure);
@@ -192,7 +193,7 @@ public class EditableTemplateTest {
   }
 
   @Test
-  public void testPageWithEditableTemplate_LockedComponent_ResourceInStructure() {
+  void testPageWithEditableTemplate_LockedComponent_ResourceInStructure() {
     Page page = context.create().page("/content/mypage", editableTemplate.getPath());
     context.currentPage(page);
     context.currentResource(lockedComponentStructure);

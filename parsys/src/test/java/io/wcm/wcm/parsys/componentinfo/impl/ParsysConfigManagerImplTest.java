@@ -19,30 +19,31 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.sling.api.SlingConstants;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.google.common.collect.Lists;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ParsysConfigManagerImplTest {
+@ExtendWith(AemContextExtension.class)
+@ExtendWith(MockitoExtension.class)
+class ParsysConfigManagerImplTest {
 
   private static final String RESOURCE_PATH_1 = "sample/components/component1";
   private static final String RESOURCE_PATH_2 = "sample/components/component2";
@@ -50,8 +51,7 @@ public class ParsysConfigManagerImplTest {
   private static final Pattern PATH_PATTERN_1 = Pattern.compile("^" + Pattern.quote("jcr:content/path1") + "$");
   private static final Pattern PATH_PATTERN_2 = Pattern.compile("^.*/path2(/.*)?$");
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
   @Mock
   private ParsysConfig parsysConfig1;
@@ -60,8 +60,8 @@ public class ParsysConfigManagerImplTest {
 
   private ParsysConfigManager underTest;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     context.create().resource("/apps/" + RESOURCE_PATH_1);
     context.create().resource("/apps/" + RESOURCE_PATH_2,
         ImmutableValueMap.of(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, RESOURCE_PATH_1));
@@ -78,7 +78,7 @@ public class ParsysConfigManagerImplTest {
   }
 
   @Test
-  public void testGetPageComponentFromOsgi_RelativePath() {
+  void testGetPageComponentFromOsgi_RelativePath() {
     List<ParsysConfig> configs;
 
     configs = Lists.newArrayList(underTest.getParsysConfigs(RESOURCE_PATH_1, context.resourceResolver()));
@@ -92,7 +92,7 @@ public class ParsysConfigManagerImplTest {
   }
 
   @Test
-  public void testGetPageComponentFromOsgi_AbsolutePath() {
+  void testGetPageComponentFromOsgi_AbsolutePath() {
     List<ParsysConfig> configs;
 
     configs = Lists.newArrayList(underTest.getParsysConfigs("/apps/" + RESOURCE_PATH_1, context.resourceResolver()));
@@ -106,7 +106,7 @@ public class ParsysConfigManagerImplTest {
   }
 
   @Test
-  public void testGetPageComponentRelativePathFromOsgi() {
+  void testGetPageComponentRelativePathFromOsgi() {
     List<ParsysConfig> configs;
 
     configs = Lists.newArrayList(underTest.getParsysConfigs(RESOURCE_PATH_1, "jcr:content/path0", context.resourceResolver()));

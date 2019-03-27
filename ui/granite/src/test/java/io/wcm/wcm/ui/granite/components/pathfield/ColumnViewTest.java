@@ -19,10 +19,10 @@
  */
 package io.wcm.wcm.ui.granite.components.pathfield;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,12 +32,11 @@ import javax.servlet.RequestDispatcher;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.servlethelpers.MockRequestDispatcherFactory;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.granite.ui.components.ExpressionResolver;
 import com.adobe.granite.ui.components.ds.DataSource;
@@ -45,23 +44,24 @@ import com.adobe.granite.ui.components.ds.ResourceDataSource;
 import com.google.common.collect.ImmutableList;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.ui.granite.testcontext.MockExpressionResolver;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ColumnViewTest {
+@ExtendWith(AemContextExtension.class)
+@ExtendWith(MockitoExtension.class)
+class ColumnViewTest {
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
   @Mock
   private ExpressionResolver expressionResolver;
   @Mock
   private RequestDispatcher requestDispatcher;
 
-  @Before
+  @BeforeEach
   @SuppressWarnings("null")
-  public void setUp() {
+  void setUp() {
     context.registerService(ExpressionResolver.class, new MockExpressionResolver());
 
     // simulate data source retrieval
@@ -91,7 +91,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testRoot() {
+  void testRoot() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1/en");
@@ -102,7 +102,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testRoot_showRoot() {
+  void testRoot_showRoot() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1/en",
@@ -115,7 +115,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testRoot_loadAncestors() {
+  void testRoot_loadAncestors() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1/en",
@@ -127,7 +127,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testRoot_showRoot_loadAncestors() {
+  void testRoot_showRoot_loadAncestors() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1/en",
@@ -142,7 +142,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testRoot_SizeLimit() {
+  void testRoot_SizeLimit() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1/en",
@@ -153,7 +153,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testPage11() {
+  void testPage11() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1/en/page1/page11");
@@ -164,7 +164,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testPage11_showRoot() {
+  void testPage11_showRoot() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1/en/page1/page11",
@@ -176,7 +176,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testPage11_loadAncestors() {
+  void testPage11_loadAncestors() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1/en/page1/page11",
@@ -190,7 +190,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testPage11_showRoot_loadAncestors() {
+  void testPage11_showRoot_loadAncestors() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1/en/page1/page11",
@@ -207,7 +207,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testSite1() {
+  void testSite1() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1");
@@ -218,7 +218,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testSite1_showRoot() {
+  void testSite1_showRoot() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1",
@@ -231,7 +231,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testSite1_loadAncestors() {
+  void testSite1_loadAncestors() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1",
@@ -243,7 +243,7 @@ public class ColumnViewTest {
   }
 
   @Test
-  public void testSite1_showRoot_loadAncestors() {
+  void testSite1_showRoot_loadAncestors() {
     List<Column> columns = getColumns(
         "rootPath", "/content/site1/en",
         "path", "/content/site1",
@@ -273,23 +273,23 @@ public class ColumnViewTest {
   }
 
   private static void assertColumn(Column column, String columnId, boolean hasMore, String... columnItemIds) {
-    assertEquals("columnId", columnId, column.getColumnId());
-    assertFalse("lazy", column.isLazy());
-    assertEquals("hasMore", hasMore, column.isHasMore());
-    assertNull("activeId", column.getActiveId());
+    assertEquals(columnId, column.getColumnId(), "columnId");
+    assertFalse(column.isLazy(), "lazy");
+    assertEquals(hasMore, column.isHasMore(), "hasMore");
+    assertNull(column.getActiveId(), "activeId");
 
     List<String> expectedItemIds = ImmutableList.copyOf(columnItemIds);
     List<String> actualItemIds = column.getItems().stream()
         .map(item -> item.getItemId())
         .collect(Collectors.toList());
-    assertEquals("columnItems", expectedItemIds, actualItemIds);
+    assertEquals(expectedItemIds, actualItemIds, "columnItems");
   }
 
   private static void assertLazyColumn(Column column, String columnId, String activeId) {
-    assertEquals("columnId", columnId, column.getColumnId());
-    assertTrue("lazy", column.isLazy());
-    assertFalse("hasMore", column.isHasMore());
-    assertEquals("activeId", activeId, column.getActiveId());
+    assertEquals(columnId, column.getColumnId(), "columnId");
+    assertTrue(column.isLazy(), "lazy");
+    assertFalse(column.isHasMore(), "hasMore");
+    assertEquals(activeId, column.getActiveId(), "activeId");
   }
 
 }

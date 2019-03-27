@@ -19,46 +19,46 @@
  */
 package io.wcm.wcm.parsys.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class CssBuilderTest {
+class CssBuilderTest {
 
   private CssBuilder underTest;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     underTest = new CssBuilder();
   }
 
   @Test
-  public void testNoItems() {
+  void testNoItems() {
     assertNull(underTest.build());
   }
 
   @Test
-  public void testAppendNull() {
+  void testAppendNull() {
     underTest.add(null);
     assertNull(underTest.build());
   }
 
   @Test
-  public void testAppendBlank() {
+  void testAppendBlank() {
     underTest.add(" ");
     assertNull(underTest.build());
   }
 
   @Test
-  public void testAppendOne() {
+  void testAppendOne() {
     underTest.add("one");
     assertEquals("one", underTest.build());
   }
 
   @Test
-  public void testAppendTwo() {
+  void testAppendTwo() {
     underTest.add("two one");
     underTest.add(null);
     assertEquals("one two", underTest.build());

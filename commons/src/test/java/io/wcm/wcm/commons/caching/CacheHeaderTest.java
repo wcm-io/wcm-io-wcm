@@ -29,9 +29,9 @@ import static io.wcm.wcm.commons.caching.CacheHeader.formatDate;
 import static io.wcm.wcm.commons.caching.ModificationDateTest.SAMPLE_CALENDAR_1;
 import static io.wcm.wcm.commons.caching.ModificationDateTest.SAMPLE_CALENDAR_2;
 import static io.wcm.wcm.commons.caching.ModificationDateTest.applyLastModified;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
@@ -50,18 +50,21 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 import com.day.cq.wcm.api.WCMMode;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CacheHeaderTest {
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class CacheHeaderTest {
 
   @Mock
   private Resource resource;
@@ -70,13 +73,13 @@ public class CacheHeaderTest {
   @Mock
   private SlingHttpServletResponse response;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     applyLastModified(resource, SAMPLE_CALENDAR_1);
   }
 
   @Test
-  public void testIsNotModified_WithoutIfModifiedSinceHeader_Publish() throws Exception {
+  void testIsNotModified_WithoutIfModifiedSinceHeader_Publish() throws Exception {
     when(request.getAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME)).thenReturn(WCMMode.DISABLED);
     assertFalse(CacheHeader.isNotModified(resource, request, response));
     verify(response).setHeader(HEADER_LAST_MODIFIED, formatDate(SAMPLE_CALENDAR_1.getTime()));
@@ -84,7 +87,7 @@ public class CacheHeaderTest {
   }
 
   @Test
-  public void testIsNotModified_WithoutIfModifiedSinceHeader_Author() throws Exception {
+  void testIsNotModified_WithoutIfModifiedSinceHeader_Author() throws Exception {
     when(request.getAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME)).thenReturn(WCMMode.EDIT);
     assertFalse(CacheHeader.isNotModified(resource, request, response));
     verify(response).setHeader(HEADER_LAST_MODIFIED, formatDate(SAMPLE_CALENDAR_1.getTime()));
@@ -93,7 +96,7 @@ public class CacheHeaderTest {
   }
 
   @Test
-  public void testIsNotModified_WithIfModifiedSinceHeader_Publish() throws Exception {
+  void testIsNotModified_WithIfModifiedSinceHeader_Publish() throws Exception {
     when(request.getAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME)).thenReturn(WCMMode.DISABLED);
     when(request.getHeader(HEADER_IF_MODIFIED_SINCE)).thenReturn(formatDate(SAMPLE_CALENDAR_2.getTime()));
     assertTrue(CacheHeader.isNotModified(resource, request, response));
@@ -102,7 +105,7 @@ public class CacheHeaderTest {
   }
 
   @Test
-  public void testIsNotModified_WithIfModifiedSinceHeader_Author() throws Exception {
+  void testIsNotModified_WithIfModifiedSinceHeader_Author() throws Exception {
     when(request.getAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME)).thenReturn(WCMMode.EDIT);
     when(request.getHeader(HEADER_IF_MODIFIED_SINCE)).thenReturn(formatDate(SAMPLE_CALENDAR_2.getTime()));
     assertTrue(CacheHeader.isNotModified(resource, request, response));
@@ -111,7 +114,7 @@ public class CacheHeaderTest {
   }
 
   @Test
-  public void testSetNonCachingHeaders() throws Exception {
+  void testSetNonCachingHeaders() throws Exception {
     CacheHeader.setNonCachingHeaders(response);
     verify(response).setHeader(HEADER_PRAGMA, "no-cache");
     verify(response).setHeader(HEADER_CACHE_CONTROL, "no-cache");
@@ -121,7 +124,7 @@ public class CacheHeaderTest {
   }
 
   @Test
-  public void testSetExpires() {
+  void testSetExpires() {
     CacheHeader.setExpires(response, null);
     verify(response).setHeader(CacheHeader.HEADER_EXPIRES, "-1");
 
@@ -131,21 +134,21 @@ public class CacheHeaderTest {
   }
 
   @Test
-  public void testSetExpiresSeconds() {
+  void testSetExpiresSeconds() {
     doAnswer(new ValidateDateHeaderAnswer(200 * DateUtils.MILLIS_PER_SECOND))
     .when(response).setHeader(eq(CacheHeader.HEADER_EXPIRES), anyString());
     CacheHeader.setExpiresSeconds(response, 200);
   }
 
   @Test
-  public void testSetExpiresHours() {
+  void testSetExpiresHours() {
     doAnswer(new ValidateDateHeaderAnswer(15 * DateUtils.MILLIS_PER_HOUR))
     .when(response).setHeader(eq(CacheHeader.HEADER_EXPIRES), anyString());
     CacheHeader.setExpiresHours(response, 15);
   }
 
   @Test
-  public void testSetExpiresDays() {
+  void testSetExpiresDays() {
     doAnswer(new ValidateDateHeaderAnswer(20 * DateUtils.MILLIS_PER_DAY))
     .when(response).setHeader(eq(CacheHeader.HEADER_EXPIRES), anyString());
     CacheHeader.setExpiresDays(response, 20);

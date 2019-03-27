@@ -19,42 +19,42 @@
  */
 package io.wcm.wcm.commons.ui;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.day.cq.wcm.api.WCMMode;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.commons.testcontext.AppAemContext;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DenyWcmDisabledTest {
+@ExtendWith(AemContextExtension.class)
+@ExtendWith(MockitoExtension.class)
+class DenyWcmDisabledTest {
 
-  @Rule
-  public final AemContext context = AppAemContext.newAemContext();
+  private final AemContext context = AppAemContext.newAemContext();
 
   @Test
-  public void testWcmModeDisabled() {
+  void testWcmModeDisabled() {
     WCMMode.DISABLED.toRequest(context.request());
     context.request().adaptTo(DenyWcmDisabled.class);
     assertEquals(HttpServletResponse.SC_FORBIDDEN, context.response().getStatus());
   }
 
   @Test
-  public void testWcmModeEdit() {
+  void testWcmModeEdit() {
     WCMMode.EDIT.toRequest(context.request());
     context.request().adaptTo(DenyWcmDisabled.class);
     assertEquals(HttpServletResponse.SC_OK, context.response().getStatus());
   }
 
   @Test
-  public void testWcmModeDisabledNotFound() {
+  void testWcmModeDisabledNotFound() {
     WCMMode.DISABLED.toRequest(context.request());
     context.request().setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
     context.request().adaptTo(DenyWcmDisabled.class);
