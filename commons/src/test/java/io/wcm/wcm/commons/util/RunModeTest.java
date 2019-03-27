@@ -19,8 +19,8 @@
  */
 package io.wcm.wcm.commons.util;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -29,19 +29,22 @@ import static org.mockito.Mockito.when;
 import java.util.Hashtable;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 
 import com.google.common.collect.ImmutableSet;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("deprecation")
-public class RunModeTest {
+class RunModeTest {
 
   private static final Set<String> AUTHOR_RUNMODES = ImmutableSet.of(RunMode.AUTHOR);
   private static final Set<String> PUBLISH_RUNMODES = ImmutableSet.of(RunMode.PUBLISH, "anotherRunMode");
@@ -51,8 +54,8 @@ public class RunModeTest {
   @Mock
   private Logger logger;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     when(logger.isDebugEnabled()).thenReturn(true);
     Hashtable<String, Object> props = new Hashtable<String, Object>();
     props.put("component.name", "myName");
@@ -60,7 +63,7 @@ public class RunModeTest {
   }
 
   @Test
-  public void testIs() {
+  void testIs() {
     Set<String> runModes = ImmutableSet.of("mode1", "mode2");
     assertTrue(RunMode.is(runModes, "mode1"));
     assertTrue(RunMode.is(runModes, "mode2"));
@@ -68,7 +71,7 @@ public class RunModeTest {
   }
 
   @Test
-  public void testIsEmptySet() {
+  void testIsEmptySet() {
     Set<String> runModes = ImmutableSet.of();
     assertFalse(RunMode.is(runModes, "mode1"));
     assertFalse(RunMode.is(runModes, "mode2"));
@@ -76,7 +79,7 @@ public class RunModeTest {
   }
 
   @Test
-  public void testIsNullSet() {
+  void testIsNullSet() {
     Set<String> runModes = null;
     assertFalse(RunMode.is(runModes, "mode1"));
     assertFalse(RunMode.is(runModes, "mode2"));
@@ -84,7 +87,7 @@ public class RunModeTest {
   }
 
   @Test
-  public void testIsInvalidParams() {
+  void testIsInvalidParams() {
     Set<String> runModes = ImmutableSet.of("mode1", "mode2");
     assertFalse(RunMode.is(runModes));
     assertFalse(RunMode.is(runModes, (String[])null));
@@ -92,40 +95,40 @@ public class RunModeTest {
   }
 
   @Test
-  public void testIsAuthor() {
+  void testIsAuthor() {
     Set<String> runModes = ImmutableSet.of("mode1", "author");
     assertTrue(RunMode.isAuthor(runModes));
   }
 
   @Test
-  public void testIsPublish() {
+  void testIsPublish() {
     Set<String> runModes = ImmutableSet.of("publish");
     assertTrue(RunMode.isPublish(runModes));
   }
 
   @Test
-  public void testDisableIfNotAuthor_Author() {
+  void testDisableIfNotAuthor_Author() {
     boolean disabled = RunMode.disableIfNotAuthor(AUTHOR_RUNMODES, componentContext, logger);
     assertFalse(disabled);
     verify(componentContext, never()).disableComponent(anyString());
   }
 
   @Test
-  public void testDisableIfNotAuthor_Publish() {
+  void testDisableIfNotAuthor_Publish() {
     boolean disabled = RunMode.disableIfNotAuthor(PUBLISH_RUNMODES, componentContext, logger);
     assertTrue(disabled);
     verify(componentContext).disableComponent(anyString());
   }
 
   @Test
-  public void testDisableIfNotPublish_Author() {
+  void testDisableIfNotPublish_Author() {
     boolean disabled = RunMode.disableIfNotPublish(AUTHOR_RUNMODES, componentContext, logger);
     assertTrue(disabled);
     verify(componentContext).disableComponent(anyString());
   }
 
   @Test
-  public void testDisableIfNotPublish_Publish() {
+  void testDisableIfNotPublish_Publish() {
     boolean disabled = RunMode.disableIfNotPublish(PUBLISH_RUNMODES, componentContext, logger);
     assertFalse(disabled);
     verify(componentContext, never()).disableComponent(anyString());

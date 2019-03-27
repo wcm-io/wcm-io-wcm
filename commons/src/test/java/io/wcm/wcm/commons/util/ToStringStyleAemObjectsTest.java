@@ -19,31 +19,32 @@
  */
 package io.wcm.wcm.commons.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.sling.api.resource.Resource;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.wcm.api.Page;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-public class ToStringStyleAemObjectsTest {
+@ExtendWith(AemContextExtension.class)
+class ToStringStyleAemObjectsTest {
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
   @Test
-  public void testResource() {
+  void testResource() {
     Resource resource = context.create().resource("/my/resource");
     ToStringTester tester = new ToStringTester(resource, null, null);
     assertEquals("ToStringStyleAemObjectsTest.ToStringTester[resource=/my/resource]", tester.toString());
   }
 
   @Test
-  public void testResources() {
+  void testResources() {
     Resource resource1 = context.create().resource("/my/resource1");
     Resource resource2 = context.create().resource("/my/resource2");
     ToStringTester tester = new ToStringTester(null, new Resource[] {
@@ -53,7 +54,7 @@ public class ToStringStyleAemObjectsTest {
   }
 
   @Test
-  public void testPage() {
+  void testPage() {
     Page page = context.create().page("/my/page");
     ToStringTester tester = new ToStringTester(null, null, page);
     assertEquals("ToStringStyleAemObjectsTest.ToStringTester[page=/my/page]", tester.toString());

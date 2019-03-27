@@ -20,41 +20,41 @@
 package io.wcm.wcm.commons.controller;
 
 import static io.wcm.wcm.commons.controller.VersionInfo.PN_FILTER_REGEX;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.google.common.collect.ImmutableList;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.commons.bundleinfo.BundleInfo;
 import io.wcm.wcm.commons.bundleinfo.BundleInfoService;
 import io.wcm.wcm.commons.testcontext.AppAemContext;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(AemContextExtension.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("null")
-public class VersionInfoTest {
+class VersionInfoTest {
 
-  @Rule
-  public AemContext context = AppAemContext.newAemContext();
+  private final AemContext context = AppAemContext.newAemContext();
 
   @Mock
   private BundleInfoService bundleInfoService;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     context.registerService(BundleInfoService.class, bundleInfoService);
 
     List<BundleInfo> bundles = ImmutableList.of(
@@ -65,27 +65,27 @@ public class VersionInfoTest {
   }
 
   @Test
-  public void testUnfiltered() {
+  void testUnfiltered() {
     context.currentPage(context.create().page("/content/page1"));
     assertBundles("aaa.bundle1", "aaa.bundle2", "bbb.bundle3");
   }
 
   @Test
-  public void testFiltered_PageProperties() {
+  void testFiltered_PageProperties() {
     context.currentPage(context.create().page("/content/page1", null, ImmutableValueMap.of(
         PN_FILTER_REGEX, "^aaa\\..*$")));
     assertBundles("aaa.bundle1", "aaa.bundle2");
   }
 
   @Test
-  public void testFiltered_PageProperties_Array() {
+  void testFiltered_PageProperties_Array() {
     context.currentPage(context.create().page("/content/page1", null, ImmutableValueMap.of(
         PN_FILTER_REGEX, new String[] { "^.*\\.bundle2$", "^.*\\.bundle3$" })));
     assertBundles("aaa.bundle2", "bbb.bundle3");
   }
 
   @Test
-  public void testFiltered_PageComponent() {
+  void testFiltered_PageComponent() {
     context.create().resource("/apps/app1/components/comp1",
         PN_FILTER_REGEX, "^aaa\\..*$");
     context.currentPage(context.create().page("/content/page1", null, ImmutableValueMap.of(
@@ -94,7 +94,7 @@ public class VersionInfoTest {
   }
 
   @Test
-  public void testFiltered_PageComponent_Array() {
+  void testFiltered_PageComponent_Array() {
     context.create().resource("/apps/app1/components/comp1",
         PN_FILTER_REGEX, new String[] { "^.*\\.bundle2$", "^.*\\.bundle3$" });
     context.currentPage(context.create().page("/content/page1", null, ImmutableValueMap.of(

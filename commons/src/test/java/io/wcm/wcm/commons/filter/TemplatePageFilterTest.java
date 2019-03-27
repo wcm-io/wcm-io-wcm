@@ -19,15 +19,15 @@
  */
 package io.wcm.wcm.commons.filter;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
@@ -35,8 +35,8 @@ import com.day.cq.wcm.api.Page;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.wcm.commons.testcontext.AppTemplate;
 
-@RunWith(MockitoJUnitRunner.class)
-public class TemplatePageFilterTest {
+@ExtendWith(MockitoExtension.class)
+class TemplatePageFilterTest {
 
   @Mock
   private Page pageTemplate1;
@@ -47,15 +47,15 @@ public class TemplatePageFilterTest {
   @Mock
   private Page pageTemplate3;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     when(pageTemplate1.getProperties()).thenReturn(ImmutableValueMap.of(NameConstants.PN_TEMPLATE, AppTemplate.TEMPLATE_1.getTemplatePath()));
     when(pageTemplate2.getProperties()).thenReturn(ImmutableValueMap.of(NameConstants.PN_TEMPLATE, AppTemplate.TEMPLATE_2.getTemplatePath()));
     when(pageTemplate3.getProperties()).thenReturn(ImmutableValueMap.of(NameConstants.PN_TEMPLATE, AppTemplate.TEMPLATE_3.getTemplatePath()));
   }
 
   @Test
-  public void testSingleMatchingTemplates() {
+  void testSingleMatchingTemplates() {
     TemplatePageFilter pageFilter = new TemplatePageFilter(true, true, AppTemplate.TEMPLATE_3);
     assertFalse(pageFilter.includes(pageTemplate1));
     assertFalse(pageFilter.includes(pageTemplate2));
@@ -63,7 +63,7 @@ public class TemplatePageFilterTest {
   }
 
   @Test
-  public void testMultipleTemplates() {
+  void testMultipleTemplates() {
     TemplatePageFilter pageFilter = new TemplatePageFilter(true, true, AppTemplate.TEMPLATE_1, AppTemplate.TEMPLATE_2);
     assertTrue(pageFilter.includes(pageTemplate1));
     assertTrue(pageFilter.includes(pageTemplate2));

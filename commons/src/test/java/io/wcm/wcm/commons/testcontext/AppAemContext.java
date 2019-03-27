@@ -26,9 +26,9 @@ import java.io.IOException;
 import org.apache.sling.api.resource.PersistenceException;
 import org.jetbrains.annotations.NotNull;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.testing.mock.aem.junit.AemContextBuilder;
-import io.wcm.testing.mock.aem.junit.AemContextCallback;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
+import io.wcm.testing.mock.aem.junit5.AemContextCallback;
 
 /**
  * Sets up {@link AemContext} for unit tests in this application.
