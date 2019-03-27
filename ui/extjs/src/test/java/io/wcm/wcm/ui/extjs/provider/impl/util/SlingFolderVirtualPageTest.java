@@ -19,29 +19,32 @@
  */
 package io.wcm.wcm.ui.extjs.provider.impl.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.WCMException;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("null")
-public class SlingFolderVirtualPageTest {
+class SlingFolderVirtualPageTest {
 
   @Mock
   private Resource resource;
@@ -52,20 +55,20 @@ public class SlingFolderVirtualPageTest {
 
   private SlingFolderVirtualPage underTest;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     when(resource.getResourceResolver()).thenReturn(resourceResolver);
     underTest = new SlingFolderVirtualPage(resource);
   }
 
   @Test
-  public void testAdaptTo() {
+  void testAdaptTo() {
     assertSame(resource, underTest.adaptTo(Resource.class));
     assertNull(underTest.adaptTo(Page.class));
   }
 
   @Test
-  public void testNullProperties() {
+  void testNullProperties() {
     assertNull(underTest.getDescription());
     assertFalse(underTest.canUnlock());
     assertNull(underTest.getContentResource());
@@ -93,7 +96,7 @@ public class SlingFolderVirtualPageTest {
   }
 
   @Test
-  public void testGetAbsoluteParent() {
+  void testGetAbsoluteParent() {
     when(resource.getPath()).thenReturn("/path1/path2/path3");
     Resource parentResource = mock(Resource.class);
     when(resourceResolver.getResource("/path1/path2")).thenReturn(parentResource);
@@ -103,26 +106,26 @@ public class SlingFolderVirtualPageTest {
   }
 
   @Test
-  public void testDepth() {
+  void testDepth() {
     when(resource.getPath()).thenReturn("/path1/path2/path3");
     assertEquals(3, underTest.getDepth());
   }
 
   @Test
-  public void testGetName() {
+  void testGetName() {
     when(resource.getName()).thenReturn("name1");
     assertEquals("name1", underTest.getName());
   }
 
   @Test
-  public void testGetPageManager() {
+  void testGetPageManager() {
     PageManager pageManager = mock(PageManager.class);
     when(resourceResolver.adaptTo(PageManager.class)).thenReturn(pageManager);
     assertSame(pageManager, underTest.getPageManager());
   }
 
   @Test
-  public void testGetParent() {
+  void testGetParent() {
     Resource parentResource = mock(Resource.class);
     Page parentPage = mock(Page.class);
     when(parentResource.adaptTo(Page.class)).thenReturn(parentPage);
@@ -131,7 +134,7 @@ public class SlingFolderVirtualPageTest {
   }
 
   @Test
-  public void testGetParentLevel() {
+  void testGetParentLevel() {
     when(resource.getPath()).thenReturn("/path1/path2/path3");
     Resource parentResource = mock(Resource.class);
     Page parentPage = mock(Page.class);
@@ -141,19 +144,23 @@ public class SlingFolderVirtualPageTest {
   }
 
   @Test
-  public void testGetPath() {
+  void testGetPath() {
     when(resource.getPath()).thenReturn("/path1");
     assertEquals("/path1", underTest.getPath());
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void testLock() throws WCMException {
-    underTest.lock();
+  @Test
+  void testLock() {
+    assertThrows(UnsupportedOperationException.class, () -> {
+      underTest.lock();
+    });
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void testUnlock() throws WCMException {
-    underTest.unlock();
+  @Test
+  void testUnlock() {
+    assertThrows(UnsupportedOperationException.class, () -> {
+      underTest.unlock();
+    });
   }
 
 }
