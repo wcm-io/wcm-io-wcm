@@ -44,11 +44,23 @@ var assertInvalid = function(validate, value) {
 describe('wcmio.email', function() {
   var validate = validators['[data-validation="wcmio.email"]'];
   assertValid(validate, "firstname.lastname@mycompany.com");
+  assertInvalid(validate, "http://myhost");
+  assertInvalid(validate, "http://www.domain.com/path1");
+  assertInvalid(validate, "https://myhost/path1/path2");
+  assertInvalid(validate, "ftp://myhost");
+  assertInvalid(validate, "//myhost");
+  assertInvalid(validate, "mailto:firstname.lastname@mycompany.com");
+  assertInvalid(validate, "tel:+49 123 456789");
   assertInvalid(validate, "simplestring");
+  assertInvalid(validate, "www.domain.com");
+  assertInvalid(validate, "/content/site1/page1");
+  assertInvalid(validate, "/content/dam/sample.jpg");
+  assertInvalid(validate, "/ns1:this/is/ns2:a/path");
 });
 
 describe('wcmio.url', function() {
   var validate = validators['[data-validation="wcmio.url"]'];
+  assertInvalid(validate, "firstname.lastname@mycompany.com");
   assertValid(validate, "http://myhost");
   assertValid(validate, "http://www.domain.com/path1");
   assertValid(validate, "https://myhost/path1/path2");
@@ -58,5 +70,24 @@ describe('wcmio.url', function() {
   assertValid(validate, "tel:+49 123 456789");
   assertInvalid(validate, "simplestring");
   assertInvalid(validate, "www.domain.com");
-  assertInvalid(validate, "/only/a/path");
+  assertInvalid(validate, "/content/site1/page1");
+  assertInvalid(validate, "/content/dam/sample.jpg");
+  assertInvalid(validate, "/ns1:this/is/ns2:a/path");
+});
+
+describe('wcmio.path', function() {
+  var validate = validators['[data-validation="wcmio.path"]'];
+  assertInvalid(validate, "firstname.lastname@mycompany.com");
+  assertInvalid(validate, "http://myhost");
+  assertInvalid(validate, "http://www.domain.com/path1");
+  assertInvalid(validate, "https://myhost/path1/path2");
+  assertInvalid(validate, "ftp://myhost");
+  assertInvalid(validate, "//myhost");
+  assertInvalid(validate, "mailto:firstname.lastname@mycompany.com");
+  assertInvalid(validate, "tel:+49 123 456789");
+  assertInvalid(validate, "simplestring");
+  assertInvalid(validate, "www.domain.com");
+  assertValid(validate, "/content/site1/page1");
+  assertValid(validate, "/content/dam/sample.jpg");
+  assertValid(validate, "/ns1:this/is/ns2:a/path");
 });
