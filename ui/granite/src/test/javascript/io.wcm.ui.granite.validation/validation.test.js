@@ -1,7 +1,7 @@
 // simple mocking to capture registered validators
 var validators = {};
 window.Granite = {
-  "$": function(arg) {
+  "$": function(obj) {
     return {
       "adaptTo": function(to) {
         if (to == "foundation-registry") {
@@ -13,7 +13,10 @@ window.Granite = {
         }
       },
       "val": function() {
-        return arg;
+        return obj.value;
+      },
+      "attr": function(param) {
+        return obj[param];
       }
     };
   },
@@ -31,12 +34,12 @@ require('../../../main/webapp/clientlibs-root/io.wcm.ui.granite.validation/js/va
 var assert = require('assert');
 var assertValid = function(validate, value) {
   it('valid: ' + value, function() {
-    assert.equal(validate(value), null);
+    assert.equal(validate({"value":value}), null);
   });
 }
 var assertInvalid = function(validate, value) {
   it('invalid: ' + value, function() {
-    assert.notEqual(validate(value), null);
+    assert.notEqual(validate({"value":value}), null);
   });
 }
 
@@ -90,4 +93,25 @@ describe('wcmio.path', function() {
   assertValid(validate, "/content/site1/page1");
   assertValid(validate, "/content/dam/sample.jpg");
   assertValid(validate, "/ns1:this/is/ns2:a/path");
+});
+
+describe('wcmio.pattern', function() {
+  var validate = validators['[data-validation="wcmio.pattern"]'];
+
+  it('matches pattern', function() {
+    assert.equal(validate({
+      "value": "abc",
+      "data-wcmio-pattern": "^ab.*$",
+      "data-wcmio-patternmessage": "Invalid."
+    }), null);
+  });
+  
+  it('does not match pattern', function() {
+    assert.equal(validate({
+      "value": "def",
+      "data-wcmio-pattern": "^ab.*$",
+      "data-wcmio-patternmessage": "Invalid."
+    }), "Invalid.");
+  });
+  
 });
