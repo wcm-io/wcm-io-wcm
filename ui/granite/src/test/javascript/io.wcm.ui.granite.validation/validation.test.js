@@ -53,10 +53,9 @@ describe('wcmio.url', function() {
   assertValid(validate, "http://www.domain.com/path1");
   assertValid(validate, "https://myhost/path1/path2");
   assertValid(validate, "ftp://myhost");
-  // TODO: does not work yet
-  //assertValid(validate, "//myhost");
-  //assertValid(validate, "mailto:firstname.lastname@mycompany.com");
-  //assertValid(validate, "tel:+49 123 456789");
+  assertValid(validate, "//myhost");
+  assertValid(validate, "mailto:firstname.lastname@mycompany.com");
+  assertValid(validate, "tel:+49 123 456789");
   assertInvalid(validate, "simplestring");
   assertInvalid(validate, "www.domain.com");
   assertInvalid(validate, "/only/a/path");
