@@ -194,6 +194,36 @@
         </configuration>
       </plugin>
 
+      <!-- Execute JavaScript unit tests using JEST -->
+      <plugin>
+        <groupId>io.wcm.maven.plugins</groupId>
+        <artifactId>nodejs-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals><goal>run</goal></goals>
+          </execution>
+        </executions>
+        <configuration>
+          <nodeJsVersion>10.15.3</nodeJsVersion>
+          <npmVersion>6.4.1</npmVersion>
+          <tasks>
+            <npmInstallTask>
+              <workingDirectory>${project.basedir}</workingDirectory>
+            </npmInstallTask>
+            <nodeJsTask>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <moduleName>npm</moduleName>
+              <executableName>npm-cli</executableName>
+              <arguments>
+                <argument>run</argument>
+                <argument>test</argument>
+              </arguments>
+            </nodeJsTask>
+          </tasks>
+        </configuration>
+      </plugin>
+
     </plugins>
     <pluginManagement>
       <plugins>

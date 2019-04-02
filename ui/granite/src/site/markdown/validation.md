@@ -15,6 +15,10 @@ Validates a string against a predefined E-Mail pattern.
   "validation": ["wcmio.email"]
 }
 ```
+Examples for matching values:
+
+* `firstname.lastname@mycompany.com`
+
 
 ### URL validator
 
@@ -28,6 +32,34 @@ Validates a string against a predefined URL pattern.
   "validation": ["wcmio.url"]
 }
 ```
+
+Examples for matching values:
+
+* `http://www.mydomain.com`
+* `https://www.mydomain.com/path1/page1.html`
+* `//www.mydomain.com/path2`
+* `mailto:firstname.lastname@mycompany.com`
+* `tel:+123 456 789`
+
+
+### Path validator
+
+Validates a string against a predefined content path pattern.
+
+```json
+"url": {
+  "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+  "name": "./path",
+  "fieldLabel": "Path",
+  "validation": ["wcmio.path"]
+}
+```
+
+Examples for matching values:
+
+* `/content/site1/page1`
+* `/content/dam/sample.jpg`
+
 
 ### Pattern validator
 

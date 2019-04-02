@@ -26,7 +26,10 @@
   // Predefined patterns
   var pattern = {
     email: /^[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}$/,
-    url: /^((https?|ftp|mailto|tel):\/\/)([\w\.-]+)(:\d+)?((\/).*)?$/i
+    // Matches all strings that seem to have a proper URL scheme - e.g. starting with http://, https://, mailto:, tel:
+    url: /^([^\/]+:|\/\/).*$/,
+    // Matches content paths like /xxx/yyy/zzz
+    path: /^(\/[^\/]+)+$/
   };
 
   var foundationValidator = $(window).adaptTo("foundation-registry");
@@ -51,6 +54,18 @@
       var valid = el.val().length === 0 || pattern.url.test(el.val());
       if (!valid) {
         return Granite.I18n.get("Must be a valid URL.");
+      }
+    }
+  });
+
+  // predefined "path" pattern validator
+  foundationValidator.register('foundation.validation.validator', {
+    selector: '[data-validation="wcmio.path"]',
+    validate: function(el) {
+      el = $(el);
+      var valid = el.val().length === 0 || pattern.path.test(el.val());
+      if (!valid) {
+        return Granite.I18n.get("Must be a valid content path.");
       }
     }
   });
