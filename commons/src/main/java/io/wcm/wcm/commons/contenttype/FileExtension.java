@@ -109,6 +109,11 @@ public final class FileExtension {
    */
   public static final String CSV = "csv";
 
+  /**
+   * PDF
+   */
+  public static final String PDF = "pdf";
+
 
   /** all file extensions that will be displayed by an image tag */
   private static final Set<String> IMAGE_FILE_EXTENSIONS = ImmutableSet.of(

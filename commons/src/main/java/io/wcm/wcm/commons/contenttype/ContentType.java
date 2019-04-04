@@ -109,4 +109,9 @@ public final class ContentType {
    */
   public static final String CSV = "text/csv";
 
+  /**
+   * PDF
+   */
+  public static final String PDF = "application/pdf";
+
 }

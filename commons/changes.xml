@@ -27,6 +27,9 @@
       <action type="add" dev="sseifert">
         Add helper class EditableTemplate and model EditableTemplateSupport.
       </action>
+      <action type="add" dev="sseifert">
+        Add "PDF" to ContentType and FileExtension classes.
+      </action>
     </release>
 
     <release version="1.3.0" date="2019-03-15">
