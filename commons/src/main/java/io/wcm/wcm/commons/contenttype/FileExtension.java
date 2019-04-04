@@ -42,76 +42,76 @@ public final class FileExtension {
   /**
    * HTML
    */
-  public static final @NotNull String HTML = "html";
+  public static final String HTML = "html";
 
   /**
    * HTML, configured as non-caching
    */
-  public static final @NotNull String HTML_UNCACHED = "htx";
+  public static final String HTML_UNCACHED = "htx";
 
   /**
    * JSON
    */
-  public static final @NotNull String JSON = "json";
+  public static final String JSON = "json";
 
   /**
    * Plain text
    */
-  public static final @NotNull String PLAINTEXT = "txt";
+  public static final String PLAINTEXT = "txt";
 
   /**
    * CSS
    */
-  public static final @NotNull String CSS = "css";
+  public static final String CSS = "css";
 
   /**
    * JavaScript
    */
-  public static final @NotNull String JAVASCRIPT = "js";
+  public static final String JAVASCRIPT = "js";
 
   /**
    * XML
    */
-  public static final @NotNull String XML = "xml";
+  public static final String XML = "xml";
 
   /**
    * XHTML
    */
-  public static final @NotNull String XHTML = "html";
+  public static final String XHTML = "html";
 
   /**
    * ZIP
    */
-  public static final @NotNull String ZIP = "zip";
+  public static final String ZIP = "zip";
 
   /**
    * GIF image
    */
-  public static final @NotNull String GIF = "gif";
+  public static final String GIF = "gif";
 
   /**
    * JPEG image
    */
-  public static final @NotNull String JPEG = "jpg";
+  public static final String JPEG = "jpg";
 
   /**
    * PNG image
    */
-  public static final @NotNull String PNG = "png";
+  public static final String PNG = "png";
 
   /**
    * Flash file
    */
-  public static final @NotNull String SWF = "swf";
+  public static final String SWF = "swf";
 
   /**
    * CSV
    */
-  public static final @NotNull String CSV = "csv";
+  public static final String CSV = "csv";
 
 
   /** all file extensions that will be displayed by an image tag */
-  private static final @NotNull Set<String> IMAGE_FILE_EXTENSIONS = ImmutableSet.of(
+  private static final Set<String> IMAGE_FILE_EXTENSIONS = ImmutableSet.of(
       GIF,
       JPEG,
       PNG,
@@ -119,7 +119,7 @@ public final class FileExtension {
       );
 
   /** all file extensions that will be displayed as flash */
-  private static final @NotNull Set<String> FLASH_FILE_EXTENSIONS = ImmutableSet.of(
+  private static final Set<String> FLASH_FILE_EXTENSIONS = ImmutableSet.of(
       SWF
       );
 
