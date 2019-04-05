@@ -19,21 +19,21 @@
  */
 package io.wcm.wcm.commons.contenttype;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class FileExtensionTest {
+class FileExtensionTest {
 
   @Test
-  public void testIsImage() throws Exception {
+  void testIsImage() throws Exception {
     assertTrue(FileExtension.isImage("png"));
     assertFalse(FileExtension.isImage(null));
   }
 
   @Test
-  public void testIsFlash() throws Exception {
+  void testIsFlash() throws Exception {
     assertTrue(FileExtension.isFlash("swf"));
     assertFalse(FileExtension.isFlash(null));
   }

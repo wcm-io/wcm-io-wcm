@@ -66,6 +66,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
   private static final long serialVersionUID = 1L;
 
   static final String RP_PATH = "path";
+  static final String RP_RESOURCE_TYPE = "resourceType";
   static final String SELECTOR = "wcmio-parsys-components";
 
   private static final Logger log = LoggerFactory.getLogger(ParsysComponentsServlet.class);
@@ -111,18 +112,16 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
 
     JSONArray allowedComponents = new JSONArray();
 
-    // get relative path in content page
     String relativePath = RequestParam.get(request, RP_PATH);
-    String fullPath = null;
+    String resourceType = RequestParam.get(request, RP_RESOURCE_TYPE);
     if (StringUtils.isNotEmpty(relativePath)) {
       // get resource from paragraph system
-      fullPath = currentPage.getPath() + "/" + relativePath;
-      Set<String> allowed = allowedComponentsProvider.getAllowedComponents(fullPath, resolver);
+      Set<String> allowed = allowedComponentsProvider.getAllowedComponents(currentPage, relativePath, resourceType, resolver);
 
       // create set with relative resource type paths
       Set<String> allowedComponentsRelative = new TreeSet<String>();
-      for (String resourceType : allowed) {
-        allowedComponentsRelative.add(ResourceType.makeAbsolute(resourceType, resolver));
+      for (String allowedResourceType : allowed) {
+        allowedComponentsRelative.add(ResourceType.makeAbsolute(allowedResourceType, resolver));
       }
 
       allowedComponents = new JSONArray(allowedComponentsRelative);
@@ -134,7 +133,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
     if (log.isDebugEnabled()) {
       long endTime = System.currentTimeMillis();
       long duration = endTime - startTime;
-      log.debug("ParsysComponentsServlet for " + fullPath + " took " + duration + "ms");
+      log.debug("ParsysComponentsServlet for " + currentPage.getPath() + "/" + relativePath + " took " + duration + "ms");
     }
   }
 

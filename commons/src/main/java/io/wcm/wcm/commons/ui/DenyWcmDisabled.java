@@ -30,6 +30,7 @@ import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.wcm.api.WCMMode;
 
@@ -40,6 +41,7 @@ import io.wcm.sling.models.annotations.AemObject;
  * The status code can be changed by request attribute
  * {@code errorCode} (defaults to HTTP 403 - access forbidden).
  */
+@ProviderType
 @Model(adaptables = SlingHttpServletRequest.class)
 public class DenyWcmDisabled {
 

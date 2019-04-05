@@ -20,7 +20,6 @@
 package io.wcm.wcm.commons.contenttype;
 
 import org.apache.commons.lang3.CharEncoding;
-import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -37,77 +36,82 @@ public final class ContentType {
   /**
    * HTML with UTF-8
    */
-  public static final @NotNull String HTML = "text/html;charset=" + CharEncoding.UTF_8;
+  public static final String HTML = "text/html;charset=" + CharEncoding.UTF_8;
 
   /**
    * JSON with UTF-8
    */
-  public static final @NotNull String JSON = "application/json;charset=" + CharEncoding.UTF_8;
+  public static final String JSON = "application/json;charset=" + CharEncoding.UTF_8;
 
   /**
    * Plain text with UTF-8
    */
-  public static final @NotNull String PLAINTEXT = "text/plain;charset=" + CharEncoding.UTF_8;
+  public static final String PLAINTEXT = "text/plain;charset=" + CharEncoding.UTF_8;
 
   /**
    * CSS with UTF-8
    */
-  public static final @NotNull String CSS = "text/css;charset=" + CharEncoding.UTF_8;
+  public static final String CSS = "text/css;charset=" + CharEncoding.UTF_8;
 
   /**
    * JavaScript with UTF-8
    */
-  public static final @NotNull String JAVASCRIPT = "text/javascript;charset=" + CharEncoding.UTF_8;
+  public static final String JAVASCRIPT = "text/javascript;charset=" + CharEncoding.UTF_8;
 
   /**
    * XML (no charset, charset is defined within XML markup)
    */
-  public static final @NotNull String XML = "application/xml";
+  public static final String XML = "application/xml";
 
   /**
    * XHTML (no charset, charset is defined within XML markup)
    */
-  public static final @NotNull String XHTML = "application/xhtml+xml";
+  public static final String XHTML = "application/xhtml+xml";
 
   /**
    * ZIP
    */
-  public static final @NotNull String ZIP = "application/zip";
+  public static final String ZIP = "application/zip";
 
   /**
    * Default binary content type
    */
-  public static final @NotNull String OCTET_STREAM = "application/octet-stream";
+  public static final String OCTET_STREAM = "application/octet-stream";
 
   /**
    * MIME type used for items that should initiate a "save-as" dialog in the browser.
    * (This is a non-standard MIME type by design to make sure the browser does not do anything with it).
    */
-  public static final @NotNull String DOWNLOAD = "application/x-download";
+  public static final String DOWNLOAD = "application/x-download";
 
   /**
    * GIF image
    */
-  public static final @NotNull String GIF = "image/gif";
+  public static final String GIF = "image/gif";
 
   /**
    * JPEG image
    */
-  public static final @NotNull String JPEG = "image/jpeg";
+  public static final String JPEG = "image/jpeg";
 
   /**
    * PNG image
    */
-  public static final @NotNull String PNG = "image/png";
+  public static final String PNG = "image/png";
 
   /**
    * Flash file
    */
-  public static final @NotNull String SWF = "application/x-shockwave-flash";
+  public static final String SWF = "application/x-shockwave-flash";
 
   /**
    * CSV (no charset included in mime type because charset can differ from platform to platform)
    */
-  public static final @NotNull String CSV = "text/csv";
+  public static final String CSV = "text/csv";
+
+  /**
+   * PDF
+   */
+  public static final String PDF = "application/pdf";
 
 }

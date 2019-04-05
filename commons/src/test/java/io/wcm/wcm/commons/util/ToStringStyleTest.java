@@ -19,15 +19,15 @@
  */
 package io.wcm.wcm.commons.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ToStringStyleTest {
+class ToStringStyleTest {
 
   @Test
-  public void testAllSet() {
+  void testAllSet() {
     ToStringTester tester = new ToStringTester("abc", new String[] {
         "abc", "def"
     }, new StringBuilder("def"));
@@ -36,14 +36,14 @@ public class ToStringStyleTest {
   }
 
   @Test
-  public void testAllNull() {
+  void testAllNull() {
     ToStringTester tester = new ToStringTester(null, null, null);
 
     assertEquals("ToStringStyleTest.ToStringTester[]", tester.toString());
   }
 
   @Test
-  public void testSomeNull() {
+  void testSomeNull() {
     ToStringTester tester = new ToStringTester("abc", null, null);
 
     assertEquals("ToStringStyleTest.ToStringTester[string=abc]", tester.toString());

@@ -19,19 +19,18 @@
  */
 package io.wcm.wcm.ui.extjs.provider.impl.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
@@ -39,13 +38,14 @@ import com.day.cq.wcm.api.PageFilter;
 import com.google.common.collect.ImmutableList;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PageIteratorTest {
+@ExtendWith(AemContextExtension.class)
+@ExtendWith(MockitoExtension.class)
+class PageIteratorTest {
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
   private Resource resource1;
   private Resource resource2;
@@ -58,8 +58,8 @@ public class PageIteratorTest {
 
   private Iterator<Resource> resources;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     page1 = context.create().page("/path1");
     page2 = context.create().page("/path2");
     page3 = context.create().page("/path3");
@@ -72,13 +72,13 @@ public class PageIteratorTest {
   }
 
   @Test
-  public void testResources() {
+  void testResources() {
     List<Page> result = ImmutableList.copyOf(new PageIterator(resources, null));
     assertEquals(ImmutableList.of(page1, page2, page3), result);
   }
 
   @Test
-  public void testWithPageFilter() {
+  void testWithPageFilter() {
     when(pageFilter.includes(page1)).thenReturn(true);
 
     List<Page> result = ImmutableList.copyOf(new PageIterator(resources, pageFilter));
@@ -86,7 +86,7 @@ public class PageIteratorTest {
   }
 
   @Test
-  public void testWithSlingFolder() {
+  void testWithSlingFolder() {
     resource1 = context.create().resource("/another/path1");
     resource2 = context.create().resource("/another/path2",
         ImmutableValueMap.of(JcrConstants.JCR_PRIMARYTYPE, "sling:Folder"));

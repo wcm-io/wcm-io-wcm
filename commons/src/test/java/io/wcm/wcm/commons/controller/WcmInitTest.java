@@ -19,10 +19,10 @@
  */
 package io.wcm.wcm.commons.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -30,12 +30,12 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import com.day.cq.wcm.api.AuthoringUIMode;
@@ -44,8 +44,8 @@ import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.components.EditContext;
 import com.day.cq.wcm.undo.UndoConfigService;
 
-@RunWith(MockitoJUnitRunner.class)
-public class WcmInitTest {
+@ExtendWith(MockitoExtension.class)
+class WcmInitTest {
 
   private static final String DIALOG_PATH = "/dialog/path";
   private static final String UNDO_CONFIG = "{config:'xyz'}";
@@ -59,8 +59,8 @@ public class WcmInitTest {
   @Mock
   private UndoConfigService undoConfigService;
 
-  @Before
-  public void setUp() throws Exception {
+  @BeforeEach
+  void setUp() throws Exception {
     when(componentContext.getEditContext()).thenReturn(editContext);
     when(editContext.getComponent()).thenReturn(component);
     when(component.getDialogPath()).thenReturn(DIALOG_PATH);
@@ -75,7 +75,7 @@ public class WcmInitTest {
   }
 
   @Test
-  public void testIsTouchAuthoring() throws Exception {
+  void testIsTouchAuthoring() throws Exception {
     WcmInit underTest = new WcmInit(AuthoringUIMode.TOUCH, componentContext, undoConfigService);
     assertTrue(underTest.isTouchUI());
     assertFalse(underTest.isClassicUI());
@@ -86,17 +86,17 @@ public class WcmInitTest {
   }
 
   @Test
-  public void testGetPagePropertiesDialogPath() throws Exception {
+  void testGetPagePropertiesDialogPath() throws Exception {
     WcmInit underTest = new WcmInit(AuthoringUIMode.TOUCH, componentContext, undoConfigService);
     assertEquals(DIALOG_PATH, underTest.getPagePropertiesDialogPath());
 
     when(componentContext.getEditContext()).thenReturn(null);
     underTest = new WcmInit(AuthoringUIMode.TOUCH, componentContext, undoConfigService);
-    assertNull(DIALOG_PATH, underTest.getPagePropertiesDialogPath());
+    assertNull(underTest.getPagePropertiesDialogPath());
   }
 
   @Test
-  public void testGetUndoConfig() throws Exception {
+  void testGetUndoConfig() throws Exception {
     WcmInit underTest = new WcmInit(AuthoringUIMode.TOUCH, componentContext, undoConfigService);
     assertEquals(UNDO_CONFIG, underTest.getUndoConfig());
   }

@@ -19,26 +19,27 @@
  */
 package io.wcm.wcm.commons.component;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.sling.api.resource.Resource;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.commons.WCMUtils;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-public class ComponentPropertyResolverTest {
+@ExtendWith(AemContextExtension.class)
+class ComponentPropertyResolverTest {
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
   @Test
-  public void testResourceWithoutResourceTypeWithoutPage() {
+  void testResourceWithoutResourceTypeWithoutPage() {
     Resource resource = context.create().resource("/content/r1");
 
     ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
@@ -49,7 +50,7 @@ public class ComponentPropertyResolverTest {
   }
 
   @Test
-  public void testResourceWithComponent() {
+  void testResourceWithComponent() {
     Resource component = context.create().resource("/apps/app1/components/comp1",
         "prop1", "value1");
     Resource resource = context.create().resource("/content/r1",
@@ -61,7 +62,7 @@ public class ComponentPropertyResolverTest {
   }
 
   @Test
-  public void testResourceWithComponent_Ignore() {
+  void testResourceWithComponent_Ignore() {
     Resource component = context.create().resource("/apps/app1/components/comp1",
         "prop1", "value1");
     Resource resource = context.create().resource("/content/r1",
@@ -74,7 +75,7 @@ public class ComponentPropertyResolverTest {
   }
 
   @Test
-  public void testResourceWithSuperComponent_Inheritance() {
+  void testResourceWithSuperComponent_Inheritance() {
     Resource superComponent = context.create().resource("/apps/app1/components/comp2",
         "prop1", "value1");
     Resource component = context.create().resource("/apps/app1/components/comp1",
@@ -91,7 +92,7 @@ public class ComponentPropertyResolverTest {
   }
 
   @Test
-  public void testResourceWithSuperComponent_NoInheritance() {
+  void testResourceWithSuperComponent_NoInheritance() {
     Resource superComponent = context.create().resource("/apps/app1/components/comp2",
         "prop1", "value1");
     Resource component = context.create().resource("/apps/app1/components/comp1",
@@ -109,7 +110,7 @@ public class ComponentPropertyResolverTest {
   }
 
   @Test
-  public void testPage() {
+  void testPage() {
     Page page = context.create().page("/content/page1", null,
         "prop1", "value1");
     Resource resource = context.create().resource(page, "r1");
@@ -121,7 +122,7 @@ public class ComponentPropertyResolverTest {
   }
 
   @Test
-  public void testPage_Inheritance() {
+  void testPage_Inheritance() {
     context.create().page("/content/page1", null,
         "prop1", "value1");
     Page page2 = context.create().page("/content/page1/page2", null,
@@ -137,7 +138,7 @@ public class ComponentPropertyResolverTest {
   }
 
   @Test
-  public void testPage_NoInheritance() {
+  void testPage_NoInheritance() {
     context.create().page("/content/page1", null,
         "prop1", "value1");
     Page page2 = context.create().page("/content/page1/page2", null,
@@ -153,7 +154,7 @@ public class ComponentPropertyResolverTest {
   }
 
   @Test
-  public void testPageAndComponent_Inheritance() {
+  void testPageAndComponent_Inheritance() {
     context.create().page("/content/page1", null,
         "prop1", "value1");
     Page page2 = context.create().page("/content/page1/page2", null,
@@ -184,7 +185,7 @@ public class ComponentPropertyResolverTest {
   }
 
   @Test
-  public void testPageAndComponent_Inheritance_ComponentContext() {
+  void testPageAndComponent_Inheritance_ComponentContext() {
     context.create().page("/content/page1", null,
         "prop1", "value1");
     Page page2 = context.create().page("/content/page1/page2", null,

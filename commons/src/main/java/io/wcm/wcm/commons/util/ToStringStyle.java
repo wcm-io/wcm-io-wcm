@@ -20,12 +20,14 @@
 package io.wcm.wcm.commons.util;
 
 import org.apache.sling.api.resource.Resource;
+import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.wcm.api.Page;
 
 /**
  * Custom styles for {@link org.apache.commons.lang3.builder.ToStringBuilder} from Apache Commons.
  */
+@ProviderType
 public final class ToStringStyle {
 
   /**

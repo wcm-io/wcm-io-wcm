@@ -21,27 +21,28 @@ package io.wcm.wcm.parsys.componentinfo.impl;
 
 import static io.wcm.testing.mock.wcmio.sling.ContextPlugins.WCMIO_SLING;
 import static org.apache.sling.jcr.resource.JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.wcm.api.Page;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.testing.mock.aem.junit.AemContextBuilder;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
-public class AllowedComponentsProviderImplTest {
+@ExtendWith(AemContextExtension.class)
+class AllowedComponentsProviderImplTest {
 
-  @Rule
-  public AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();
+  private final AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();
 
   private static final String CONTENT_ROOT_PATH = "/content/dummy";
   private static final String BASE_TEMPLATE = "/apps/dummy/templates/baseTemplate";
@@ -51,8 +52,11 @@ public class AllowedComponentsProviderImplTest {
 
   private AllowedComponentsProvider underTest;
 
-  @Before
-  public void setUp() {
+  private Page basePage;
+  private Page inheritedPage;
+
+  @BeforeEach
+  void setUp() {
     context.registerInjectActivateService(new ParsysConfigManagerImpl());
     context.registerInjectActivateService(new AllowedComponentsProviderImpl());
 
@@ -63,11 +67,11 @@ public class AllowedComponentsProviderImplTest {
     context.load().json("/parsys/inheritedPageComponent.json", INHERITED_PAGE_COMPONENT);
 
     // create pages with dummy content
-    Page basePage = context.create().page(CONTENT_ROOT_PATH + "/page-1", BASE_TEMPLATE,
+    basePage = context.create().page(CONTENT_ROOT_PATH + "/page-1", BASE_TEMPLATE,
         ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, BASE_PAGE_COMPONENT));
     addDummyContent(basePage);
 
-    Page inheritedPage = context.create().page(CONTENT_ROOT_PATH + "/page-2", INHERITED_TEMPLATE,
+    inheritedPage = context.create().page(CONTENT_ROOT_PATH + "/page-2", INHERITED_TEMPLATE,
         ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, INHERITED_PAGE_COMPONENT));
     addDummyContent(inheritedPage);
     context.create().resource(inheritedPage.getContentResource().getPath() + "/special",
@@ -77,171 +81,224 @@ public class AllowedComponentsProviderImplTest {
   }
 
   @Test
-  public void testGetAllowedComponentsForParsys() {
+  void testGetAllowedComponentsForParsys() {
     String contentParsys = CONTENT_ROOT_PATH + "/page-1/jcr:content/content";
     Set<String> allowedComponents = underTest.getAllowedComponents(contentParsys, context.resourceResolver());
 
     // null check
-    assertNotNull("Allowed component for parsys cannot be null", allowedComponents);
+    assertNotNull(allowedComponents, "Allowed component for parsys cannot be null");
 
     // positive tests
-    assertTrue("Component 'comp1' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/comp1"));
-    assertTrue("Component 'comp2' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/comp2"));
-    assertTrue("Component 'linklist' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/linklist"));
-    assertTrue("Component 'container2col' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/container2col"));
+    assertTrue(allowedComponents.contains("dummy/components/comp1"),
+        "Component 'comp1' must be allowed in " + contentParsys + ".");
+    assertTrue(allowedComponents.contains("dummy/components/comp2"),
+        "Component 'comp2' must be allowed in " + contentParsys + ".");
+    assertTrue(allowedComponents.contains("dummy/components/linklist"),
+        "Component 'linklist' must be allowed in " + contentParsys + ".");
+    assertTrue(allowedComponents.contains("dummy/components/container2col"),
+        "Component 'container2col' must be allowed in " + contentParsys + ".");
 
     // negative tests
-    assertFalse("Component 'nestedComp2' should not be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/nestedComp2"));
-    assertFalse("Component 'comp3' should not be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/comp3"));
+    assertFalse(allowedComponents.contains("dummy/components/nestedComp2"),
+        "Component 'nestedComp2' should not be allowed in " + contentParsys + ".");
+    assertFalse(allowedComponents.contains("dummy/components/comp3"),
+        "Component 'comp3' should not be allowed in " + contentParsys + ".");
   }
 
   @Test
-  public void testGetAllowedComponentsForNestedParsys() {
+  void testGetAllowedComponentsForNestedParsys() {
     String nested2ColParsys = CONTENT_ROOT_PATH + "/page-1/jcr:content/content/2colContainer/items";
     Set<String> allowedComponents = underTest.getAllowedComponents(nested2ColParsys, context.resourceResolver());
 
     // null check
-    assertNotNull("Allowed component for parsys cannot be null", allowedComponents);
+    assertNotNull(allowedComponents,
+        "Allowed component for parsys cannot be null");
 
     // positive tests
-    assertTrue("Component 'nestedComp1' must be allowed in " + nested2ColParsys + ".",
-        allowedComponents.contains("dummy/components/nestedComp1"));
-    assertTrue("Component 'nestedComp2' must be allowed in " + nested2ColParsys + ".",
-        allowedComponents.contains("dummy/components/nestedComp2"));
-    assertTrue("Component 'linklist' must be allowed in " + nested2ColParsys + ".",
-        allowedComponents.contains("dummy/components/linklist"));
+    assertTrue(allowedComponents.contains("dummy/components/nestedComp1"),
+        "Component 'nestedComp1' must be allowed in " + nested2ColParsys + ".");
+    assertTrue(allowedComponents.contains("dummy/components/nestedComp2"),
+        "Component 'nestedComp2' must be allowed in " + nested2ColParsys + ".");
+    assertTrue(allowedComponents.contains("dummy/components/linklist"),
+        "Component 'linklist' must be allowed in " + nested2ColParsys + ".");
 
     // negative tests
-    assertFalse("Component 'comp1' should not be allowed in " + nested2ColParsys + ".",
-        allowedComponents.contains("dummy/components/comp1"));
+    assertFalse(allowedComponents.contains("dummy/components/comp1"),
+        "Component 'comp1' should not be allowed in " + nested2ColParsys + ".");
   }
 
   @Test
-  public void testGetAllowedComponentsForNestedNestedParsys() {
+  void testGetAllowedComponentsForNestedNestedParsys() {
     String linklist = CONTENT_ROOT_PATH + "/page-1/jcr:content/content/2colContainer/linklist/links";
     Set<String> allowedComponents = underTest.getAllowedComponents(linklist, context.resourceResolver());
 
     // null check
-    assertNotNull("Allowed component for parsys cannot be null", allowedComponents);
+    assertNotNull(allowedComponents,
+        "Allowed component for parsys cannot be null");
 
     // positive tests
-    assertTrue("Component 'linkItem' must be allowed in " + linklist + ".",
-        allowedComponents.contains("dummy/components/linkItem"));
+    assertTrue(allowedComponents.contains("dummy/components/linkItem"),
+        "Component 'linkItem' must be allowed in " + linklist + ".");
 
     // negative tests
-    assertFalse("Component 'comp1' should not be allowed in " + linklist + ".",
-        allowedComponents.contains("dummy/components/comp1"));
-    assertFalse("Component 'nestedComp1' must be allowed in " + linklist + ".",
-        allowedComponents.contains("dummy/components/nestedComp1"));
+    assertFalse(allowedComponents.contains("dummy/components/comp1"),
+        "Component 'comp1' should not be allowed in " + linklist + ".");
+    assertFalse(allowedComponents.contains("dummy/components/nestedComp1"),
+        "Component 'nestedComp1' must be allowed in " + linklist + ".");
   }
 
   @Test
-  public void testGetAllowedComponentsForTemplate() {
+  void testGetAllowedComponentsForTemplate() {
     Set<String> allowedComponents = underTest.getAllowedComponentsForTemplate(BASE_PAGE_COMPONENT, context.resourceResolver());
 
     // null check
-    assertNotNull("Allowed components for template cannot be null", allowedComponents);
+    assertNotNull(allowedComponents,
+        "Allowed components for template cannot be null");
 
     // positive tests
-    assertTrue("Component 'comp1' must be allowed in page " + BASE_PAGE_COMPONENT + ".",
-        allowedComponents.contains("dummy/components/comp1"));
-    assertTrue("Component 'nestedComp2' must be allowed in page " + BASE_PAGE_COMPONENT + ".",
-        allowedComponents.contains("dummy/components/nestedComp2"));
+    assertTrue(allowedComponents.contains("dummy/components/comp1"),
+        "Component 'comp1' must be allowed in page " + BASE_PAGE_COMPONENT + ".");
+    assertTrue(allowedComponents.contains("dummy/components/nestedComp2"),
+        "Component 'nestedComp2' must be allowed in page " + BASE_PAGE_COMPONENT + ".");
 
     // negative tests
-    assertFalse("Component 'comp3' should not be allowed in page " + BASE_PAGE_COMPONENT + ".",
-        allowedComponents.contains("dummy/components/comp3"));
+    assertFalse(allowedComponents.contains("dummy/components/comp3"),
+        "Component 'comp3' should not be allowed in page " + BASE_PAGE_COMPONENT + ".");
 
   }
 
   @Test
-  public void testGetAllowedComponentsForInheritedParsys() {
+  void testGetAllowedComponentsForInheritedParsys() {
     // ---- special parsys (not inherited) ----
     String specialParsys = CONTENT_ROOT_PATH + "/page-2/jcr:content/special";
     Set<String> allowedComponents = underTest.getAllowedComponents(specialParsys, context.resourceResolver());
 
     // null check
-    assertNotNull("Allowed component for parsys cannot be null", allowedComponents);
+    assertNotNull(allowedComponents,
+        "Allowed component for parsys cannot be null");
 
     // positive tests
-    assertTrue("Component 'specialComp1' must be allowed in " + specialParsys + ".",
-        allowedComponents.contains("dummy/components/specialComp1"));
-    assertTrue("Component 'specialText' must be allowed in " + specialParsys + ".",
-        allowedComponents.contains("dummy/components/specialText"));
+    assertTrue(allowedComponents.contains("dummy/components/specialComp1"),
+        "Component 'specialComp1' must be allowed in " + specialParsys + ".");
+    assertTrue(allowedComponents.contains("dummy/components/specialText"),
+        "Component 'specialText' must be allowed in " + specialParsys + ".");
 
     // negative tests
-    assertFalse("Component 'comp1' should not be allowed in " + specialParsys + ".",
-        allowedComponents.contains("dummy/components/comp1"));
-    assertFalse("Component 'nestedComp2' should not be allowed in " + specialParsys + ".",
-        allowedComponents.contains("dummy/components/nestedComp2"));
+    assertFalse(allowedComponents.contains("dummy/components/comp1"),
+        "Component 'comp1' should not be allowed in " + specialParsys + ".");
+    assertFalse(allowedComponents.contains("dummy/components/nestedComp2"),
+        "Component 'nestedComp2' should not be allowed in " + specialParsys + ".");
 
     // ---- content parsys (inherited) ----
     String contentParsys = CONTENT_ROOT_PATH + "/page-2/jcr:content/content";
     allowedComponents = underTest.getAllowedComponents(contentParsys, context.resourceResolver());
 
     // null check
-    assertNotNull("Allowed component for parsys cannot be null", allowedComponents);
+    assertNotNull(allowedComponents,
+        "Allowed component for parsys cannot be null");
 
     // positive tests (inherited parsys config)
-    assertTrue("Component 'comp1' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/comp1"));
-    assertTrue("Component 'comp2' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/comp2"));
-    assertTrue("Component 'comp2a' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/comp2a"));
-    assertTrue("Component 'linklist' must be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/linklist"));
+    assertTrue(allowedComponents.contains("dummy/components/comp1"),
+        "Component 'comp1' must be allowed in " + contentParsys + ".");
+    assertTrue(allowedComponents.contains("dummy/components/comp2"),
+        "Component 'comp2' must be allowed in " + contentParsys + ".");
+    assertTrue(allowedComponents.contains("dummy/components/comp2a"),
+        "Component 'comp2a' must be allowed in " + contentParsys + ".");
+    assertTrue(allowedComponents.contains("dummy/components/linklist"),
+        "Component 'linklist' must be allowed in " + contentParsys + ".");
 
     // negative tests (inherited parsys config)
-    assertFalse("Component 'nestedComp2' should not be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/nestedComp2"));
-    assertFalse("Component 'container2col' must not be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/container2col"));
-    assertFalse("Component 'comp3' should not be allowed in " + contentParsys + ".",
-        allowedComponents.contains("dummy/components/comp3"));
+    assertFalse(allowedComponents.contains("dummy/components/nestedComp2"),
+        "Component 'nestedComp2' should not be allowed in " + contentParsys + ".");
+    assertFalse(allowedComponents.contains("dummy/components/container2col"),
+        "Component 'container2col' must not be allowed in " + contentParsys + ".");
+    assertFalse(allowedComponents.contains("dummy/components/comp3"),
+        "Component 'comp3' should not be allowed in " + contentParsys + ".");
 
     // ---- linklist (inheritance canceled) ----
     String linklistParsys = CONTENT_ROOT_PATH + "/page-2/jcr:content/content/links";
     allowedComponents = underTest.getAllowedComponents(linklistParsys, context.resourceResolver());
 
     // positive tests
-    assertTrue("Component 'comp2b' must be allowed in " + linklistParsys + ".",
-        allowedComponents.contains("dummy/components/comp2b"));
+    assertTrue(allowedComponents.contains("dummy/components/comp2b"),
+        "Component 'comp2b' must be allowed in " + linklistParsys + ".");
 
     // negative tests
-    assertFalse("Component 'linkItem' should not be allowed in " + linklistParsys + ".",
-        allowedComponents.contains("dummy/components/linkItem"));
+    assertFalse(allowedComponents.contains("dummy/components/linkItem"),
+        "Component 'linkItem' should not be allowed in " + linklistParsys + ".");
 
   }
 
   @Test
-  public void testGetAllowedComponentsForInheritedTemplate() {
+  void testGetAllowedComponentsForInheritedTemplate() {
     Set<String> allowedComponents = underTest.getAllowedComponentsForTemplate(INHERITED_PAGE_COMPONENT, context.resourceResolver());
 
     // null check
-    assertNotNull("Allowed components for template cannot be null", allowedComponents);
+    assertNotNull(allowedComponents,
+        "Allowed components for template cannot be null");
 
     // positive tests
-    assertTrue("Component 'specialComp1' must be allowed in page " + INHERITED_PAGE_COMPONENT + ".",
-        allowedComponents.contains("dummy/components/specialComp1"));
+    assertTrue(allowedComponents.contains("dummy/components/specialComp1"),
+        "Component 'specialComp1' must be allowed in page " + INHERITED_PAGE_COMPONENT + ".");
 
     // positive tests (inherited parsys config)
-    assertTrue("Component 'comp1' must be allowed in page " + INHERITED_PAGE_COMPONENT + ".",
-        allowedComponents.contains("dummy/components/comp1"));
-    assertTrue("Component 'nestedComp2' must be allowed in page " + INHERITED_PAGE_COMPONENT + ".",
-        allowedComponents.contains("dummy/components/nestedComp2"));
+    assertTrue(allowedComponents.contains("dummy/components/comp1"),
+        "Component 'comp1' must be allowed in page " + INHERITED_PAGE_COMPONENT + ".");
+    assertTrue(allowedComponents.contains("dummy/components/nestedComp2"),
+        "Component 'nestedComp2' must be allowed in page " + INHERITED_PAGE_COMPONENT + ".");
 
     // negative tests
-    assertFalse("Component 'comp3' should not be allowed in page " + INHERITED_PAGE_COMPONENT + ".",
-        allowedComponents.contains("dummy/components/comp3"));
+    assertFalse(allowedComponents.contains("dummy/components/comp3"),
+        "Component 'comp3' should not be allowed in page " + INHERITED_PAGE_COMPONENT + ".");
 
   }
+
+  @Test
+  void testGetAllowedComponentsForParsys_NonexistingResource_ResourceType_Ancestor1() {
+    String relativePath = "jcr:content/nonExistingResource";
+    Set<String> allowedComponents = underTest.getAllowedComponents(basePage, relativePath,
+        "dummy/components/parentWithAncestorLevel1", context.resourceResolver());
+
+    // null check
+    assertNotNull(allowedComponents,
+        "Allowed component for parsys cannot be null");
+
+    // positive tests
+    assertTrue(allowedComponents.contains("dummy/components/nestedComp1"),
+        "Component 'nestedComp1' must be allowed in " + relativePath + ".");
+    assertTrue(allowedComponents.contains("dummy/components/nestedComp2"),
+        "Component 'nestedComp2' must be allowed in " + relativePath + ".");
+    assertTrue(allowedComponents.contains("dummy/components/nestedComp3"),
+        "Component 'nestedComp3' must be allowed in " + relativePath + ".");
+
+    // negative tests
+    assertFalse(allowedComponents.contains("dummy/components/comp1"),
+        "Component 'comp1' should not be allowed in " + relativePath + ".");
+  }
+
+  @Test
+  void testGetAllowedComponentsForParsys_NonexistingResource_ResourceType_NoAncestor() {
+    String relativePath = "jcr:content/nonExistingResource";
+    Set<String> allowedComponents = underTest.getAllowedComponents(basePage, relativePath,
+        "dummy/components/parentWithoutAncestorLevel", context.resourceResolver());
+
+    // null check
+    assertNotNull(allowedComponents,
+        "Allowed component for parsys cannot be null");
+
+    // positive tests
+    assertTrue(allowedComponents.contains("dummy/components/nestedComp1"),
+        "Component 'nestedComp1' must be allowed in " + relativePath + ".");
+    assertTrue(allowedComponents.contains("dummy/components/nestedComp2"),
+        "Component 'nestedComp2' must be allowed in " + relativePath + ".");
+
+    // negative tests
+    assertFalse(allowedComponents.contains("dummy/components/comp1"),
+        "Component 'comp1' should not be allowed in " + relativePath + ".");
+    assertFalse(allowedComponents.contains("dummy/components/nestedComp3"),
+        "Component 'nestedComp3' should not be allowed in " + relativePath + ".");
+  }
+
 
   private void addDummyContent(Page page) {
     String contentPath = page.getContentResource().getPath();
@@ -250,7 +307,7 @@ public class AllowedComponentsProviderImplTest {
     context.create().resource(contentPath + "/content",
         ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "dummy/components/parsys"));
 
-    // 2col-container (nested parsys )
+    // 2col-container (nested parsys)
     context.create().resource(contentPath + "/content/2colContainer",
         ImmutableValueMap.of(SLING_RESOURCE_TYPE_PROPERTY, "dummy/components/container2Col"));
     context.create().resource(contentPath + "/content/2colContainer/items");

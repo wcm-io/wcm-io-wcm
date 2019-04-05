@@ -19,7 +19,7 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -27,51 +27,57 @@ import static org.mockito.Mockito.when;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.resource.ResourceResolver;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableSortedSet;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.commons.util.RunMode;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ParsysComponentsServletTest {
+@ExtendWith(AemContextExtension.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class ParsysComponentsServletTest {
 
   private static final String PAGE_PATH = "/content/sample/page1";
   private static final String LOCAL_PATH = "jcr:content/sample";
+  private static final String RESOURCE_TYPE = "/sample/components/parsys";
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
   @Mock
   private AllowedComponentsProvider allowedComponentsProvider;
 
   private Page currentPage;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     currentPage = context.create().page(PAGE_PATH);
     context.currentPage(currentPage);
 
-    context.request().setParameterMap(ImmutableValueMap.of(ParsysComponentsServlet.RP_PATH, LOCAL_PATH));
+    context.request().setParameterMap(ImmutableValueMap.of(
+        ParsysComponentsServlet.RP_PATH, LOCAL_PATH,
+        ParsysComponentsServlet.RP_RESOURCE_TYPE, RESOURCE_TYPE));
 
-    when(allowedComponentsProvider.getAllowedComponents(
-        eq(PAGE_PATH + "/" + LOCAL_PATH), any(ResourceResolver.class)))
+    when(allowedComponentsProvider.getAllowedComponents(any(Page.class),
+        eq(LOCAL_PATH), eq(RESOURCE_TYPE), any(ResourceResolver.class)))
         .thenReturn(ImmutableSortedSet.of("sample/components/comp1", "sample/components/comp2"));
 
     context.registerService(AllowedComponentsProvider.class, allowedComponentsProvider);
   }
 
   @Test
-  public void testJsonResult() throws Exception {
+  void testJsonResult() throws Exception {
     context.runMode(RunMode.AUTHOR);
     ParsysComponentsServlet underTest = new ParsysComponentsServlet();
     context.registerInjectActivateService(underTest);
@@ -82,7 +88,7 @@ public class ParsysComponentsServletTest {
   }
 
   @Test
-  public void testJsonResultNoRequestParam() throws Exception {
+  void testJsonResultNoRequestParam() throws Exception {
     context.runMode(RunMode.AUTHOR);
     ParsysComponentsServlet underTest = new ParsysComponentsServlet();
     context.registerInjectActivateService(underTest);
@@ -95,7 +101,7 @@ public class ParsysComponentsServletTest {
   }
 
   @Test
-  public void testJsonResultPublish() throws Exception {
+  void testJsonResultPublish() throws Exception {
     context.runMode(RunMode.PUBLISH);
     ParsysComponentsServlet underTest = new ParsysComponentsServlet();
     context.registerInjectActivateService(underTest);

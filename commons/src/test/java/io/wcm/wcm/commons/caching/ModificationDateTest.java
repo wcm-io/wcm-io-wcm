@@ -19,8 +19,8 @@
  */
 package io.wcm.wcm.commons.caching;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
@@ -29,18 +29,18 @@ import java.util.Date;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ModificationDateTest {
+@ExtendWith(MockitoExtension.class)
+class ModificationDateTest {
 
   static final Calendar SAMPLE_CALENDAR_1 = DateUtils.toCalendar(new Date(1000000L));
   static final Calendar SAMPLE_CALENDAR_2 = DateUtils.toCalendar(new Date(1200000L));
@@ -55,7 +55,7 @@ public class ModificationDateTest {
   private Resource resource2;
 
   @Test
-  public void testGetPage() {
+  void testGetPage() {
     assertNull(ModificationDate.get((Page)null));
 
     assertNull(ModificationDate.get(page1));
@@ -65,7 +65,7 @@ public class ModificationDateTest {
   }
 
   @Test
-  public void testGetResource() {
+  void testGetResource() {
     assertNull(ModificationDate.get((Resource)null));
 
     assertNull(ModificationDate.get(resource1));
@@ -79,27 +79,27 @@ public class ModificationDateTest {
   }
 
   @Test
-  public void testMostRecentResourceArray() {
+  void testMostRecentResourceArray() {
     applyLastModified(resource1, SAMPLE_CALENDAR_1);
     applyLastModified(resource2, SAMPLE_CALENDAR_2);
     assertEquals(SAMPLE_CALENDAR_2.getTime(), ModificationDate.mostRecent(resource1, resource2));
   }
 
   @Test
-  public void testMostRecentPageArray() {
+  void testMostRecentPageArray() {
     applyPageLastModified(page1, SAMPLE_CALENDAR_1);
     applyPageLastModified(page2, SAMPLE_CALENDAR_2);
     assertEquals(SAMPLE_CALENDAR_2.getTime(), ModificationDate.mostRecent(page1, page2));
   }
 
   @Test
-  public void testMostRecentPageArray_WithNullDate() {
+  void testMostRecentPageArray_WithNullDate() {
     applyPageLastModified(page1, SAMPLE_CALENDAR_1);
     assertEquals(SAMPLE_CALENDAR_1.getTime(), ModificationDate.mostRecent(page1, page2));
   }
 
   @Test
-  public void testMostRecentModificationDateProviderArray() throws Exception {
+  void testMostRecentModificationDateProviderArray() throws Exception {
     applyPageLastModified(page1, SAMPLE_CALENDAR_1);
     applyPageLastModified(resource2, SAMPLE_CALENDAR_2);
     assertEquals(SAMPLE_CALENDAR_2.getTime(), ModificationDate.mostRecent(
@@ -109,7 +109,7 @@ public class ModificationDateTest {
   }
 
   @Test
-  public void testMostRecentDateArray() {
+  void testMostRecentDateArray() {
     assertEquals(SAMPLE_CALENDAR_2.getTime(),
         ModificationDate.mostRecent(SAMPLE_CALENDAR_1.getTime(), SAMPLE_CALENDAR_2.getTime()));
     assertEquals(SAMPLE_CALENDAR_2.getTime(),

@@ -19,38 +19,39 @@
  */
 package io.wcm.wcm.ui.extjs.provider.impl.servlets;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.commons.predicate.PredicateProvider;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
-public class PageListProviderTest {
+@ExtendWith(AemContextExtension.class)
+class PageListProviderTest {
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
-  @Before
-  public void setUp() throws Exception {
+  @BeforeEach
+  void setUp() throws Exception {
     context.create().page("/content/sample/en");
     context.create().page("/content/sample/en/page1", "", "title1");
     context.create().page("/content/sample/en/page2", "", "title2");
   }
 
   @Test
-  public void testWithPath() throws Exception {
+  void testWithPath() throws Exception {
     context.request().setParameterMap(ImmutableValueMap.of(AbstractPageProvider.RP_PATH, "/content/sample/en"));
 
     JSONArray result = getJsonResult();
@@ -61,7 +62,7 @@ public class PageListProviderTest {
   }
 
   @Test
-  public void testWithCurrentResource() throws Exception {
+  void testWithCurrentResource() throws Exception {
     context.currentResource(context.resourceResolver().getResource("/content/sample/en/jcr:content"));
 
     JSONArray result = getJsonResult();
@@ -72,13 +73,13 @@ public class PageListProviderTest {
   }
 
   @Test
-  public void testInvalidPath() throws Exception {
+  void testInvalidPath() throws Exception {
     context.request().setParameterMap(ImmutableValueMap.of(AbstractPageProvider.RP_PATH, "/content/sample/en/invalid/path"));
     assertNull(getJsonResult());
   }
 
   @Test
-  public void testWithPredicate() throws Exception {
+  void testWithPredicate() throws Exception {
     context.registerService(PredicateProvider.class, new DummyPredicateProvider());
 
     context.request().setParameterMap(ImmutableValueMap.of(AbstractPageProvider.RP_PATH, "/content/sample/en",

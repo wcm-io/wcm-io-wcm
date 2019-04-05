@@ -98,6 +98,8 @@ Enhancements over AEM version:
 
 ### Pathfield
 
+*Please note:* Some of the listed features will only work in AEM 6.3 and higher.
+
 A field that allows the user to enter path. This path field can be used for both picking page paths or asset paths.
 
 ```json

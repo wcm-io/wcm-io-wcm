@@ -19,8 +19,8 @@
  */
 package io.wcm.wcm.ui.extjs.provider.impl.servlets;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
 
@@ -34,32 +34,32 @@ import org.apache.sling.commons.json.JSONObject;
 import org.apache.sling.testing.mock.jcr.MockJcr;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.jetbrains.annotations.Nullable;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(AemContextExtension.class)
+@ExtendWith(MockitoExtension.class)
 @SuppressWarnings("null")
-public class TemplateFilterPageTreeProviderTest {
+class TemplateFilterPageTreeProviderTest {
 
   private static final String TEMPLATE_1 = "/apps/app1/templates/template1";
   private static final String TEMPLATE_2 = "/apps/app1/templates/template2";
 
-  @Rule
-  public AemContext context = new AemContext(ResourceResolverType.JCR_MOCK);
+  private final AemContext context = new AemContext(ResourceResolverType.JCR_MOCK);
 
-  @Before
-  public void setUp() throws Exception {
+  @BeforeEach
+  void setUp() throws Exception {
     context.create().page("/content/sample/en");
     context.create().page("/content/sample/en/page1", TEMPLATE_1, "title1");
     context.create().page("/content/sample/en/page1/page11", TEMPLATE_2, "title11");
@@ -72,7 +72,7 @@ public class TemplateFilterPageTreeProviderTest {
   }
 
   @Test
-  public void testWithOutTemplates() throws Exception {
+  void testWithOutTemplates() throws Exception {
     context.request().setParameterMap(ImmutableValueMap.of(AbstractPageProvider.RP_PATH, "/content/sample/en"));
 
     JSONArray result = getJsonResult();
@@ -80,7 +80,7 @@ public class TemplateFilterPageTreeProviderTest {
   }
 
   @Test
-  public void testWithTemplate1() throws Exception {
+  void testWithTemplate1() throws Exception {
     context.request().setParameterMap(ImmutableValueMap.of(AbstractPageProvider.RP_PATH, "/content/sample/en",
         TemplateFilterPageTreeProvider.RP_TEMPLATE, new String[] {
         TEMPLATE_1
@@ -106,7 +106,7 @@ public class TemplateFilterPageTreeProviderTest {
   }
 
   @Test
-  public void testWithTemplate1an2() throws Exception {
+  void testWithTemplate1an2() throws Exception {
     context.request().setParameterMap(ImmutableValueMap.of(AbstractPageProvider.RP_PATH, "/content/sample/en",
         TemplateFilterPageTreeProvider.RP_TEMPLATE, new String[] {
         TEMPLATE_1,

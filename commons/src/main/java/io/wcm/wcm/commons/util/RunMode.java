@@ -22,7 +22,6 @@ package io.wcm.wcm.commons.util;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
@@ -37,12 +36,12 @@ public final class RunMode {
   /**
    * Runmode for author instance
    */
-  public static final @NotNull String AUTHOR = "author";
+  public static final String AUTHOR = "author";
 
   /**
    * Runmode for publish instance
    */
-  public static final @NotNull String PUBLISH = "publish";
+  public static final String PUBLISH = "publish";
 
   private RunMode() {
     // static methods only

@@ -19,10 +19,10 @@
  */
 package io.wcm.wcm.commons.bundleinfo.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.osgi.framework.Constants.BUNDLE_NAME;
@@ -33,11 +33,13 @@ import java.util.Dictionary;
 import java.util.List;
 
 import org.apache.sling.testing.mock.osgi.MapUtil;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
@@ -47,16 +49,17 @@ import io.wcm.wcm.commons.bundleinfo.BundleInfo;
 import io.wcm.wcm.commons.bundleinfo.BundleInfoService;
 import io.wcm.wcm.commons.bundleinfo.BundleState;
 
-@RunWith(MockitoJUnitRunner.class)
-public class BundleInfoServiceImplTest {
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class BundleInfoServiceImplTest {
 
   @Mock
   private BundleContext bundleContext;
 
   private BundleInfoService underTest;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     // instantiate OSGi service directly to be able to inject a mock bundle context
     BundleInfoServiceImpl instance = new BundleInfoServiceImpl();
     instance.activate(bundleContext);
@@ -64,13 +67,13 @@ public class BundleInfoServiceImplTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     when(bundleContext.getBundles()).thenReturn(new Bundle[0]);
     assertTrue(underTest.getBundles().isEmpty());
   }
 
   @Test
-  public void testBundles() {
+  void testBundles() {
     bundles(
         bundle("bundle1", BundleState.ACTIVE, BUNDLE_NAME, "Bundle 1", BUNDLE_VERSION, "1.2.3"),
         bundle("minimalBundle2", BundleState.RESOLVED),

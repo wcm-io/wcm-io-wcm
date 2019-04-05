@@ -26,19 +26,26 @@
   // Predefined patterns
   var pattern = {
     email: /^[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}$/,
-    url: /^((https?|ftp|mailto|tel):\/\/)([\w\.-]+)(:\d+)?((\/).*)?$/i
+    // Matches all strings that seem to have a proper URL scheme - e.g. starting with http://, https://, mailto:, tel:
+    url: /^([^\/]+:|\/\/).*$/,
+    // Matches content paths like /xxx/yyy/zzz
+    path: /^(\/[^\/]+)+$/
   };
 
   var foundationValidator = $(window).adaptTo("foundation-registry");
+
+  var getValue = function(el) {
+    return $(el).val();
+  };
 
   // predefined "email" pattern validator
   foundationValidator.register('foundation.validation.validator', {
     selector: '[data-validation="wcmio.email"]',
     validate: function(el) {
-      el = $(el);
-      var valid = el.val().length === 0 || pattern.email.test(el.val());
+      var value = getValue(el);
+      var valid = value.length === 0 || pattern.email.test(value);
       if (!valid) {
-        return Granite.I18n.get("Must be a valid email address.");
+        return Granite.I18n.get("Please enter a valid email address.");
       }
     }
   });
@@ -47,10 +54,22 @@
   foundationValidator.register('foundation.validation.validator', {
     selector: '[data-validation="wcmio.url"]',
     validate: function(el) {
-      el = $(el);
-      var valid = el.val().length === 0 || pattern.url.test(el.val());
+      var value = getValue(el);
+      var valid = value.length === 0 || pattern.url.test(value);
       if (!valid) {
-        return Granite.I18n.get("Must be a valid URL.");
+        return Granite.I18n.get("Please enter a valid URL.");
+      }
+    }
+  });
+
+  // predefined "path" pattern validator
+  foundationValidator.register('foundation.validation.validator', {
+    selector: '[data-validation="wcmio.path"]',
+    validate: function(el) {
+      var value = getValue(el);
+      var valid = value.length === 0 || pattern.path.test(value);
+      if (!valid) {
+        return Granite.I18n.get("Please enter a valid content path.");
       }
     }
   });
@@ -59,10 +78,11 @@
   foundationValidator.register('foundation.validation.validator', {
     selector: '[data-validation="wcmio.pattern"]',
     validate: function(el) {
-      var regex = el.getAttribute("data-wcmio-pattern");
-      var regexMessage = el.getAttribute("data-wcmio-patternmessage");
       el = $(el);
-      var valid = el.val().length === 0 || new RegExp(regex).test(el.val());
+      var regex = el.attr("data-wcmio-pattern");
+      var regexMessage = el.attr("data-wcmio-patternmessage");
+      var value = el.val();
+      var valid = value.length === 0 || new RegExp(regex).test(value);
       if (!valid) {
         return Granite.I18n.get(regexMessage || "Value is invalid.");
       }

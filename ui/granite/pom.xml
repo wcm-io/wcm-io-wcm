@@ -31,7 +31,7 @@
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.ui.granite</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>WCM Granite UI Extensions</name>
@@ -101,8 +101,18 @@
     </dependency>
 
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -111,9 +121,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>io.wcm</groupId>
-      <artifactId>io.wcm.testing.aem-mock.junit4</artifactId>
-      <version>2.4.2</version>
+      <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
+      <version>2.4.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -176,6 +191,36 @@
             </Import-Package>
 
           </instructions>
+        </configuration>
+      </plugin>
+
+      <!-- Execute JavaScript unit tests using JEST -->
+      <plugin>
+        <groupId>io.wcm.maven.plugins</groupId>
+        <artifactId>nodejs-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals><goal>run</goal></goals>
+          </execution>
+        </executions>
+        <configuration>
+          <nodeJsVersion>10.15.3</nodeJsVersion>
+          <npmVersion>6.4.1</npmVersion>
+          <tasks>
+            <npmInstallTask>
+              <workingDirectory>${project.basedir}</workingDirectory>
+            </npmInstallTask>
+            <nodeJsTask>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <moduleName>npm</moduleName>
+              <executableName>npm-cli</executableName>
+              <arguments>
+                <argument>run</argument>
+                <argument>test</argument>
+              </arguments>
+            </nodeJsTask>
+          </tasks>
         </configuration>
       </plugin>
 

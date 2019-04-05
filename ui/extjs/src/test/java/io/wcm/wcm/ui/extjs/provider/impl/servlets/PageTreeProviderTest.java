@@ -19,33 +19,34 @@
  */
 package io.wcm.wcm.ui.extjs.provider.impl.servlets;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.commons.predicate.PredicateProvider;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
-public class PageTreeProviderTest {
+@ExtendWith(AemContextExtension.class)
+class PageTreeProviderTest {
 
   private static final String TEMPLATE = "/apps/app1/templates/template1";
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
-  @Before
-  public void setUp() throws Exception {
+  @BeforeEach
+  void setUp() throws Exception {
     context.create().page("/content/sample/en");
     context.create().page("/content/sample/en/page1", TEMPLATE, "title1");
     context.create().page("/content/sample/en/page1/page11", TEMPLATE, "title11");
@@ -58,7 +59,7 @@ public class PageTreeProviderTest {
   }
 
   @Test
-  public void testWithPath() throws Exception {
+  void testWithPath() throws Exception {
     context.request().setParameterMap(ImmutableValueMap.of(AbstractPageProvider.RP_PATH, "/content/sample/en"));
 
     JSONArray result = getJsonResult();
@@ -77,7 +78,7 @@ public class PageTreeProviderTest {
   }
 
   @Test
-  public void testWithPredicate() throws Exception {
+  void testWithPredicate() throws Exception {
     context.registerService(PredicateProvider.class, new DummyPredicateProvider());
 
     context.request().setParameterMap(ImmutableValueMap.of(AbstractPageProvider.RP_PATH, "/content/sample/en",

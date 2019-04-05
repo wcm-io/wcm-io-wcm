@@ -19,6 +19,8 @@
  */
 package io.wcm.wcm.parsys;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * Names used for the parsys.
  * <p>
@@ -32,6 +34,7 @@ package io.wcm.wcm.parsys;
  * <li>RA_ prefix stands for "request attribute"</li>
  * </ul>
  */
+@ProviderType
 public final class ParsysNameConstants {
 
   /**
@@ -72,6 +75,13 @@ public final class ParsysNameConstants {
    * To be used as property in the parsys component definition.
    */
   public static final String PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE = "wcmio:parsysParagraphNoDecorationWcmMode";
+
+  /**
+   * If set to true, each paragraph item is validated. If it is not valid, it's hidden when
+   * <code>wcmmode=disabled</code>. To validate the paragraph item a Sling Model has to be implemented registered to the
+   * adapter {@link ParsysItem} and the resource type of the paragraph item's resource.
+   */
+  public static final String PN_PARSYS_PARAGRAPH_VALIDATE = "wcmio:parsysParagraphValidate";
 
   /**
    * Sets the element name to be used for the element wrapping the whole paragraph system.

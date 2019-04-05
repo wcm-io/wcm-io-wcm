@@ -19,9 +19,9 @@
  */
 package io.wcm.wcm.ui.granite.emulator.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,9 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.emulator.Emulator;
@@ -41,13 +41,14 @@ import com.day.cq.wcm.mobile.api.device.DeviceGroupList;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+@ExtendWith(AemContextExtension.class)
 @SuppressWarnings("null")
-public class EmulatorProviderImplTest {
+class EmulatorProviderImplTest {
 
-  @Rule
-  public AemContext context = new AemContext();
+  private final AemContext context = new AemContext();
 
   private EmulatorProvider underTest;
 
@@ -55,8 +56,8 @@ public class EmulatorProviderImplTest {
   private Page page2;
   private Page page3;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     underTest = context.registerInjectActivateService(new EmulatorProviderImpl(),
         "templatePathPatterns", new String[] { "^/apps/app1/.*$", "^/apps/app2/.*$" });
 
@@ -69,14 +70,14 @@ public class EmulatorProviderImplTest {
   }
 
   @Test
-  public void testHandles() {
+  void testHandles() {
     assertTrue(underTest.handles(page1.adaptTo(Resource.class)));
     assertTrue(underTest.handles(page2.adaptTo(Resource.class)));
     assertFalse(underTest.handles(page3.adaptTo(Resource.class)));
   }
 
   @Test
-  public void testGetEmulators() {
+  void testGetEmulators() {
     Resource resource = mock(Resource.class);
     Page page = mock(Page.class);
     when(resource.adaptTo(Page.class)).thenReturn(page);

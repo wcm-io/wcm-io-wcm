@@ -25,6 +25,7 @@ import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_NEWAREA_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_ELEMENT;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE;
+import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_VALIDATE;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
 import static io.wcm.wcm.parsys.controller.Parsys.DEFAULT_ELEMENT_NAME;
@@ -35,29 +36,34 @@ import static io.wcm.wcm.parsys.controller.Parsys.NEWAREA_RESOURCE_PATH;
 import static io.wcm.wcm.parsys.controller.Parsys.NEWAREA_STYLE;
 import static io.wcm.wcm.parsys.controller.Parsys.RA_PARSYS_PARENT_RESOURCE;
 import static io.wcm.wcm.parsys.controller.Parsys.SECTION_DEFAULT_CLASS_NAME;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
 import org.apache.sling.api.SlingConstants;
 import org.apache.sling.api.resource.Resource;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
+import com.google.common.base.Function;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.testing.mock.aem.junit.AemContextBuilder;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import io.wcm.wcm.parsys.ParsysItem;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
+@ExtendWith(AemContextExtension.class)
 @SuppressWarnings("null")
-public class ParsysTest {
+class ParsysTest {
 
   private static final String RESOURCE_TYPE_SAMPLE = "sample/components/parsys";
   private static final String SUPER_RESOURCE_TYPE_SAMPLE = "sample/components/superParsys";
@@ -65,31 +71,32 @@ public class ParsysTest {
   private static final String COMPONENT_PATH_2 = "sample/components/comp2";
   private static final String SUPERCOMPONENT_PATH = "sample/components/super";
 
-  @Rule
-  public AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();
+  private final AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();
 
   private Page page;
   private Resource parsysResource;
   private Resource par1Resource;
   private Resource par2Resource;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     context.addModelsForPackage("io.wcm.wcm.parsys.controller");
 
     page = context.create().page("/content/page1", "sample/templates/test1");
     parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsys",
         "sling:resourceType", RESOURCE_TYPE_SAMPLE);
     par1Resource = context.create().resource(parsysResource.getPath() + "/par1",
-        "sling:resourceType", COMPONENT_PATH_1);
+        "sling:resourceType", COMPONENT_PATH_1,
+        "valid", true);
     par2Resource = context.create().resource(parsysResource.getPath() + "/par2",
-        "sling:resourceType", COMPONENT_PATH_2);
+        "sling:resourceType", COMPONENT_PATH_2,
+        "valid", false);
 
     context.currentResource(parsysResource);
   }
 
   @Test
-  public void testEditMode() {
+  void testEditMode() {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
 
     WCMMode.EDIT.toRequest(context.request());
@@ -128,7 +135,7 @@ public class ParsysTest {
   }
 
   @Test
-  public void testEditMode_Customized() {
+  void testEditMode_Customized() {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
         PN_PARSYS_GENERATE_DEAFULT_CSS, false,
         PN_PARSYS_PARAGRAPH_CSS, "paracss",
@@ -173,7 +180,7 @@ public class ParsysTest {
   }
 
   @Test
-  public void testEditMode_Customized_Inheritance() {
+  void testEditMode_Customized_Inheritance() {
     context.create().resource("/apps/" + SUPERCOMPONENT_PATH,
         PN_PARSYS_GENERATE_DEAFULT_CSS, false,
         PN_PARSYS_PARAGRAPH_CSS, "paracss",
@@ -220,7 +227,7 @@ public class ParsysTest {
   }
 
   @Test
-  public void testWcmDisabledMode() {
+  void testWcmDisabledMode() {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
     WCMMode.DISABLED.toRequest(context.request());
     Parsys parsys = context.request().adaptTo(Parsys.class);
@@ -242,7 +249,7 @@ public class ParsysTest {
   }
 
   @Test
-  public void testNewAreaResourceTypeFromCurrentComponent() {
+  void testNewAreaResourceTypeFromCurrentComponent() {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
 
@@ -255,7 +262,7 @@ public class ParsysTest {
   }
 
   @Test
-  public void testNewAreaResourceTypeFromSuperComponent() {
+  void testNewAreaResourceTypeFromSuperComponent() {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
         SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_SUPER_TYPE, SUPER_RESOURCE_TYPE_SAMPLE);
 
@@ -271,7 +278,7 @@ public class ParsysTest {
   }
 
   @Test
-  public void testOtherParentParsysResource() {
+  void testOtherParentParsysResource() {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
     parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsysOther");
     par1Resource = context.create().resource(parsysResource.getPath() + "/par1");
@@ -298,7 +305,7 @@ public class ParsysTest {
   }
 
   @Test
-  public void testComponentWithTagDecoration() {
+  void testComponentWithTagDecoration() {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
 
     // prepare tag decoration for one component
@@ -337,7 +344,7 @@ public class ParsysTest {
   }
 
   @Test
-  public void testComponentWithNoTagDecoration() {
+  void testComponentWithNoTagDecoration() {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
         PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE, new String[] { "edit" });
 
@@ -374,6 +381,83 @@ public class ParsysTest {
     assertEquals(DEFAULT_ELEMENT_NAME, item3.getElementName());
     assertTrue(item3.isDecorate());
     assertTrue(item3.isNewArea());
+  }
+
+  @Test
+  void testParagraphValidate_DisabledMode() {
+    context.registerAdapter(Resource.class, ParsysItem.class, new ValidatedParsysItem());
+
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
+        PN_PARSYS_PARAGRAPH_VALIDATE, true);
+
+    WCMMode.DISABLED.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+
+    List<Item> items = parsys.getItems();
+    assertEquals(1, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertTrue(item1.isValid());
+  }
+
+  @Test
+  void testParagraphValidate_DisabledMode_NoAdapter() {
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
+        PN_PARSYS_PARAGRAPH_VALIDATE, true);
+
+    WCMMode.DISABLED.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+
+    List<Item> items = parsys.getItems();
+    assertEquals(2, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertTrue(item1.isValid());
+
+    Item item2 = items.get(1);
+    assertEquals(par2Resource.getPath(), item2.getResourcePath());
+    assertTrue(item2.isValid());
+  }
+
+  @Test
+  void testParagraphValidate_EditMode() {
+    context.registerAdapter(Resource.class, ParsysItem.class, new ValidatedParsysItem());
+
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
+        PN_PARSYS_PARAGRAPH_VALIDATE, true);
+
+    WCMMode.EDIT.toRequest(context.request());
+    Parsys parsys = context.request().adaptTo(Parsys.class);
+
+    List<Item> items = parsys.getItems();
+    assertEquals(3, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertTrue(item1.isValid());
+
+    Item item2 = items.get(1);
+    assertEquals(par2Resource.getPath(), item2.getResourcePath());
+    assertFalse(item2.isValid());
+
+    Item item3 = items.get(2);
+    assertEquals(NEWAREA_RESOURCE_PATH, item3.getResourcePath());
+    assertFalse(item3.isValid());
+  }
+
+  private static class ValidatedParsysItem implements Function<Resource, ParsysItem> {
+    @Override
+    @Nullable
+    public ParsysItem apply(@Nullable Resource resource) {
+      return new ParsysItem() {
+        @Override
+        public boolean isValid() {
+          return resource.getValueMap().get("valid", false);
+        }
+      };
+    }
   }
 
 }

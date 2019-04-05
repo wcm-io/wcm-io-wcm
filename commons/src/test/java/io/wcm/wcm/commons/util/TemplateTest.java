@@ -19,17 +19,19 @@
  */
 package io.wcm.wcm.commons.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
@@ -37,20 +39,21 @@ import com.day.cq.wcm.api.Page;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.wcm.commons.testcontext.AppTemplate;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings("null")
-public class TemplateTest {
+class TemplateTest {
 
   @Mock
   private Page page;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     when(page.getProperties()).thenReturn(ImmutableValueMap.of(NameConstants.PN_TEMPLATE, AppTemplate.TEMPLATE_1.getTemplatePath()));
   }
 
   @Test
-  public void testGetResourceTypeFromTemplatePath() {
+  void testGetResourceTypeFromTemplatePath() {
 
     assertNull(null, Template.getResourceTypeFromTemplatePath(null));
     assertNull(null, Template.getResourceTypeFromTemplatePath(""));
@@ -64,7 +67,7 @@ public class TemplateTest {
   }
 
   @Test
-  public void testIs_TemplatePathInfo() {
+  void testIs_TemplatePathInfo() {
     assertFalse(Template.is(null, new TemplatePathInfo[0]));
     assertFalse(Template.is(page, new TemplatePathInfo[0]));
     assertFalse(Template.is(page, (TemplatePathInfo[])null));
@@ -74,7 +77,7 @@ public class TemplateTest {
   }
 
   @Test
-  public void testIs_TemplatePath() {
+  void testIs_TemplatePath() {
     assertFalse(Template.is(null, new String[0]));
     assertFalse(Template.is(page, new String[0]));
     assertFalse(Template.is(page, (String[])null));
@@ -84,25 +87,25 @@ public class TemplateTest {
   }
 
   @Test
-  public void testForTemplatePath() {
+  void testForTemplatePath() {
     assertEquals(AppTemplate.TEMPLATE_1, Template.forTemplatePath(AppTemplate.TEMPLATE_1.getTemplatePath(), AppTemplate.values()));
     assertNull(Template.forTemplatePath("/apps/xxx/templates/yyy", AppTemplate.values()));
   }
 
   @Test
-  public void testForTemplatePath_Enum() {
+  void testForTemplatePath_Enum() {
     assertEquals(AppTemplate.TEMPLATE_1, Template.forTemplatePath(AppTemplate.TEMPLATE_1.getTemplatePath(), AppTemplate.class));
     assertNull(Template.forTemplatePath("/apps/xxx/templates/yyy", AppTemplate.class));
   }
 
   @Test
-  public void testForPage() throws Exception {
+  void testForPage() throws Exception {
     assertEquals(AppTemplate.TEMPLATE_1, Template.forPage(page, AppTemplate.values()));
     assertNull(Template.forPage(null, AppTemplate.values()));
   }
 
   @Test
-  public void testForPage_Enum() throws Exception {
+  void testForPage_Enum() throws Exception {
     assertEquals(AppTemplate.TEMPLATE_1, Template.forPage(page, AppTemplate.class));
     assertNull(Template.forPage(null, AppTemplate.class));
   }
