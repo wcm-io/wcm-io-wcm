@@ -75,9 +75,9 @@ Enhancements over AEM version:
 * Always stores values as array if "multiple" mode is activated, regardless how many entries are selected.
 
 
-### Pathfield
+### Path Field
 
-![Pathfield component](images/pathfield-component.png)
+![Path Field component](images/pathfield-component.png)
 
 *Please note:* Some of the listed features will only work in AEM 6.3 and higher.
 
