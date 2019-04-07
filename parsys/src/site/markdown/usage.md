@@ -35,12 +35,11 @@ To define which components are allowed in your paragraph system you create a nod
       ]
     },
 
-    /* Allowed components in a nested parsys that is contained in component1 */
+    /* Allowed components in a nested parsys 'customparsys'  */
     "nested_parsys": {
       "pattern": "^jcr:content/.*$",
-      "parentAncestorLevel": 2,
       "allowedParents": [
-        "myapp/components/component1"
+        "myapp/components/customparsys"
       ],
       "allowedChildren": [
         "myapp/components/subcomponent1",
@@ -65,8 +64,8 @@ A `wcmio:parsysConfig` contains always a `paths` node defining the allowance def
 * **allowedParents**: Optional. Defines an additional restriction to the path or path pattern to allow components only below certain parent components. The parent components are references by their resource types.
 
 * **parentAncestorLevel**: Optional. Only supported together with `allowedParents`. Two possible values are allowed:
-    * **1**: `allowedParents` restriction is applied to the paragraph system component itself (the direct parent of the component)
-    * **2**: `allowedParents` restriction is applied to the component that contains the paragraph system (the grand-parent of the component)
+    * **1**: `allowedParents` restriction is applied to the paragraph system component itself (the direct parent of the component). This is the default mode.
+    * **2**: `allowedParents` restriction is applied to the component that contains the paragraph system (the grand-parent of the component).
 
 * **inherit**: If you have an inheritance hierarchy of page components using `sling:resourceSuperType` you can define a `wcmio:parsysConfig` on each level of this hierarchy. The definitions are merged together according to the inheritance hierarchy. Thus it is possible to centrally define global allowed components rules for all page components in your application. If you want to disabled this behavior add this this property and set it to false.
 
@@ -126,15 +125,3 @@ Notes:
 }
 ```
 * Although technically possible it is not recommended to copy and overlay the Sightly script of the paragraph system, it may change in future versions.
-
-
-### Paragraph system with editbar (Classic UI)
-
-If you want to use editbars instead of rollover edit mode for the paragraph system you can use:
-
-```html
-<sly data-sly-resource="${'./content'
-    @ resourceType='wcm-io/wcm/parsys/components/parsysEditbar'}" />
-```
-
-This is only supported in Classic UI.
