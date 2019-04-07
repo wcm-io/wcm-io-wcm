@@ -1,27 +1,6 @@
 ## Granite UI components
 
 
-### Config-Scope Path Browser
-
-This is a customized Path Field/Browser that always sets the root path to the inner-most configuration scope root. If you want to show only pages of the current site, consider using the Site Root Path Picker from [wcm.io URL Handler Granite UI components][url-handler-graniteui-components].
-
-Requires proper configuration of Apache Sling Context-Aware configuration, see also [wcm.io Context-Aware Configuration][wcmio-caconfig].
-
-
-```json
-"field": {
-  "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/configScopePathBrowser",
-  "name": "./field",
-  "fieldLabel": "Internal Page"
-}
-```
-
-Enhancements over AEM version:
-
-* Dynamically sets the `rootPath` to the configuration scope root.
-* Optional config parameter `appendPath`: provides a relative path (starting with "/") which is appended to the detected root path
-
-
 ### Checkbox
 
 Form checkbox for boolean data.
@@ -98,6 +77,8 @@ Enhancements over AEM version:
 
 ### Pathfield
 
+![Pathfield component](images/pathfield-component.png)
+
 *Please note:* Some of the listed features will only work in AEM 6.3 and higher.
 
 A field that allows the user to enter path. This path field can be used for both picking page paths or asset paths.
@@ -119,5 +100,29 @@ Enhancements over AEM version:
 * Hides certain "AEM-internal" content paths which should not be shown when picking pages or assets
 
 
+
+### Config-Scope Path Browser (deprecated)
+
+This is a customized Path Field/Browser that always sets the root path to the inner-most configuration scope root. If you want to show only pages of the current site, consider using the Site Root Path Picker from [wcm.io URL Handler Granite UI components][url-handler-graniteui-components].
+
+Requires proper configuration of Apache Sling Context-Aware configuration, see also [wcm.io Context-Aware Configuration][wcmio-caconfig].
+
+
+```json
+"field": {
+  "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/configScopePathBrowser",
+  "name": "./field",
+  "fieldLabel": "Internal Page"
+}
+```
+
+Enhancements over AEM version:
+
+* Dynamically sets the `rootPath` to the configuration scope root.
+* Optional config parameter `appendPath`: provides a relative path (starting with "/") which is appended to the detected root path
+
+
+
 [wcmio-caconfig]: http://wcm.io/caconfig/
 [url-handler-graniteui-components]: http://wcm.io/handler/url/graniteui-components.html
+
