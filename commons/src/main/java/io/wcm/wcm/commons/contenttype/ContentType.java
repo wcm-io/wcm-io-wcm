@@ -114,4 +114,9 @@ public final class ContentType {
    */
   public static final String PDF = "application/pdf";
 
+  /**
+   * SVG
+   */
+  public static final String SVG = "image/svg+xml";
+
 }

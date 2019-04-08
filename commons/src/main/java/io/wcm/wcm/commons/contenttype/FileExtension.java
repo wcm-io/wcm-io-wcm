@@ -114,6 +114,11 @@ public final class FileExtension {
    */
   public static final String PDF = "pdf";
 
+  /**
+   * SVG
+   */
+  public static final String SVG = "svg";
+
 
   /** all file extensions that will be displayed by an image tag */
   private static final Set<String> IMAGE_FILE_EXTENSIONS = ImmutableSet.of(
