@@ -28,9 +28,12 @@ import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_VALIDATE
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -39,9 +42,15 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.factory.ModelClassException;
+import org.apache.sling.models.factory.ModelFactory;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.WCMMode;
@@ -75,6 +84,8 @@ public final class Parsys {
   static final String FALLBACK_NEWAREA_RESOURCE_TYPE = "wcm-io/wcm/parsys/components/parsys/newpar";
   static final String DEFAULT_ELEMENT_NAME = "div";
 
+  private final Logger log = LoggerFactory.getLogger(Parsys.class);
+
   /**
    * Allows to override the resource which children are iterated to display the parsys.
    */
@@ -89,6 +100,8 @@ public final class Parsys {
   private WCMMode wcmMode;
   @AemObject
   private ComponentContext componentContext;
+  @OSGiService
+  private ModelFactory modelFactory;
   private ComponentManager componentManager;
 
   private boolean generateDefaultCss;
@@ -167,9 +180,9 @@ public final class Parsys {
     // try to check valid state of paragraph item
     boolean valid = true;
     if (paragraphValidate) {
-      ParsysItem parsysItem = resource.adaptTo(ParsysItem.class);
-      if (parsysItem != null) {
-        valid = parsysItem.isValid();
+      Optional<Boolean> validStatus = isParagraphValid(resource);
+      if (validStatus.isPresent()) {
+        valid = validStatus.get();
       }
     }
 
@@ -179,6 +192,50 @@ public final class Parsys {
         .decorate(paragraphDecoration)
         .valid(valid);
   }
+
+  /**
+   * Checks if the given paragraph is valid.
+   * @param resource Resource
+   * @return if the return value is empty there is no model associated with this resource, or
+   *         it does not support validation via {@link ParsysItem} interface. Otherwise it contains the valid status.
+   */
+  private Optional<@NotNull Boolean> isParagraphValid(Resource resource) {
+    // use reflection to access the method "getModelFromResource" from ModelFactory, as it is not present in earlier version
+    // but we want still to support earlier versions of AEM as well which do not contain this method
+    // validation is disabled in this case
+    Method getModelFromResourceMethod;
+    try {
+      getModelFromResourceMethod = ModelFactory.class.getDeclaredMethod("getModelFromResource", Resource.class);
+    }
+    catch (NoSuchMethodException | SecurityException ex) {
+      // seems to be an earlier version of AEM/Sling models not supporting this method
+      log.debug("ModelFactory does not support method 'getModelFromResource' - skip paragraph validation.");
+      return Optional.empty();
+    }
+    try {
+      // try to get model associated with the resource, and check if it implements the ParsysItem interface
+      Object model = getModelFromResourceMethod.invoke(modelFactory, resource);
+      if (model instanceof ParsysItem) {
+        return Optional.of(((ParsysItem)model).isValid());
+      }
+    }
+    catch (ModelClassException ex) {
+      // ignore if no model was registered for this resource type
+    }
+    catch (InvocationTargetException ex) {
+      if (ex.getCause() instanceof ModelClassException) {
+        // ignore if no model was registered for this resource type
+      }
+      else {
+        log.warn("Unable to invoke ModelFactorygetModelFromResource.", ex);
+      }
+    }
+    catch (IllegalAccessException ex) {
+      log.warn("Unable to Access ModelFactorygetModelFromResource.", ex);
+    }
+    return Optional.empty();
+  }
+
 
   /**
    * Get HTML tag attributes from component.

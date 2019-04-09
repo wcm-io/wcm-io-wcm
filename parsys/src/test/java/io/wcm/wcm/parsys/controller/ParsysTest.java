@@ -25,7 +25,6 @@ import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_NEWAREA_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_ELEMENT;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE;
-import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_VALIDATE;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
 import static io.wcm.wcm.parsys.controller.Parsys.DEFAULT_ELEMENT_NAME;
@@ -45,7 +44,6 @@ import java.util.List;
 
 import org.apache.sling.api.SlingConstants;
 import org.apache.sling.api.resource.Resource;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,16 +51,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
-import com.google.common.base.Function;
 
+import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import io.wcm.wcm.parsys.ParsysItem;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 @ExtendWith(AemContextExtension.class)
-@SuppressWarnings("null")
 class ParsysTest {
 
   private static final String RESOURCE_TYPE_SAMPLE = "sample/components/parsys";
@@ -71,7 +67,10 @@ class ParsysTest {
   private static final String COMPONENT_PATH_2 = "sample/components/comp2";
   private static final String SUPERCOMPONENT_PATH = "sample/components/super";
 
-  private final AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();
+  private final AemContext context = new AemContextBuilder()
+      .plugin(WCMIO_SLING)
+      .registerSlingModelsFromClassPath(false)
+      .build();
 
   private Page page;
   private Resource parsysResource;
@@ -80,7 +79,7 @@ class ParsysTest {
 
   @BeforeEach
   void setUp() {
-    context.addModelsForPackage("io.wcm.wcm.parsys.controller");
+    context.addModelsForClasses(Parsys.class);
 
     page = context.create().page("/content/page1", "sample/templates/test1");
     parsysResource = context.create().resource(page.getContentResource().getPath() + "/parsys",
@@ -100,7 +99,7 @@ class ParsysTest {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
 
     WCMMode.EDIT.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
 
     assertFalse(parsys.isWrapperElement());
     assertNull(parsys.getWrapperCss());
@@ -145,7 +144,7 @@ class ParsysTest {
         PN_PARSYS_WRAPPER_CSS, "wrappercss");
 
     WCMMode.EDIT.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
 
     assertTrue(parsys.isWrapperElement());
     assertEquals("wrappercss", parsys.getWrapperCss());
@@ -192,7 +191,7 @@ class ParsysTest {
         "sling:resourceSuperType", SUPERCOMPONENT_PATH);
 
     WCMMode.EDIT.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
 
     assertTrue(parsys.isWrapperElement());
     assertEquals("wrappercss", parsys.getWrapperCss());
@@ -230,7 +229,7 @@ class ParsysTest {
   void testWcmDisabledMode() {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE);
     WCMMode.DISABLED.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
 
     List<Item> items = parsys.getItems();
     assertEquals(2, items.size());
@@ -254,7 +253,7 @@ class ParsysTest {
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
 
     WCMMode.EDIT.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
     List<Item> items = parsys.getItems();
 
     Item item3 = items.get(2);
@@ -270,7 +269,7 @@ class ParsysTest {
     context.create().resource("/apps/" + SUPER_RESOURCE_TYPE_SAMPLE + "/" + NEWAREA_CHILD_NAME);
 
     WCMMode.EDIT.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
     List<Item> items = parsys.getItems();
 
     Item item3 = items.get(2);
@@ -286,7 +285,7 @@ class ParsysTest {
     context.request().setAttribute(RA_PARSYS_PARENT_RESOURCE, parsysResource);
 
     WCMMode.EDIT.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
 
     List<Item> items = parsys.getItems();
     assertEquals(2, items.size());
@@ -313,7 +312,7 @@ class ParsysTest {
         NameConstants.PN_TAG_NAME, "article", "class", "css1");
 
     WCMMode.EDIT.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
 
     List<Item> items = parsys.getItems();
     assertEquals(3, items.size());
@@ -353,7 +352,7 @@ class ParsysTest {
         NameConstants.PN_TAG_NAME, "article", "class", "css1");
 
     WCMMode.EDIT.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
 
     List<Item> items = parsys.getItems();
     assertEquals(3, items.size());
@@ -383,15 +382,18 @@ class ParsysTest {
     assertTrue(item3.isNewArea());
   }
 
+  // --- following tests can be tested (and compiled) only with profile "test-with-latest-sling-models" ---
+  //     (they require Sling Models API 1.3.0 or higher)
+  /*
   @Test
   void testParagraphValidate_DisabledMode() {
-    context.registerAdapter(Resource.class, ParsysItem.class, new ValidatedParsysItem());
+    context.addModelsForClasses(Parsys.class, ParsysItemModel.class);
 
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
         PN_PARSYS_PARAGRAPH_VALIDATE, true);
 
     WCMMode.DISABLED.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
 
     List<Item> items = parsys.getItems();
     assertEquals(1, items.size());
@@ -407,7 +409,7 @@ class ParsysTest {
         PN_PARSYS_PARAGRAPH_VALIDATE, true);
 
     WCMMode.DISABLED.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
 
     List<Item> items = parsys.getItems();
     assertEquals(2, items.size());
@@ -423,13 +425,13 @@ class ParsysTest {
 
   @Test
   void testParagraphValidate_EditMode() {
-    context.registerAdapter(Resource.class, ParsysItem.class, new ValidatedParsysItem());
+    context.addModelsForClasses(Parsys.class, ParsysItemModel.class);
 
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
         PN_PARSYS_PARAGRAPH_VALIDATE, true);
 
     WCMMode.EDIT.toRequest(context.request());
-    Parsys parsys = context.request().adaptTo(Parsys.class);
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
 
     List<Item> items = parsys.getItems();
     assertEquals(3, items.size());
@@ -447,17 +449,21 @@ class ParsysTest {
     assertFalse(item3.isValid());
   }
 
-  private static class ValidatedParsysItem implements Function<Resource, ParsysItem> {
+
+  @Model(adaptables = Resource.class,
+      adapters = { ParsysItemModel.class, ParsysItem.class },
+      resourceType = { COMPONENT_PATH_1, COMPONENT_PATH_2 })
+  public static class ParsysItemModel implements ParsysItem {
+
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private boolean valid;
+
     @Override
-    @Nullable
-    public ParsysItem apply(@Nullable Resource resource) {
-      return new ParsysItem() {
-        @Override
-        public boolean isValid() {
-          return resource.getValueMap().get("valid", false);
-        }
-      };
+    public boolean isValid() {
+      return valid;
     }
+
   }
+  */
 
 }
