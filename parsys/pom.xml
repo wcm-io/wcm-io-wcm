@@ -173,9 +173,6 @@
   <profiles>
     <profile>
       <id>test-with-latest-sling-models</id>
-      <properties>
-        <test.sling.models.latest>true</test.sling.models.latest>
-      </properties>
       <dependencies>
         <dependency>
           <groupId>org.apache.sling</groupId>

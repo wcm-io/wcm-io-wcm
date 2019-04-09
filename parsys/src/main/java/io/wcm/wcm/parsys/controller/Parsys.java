@@ -227,11 +227,11 @@ public final class Parsys {
         // ignore if no model was registered for this resource type
       }
       else {
-        log.warn("Unable to invoke ModelFactorygetModelFromResource.", ex);
+        log.warn("Unable to invoke ModelFactory.getModelFromResource.", ex);
       }
     }
     catch (IllegalAccessException ex) {
-      log.warn("Unable to Access ModelFactorygetModelFromResource.", ex);
+      log.warn("Unable to access ModelFactory.getModelFromResource.", ex);
     }
     return Optional.empty();
   }
