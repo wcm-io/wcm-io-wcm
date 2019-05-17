@@ -113,10 +113,17 @@ public final class GraniteUi {
   private static String getContentPath(HttpServletRequest request) {
 
     String contentPath = (String)request.getAttribute(Value.CONTENTPATH_ATTRIBUTE);
+
     if (contentPath == null) {
       // fallback to suffix if CONTENTPATH_ATTRIBUTE is not set
       // (e.g. in inside a /libs/granite/ui/components/foundation/form/multifield component)
       contentPath = ((SlingHttpServletRequest)request).getRequestPathInfo().getSuffix();
+    }
+
+    if (contentPath == null) {
+      // fallback to suffix item parameter in query string
+      // (e.g. in inside a /libs/granite/ui/components/foundation/form/multifield component)
+      contentPath = request.getParameter("item");
     }
 
     return contentPath;
