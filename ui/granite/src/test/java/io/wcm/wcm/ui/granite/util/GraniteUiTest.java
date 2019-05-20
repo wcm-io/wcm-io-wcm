@@ -89,6 +89,13 @@ class GraniteUiTest {
   }
 
   @Test
+  void testGetContentResource_NoContentPath_FallbackItemParam() {
+    when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(null);
+    when(request.getParameter("item")).thenReturn(CONTENT_PATH);
+    assertSame(resource, GraniteUi.getContentResource(request));
+  }
+
+  @Test
   void testGetContentResource_NoResource() {
     when(resourceResolver.getResource(CONTENT_PATH)).thenReturn(null);
     assertNull(GraniteUi.getContentResource(request));
