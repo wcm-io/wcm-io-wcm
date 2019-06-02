@@ -123,6 +123,6 @@ Enhancements over AEM version:
 
 
 
-[wcmio-caconfig]: http://wcm.io/caconfig/
-[url-handler-graniteui-components]: http://wcm.io/handler/url/graniteui-components.html
+[wcmio-caconfig]: https://wcm.io/caconfig/
+[url-handler-graniteui-components]: https://wcm.io/handler/url/graniteui-components.html
 
