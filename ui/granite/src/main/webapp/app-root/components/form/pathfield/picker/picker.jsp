@@ -54,14 +54,18 @@ dispatcher.include(slingRequest, slingResponse);
  * existing resource path - up to the root path. As fallback, return the root path.
  */
 String getExistingPath(String path, String rootPath, ResourceResolver resourceResolver) {
-  if (path == null || !StringUtils.startsWith(path, rootPath)) {
+  String rootPathWithSuffix = rootPath;
+  if (!StringUtils.endsWith(rootPathWithSuffix, "/")) {
+    rootPathWithSuffix += "/";
+  }
+  if (path == null || !StringUtils.startsWith(path, rootPathWithSuffix)) {
     return rootPath;
   }
   if (resourceResolver.getResource(path) != null) {
     return path;
   }
   String parentPath = Text.getRelativeParent(path, 1);
-  return getExistingPath(parentPath, rootPath, resourceResolver);
+  return getExistingPath(parentPath, rootPathWithSuffix, resourceResolver);
 }
 
 %>
