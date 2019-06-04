@@ -240,6 +240,29 @@
     </pluginManagement>
   </build>
 
+  <profiles>
+
+    <!-- "Fast" profile for quick compile of the project without any unit tests etc. -->
+    <profile>
+      <id>fast</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.wcm.maven.plugins</groupId>
+            <artifactId>nodejs-maven-plugin</artifactId>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+  </profiles>
+
   <distributionManagement>
     <site>
       <id>${site.deploy.id}</id>
