@@ -2,7 +2,7 @@
   "jcr:primaryType": "nt:unstructured",
   "rootPath": "${empty param.root ? \"/\" : param.root}",
   "path": "${empty param.path ? (empty param.root ? \"/\" : param.root) : param.path}",
-  "sling:resourceType": "granite/ui/components/coral/foundation/picker",
+  "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/pathfield/picker",
   "targetCollection": "#granite-ui-pathfield-picker-collection",
   "selectionCount": "${empty param.selectionCount ? \"single\" : param.selectionCount}",
   "views": {

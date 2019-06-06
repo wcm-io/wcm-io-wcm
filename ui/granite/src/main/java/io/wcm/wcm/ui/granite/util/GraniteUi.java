@@ -40,6 +40,10 @@ import com.day.cq.wcm.api.PageManager;
 @ProviderType
 public final class GraniteUi {
 
+  static final String CREATEPAGEWITZARD_PROPERTIES_URI = "/mnt/overlay/wcm/core/content/sites/createpagewizard/properties.html";
+  static final String CREATEPAGEWITZARD_URI = "/mnt/overlay/wcm/core/content/sites/createpagewizard.html";
+  static final String HEADER_REFERER = "Referer";
+
   private GraniteUi() {
     // static methods only
   }
@@ -50,10 +54,8 @@ public final class GraniteUi {
    * @return Current content resource or null
    */
   public static @Nullable Resource getContentResource(@NotNull HttpServletRequest request) {
-
     String contentPath = getContentPath(request);
-
-    if (StringUtils.isNotEmpty(contentPath)) {
+    if (contentPath != null) {
       SlingHttpServletRequest slingRequest = (SlingHttpServletRequest)request;
       return slingRequest.getResourceResolver().getResource(contentPath);
     }
@@ -110,23 +112,45 @@ public final class GraniteUi {
    * @param request Request
    * @return Current content path or null
    */
-  private static String getContentPath(HttpServletRequest request) {
+  private static @Nullable String getContentPath(@NotNull HttpServletRequest request) {
 
     String contentPath = (String)request.getAttribute(Value.CONTENTPATH_ATTRIBUTE);
 
-    if (contentPath == null) {
+    // if we are currently in create page wizard try to extract content path from referer,
+    // as it is not available via other ways
+    if (!isValidContentPath(contentPath)) {
+      if (StringUtils.contains(request.getRequestURI(), CREATEPAGEWITZARD_PROPERTIES_URI)) {
+        String referer = request.getHeader(HEADER_REFERER);
+        if (referer != null && StringUtils.contains(referer, CREATEPAGEWITZARD_URI)) {
+          contentPath = StringUtils.substringAfter(referer, CREATEPAGEWITZARD_URI);
+        }
+      }
+    }
+
+    if (!isValidContentPath(contentPath)) {
       // fallback to suffix if CONTENTPATH_ATTRIBUTE is not set
       // (e.g. in inside a /libs/granite/ui/components/foundation/form/multifield component)
       contentPath = ((SlingHttpServletRequest)request).getRequestPathInfo().getSuffix();
     }
 
-    if (contentPath == null) {
+    if (!isValidContentPath(contentPath)) {
       // fallback to suffix item parameter in query string
       // (e.g. in inside a /libs/granite/ui/components/foundation/form/multifield component)
       contentPath = request.getParameter("item");
     }
 
+    if (!isValidContentPath(contentPath)) {
+      contentPath = null;
+    }
+
     return contentPath;
+  }
+
+  private static boolean isValidContentPath(@Nullable String path) {
+    if (path == null) {
+      return false;
+    }
+    return StringUtils.startsWith(path, "/");
   }
 
   private static Resource getContentResourceOrParentFromPath(SlingHttpServletRequest slingRequest, String contentPath) {

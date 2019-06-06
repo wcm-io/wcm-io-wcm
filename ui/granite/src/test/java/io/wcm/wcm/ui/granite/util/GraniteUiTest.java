@@ -44,7 +44,7 @@ import com.day.cq.wcm.api.PageManager;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class GraniteUiTest {
 
-  private static final String CONTENT_PATH = "/my/path";
+  private static final String CONTENT_PATH = "/content/my/path";
 
   @Mock
   private SlingHttpServletRequest request;
@@ -79,6 +79,14 @@ class GraniteUiTest {
   void testGetContentResource_NoContentPath() {
     when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(null);
     assertNull(GraniteUi.getContentResource(request));
+  }
+
+  @Test
+  void testGetContentResource_NoContentPath_FallbackToReferer() {
+    when(request.getRequestURI()).thenReturn(GraniteUi.CREATEPAGEWITZARD_PROPERTIES_URI + "/apps/app1/templates/template1");
+    when(request.getHeader(GraniteUi.HEADER_REFERER)).thenReturn(GraniteUi.CREATEPAGEWITZARD_URI + CONTENT_PATH);
+    when(request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).thenReturn(null);
+    assertSame(resource, GraniteUi.getContentResource(request));
   }
 
   @Test

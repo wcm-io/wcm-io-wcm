@@ -1,7 +1,7 @@
 {
   "jcr:primaryType": "nt:unstructured",
   "query": "${param.query}",
-  "sling:resourceType": "granite/ui/components/coral/foundation/form/pathfield/suggestion",
+  "sling:resourceType": "wcm-io/wcm/ui/granite/components/form/pathfield/suggestion",
   "datasource": {
     "filter": "${paramValues.filter}",
     "offset": "${requestPathInfo.selectors[0]}",
