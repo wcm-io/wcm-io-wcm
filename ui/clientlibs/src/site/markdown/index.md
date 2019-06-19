@@ -1,4 +1,4 @@
-## About WCM Clientlibs UI Extensions
+## About Clientlibs UI Extensions
 
 Extensions for AEM HTML client libraries.
 
@@ -7,6 +7,7 @@ Extensions for AEM HTML client libraries.
 
 ### Documentation
 
+* [Usage][usage]
 * [API documentation][apidocs]
 * [Changelog][changelog]
 
@@ -20,8 +21,10 @@ Extensions for AEM HTML client libraries.
 
 ### Overview
 
-TBD
+* Drop-in replacement for `/libs/granite/sightly/templates/clientlib.html` to include AEM client libraries (JS, CSS) in your HTML markup.
+* Provides support for advanced attributes on the include `script` elements like `async`, `defer`, `crossorigin`, `type` and more.
 
 
+[usage]: usage.html
 [apidocs]: apidocs/
 [changelog]: changes-report.html
