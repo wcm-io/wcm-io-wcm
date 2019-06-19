@@ -24,6 +24,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
@@ -45,7 +46,7 @@ import com.adobe.granite.ui.clientlibs.LibraryType;
 public class CSSInclude {
 
   @SlingObject
-  private SlingHttpServletRequest request;
+  private ResourceResolver resourceResolver;
   @OSGiService
   private HtmlLibraryManager htmlLibraryManager;
   @OSGiService
@@ -61,7 +62,7 @@ public class CSSInclude {
     // build include string
     String[] categoryArray = IncludeUtil.toCategoryArray(categories);
     if (categoryArray != null) {
-      List<String> libraryPaths = IncludeUtil.getLibraryUrls(htmlLibraryManager, request.getResourceResolver(),
+      List<String> libraryPaths = IncludeUtil.getLibraryUrls(htmlLibraryManager, resourceResolver,
           categoryArray, LibraryType.CSS);
       if (!libraryPaths.isEmpty()) {
         this.include = buildIncludeString(libraryPaths);

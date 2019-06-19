@@ -1,20 +1,20 @@
-## Clientlibs UI Extensions usage
+## clientlibs UI Extensions usage
 
 ### Include JS Files
 
 Include without special attributes:
 
 ```html
-<sly data-sly-use.clientLib="/apps/wcm-io/wcm/ui/clientlibs/sightly/templates/clientlib.html"
-    data-sly-call="${clientLib.js @ categories=['my-clientlib-category']}"/>
+<sly data-sly-use.clientlib="/apps/wcm-io/wcm/ui/clientlibs/sightly/templates/clientlib.html"
+    data-sly-call="${clientlib.js @ categories=['my-clientlib-category']}"/>
 ```
 
 Include with advanced script tag attributes:
 
 ```html
-<sly data-sly-use.clientLib="/apps/wcm-io/wcm/ui/clientlibs/sightly/templates/clientlib.html"
-    data-sly-call="${clientLib.js @ categories=['my-clientlib-category'],async=true,type='module'}"/>
-<sly data-sly-call="${clientLib.js @ categories=['my-clientlib-category-2'],defer=true,nomodule=true}"/>
+<sly data-sly-use.clientlib="/apps/wcm-io/wcm/ui/clientlibs/sightly/templates/clientlib.html"
+    data-sly-call="${clientlib.js @ categories=['my-clientlib-category'],async=true,type='module'}"/>
+<sly data-sly-call="${clientlib.js @ categories=['my-clientlib-category-2'],defer=true,nomodule=true}"/>
 ```
 
 The following advanced script tag attributes are supported:
@@ -35,6 +35,6 @@ See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes 
 Include CSS without special attributes:
 
 ```html
-<sly data-sly-use.clientLib="/apps/wcm-io/wcm/ui/clientlibs/sightly/templates/clientlib.html"
-    data-sly-call="${clientLib.css @ categories=['my-clientlib-category']}"/>
+<sly data-sly-use.clientlib="/apps/wcm-io/wcm/ui/clientlibs/sightly/templates/clientlib.html"
+    data-sly-call="${clientlib.css @ categories=['my-clientlib-category']}"/>
 ```

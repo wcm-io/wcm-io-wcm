@@ -30,6 +30,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
@@ -59,7 +60,7 @@ public class JSInclude {
       "text/javascript", "module"));
 
   @SlingObject
-  private SlingHttpServletRequest request;
+  private ResourceResolver resourceResolver;
   @OSGiService
   private HtmlLibraryManager htmlLibraryManager;
   @OSGiService
@@ -91,7 +92,7 @@ public class JSInclude {
     // build include string
     String[] categoryArray = IncludeUtil.toCategoryArray(categories);
     if (categoryArray != null) {
-      List<String> libraryPaths = IncludeUtil.getLibraryUrls(htmlLibraryManager, request.getResourceResolver(),
+      List<String> libraryPaths = IncludeUtil.getLibraryUrls(htmlLibraryManager, resourceResolver,
           categoryArray, LibraryType.JS);
       if (!libraryPaths.isEmpty()) {
         Map<String, String> attrs = validateAndBuildAttributes();
