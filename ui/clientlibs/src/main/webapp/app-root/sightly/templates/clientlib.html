@@ -26,8 +26,10 @@ ${clientlib.include @ context='unsafe'}
      */-->
 <template data-sly-template.css="${@ categories}">
   <sly data-sly-test="${request.getResourceResolver}"
-      data-sly-use.clientlib="${'/libs/granite/sightly/templates/graniteClientLib.html'}"
-      data-sly-call="${clientlib.include @ categories=categories, mode='css'}"/>
+      data-sly-use.clientlib="${'io.wcm.wcm.ui.clientlibs.components.CSSInclude' @
+      categories=categories}">
+${clientlib.include @ context='unsafe'}      
+  </sly>
 </template>
 
 <!--/**

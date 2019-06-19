@@ -19,15 +19,12 @@
  */
 package io.wcm.wcm.ui.clientlibs.components;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -43,7 +40,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
-import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 
@@ -93,35 +89,15 @@ public class JSInclude {
   @PostConstruct
   private void activate() {
     // build include string
-    String[] categoryArray = getCategoryArray();
+    String[] categoryArray = IncludeUtil.toCategoryArray(categories);
     if (categoryArray != null) {
-      List<String> libraryPaths = getLibraryUrls(categoryArray, LibraryType.JS);
+      List<String> libraryPaths = IncludeUtil.getLibraryUrls(htmlLibraryManager, request.getResourceResolver(),
+          categoryArray, LibraryType.JS);
       if (!libraryPaths.isEmpty()) {
         Map<String, String> attrs = validateAndBuildAttributes();
         this.include = buildIncludeString(libraryPaths, attrs);
       }
     }
-  }
-
-  /**
-   * @return Array of clientlib category names as specified in HTL script
-   */
-  private @Nullable String[] getCategoryArray() {
-    String[] categoryArray = null;
-    if (categories instanceof String) {
-      categoryArray = new String[] { (String)categories };
-    }
-    else if (categories != null && categories.getClass().isArray()) {
-      categoryArray = new String[Array.getLength(categories)];
-      for (int i = 0; i < Array.getLength(categories); i++) {
-        Object value = Array.get(categories, i);
-        if (value == null) {
-          value = "";
-        }
-        categoryArray[i] = value.toString();
-      }
-    }
-    return categoryArray;
   }
 
   /**
@@ -156,41 +132,6 @@ public class JSInclude {
       attrs.put("type", type);
     }
     return attrs;
-  }
-
-  /**
-   * Get all (external) library URLs for the src attributes of the script tag(s).
-   * @param categoryArray Clientlib categories
-   * @param libraryType Library type
-   * @return List of Client Library URLs
-   */
-  @SuppressWarnings("null")
-  private @NotNull List<String> getLibraryUrls(@NotNull String[] categoryArray, @NotNull LibraryType libraryType) {
-    return htmlLibraryManager.getLibraries(categoryArray, libraryType, false, false).stream()
-        .map(library -> getLibraryUrl(request, library, libraryType, htmlLibraryManager.isMinifyEnabled()))
-        .filter(Objects::nonNull)
-        .collect(Collectors.toList());
-  }
-
-  /**
-   * Get (external) library URL respecting proxy mode and access rights to the client library.
-   * @param request Request
-   * @param library Library
-   * @param libraryType Library type
-   * @param minify Whether to minify the client library
-   * @return Library URL or null
-   */
-  private static @Nullable String getLibraryUrl(@NotNull SlingHttpServletRequest request, @NotNull ClientLibrary library,
-      @NotNull LibraryType libraryType, boolean minify) {
-    String path = library.getIncludePath(libraryType, minify);
-    if (library.allowProxy() && (path.startsWith("/libs/") || path.startsWith("/apps/"))) {
-      path = "/etc.clientlibs" + path.substring(5);
-    }
-    else if (request.getResourceResolver().getResource(library.getPath()) == null) {
-      // current render resourcer resolver has no access to the client library - ignore it
-      path = null;
-    }
-    return path;
   }
 
   /**
