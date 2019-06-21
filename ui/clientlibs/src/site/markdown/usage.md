@@ -1,4 +1,4 @@
-## clientlibs UI Extensions usage
+## Clientlibs UI Extensions usage
 
 ### Include JS Files
 
