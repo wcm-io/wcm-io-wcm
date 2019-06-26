@@ -3,7 +3,7 @@
   #%L
   wcm.io
   %%
-  Copyright (C) 2014 wcm.io
+  Copyright (C) 2019 wcm.io
   %%
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -30,12 +30,12 @@
   </parent>
 
   <groupId>io.wcm</groupId>
-  <artifactId>io.wcm.wcm.ui.granite</artifactId>
-  <version>1.3.5-SNAPSHOT</version>
+  <artifactId>io.wcm.wcm.ui.clientlibs</artifactId>
+  <version>1.0.0</version>
   <packaging>bundle</packaging>
 
-  <name>WCM Granite UI Extensions</name>
-  <description>Granite UI Components for AEM Touch UI.</description>
+  <name>WCM Clientlibs UI Extensions</name>
+  <description>Extensions for AEM HTML client libraries.</description>
   <url>${site.url}/${site.url.module.prefix}/</url>
 
   <scm>
@@ -46,16 +46,10 @@
   </scm>
 
   <properties>
-    <site.url.module.prefix>wcm/ui/granite</site.url.module.prefix>
+    <site.url.module.prefix>wcm/ui/clientlibs</site.url.module.prefix>
   </properties>
 
   <dependencies>
-
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <scope>compile</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -63,41 +57,10 @@
       <scope>compile</scope>
     </dependency>
 
-<!-- (implicit reference in configScopePathBrowser JSP)
-    <dependency>
-      <groupId>org.apache.sling</groupId>
-      <artifactId>org.apache.sling.caconfig.api</artifactId>
-      <version>1.1.0</version>
-      <scope>compile</scope>
-    </dependency>
--->
-
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet.jsp</groupId>
-      <artifactId>jsp-api</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.jcr</groupId>
-      <artifactId>jcr</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.el</groupId>
-      <artifactId>javax.el-api</artifactId>
-      <version>3.0.0</version>
-      <scope>compile</scope>
-      <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -177,49 +140,21 @@
         <configuration>
           <instructions>
             <Sling-Initial-Content>
-              SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/ui/granite,
-              SLING-INF/clientlibs-root;overwrite:=true;ignoreImportProviders:=xml;path:=/etc/clientlibs/wcm-io/ui/granite
+              SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/ui/clientlibs
             </Sling-Initial-Content>
             <Sling-Model-Packages>
-              io.wcm.wcm.ui.granite
+              io.wcm.wcm.ui.clientlibs
             </Sling-Model-Packages>
 
-            <!-- For build compatibility with Java 11 -->
             <Import-Package>
+              <!-- For build compatibility with Java 11 -->
               javax.annotation;version="[0.0,2)",
+              <!-- Make compatible for AEM 6.2 and up -->
+              org.apache.sling.xss;version="[1.1,3)",
               *
             </Import-Package>
 
           </instructions>
-        </configuration>
-      </plugin>
-
-      <!-- Execute JavaScript unit tests using JEST -->
-      <plugin>
-        <groupId>io.wcm.maven.plugins</groupId>
-        <artifactId>nodejs-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals><goal>run</goal></goals>
-          </execution>
-        </executions>
-        <configuration>
-          <nodeJsVersion>10.15.3</nodeJsVersion>
-          <tasks>
-            <npmInstallTask>
-              <workingDirectory>${project.basedir}</workingDirectory>
-            </npmInstallTask>
-            <nodeJsTask>
-              <workingDirectory>${project.basedir}</workingDirectory>
-              <moduleName>npm</moduleName>
-              <executableName>npm-cli</executableName>
-              <arguments>
-                <argument>run</argument>
-                <argument>test</argument>
-              </arguments>
-            </nodeJsTask>
-          </tasks>
         </configuration>
       </plugin>
 
@@ -239,29 +174,6 @@
       </plugins>
     </pluginManagement>
   </build>
-
-  <profiles>
-
-    <!-- "Fast" profile for quick compile of the project without any unit tests etc. -->
-    <profile>
-      <id>fast</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>io.wcm.maven.plugins</groupId>
-            <artifactId>nodejs-maven-plugin</artifactId>
-            <configuration>
-              <skip>true</skip>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-  </profiles>
 
   <distributionManagement>
     <site>

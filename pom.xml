@@ -42,6 +42,7 @@
     <module>commons</module>
     <module>ui/granite</module>
     <module>ui/extjs</module>
+    <module>ui/clientlibs</module>
     <module>parsys</module>
   </modules>
 
