@@ -24,7 +24,9 @@ import static io.wcm.testing.mock.wcmio.sling.ContextPlugins.WCMIO_SLING;
 import java.io.IOException;
 
 import org.apache.sling.api.resource.PersistenceException;
+import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
@@ -40,7 +42,15 @@ public final class AppAemContext {
   }
 
   public static AemContext newAemContext() {
-    return new AemContextBuilder()
+    return newAemContext(null);
+  }
+
+  public static AemContext newAemContext(@Nullable ResourceResolverType resourceResolverType) {
+    AemContextBuilder builder = new AemContextBuilder();
+    if (resourceResolverType != null) {
+      builder.resourceResolverType(resourceResolverType);
+    }
+    return builder
         .plugin(WCMIO_SLING)
         .afterSetUp(SETUP_CALLBACK)
         .build();
