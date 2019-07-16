@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.commons.workflow;
+package io.wcm.wcm.commons.workflow.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,15 +100,14 @@ final class ResourceCollectionUtil {
       @Nullable ResourceCollection resourceCollection,
       @NotNull Set<String> allowedResourceTypes) throws RepositoryException {
     List<String> paths = new ArrayList<>();
-    if (resourceCollection == null) {
-      return paths;
-    }
 
-    String[] allowsResourceTypesArray = allowedResourceTypes.toArray(new String[allowedResourceTypes.size()]);
-    List<Node> members = resourceCollection.list(allowsResourceTypesArray);
-    for (Node member : members) {
-      String memberPath = member.getPath();
-      paths.add(memberPath);
+    if (resourceCollection != null) {
+      String[] allowsResourceTypesArray = allowedResourceTypes.toArray(new String[allowedResourceTypes.size()]);
+      List<Node> members = resourceCollection.list(allowsResourceTypesArray);
+      for (Node member : members) {
+        String memberPath = member.getPath();
+        paths.add(memberPath);
+      }
     }
 
     return paths;

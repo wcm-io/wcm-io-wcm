@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.commons.workflow;
+package io.wcm.wcm.commons.workflow.impl;
 
 import java.util.List;
 import java.util.Set;
@@ -26,6 +26,8 @@ import java.util.function.Consumer;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,33 +35,24 @@ import com.adobe.granite.workflow.WorkflowSession;
 import com.adobe.granite.workflow.collection.ResourceCollectionManager;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
+import io.wcm.wcm.commons.workflow.WorkflowPayloadProcessor;
 
 /**
  * Helper method for workflow payload processing.
  */
-public final class WorkflowPayload {
+@Component(service = WorkflowPayloadProcessor.class)
+public final class WorkflowPayloadProcessorImpl implements WorkflowPayloadProcessor {
 
-  private static final Logger log = LoggerFactory.getLogger(WorkflowPayload.class);
+  @Reference
+  private ResourceCollectionManager resourceCollectionManager;
 
-  private WorkflowPayload() {
-    // static methods only
-  }
+  private static final Logger log = LoggerFactory.getLogger(WorkflowPayloadProcessorImpl.class);
 
-  /**
-   * Processes the payload path with the given processor.
-   * If the payload represents a resource collection then only the resources from the resource collection with the
-   * allowed resource types are processed.
-   * @param payloadPath payload path to process
-   * @param allowedResourceTypes allowed resource types to process
-   * @param processor processes the resource(s)
-   * @param workflowSession workflow session
-   * @param resourceCollectionManager resource collection manager
-   */
-  public static void process(@NotNull String payloadPath,
+  @Override
+  public void process(@NotNull String payloadPath,
       @NotNull Set<String> allowedResourceTypes,
       @NotNull Consumer<Resource> processor,
-      @NotNull WorkflowSession workflowSession,
-      @NotNull ResourceCollectionManager resourceCollectionManager) {
+      @NotNull WorkflowSession workflowSession) {
     // Get resource resolver explicitly from workflow session
     ResourceResolver resourceResolver = AdaptTo.notNull(workflowSession, ResourceResolver.class);
 

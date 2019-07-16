@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.wcm.commons.workflow;
+package io.wcm.wcm.commons.workflow.impl;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -57,10 +57,11 @@ import com.google.common.collect.ImmutableSet;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.commons.testcontext.AppAemContext;
+import io.wcm.wcm.commons.workflow.WorkflowPayloadProcessor;
 
 @ExtendWith(AemContextExtension.class)
 @ExtendWith(MockitoExtension.class)
-class WorkflowPayloadTest {
+class WorkflowPayloadProcessorTest {
 
   private static final String DAM_ROOT = "/content/dam/wftest";
 
@@ -83,11 +84,16 @@ class WorkflowPayloadTest {
   @Mock
   private ResourceCollectionManager resourceCollectionManager;
 
+  private WorkflowPayloadProcessor underTest;
+
   private List<Node> collectionNodeList;
 
   @BeforeEach
   @SuppressWarnings("null")
   void setUp() {
+    context.registerService(ResourceCollectionManager.class, resourceCollectionManager);
+    underTest = context.registerInjectActivateService(new WorkflowPayloadProcessorImpl());
+
     when(workflowSession.adaptTo(ResourceResolver.class)).thenReturn(context.resourceResolver());
     collectionNodeList = new ArrayList<>();
   }
@@ -173,7 +179,7 @@ class WorkflowPayloadTest {
   // Private methods (Arrange)
 
   private void processPayloadPathWithDefaults(String path) {
-    WorkflowPayload.process(path, ASSET_TYPE_FILTER, process, workflowSession, resourceCollectionManager);
+    underTest.process(path, ASSET_TYPE_FILTER, process, workflowSession);
   }
 
   private void createNodeWithPathAndAddToList(List<Node> list, String path) {
