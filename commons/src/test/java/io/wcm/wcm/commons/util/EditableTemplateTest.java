@@ -48,6 +48,8 @@ import io.wcm.wcm.commons.testcontext.AppAemContext;
 @ExtendWith(AemContextExtension.class)
 class EditableTemplateTest {
 
+  private static final String TEMPLATE_PATH = "/conf/app1/settings/wcm/templates/template1";
+
   private final AemContext context = AppAemContext.newAemContext();
 
   private Resource editableTemplate;
@@ -60,11 +62,11 @@ class EditableTemplateTest {
   @BeforeEach
   void setUp() {
     // prepare editable template
-    editableTemplate = context.create().resource("/conf/app1/settings/wcm/templates/template1",
+    editableTemplate = context.create().resource(TEMPLATE_PATH,
         JCR_PRIMARYTYPE, NT_TEMPLATE);
-    context.create().page(editableTemplate.getPath() + "/" + NN_EDITABLE_TEMPLATE_POLICIES);
-    Page initial = context.create().page(editableTemplate.getPath() + "/" + NN_EDITABLE_TEMPLATE_INITIAL);
-    Page structure = context.create().page(editableTemplate.getPath() + "/" + NN_EDITABLE_TEMPLATE_STRUCTURE);
+    context.create().page(editableTemplate.getPath() + "/" + NN_EDITABLE_TEMPLATE_POLICIES, TEMPLATE_PATH);
+    Page initial = context.create().page(editableTemplate.getPath() + "/" + NN_EDITABLE_TEMPLATE_INITIAL, TEMPLATE_PATH);
+    Page structure = context.create().page(editableTemplate.getPath() + "/" + NN_EDITABLE_TEMPLATE_STRUCTURE, TEMPLATE_PATH);
 
     editableComponentInitial = context.create().resource(initial, "editableComponent");
     editableComponentStructure = context.create().resource(structure, "editableComponent",
@@ -151,7 +153,7 @@ class EditableTemplateTest {
   @Test
   void testPageWithEditableTemplate_EditableComponent() {
     Page page = context.create().page("/content/mypage", editableTemplate.getPath());
-    Resource resource = context.create().resource(page, editableComponentStructure.getName());
+    Resource resource = page.getContentResource(editableComponentStructure.getName());
     context.currentResource(resource);
     assertFalse(isEditRestricted(WCMUtils.getComponentContext(context.request())));
 

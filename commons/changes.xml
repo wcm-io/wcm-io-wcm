@@ -24,8 +24,11 @@
   <body>
 
     <release version="1.4.2" date="not released">
-      <action type="add" dev="sseifert">
-        Add "SVG" to ContentType and FileExtension classes.
+      <action type="update" dev="sseifert">
+        Component property resolver: add support for resolving properties from content policies.
+      </action>
+      <action type="update" dev="sseifert">
+        Add "SVG", "TIFF", "WEBP" to ContentType and FileExtension classes.
       </action>
     </release>
 

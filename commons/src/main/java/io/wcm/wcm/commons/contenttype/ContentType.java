@@ -119,4 +119,14 @@ public final class ContentType {
    */
   public static final String SVG = "image/svg+xml";
 
+  /**
+   * TIFF
+   */
+  public static final String TIFF = "image/tiff";
+
+  /**
+   * WebP
+   */
+  public static final String WEBP = "image/webp";
+
 }
