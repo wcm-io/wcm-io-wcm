@@ -119,6 +119,16 @@ public final class FileExtension {
    */
   public static final String SVG = "svg";
 
+  /**
+   * TIFF
+   */
+  public static final String TIFF = "tif";
+
+  /**
+   * WebP
+   */
+  public static final String WEBP = "webp";
+
 
   /** all file extensions that will be displayed by an image tag */
   private static final Set<String> IMAGE_FILE_EXTENSIONS = ImmutableSet.of(
