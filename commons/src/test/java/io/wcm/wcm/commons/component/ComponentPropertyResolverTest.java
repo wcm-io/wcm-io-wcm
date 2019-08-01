@@ -19,6 +19,7 @@
  */
 package io.wcm.wcm.commons.component;
 
+import static org.apache.sling.api.resource.ResourceResolver.PROPERTY_RESOURCE_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -54,7 +55,7 @@ class ComponentPropertyResolverTest {
     Resource component = context.create().resource("/apps/app1/components/comp1",
         "prop1", "value1");
     Resource resource = context.create().resource("/content/r1",
-        "sling:resourceType", component.getPath());
+        PROPERTY_RESOURCE_TYPE, component.getPath());
 
     ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
     assertEquals("value1", underTest.get("prop1", String.class));
@@ -66,7 +67,7 @@ class ComponentPropertyResolverTest {
     Resource component = context.create().resource("/apps/app1/components/comp1",
         "prop1", "value1");
     Resource resource = context.create().resource("/content/r1",
-        "sling:resourceType", component.getPath());
+        PROPERTY_RESOURCE_TYPE, component.getPath());
 
     ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.IGNORE);
@@ -82,7 +83,7 @@ class ComponentPropertyResolverTest {
         "sling:resourceSuperType", superComponent.getPath(),
         "prop2", "value2");
     Resource resource = context.create().resource("/content/r1",
-        "sling:resourceType", component.getPath());
+        PROPERTY_RESOURCE_TYPE, component.getPath());
 
     ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
     assertEquals("value1", underTest.get("prop1", String.class));
@@ -99,7 +100,7 @@ class ComponentPropertyResolverTest {
         "sling:resourceSuperType", superComponent.getPath(),
         "prop2", "value2");
     Resource resource = context.create().resource("/content/r1",
-        "sling:resourceType", component.getPath());
+        PROPERTY_RESOURCE_TYPE, component.getPath());
 
     ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE);
@@ -167,7 +168,7 @@ class ComponentPropertyResolverTest {
         "prop4", "value4");
 
     Resource resource = context.create().resource(page2, "r1",
-        "sling:resourceType", component.getPath());
+        PROPERTY_RESOURCE_TYPE, component.getPath());
 
     ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
@@ -185,36 +186,77 @@ class ComponentPropertyResolverTest {
   }
 
   @Test
-  void testPageAndComponent_Inheritance_ComponentContext() {
+  void testPageAndPolicyAndComponent_Inheritance_ComponentContext() {
+    context.contentPolicyMapping("app1/components/comp1",
+        "prop5", "value5b");
+    context.contentPolicyMapping("app1/components/comp2",
+        "prop6", "value6b");
+
     context.create().page("/content/page1", null,
-        "prop1", "value1");
+        "prop1", "value1a");
     Page page2 = context.create().page("/content/page1/page2", null,
-        "prop2", "value2");
+        "prop2", "value2a");
 
     Resource superComponent = context.create().resource("/apps/app1/components/comp2",
+        "prop1", "value1",
         "prop3", "value3");
     Resource component = context.create().resource("/apps/app1/components/comp1",
         "sling:resourceSuperType", superComponent.getPath(),
-        "prop4", "value4");
+        "prop2", "value2",
+        "prop4", "value4",
+        "prop5", "value5");
 
     Resource resource = context.create().resource(page2, "r1",
-        "sling:resourceType", component.getPath());
+        PROPERTY_RESOURCE_TYPE, component.getPath());
     context.currentResource(resource);
 
     ComponentContext wcmComponentContext = WCMUtils.getComponentContext(context.request());
     ComponentPropertyResolver underTest = new ComponentPropertyResolver(wcmComponentContext)
-        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
-        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
-    assertEquals("value1", underTest.get("prop1", String.class));
-    assertEquals("value1", underTest.get("prop1", "def"));
-    assertEquals("value2", underTest.get("prop2", String.class));
-    assertEquals("value2", underTest.get("prop2", "def"));
+        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
+        .contentPolicyResolution(ComponentPropertyResolution.RESOLVE)
+        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
+
+    assertEquals("value1a", underTest.get("prop1", String.class));
+    assertEquals("value1a", underTest.get("prop1", "def"));
+    assertEquals("value2a", underTest.get("prop2", String.class));
+    assertEquals("value2a", underTest.get("prop2", "def"));
     assertEquals("value3", underTest.get("prop3", String.class));
     assertEquals("value3", underTest.get("prop3", "def"));
     assertEquals("value4", underTest.get("prop4", String.class));
     assertEquals("value4", underTest.get("prop4", "def"));
-    assertNull(underTest.get("prop5", String.class));
-    assertEquals("def5", underTest.get("prop5", "def5"));
+    assertEquals("value5b", underTest.get("prop5", String.class));
+    assertEquals("value5b", underTest.get("prop5", "def"));
+    assertNull(underTest.get("prop6", String.class));
+    assertEquals("def", underTest.get("prop6", "def"));
+    assertNull(underTest.get("prop7", String.class));
+    assertEquals("def", underTest.get("prop7", "def"));
+  }
+
+  @Test
+  void testContentPolicy() {
+    context.contentPolicyMapping("app1/components/comp1",
+        "prop1", "value1");
+
+    Page page = context.create().page("/content/page1");
+    Resource resource = context.create().resource(page, "r1",
+        PROPERTY_RESOURCE_TYPE, "app1/components/comp1");
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .contentPolicyResolution(ComponentPropertyResolution.RESOLVE);
+    assertEquals("value1", underTest.get("prop1", String.class));
+    assertEquals("value1", underTest.get("prop1", "def"));
+  }
+
+  @Test
+  void testContentPolicy_NoPolicy() {
+    Page page = context.create().page("/content/page1");
+    Resource resource = context.create().resource(page, "r1",
+        PROPERTY_RESOURCE_TYPE, "app1/components/comp1");
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .contentPolicyResolution(ComponentPropertyResolution.RESOLVE);
+    assertNull(underTest.get("prop1", String.class));
+    assertEquals("def", underTest.get("prop1", "def"));
   }
 
 }
