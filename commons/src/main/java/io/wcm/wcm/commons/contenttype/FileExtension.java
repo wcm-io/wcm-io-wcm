@@ -130,7 +130,9 @@ public final class FileExtension {
   public static final String WEBP = "webp";
 
 
-  /** all file extensions that will be displayed by an image tag */
+  /**
+   * all file extensions that will be displayed by an image tag
+   */
   private static final Set<String> IMAGE_FILE_EXTENSIONS = ImmutableSet.of(
       GIF,
       JPEG,
@@ -138,7 +140,9 @@ public final class FileExtension {
       "jpeg" // check for this alternative JEPG extension as well
       );
 
-  /** all file extensions that will be displayed as flash */
+  /**
+   * all file extensions that will be displayed as flash
+   */
   private static final Set<String> FLASH_FILE_EXTENSIONS = ImmutableSet.of(
       SWF
       );
@@ -148,7 +152,9 @@ public final class FileExtension {
    * implementations.
    * @param fileExtension File extension
    * @return true if image
+   * @deprecated Use <code>io.wcm.handler.media.MediaFileExtension.isImage</code> instead.
    */
+  @Deprecated
   public static boolean isImage(@Nullable String fileExtension) {
     if (StringUtils.isEmpty(fileExtension)) {
       return false;
@@ -158,7 +164,9 @@ public final class FileExtension {
 
   /**
    * @return Image file extensions for standard image formats supported by web browsers and AEM Layer implementations.
+   * @deprecated Use <code>io.wcm.handler.media.MediaFileExtension.getImageFileExtensions</code> instead.
    */
+  @Deprecated
   public static @NotNull Set<String> getImageFileExtensions() {
     return IMAGE_FILE_EXTENSIONS;
   }
@@ -167,7 +175,9 @@ public final class FileExtension {
    * Check if the given file extension is an flash.
    * @param fileExtension File extension
    * @return true if flash
+   * @deprecated Use <code>io.wcm.handler.media.MediaFileExtension.isFlash</code> instead.
    */
+  @Deprecated
   public static boolean isFlash(@Nullable String fileExtension) {
     if (StringUtils.isEmpty(fileExtension)) {
       return false;
@@ -177,7 +187,9 @@ public final class FileExtension {
 
   /**
    * @return Flash file extensions
+   * @deprecated Use <code>io.wcm.handler.media.MediaFileExtension.getFlashFileExtensions</code> instead.
    */
+  @Deprecated
   public static @NotNull Set<String> getFlashFileExtensions() {
     return FLASH_FILE_EXTENSIONS;
   }

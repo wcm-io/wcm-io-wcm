@@ -30,6 +30,9 @@
       <action type="update" dev="sseifert">
         Add "SVG", "TIFF", "WEBP" to ContentType and FileExtension classes.
       </action>
+      <action type="update" dev="sseifert">
+        Deprecate FileExtension methods: isImage, getImageFileExtensions, isFlash, getFlashFileExtensions.
+      </action>
     </release>
 
     <release version="1.4.0" date="2019-04-05">
