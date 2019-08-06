@@ -152,7 +152,7 @@ public final class FileExtension {
    * implementations.
    * @param fileExtension File extension
    * @return true if image
-   * @deprecated Use <code>io.wcm.handler.media.MediaFileExtension.isImage</code> instead.
+   * @deprecated Use <code>io.wcm.handler.media.MediaFileType.isImage</code> instead.
    */
   @Deprecated
   public static boolean isImage(@Nullable String fileExtension) {
@@ -164,7 +164,7 @@ public final class FileExtension {
 
   /**
    * @return Image file extensions for standard image formats supported by web browsers and AEM Layer implementations.
-   * @deprecated Use <code>io.wcm.handler.media.MediaFileExtension.getImageFileExtensions</code> instead.
+   * @deprecated Use <code>io.wcm.handler.media.MediaFileType.getImageFileExtensions</code> instead.
    */
   @Deprecated
   public static @NotNull Set<String> getImageFileExtensions() {
@@ -175,7 +175,7 @@ public final class FileExtension {
    * Check if the given file extension is an flash.
    * @param fileExtension File extension
    * @return true if flash
-   * @deprecated Use <code>io.wcm.handler.media.MediaFileExtension.isFlash</code> instead.
+   * @deprecated Use <code>io.wcm.handler.media.MediaFileType.isFlash</code> instead.
    */
   @Deprecated
   public static boolean isFlash(@Nullable String fileExtension) {
@@ -187,7 +187,7 @@ public final class FileExtension {
 
   /**
    * @return Flash file extensions
-   * @deprecated Use <code>io.wcm.handler.media.MediaFileExtension.getFlashFileExtensions</code> instead.
+   * @deprecated Use <code>io.wcm.handler.media.MediaFileType.getFlashFileExtensions</code> instead.
    */
   @Deprecated
   public static @NotNull Set<String> getFlashFileExtensions() {
