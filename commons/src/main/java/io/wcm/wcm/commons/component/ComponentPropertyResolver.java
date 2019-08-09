@@ -21,6 +21,7 @@ package io.wcm.wcm.commons.component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -35,6 +36,7 @@ import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
+import com.google.common.collect.ImmutableList;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
 
@@ -202,6 +204,69 @@ public final class ComponentPropertyResolver {
       return policy.getProperties().get(name, type);
     }
     return null;
+  }
+
+  /**
+   * Get list of child resources.
+   * @param name Child node name
+   * @return List of child resources or null if not set.
+   */
+  public @Nullable Collection<Resource> getResources(@NotNull String name) {
+    Collection<Resource> list = getPageResources(currentPage, name);
+    if (list == null) {
+      list = getContentPolicyResources(name);
+    }
+    if (list == null) {
+      list = getComponentResources(currentComponent, name);
+    }
+    return list;
+  }
+
+  private @Nullable Collection<Resource> getComponentResources(@Nullable Component component, @NotNull String name) {
+    if (componentPropertiesResolution == ComponentPropertyResolution.IGNORE || component == null) {
+      return null;
+    }
+    Collection<Resource> result = getResources(component.getLocalResource(name));
+    if (result == null && componentPropertiesResolution == ComponentPropertyResolution.RESOLVE_INHERIT) {
+      result = getComponentResources(component.getSuperComponent(), name);
+    }
+    return result;
+  }
+
+  private @Nullable Collection<Resource> getPageResources(@Nullable Page page, @NotNull String name) {
+    if (pagePropertiesResolution == ComponentPropertyResolution.IGNORE || page == null) {
+      return null;
+    }
+    Collection<Resource> result = getResources(page.getContentResource(name));
+    if (result == null && pagePropertiesResolution == ComponentPropertyResolution.RESOLVE_INHERIT) {
+      result = getPageResources(page.getParent(), name);
+    }
+    return result;
+  }
+
+  private @Nullable Collection<Resource> getContentPolicyResources(@NotNull String name) {
+    if (contentPolicyResolution == ComponentPropertyResolution.IGNORE || resource == null) {
+      return null;
+    }
+    ContentPolicy policy = getPolicy(resource);
+    if (policy != null) {
+      Resource policyResource = policy.adaptTo(Resource.class);
+      if (policyResource != null) {
+        return getResources(policyResource.getChild(name));
+      }
+    }
+    return null;
+  }
+
+  private @Nullable Collection<Resource> getResources(@Nullable Resource parent) {
+    if (parent == null) {
+      return null;
+    }
+    Collection<Resource> children = ImmutableList.copyOf(parent.getChildren());
+    if (children.isEmpty()) {
+      return null;
+    }
+    return children;
   }
 
   /**

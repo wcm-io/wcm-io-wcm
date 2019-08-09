@@ -31,6 +31,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.commons.WCMUtils;
 
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -257,6 +258,21 @@ class ComponentPropertyResolverTest {
         .contentPolicyResolution(ComponentPropertyResolution.RESOLVE);
     assertNull(underTest.get("prop1", String.class));
     assertEquals("def", underTest.get("prop1", "def"));
+  }
+
+  @Test
+  void testContentPolicy_DeepProperty() {
+    context.contentPolicyMapping("app1/components/comp1",
+        "child1", ImmutableValueMap.of("prop1", "value1"));
+
+    Page page = context.create().page("/content/page1");
+    Resource resource = context.create().resource(page, "r1",
+        PROPERTY_RESOURCE_TYPE, "app1/components/comp1");
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+        .contentPolicyResolution(ComponentPropertyResolution.RESOLVE);
+    assertEquals("value1", underTest.get("child1/prop1", String.class));
+    assertEquals("value1", underTest.get("child1/prop1", "def"));
   }
 
 }
