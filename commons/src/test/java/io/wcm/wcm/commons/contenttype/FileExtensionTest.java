@@ -27,12 +27,14 @@ import org.junit.jupiter.api.Test;
 class FileExtensionTest {
 
   @Test
+  @SuppressWarnings("deprecation")
   void testIsImage() throws Exception {
     assertTrue(FileExtension.isImage("png"));
     assertFalse(FileExtension.isImage(null));
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   void testIsFlash() throws Exception {
     assertTrue(FileExtension.isFlash("swf"));
     assertFalse(FileExtension.isFlash(null));

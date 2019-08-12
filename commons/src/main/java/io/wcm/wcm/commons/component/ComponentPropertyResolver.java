@@ -19,6 +19,10 @@
  */
 package io.wcm.wcm.commons.component;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collection;
+
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
@@ -30,21 +34,36 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.components.ComponentManager;
+import com.day.cq.wcm.api.policies.ContentPolicy;
+import com.day.cq.wcm.api.policies.ContentPolicyManager;
+import com.google.common.collect.ImmutableList;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
 
 /**
- * Resolves properties set on component associated with the given resource or pages the current resource is contained
- * in, with or without inheritance in both cases.
- * By default, only component properties are resolved with inheritance.
+ * Tries to resolve properties with or without inheritance from pages, content policies or component definitions.
+ * <p>
+ * The lookup takes place in:
+ * </p>
+ * <ol>
+ * <li>Properties of the current page (including the parent pages if inheritance is enabled)</li>
+ * <li>Properties from the content policy associated with the current resource</li>
+ * <li>Properties defined on the component associated with the current resource (including super components if
+ * inheritance is enabled)</li>
+ * </ol>
+ * <p>
+ * By default, only option 3 is enabled (with inheritance).
+ * </p>
  */
 @ProviderType
 public final class ComponentPropertyResolver {
 
   private ComponentPropertyResolution componentPropertiesResolution = ComponentPropertyResolution.RESOLVE_INHERIT;
   private ComponentPropertyResolution pagePropertiesResolution = ComponentPropertyResolution.IGNORE;
+  private ComponentPropertyResolution contentPolicyResolution = ComponentPropertyResolution.IGNORE;
   private final Page currentPage;
   private final Component currentComponent;
+  private final Resource resource;
 
   /**
    * Content resource associated with a component (resource type).
@@ -64,6 +83,7 @@ public final class ComponentPropertyResolver {
     this.currentPage = pageManager.getContainingPage(resource);
     ComponentManager componentManager = AdaptTo.notNull(resourceResolver, ComponentManager.class);
     this.currentComponent = componentManager.getComponentOfResource(resource);
+    this.resource = resource;
   }
 
   /**
@@ -73,6 +93,7 @@ public final class ComponentPropertyResolver {
   public ComponentPropertyResolver(@NotNull ComponentContext wcmComponentContext) {
     this.currentPage = wcmComponentContext.getPage();
     this.currentComponent = wcmComponentContext.getComponent();
+    this.resource = wcmComponentContext.getResource();
   }
 
   /**
@@ -81,7 +102,7 @@ public final class ComponentPropertyResolver {
    * @param resolution Resolution mode
    * @return this
    */
-  public ComponentPropertyResolver componentPropertiesResolution(ComponentPropertyResolution resolution) {
+  public ComponentPropertyResolver componentPropertiesResolution(@NotNull ComponentPropertyResolution resolution) {
     this.componentPropertiesResolution = resolution;
     return this;
   }
@@ -92,8 +113,21 @@ public final class ComponentPropertyResolver {
    * @param resolution Resolution mode
    * @return this
    */
-  public ComponentPropertyResolver pagePropertiesResolution(ComponentPropertyResolution resolution) {
+  public ComponentPropertyResolver pagePropertiesResolution(@NotNull ComponentPropertyResolution resolution) {
     this.pagePropertiesResolution = resolution;
+    return this;
+  }
+
+  /**
+   * Configure if properties should be resolved from content policies mapped for the given resource.
+   * No explicit inheritance mode is supported, so {@link ComponentPropertyResolution#RESOLVE_INHERIT}
+   * has the same effect as {@link ComponentPropertyResolution#RESOLVE} in this case.
+   * Default mode is {@link ComponentPropertyResolution#IGNORE}.
+   * @param resolution Resolution mode
+   * @return this
+   */
+  public ComponentPropertyResolver contentPolicyResolution(@NotNull ComponentPropertyResolution resolution) {
+    this.contentPolicyResolution = resolution;
     return this;
   }
 
@@ -107,6 +141,9 @@ public final class ComponentPropertyResolver {
   public @Nullable <T> T get(@NotNull String name, @NotNull Class<T> type) {
     @Nullable
     T value = getPageProperty(currentPage, name, type);
+    if (value == null) {
+      value = getContentPolicyProperty(name, type);
+    }
     if (value == null) {
       value = getComponentProperty(currentComponent, name, type);
     }
@@ -156,6 +193,104 @@ public final class ComponentPropertyResolver {
       result = getPageProperty(page.getParent(), name, type);
     }
     return result;
+  }
+
+  private @Nullable <T> T getContentPolicyProperty(@NotNull String name, @NotNull Class<T> type) {
+    if (contentPolicyResolution == ComponentPropertyResolution.IGNORE || resource == null) {
+      return null;
+    }
+    ContentPolicy policy = getPolicy(resource);
+    if (policy != null) {
+      return policy.getProperties().get(name, type);
+    }
+    return null;
+  }
+
+  /**
+   * Get list of child resources.
+   * @param name Child node name
+   * @return List of child resources or null if not set.
+   */
+  public @Nullable Collection<Resource> getResources(@NotNull String name) {
+    Collection<Resource> list = getPageResources(currentPage, name);
+    if (list == null) {
+      list = getContentPolicyResources(name);
+    }
+    if (list == null) {
+      list = getComponentResources(currentComponent, name);
+    }
+    return list;
+  }
+
+  private @Nullable Collection<Resource> getComponentResources(@Nullable Component component, @NotNull String name) {
+    if (componentPropertiesResolution == ComponentPropertyResolution.IGNORE || component == null) {
+      return null;
+    }
+    Collection<Resource> result = getResources(component.getLocalResource(name));
+    if (result == null && componentPropertiesResolution == ComponentPropertyResolution.RESOLVE_INHERIT) {
+      result = getComponentResources(component.getSuperComponent(), name);
+    }
+    return result;
+  }
+
+  private @Nullable Collection<Resource> getPageResources(@Nullable Page page, @NotNull String name) {
+    if (pagePropertiesResolution == ComponentPropertyResolution.IGNORE || page == null) {
+      return null;
+    }
+    Collection<Resource> result = getResources(page.getContentResource(name));
+    if (result == null && pagePropertiesResolution == ComponentPropertyResolution.RESOLVE_INHERIT) {
+      result = getPageResources(page.getParent(), name);
+    }
+    return result;
+  }
+
+  private @Nullable Collection<Resource> getContentPolicyResources(@NotNull String name) {
+    if (contentPolicyResolution == ComponentPropertyResolution.IGNORE || resource == null) {
+      return null;
+    }
+    ContentPolicy policy = getPolicy(resource);
+    if (policy != null) {
+      Resource policyResource = policy.adaptTo(Resource.class);
+      if (policyResource != null) {
+        return getResources(policyResource.getChild(name));
+      }
+    }
+    return null;
+  }
+
+  private @Nullable Collection<Resource> getResources(@Nullable Resource parent) {
+    if (parent == null) {
+      return null;
+    }
+    Collection<Resource> children = ImmutableList.copyOf(parent.getChildren());
+    if (children.isEmpty()) {
+      return null;
+    }
+    return children;
+  }
+
+  /**
+   * Get content policy via policy manager. Please not that the signature to get policy from a resource
+   * is only available in AEM 6.3+. We keep compiling against AEM 6.2 atm, but call the method via reflection
+   * and accept that resolving the content policy only work with AEM 6.3.
+   * @param resource Content resource
+   * @return Policy or null
+   */
+  private static @Nullable ContentPolicy getPolicy(@NotNull Resource resource) {
+    try {
+      // TODO: remove this ugly hack once updated to AEM 6.3 API or above
+      ContentPolicyManager policyManager = AdaptTo.notNull(resource.getResourceResolver(), ContentPolicyManager.class);
+      Method getPolicyByResource = policyManager.getClass().getMethod("getPolicy", Resource.class);
+      getPolicyByResource.setAccessible(true);
+      return (ContentPolicy)getPolicyByResource.invoke(policyManager, resource);
+    }
+    catch (NoSuchMethodException ex) {
+      // assume AEM 6.2 - content policy resolution not supported
+      return null;
+    }
+    catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+      throw new RuntimeException("Unable to get content policy.", ex);
+    }
   }
 
 }
