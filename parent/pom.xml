@@ -25,6 +25,7 @@
   <parent>
     <groupId>io.wcm</groupId>
     <artifactId>io.wcm.parent_toplevel</artifactId>
+    <!-- TODO: remove reflow-maven-skin def from https://github.com/wcm-io/wcm-io-wcm-core-components/blob/develop/src/site/site.xml#L27 when updating to 1.3.10 or later -->
     <version>1.3.8</version>
     <relativePath />
   </parent>
