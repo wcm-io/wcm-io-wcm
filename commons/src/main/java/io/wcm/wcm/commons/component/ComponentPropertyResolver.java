@@ -19,6 +19,8 @@
  */
 package io.wcm.wcm.commons.component;
 
+import static org.apache.sling.api.resource.ResourceResolver.PROPERTY_RESOURCE_TYPE;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -78,12 +80,42 @@ public final class ComponentPropertyResolver {
    * @param resource Content resource
    */
   public ComponentPropertyResolver(@NotNull Resource resource) {
-    ResourceResolver resourceResolver = resource.getResourceResolver();
+    this(resource, false);
+  }
+
+  /**
+   * Content resource associated with a component (resource type).
+   * @param resource Content resource
+   * @param ensureResourceType Ensure the given resource has a resource type.
+   *          If this is not the case, try to find the closest parent resource which has a resource type.
+   */
+  public ComponentPropertyResolver(@NotNull Resource resource, boolean ensureResourceType) {
+    Resource contextResource = null;
+    if (ensureResourceType) {
+      // find closest parent resource that has a resource type (and not nt:unstructured)
+      contextResource = getResourceWithResourceType(resource);
+    }
+    if (contextResource == null) {
+      contextResource = resource;
+    }
+
+    ResourceResolver resourceResolver = contextResource.getResourceResolver();
     PageManager pageManager = AdaptTo.notNull(resourceResolver, PageManager.class);
-    this.currentPage = pageManager.getContainingPage(resource);
+    this.currentPage = pageManager.getContainingPage(contextResource);
     ComponentManager componentManager = AdaptTo.notNull(resourceResolver, ComponentManager.class);
-    this.currentComponent = componentManager.getComponentOfResource(resource);
-    this.resource = resource;
+    this.currentComponent = componentManager.getComponentOfResource(contextResource);
+    this.resource = contextResource;
+  }
+
+  private static @Nullable Resource getResourceWithResourceType(@Nullable Resource resource) {
+    if (resource == null) {
+      return null;
+    }
+    String resourceType = resource.getValueMap().get(PROPERTY_RESOURCE_TYPE, String.class);
+    if (resourceType != null) {
+      return resource;
+    }
+    return getResourceWithResourceType(resource.getParent());
   }
 
   /**

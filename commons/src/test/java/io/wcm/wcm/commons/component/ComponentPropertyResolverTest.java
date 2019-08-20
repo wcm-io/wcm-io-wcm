@@ -27,6 +27,7 @@ import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.commons.WCMUtils;
@@ -59,6 +60,21 @@ class ComponentPropertyResolverTest {
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
     ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    assertEquals("value1", underTest.get("prop1", String.class));
+    assertEquals("value1", underTest.get("prop1", "def"));
+  }
+
+  @Test
+  void testResourceWithComponent_EnsureResourceType() {
+    Resource component = context.create().resource("/apps/app1/components/comp1",
+        "prop1", "value1");
+    Resource resource = context.create().resource("/content/r1",
+        PROPERTY_RESOURCE_TYPE, component.getPath());
+    Resource subresource1 = context.create().resource(resource, "subresource1",
+        JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_UNSTRUCTURED);
+    Resource subresource2 = context.create().resource(subresource1, "subresource2");
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(subresource2, true);
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals("value1", underTest.get("prop1", "def"));
   }
