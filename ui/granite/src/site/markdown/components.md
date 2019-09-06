@@ -98,7 +98,7 @@ Enhancements over AEM version:
 * Path field always displays only the subtree of the configured root path, regardless if the given path value has a path outside the root path
 * Limit search result to pages and assets
 * Hides certain "AEM-internal" content paths which should not be shown when picking pages or assets
-
+* Provide `appendPath` parameter that allows to add an additional sub path to the configured root path
 
 
 ### Config-Scope Path Browser (deprecated)
