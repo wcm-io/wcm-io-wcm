@@ -32,7 +32,38 @@
 <%@page import="com.day.cq.commons.jcr.JcrConstants"%>
 <%@page import="io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource"%>
 <%@page import="io.wcm.wcm.ui.granite.util.GraniteUi"%>
-<%@include file="../../global/global.jsp" %><%
+<%@page import="io.wcm.wcm.ui.granite.util.RootPathResolver"%>
+<%@include file="../../global/global.jsp" %><%--###
+
+wcm.io Granite UI Extensions PathField
+======================================
+
+A field that allows the user to enter path.
+
+It extends `granite/ui/components/coral/foundation/form/pathfield` component
+(with a fallback to `granite/ui/components/foundation/form/pathbrowser` for older AEM versions).
+
+It supports the same properties as it's super component. The following properties
+are overwritten or added.
+
+.. gnd:gnd::
+
+  /**
+   * The path of the root of the pathfield.
+   */
+  - rootPath (StringEL) = {path}
+
+  /**
+   * Fallback root path that is used when no root path was configured.
+   */
+  - fallbackRootPath (StringEL) = '/'
+
+  /**
+   * Appendix path added to the root path.
+   */
+  - appendPath (StringEL) = {path appendix}
+
+###--%><%
 
 String resourceType = GraniteUi.getExistingResourceType(resourceResolver,
     "granite/ui/components/coral/foundation/form/pathfield",
@@ -47,29 +78,33 @@ boolean isPathField = StringUtils.equals(resourceType, "granite/ui/components/co
     && productVersion.getMajor() >= 6
     && (productVersion.getMinor() > 3 || (productVersion.getMinor() == 3 && productVersion.getMicro() >= 3));
 
+// resolver root path
+RootPathResolver rootPathResolver = new RootPathResolver(cmp, slingRequest);
+String rootPath = rootPathResolver.get();
+
 if (isPathField) {
   Config cfg = cmp.getConfig();
   ExpressionHelper ex = cmp.getExpressionHelper();
-  
-  String rootPath = getExistingRootPath(ex.getString(cfg.get("rootPath", "/")), resourceResolver);
+
   String filter = cfg.get("filter", "hierarchyNotFile");
   boolean multiple = cfg.get("multiple", false);
   String selectionCount = multiple ? "multiple" : "single";
-  
+
   // build path to picker and suggestion src based on overlayed pathfield content from wcm.io
   String defaultPickerSrc = "/mnt/overlay/wcm-io/wcm/ui/granite/content/form/pathfield/picker.html"
       + "?_charset_=utf-8&path={value}&root=" + Text.escape(rootPath) + "&filter=" + Text.escape(filter) + "&selectionCount=" + Text.escape(selectionCount);
   String pickerSrc = ex.getString(cfg.get("pickerSrc", defaultPickerSrc));
-  
+
   String defaultSuggestionSrc = "/mnt/overlay/wcm-io/wcm/ui/granite/content/form/pathfield/suggestion{.offset,limit}.html"
       + "?_charset_=utf-8&root=" + Text.escape(rootPath) + "&filter=" + Text.escape(filter) + "{&query}";
   String suggestionSrc = ex.getString(cfg.get("suggestionSrc", defaultSuggestionSrc));
-    
+
   props.put("pickerSrc", pickerSrc);
   props.put("suggestionSrc", suggestionSrc);  
 }
 else {
   resourceType = "granite/ui/components/foundation/form/pathbrowser";
+  props.put("rootPath", rootPath);
 }
 
 // simulate resource for dialog field def with new rootPath instead of configured one
@@ -79,21 +114,5 @@ RequestDispatcherOptions options = new RequestDispatcherOptions();
 options.setForceResourceType(resourceType);
 RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(resourceWrapper, options);
 dispatcher.include(slingRequest, slingResponse);
-
-%><%!
-
-/**
- * Make sure the root path exists. If it does not exist go up to parent hierarchy until it returns an
- * existing resource path.
- */
-String getExistingRootPath(String rootPath, ResourceResolver resourceResolver) {
-  if (resourceResolver.getResource(rootPath) == null) {
-    String parentPath = Text.getRelativeParent(rootPath, 1);
-    return getExistingRootPath(parentPath, resourceResolver);
-  }
-  else {
-    return rootPath;
-  }
-}
 
 %>
