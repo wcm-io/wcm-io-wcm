@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.SyntheticResource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -289,6 +290,24 @@ class ComponentPropertyResolverTest {
         .contentPolicyResolution(ComponentPropertyResolution.RESOLVE);
     assertEquals("value1", underTest.get("child1/prop1", String.class));
     assertEquals("value1", underTest.get("child1/prop1", "def"));
+  }
+
+  @Test
+  void testResourceWithoutResourceType() {
+    Resource resource = context.create().resource("/content/r1");
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    assertNull(underTest.get("prop1", String.class));
+    assertEquals("def", underTest.get("prop1", "def"));
+  }
+
+  @Test
+  void testSyntheticResourceWithoutResourceType() {
+    Resource resource = new SyntheticResource(context.resourceResolver(), "/content/r1", null);
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    assertNull(underTest.get("prop1", String.class));
+    assertEquals("def", underTest.get("prop1", "def"));
   }
 
 }

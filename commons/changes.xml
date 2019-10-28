@@ -25,6 +25,9 @@
 
     <release version="1.5.2" date="not released">
       <action type="fix" dev="sseifert">
+        ComponentPropertyResolver: Avoid NPE when trying to lookup the AEM component for synthetic resources without resource type.
+      </action>
+      <action type="fix" dev="sseifert">
         Remove invalid closing meta tags from wcmInit markup.
       </action>
     </release>

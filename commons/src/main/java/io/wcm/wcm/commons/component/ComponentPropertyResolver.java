@@ -102,9 +102,19 @@ public final class ComponentPropertyResolver {
     ResourceResolver resourceResolver = contextResource.getResourceResolver();
     PageManager pageManager = AdaptTo.notNull(resourceResolver, PageManager.class);
     this.currentPage = pageManager.getContainingPage(contextResource);
-    ComponentManager componentManager = AdaptTo.notNull(resourceResolver, ComponentManager.class);
-    this.currentComponent = componentManager.getComponentOfResource(contextResource);
+    if (hasResourceType(contextResource)) {
+      ComponentManager componentManager = AdaptTo.notNull(resourceResolver, ComponentManager.class);
+      this.currentComponent = componentManager.getComponentOfResource(contextResource);
+    }
+    else {
+      this.currentComponent = null;
+    }
     this.resource = contextResource;
+  }
+
+  @SuppressWarnings("null")
+  private static boolean hasResourceType(@NotNull Resource resource) {
+    return resource.getResourceType() != null;
   }
 
   private static @Nullable Resource getResourceWithResourceType(@Nullable Resource resource) {
