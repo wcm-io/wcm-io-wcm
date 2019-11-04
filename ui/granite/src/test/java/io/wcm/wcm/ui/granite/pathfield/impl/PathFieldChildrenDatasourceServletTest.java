@@ -23,12 +23,14 @@ import static com.day.cq.commons.jcr.JcrConstants.JCR_PRIMARYTYPE;
 import static com.day.cq.commons.jcr.JcrConstants.NT_FILE;
 import static com.day.cq.commons.jcr.JcrConstants.NT_HIERARCHYNODE;
 import static com.day.cq.commons.jcr.JcrConstants.NT_UNSTRUCTURED;
+import static io.wcm.wcm.ui.granite.pathfield.impl.DummyPredicateProvider.PREDICATE_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.Predicate;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,13 +39,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.granite.ui.components.ExpressionResolver;
 import com.adobe.granite.ui.components.ds.DataSource;
+import com.day.cq.commons.predicate.PredicateProvider;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import io.wcm.wcm.ui.granite.pathfield.impl.predicate.HierarchyNotFilePredicate;
-import io.wcm.wcm.ui.granite.pathfield.impl.predicate.NoSystemPredicate;
 import io.wcm.wcm.ui.granite.testcontext.MockExpressionResolver;
 
 @ExtendWith(AemContextExtension.class)
@@ -56,6 +57,16 @@ class PathFieldChildrenDatasourceServletTest {
   @BeforeEach
   void setUp() {
     context.registerService(ExpressionResolver.class, new MockExpressionResolver());
+    context.registerService(PredicateProvider.class, new DummyPredicateProvider(context));
+
+    context.registerService(Predicate.class, new com.day.cq.commons.predicate.IsFolderPredicate(),
+        PREDICATE_NAME, "folder");
+    context.registerService(Predicate.class, new com.day.cq.commons.predicate.IsHierarchyNodePredicate(),
+        PREDICATE_NAME, "hierarchy");
+    context.registerService(Predicate.class, new com.day.cq.commons.predicate.HierarchyNotFilePredicate(),
+        PREDICATE_NAME, "hierarchyNotFile");
+    context.registerService(Predicate.class, new com.day.cq.commons.predicate.IsNoSystemNodePredicate(),
+        PREDICATE_NAME, "nosystem");
 
     underTest = context.registerInjectActivateService(new PathFieldChildrenDatasourceServlet());
 
@@ -74,7 +85,7 @@ class PathFieldChildrenDatasourceServletTest {
   void testHierarchyNotFilePredicate() {
     Map<String, Object> props = ImmutableMap.<String, Object>of(
         "path", "/content/l1",
-        "filter", HierarchyNotFilePredicate.FILTER);
+        "filter", "hierarchyNotFile");
     assertResultPaths(props,
         "/content/l1/l1a",
         "/content/l1/l1b");
@@ -84,7 +95,7 @@ class PathFieldChildrenDatasourceServletTest {
   void testNoSystemPredicate() {
     Map<String, Object> props = ImmutableMap.<String, Object>of(
         "path", "/content/l1",
-        "filter", NoSystemPredicate.FILTER);
+        "filter", "nosystem");
     assertResultPaths(props,
         "/content/l1/file",
         "/content/l1/l1a",
@@ -96,7 +107,7 @@ class PathFieldChildrenDatasourceServletTest {
     Map<String, Object> props = ImmutableMap.<String, Object>of(
         "query", "fi",
         "rootPath", "/content/l1",
-        "filter", NoSystemPredicate.FILTER);
+        "filter", "nosystem");
     assertResultPaths(props,
         "/content/l1/file");
   }
@@ -111,7 +122,7 @@ class PathFieldChildrenDatasourceServletTest {
 
     Map<String, Object> props = ImmutableMap.<String, Object>of(
         "path", "/content/l2",
-        "filter", HierarchyNotFilePredicate.FILTER);
+        "filter", "hierarchyNotFile");
     assertResultPaths(props,
         "/content/l2/l2b",
         "/content/l2/l2a");
