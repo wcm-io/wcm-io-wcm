@@ -99,6 +99,7 @@ Enhancements over AEM version:
 * Limit search result to pages and assets
 * Hides certain "AEM-internal" content paths which should not be shown when picking pages or assets
 * Provide `appendPath` parameter that allows to add an additional sub path to the configured root path
+* Supports any resource-based predicates as `filter` (and not only `folder`, `hierarchy`, `hierarchyNotFile`, `nosystem`)
 
 
 ### Config-Scope Path Browser (deprecated)
