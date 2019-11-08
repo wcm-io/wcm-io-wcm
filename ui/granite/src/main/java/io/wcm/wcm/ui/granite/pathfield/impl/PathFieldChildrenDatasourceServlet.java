@@ -39,15 +39,17 @@ import org.apache.commons.collections.PredicateUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.collections.iterators.FilterIterator;
 import org.apache.commons.collections.iterators.TransformIterator;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.servlets.annotations.SlingServletResourceTypes;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.granite.ui.components.Config;
 import com.adobe.granite.ui.components.ExpressionHelper;
@@ -56,12 +58,9 @@ import com.adobe.granite.ui.components.PagingIterator;
 import com.adobe.granite.ui.components.ds.AbstractDataSource;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.EmptyDataSource;
+import com.day.cq.commons.predicate.PredicateProvider;
 
-import io.wcm.wcm.ui.granite.pathfield.impl.predicate.FolderPredicate;
 import io.wcm.wcm.ui.granite.pathfield.impl.predicate.HideInternalContentPathsPredicate;
-import io.wcm.wcm.ui.granite.pathfield.impl.predicate.HierarchyNotFilePredicate;
-import io.wcm.wcm.ui.granite.pathfield.impl.predicate.HierarchyPredicate;
-import io.wcm.wcm.ui.granite.pathfield.impl.predicate.NoSystemPredicate;
 import io.wcm.wcm.ui.granite.pathfield.impl.util.DummyPageContext;
 import io.wcm.wcm.ui.granite.pathfield.impl.util.PredicatedResourceWrapper;
 
@@ -78,6 +77,10 @@ public class PathFieldChildrenDatasourceServlet extends SlingSafeMethodsServlet 
 
   @Reference
   private ExpressionResolver expressionResolver;
+  @Reference
+  private PredicateProvider predicateProvider;
+
+  private static final Logger log = LoggerFactory.getLogger(PathFieldChildrenDatasourceServlet.class);
 
   @Override
   @SuppressWarnings("null")
@@ -128,11 +131,15 @@ public class PathFieldChildrenDatasourceServlet extends SlingSafeMethodsServlet 
       final Integer offset = ex.get(cfg.get("offset", String.class), Integer.class);
       final Integer limit = ex.get(cfg.get("limit", String.class), Integer.class);
       final String itemResourceType = cfg.get("itemResourceType", String.class);
-      final String filter = ex.getString(cfg.get("filter"));
+      final String filter = ex.getString(cfg.get("filter", "hierarchyNotFile"));
 
       final Collection<Predicate> predicates = new ArrayList<>();
       predicates.add(new HideInternalContentPathsPredicate());
-      predicates.add(toPredicate(filter));
+
+      Predicate filterPredicate = toPredicate(filter);
+      if (filterPredicate != null) {
+        predicates.add(filterPredicate);
+      }
 
       if (searchName != null) {
         final Pattern searchNamePattern = Pattern.compile(Pattern.quote(searchName), Pattern.CASE_INSENSITIVE);
@@ -174,17 +181,15 @@ public class PathFieldChildrenDatasourceServlet extends SlingSafeMethodsServlet 
     request.setAttribute(DataSource.class.getName(), ds);
   }
 
-  private static Predicate toPredicate(String filter) {
-    if (StringUtils.equals(filter, FolderPredicate.FILTER)) {
-      return new FolderPredicate();
+  private @Nullable Predicate toPredicate(@NotNull String filter) {
+    Predicate predicate = predicateProvider.getPredicate(filter);
+    if (predicate != null) {
+      return predicate;
     }
-    if (StringUtils.equals(filter, HierarchyPredicate.FILTER)) {
-      return new HierarchyPredicate();
+    else {
+      log.warn("Unable to find predicate implementation for filter: {}", filter);
+      return null;
     }
-    if (StringUtils.equals(filter, NoSystemPredicate.FILTER)) {
-      return new NoSystemPredicate();
-    }
-    return new HierarchyNotFilePredicate(); // default is hierarchyNotFile
   }
 
   private static Transformer createTransformer(final String itemResourceType, final Predicate predicate) {
