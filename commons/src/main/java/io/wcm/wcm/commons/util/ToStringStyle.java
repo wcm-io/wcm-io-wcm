@@ -89,7 +89,7 @@ public final class ToStringStyle {
     }
 
     /**
-     * Ensure <code>Singleton</ode> after serialization.
+     * Ensure <code>Singleton</code> after serialization.
      * @return the singleton
      */
     private Object readResolve() {
