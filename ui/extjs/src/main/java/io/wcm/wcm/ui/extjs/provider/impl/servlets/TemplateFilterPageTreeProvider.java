@@ -91,9 +91,6 @@ public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
 
   /**
    * Get paths for pages that use the given template
-   *
-   * @param templates
-   * @param rootPath
    * @return a set of nodes that should be displayed in the tree
    */
   private Set<String> getPagePathsForTemplate(String[] templates, String rootPath, SlingHttpServletRequest request) {
@@ -119,11 +116,7 @@ public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
   /**
    * Searches for page content nodes under the {@code pRootPath} with given
    * template It uses a XPATH query and return the node iterator of results.
-   *
-   * @param templates
-   * @param rootPath
    * @return results node iterator
-   * @throws RepositoryException
    */
   @SuppressWarnings("null")
   private NodeIterator searchNodesByTemplate(String[] templates, String rootPath, SlingHttpServletRequest request) throws RepositoryException {
@@ -137,7 +130,6 @@ public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
   }
 
   /**
-   * @param expressions
    * @return array of escaped xPath query expressions
    */
   private String[] escapeXPathQueryExpressions(String[] expressions) {
