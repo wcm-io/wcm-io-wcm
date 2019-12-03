@@ -25,8 +25,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
@@ -217,7 +219,18 @@ public final class ComponentPropertyResolver {
       return null;
     }
     @Nullable
-    T result = component.getProperties().get(name, type);
+    T result;
+    if (StringUtils.contains(name, "/")) {
+      // if a property in child resource is addressed get property value via local resource
+      // because the map behind the getProperties() method does not support child resource access
+      String childResourcePath = StringUtils.substringBeforeLast(name, "/");
+      String localPropertyName = StringUtils.substringAfterLast(name, "/");
+      Resource childResource = component.getLocalResource(childResourcePath);
+      result = ResourceUtil.getValueMap(childResource).get(localPropertyName, type);
+    }
+    else {
+      result = component.getProperties().get(name, type);
+    }
     if (result == null && componentPropertiesResolution == ComponentPropertyResolution.RESOLVE_INHERIT) {
       result = getComponentProperty(component.getSuperComponent(), name, type);
     }
