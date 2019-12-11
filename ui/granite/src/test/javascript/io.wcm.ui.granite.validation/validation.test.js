@@ -28,7 +28,7 @@ window.Granite = {
 };
 
 // load validation script from clientlib
-require('../../../main/webapp/clientlibs-root/io.wcm.ui.granite.validation/js/validation.js');
+require('../../../main/webapp/app-root/clientlibs/io.wcm.ui.granite.validation/js/validation.js');
 
 // helper methos for assertion
 var assert = require('assert');
