@@ -66,6 +66,22 @@ class ComponentPropertyResolverTest {
   }
 
   @Test
+  void testResourceWithComponent_ChildResourceProperty() {
+    Resource component = context.create().resource("/apps/app1/components/comp1",
+        "prop1", "value1");
+    context.create().resource(component, "child1",
+        "prop11", "value11");
+    Resource resource = context.create().resource("/content/r1",
+        PROPERTY_RESOURCE_TYPE, component.getPath());
+
+    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    assertEquals("value1", underTest.get("prop1", String.class));
+    assertEquals("value1", underTest.get("prop1", "def"));
+    assertEquals("value11", underTest.get("child1/prop11", String.class));
+    assertEquals("value11", underTest.get("child1/prop11", "def"));
+  }
+
+  @Test
   void testResourceWithComponent_EnsureResourceType() {
     Resource component = context.create().resource("/apps/app1/components/comp1",
         "prop1", "value1");

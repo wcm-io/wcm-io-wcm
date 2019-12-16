@@ -109,13 +109,13 @@ public class JSInclude {
   private @NotNull Map<String, String> validateAndBuildAttributes() {
     Map<String, String> attrs = new TreeMap<>();
     if (async) {
-      attrs.put("async", "true");
+      attrs.put("async", null);
     }
     if (CROSSORIGIN_ALLOWED_VALUES.contains(crossorigin)) {
       attrs.put("crossorigin", crossorigin);
     }
     if (defer) {
-      attrs.put("defer", "true");
+      attrs.put("defer", null);
     }
     if (StringUtils.isNotEmpty(integrity)) {
       attrs.put("integrity", xssApi.encodeForHTMLAttr(integrity));

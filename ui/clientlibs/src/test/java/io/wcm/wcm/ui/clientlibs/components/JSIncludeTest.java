@@ -105,7 +105,7 @@ class JSIncludeTest extends AbstractIncludeTest {
     context.request().setAttribute("type", "module");
     JSInclude underTest = AdaptTo.notNull(context.request(), JSInclude.class);
     assertEquals("<script src=\"/etc/clientlibs/app1/clientlib1.min.js\" "
-        + "async=\"true\" crossorigin=\"anonymous\" defer=\"true\" integrity=\"value1\" "
+        + "async crossorigin=\"anonymous\" defer integrity=\"value1\" "
         + "nomodule nonce=\"value2\" referrerpolicy=\"no-referrer\" type=\"module\">"
         + "</script>\n", underTest.getInclude());
   }
@@ -133,11 +133,11 @@ class JSIncludeTest extends AbstractIncludeTest {
     context.request().setAttribute("type", "text/javascript");
     JSInclude underTest = AdaptTo.notNull(context.request(), JSInclude.class);
     assertEquals("<script src=\"/etc/clientlibs/app1/clientlib3.min.js\" "
-        + "async=\"true\" nomodule type=\"text/javascript\"></script>\n"
+        + "async nomodule type=\"text/javascript\"></script>\n"
         + "<script src=\"/etc.clientlibs/app1/clientlibs/clientlib4_proxy.min.js\" "
-        + "async=\"true\" nomodule type=\"text/javascript\"></script>\n"
+        + "async nomodule type=\"text/javascript\"></script>\n"
         + "<script src=\"/etc.clientlibs/app1/clientlibs/clientlib5_proxy.min.js\" "
-        + "async=\"true\" nomodule type=\"text/javascript\"></script>\n",
+        + "async nomodule type=\"text/javascript\"></script>\n",
         underTest.getInclude());
   }
 
