@@ -33,6 +33,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 
+import org.apache.sling.scripting.jsp.jasper.runtime.JspWriterImpl;
+
 import io.wcm.testing.mock.aem.junit5.AemContext;
 
 public class MockPageContext extends PageContext {
@@ -51,6 +53,11 @@ public class MockPageContext extends PageContext {
   @Override
   public ServletResponse getResponse() {
     return context.response();
+  }
+
+  @Override
+  public JspWriter getOut() {
+    return new JspWriterImpl();
   }
 
 
@@ -159,11 +166,6 @@ public class MockPageContext extends PageContext {
 
   @Override
   public Enumeration<String> getAttributeNamesInScope(int scope) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public JspWriter getOut() {
     throw new UnsupportedOperationException();
   }
 
