@@ -40,6 +40,7 @@ import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
  * Abstract implementation, some methods can be overwritten by subclasses.
  */
 @ConsumerType
+@SuppressWarnings("deprecation")
 public abstract class AbstractPageTreeProvider extends AbstractPageProvider {
   private static final long serialVersionUID = 1L;
 
@@ -56,6 +57,7 @@ public abstract class AbstractPageTreeProvider extends AbstractPageProvider {
    * @return Page array
    * @throws JSONException JSON exception
    */
+  @SuppressWarnings("javadoc")
   protected final JSONArray getPages(Iterator<Page> pages, int depth, PageFilter pageFilter) throws JSONException {
     JSONArray pagesArray = new JSONArray();
 
@@ -98,7 +100,7 @@ public abstract class AbstractPageTreeProvider extends AbstractPageProvider {
    * @return JSON object
    * @throws JSONException JSON exception
    */
-  @SuppressWarnings("null")
+  @SuppressWarnings({ "null", "javadoc" })
   protected final JSONObject getPage(Page page) throws JSONException {
     Resource resource = page.adaptTo(Resource.class);
 

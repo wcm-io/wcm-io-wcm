@@ -23,9 +23,9 @@ The widgets are accompanied by a set of servlets serving as JSON providers.
 
 |WCM ExtJS UI Extensions version |AEM version supported
 |--------------------------------|----------------------
-|1.1.x or higher                 |AEM 6.2 and up
-|1.0.x                           |AEM 6.1 and up
-|0.x                             |AEM 6.0 and up
+|1.1.x or higher                 |AEM 6.3+
+|1.0.x                           |AEM 6.1+
+|0.x                             |AEM 6.0+
 
 
 ### Dependencies

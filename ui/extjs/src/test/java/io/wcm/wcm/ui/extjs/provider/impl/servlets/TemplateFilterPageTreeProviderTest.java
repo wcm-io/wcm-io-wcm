@@ -50,7 +50,7 @@ import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
 @ExtendWith(AemContextExtension.class)
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings("null")
+@SuppressWarnings({ "null", "deprecation" })
 class TemplateFilterPageTreeProviderTest {
 
   private static final String TEMPLATE_1 = "/apps/app1/templates/template1";

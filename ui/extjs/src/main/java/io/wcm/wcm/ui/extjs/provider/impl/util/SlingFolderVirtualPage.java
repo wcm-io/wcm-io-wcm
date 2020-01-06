@@ -104,6 +104,11 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
+  public Locale getLanguage() {
+    return null;
+  }
+
+  @Override
   public Calendar getLastModified() {
     return null;
   }
