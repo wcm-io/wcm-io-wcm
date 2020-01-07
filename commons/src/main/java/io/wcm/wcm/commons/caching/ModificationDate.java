@@ -66,7 +66,6 @@ public final class ModificationDate {
    * @param resource a resource with a cq:lastModified property *and/or* a file/jcr:content subnode with a jcr:lastModified property
    * @return the date or null if last modified property could not be found
    */
-  @SuppressWarnings("null")
   public static @Nullable Date get(@Nullable Resource resource) {
     if (resource == null) {
       return null;
@@ -74,7 +73,7 @@ public final class ModificationDate {
     ValueMap resourceProperties = resource.getValueMap();
 
     // get the cq:lastModified property from the resource (used in jcr:content nodes of cq pages)
-    Date cqModified = resourceProperties != null ? resourceProperties.get(NameConstants.PN_PAGE_LAST_MOD, Date.class) : null;
+    Date cqModified = resourceProperties.get(NameConstants.PN_PAGE_LAST_MOD, Date.class);
 
     // try to find a jcr:lastModified property that is used for binary uploads or cq paragraphs
     Date resourceModified = getResourceMetadataModificationTime(resource);

@@ -104,7 +104,7 @@ class BundleInfoImpl implements BundleInfo {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == null || !(obj instanceof BundleInfoImpl)) {
+    if (!(obj instanceof BundleInfoImpl)) {
       return false;
     }
     BundleInfoImpl other = (BundleInfoImpl)obj;

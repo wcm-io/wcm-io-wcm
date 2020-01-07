@@ -64,7 +64,7 @@ public final class ColumnView {
   private ResourceResolver resourceResolver;
 
   private Resource currentResource;
-  private List<Column> columns = new ArrayList<>();
+  private final List<Column> columns = new ArrayList<>();
 
   @PostConstruct
   @SuppressWarnings("null")

@@ -154,9 +154,11 @@ class SlingFolderVirtualPage implements Page {
   }
 
   @Override
-  @SuppressWarnings("null")
   public Page getParent() {
     Resource parentResource = resource.getParent();
+    if (parentResource == null) {
+      return null;
+    }
     return parentResource.adaptTo(Page.class);
   }
 

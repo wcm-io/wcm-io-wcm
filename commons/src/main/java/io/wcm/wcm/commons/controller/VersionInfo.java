@@ -31,10 +31,8 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.osgi.annotation.versioning.ProviderType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,8 +63,6 @@ public final class VersionInfo {
   private BundleInfoService bundleInfoService;
   @AemObject
   private Page currentPage;
-  @SlingObject
-  private ResourceResolver resourceResolver;
 
   private Collection<BundleInfo> bundles;
 
@@ -118,7 +114,8 @@ public final class VersionInfo {
             return Pattern.compile(regExString);
           }
           catch (PatternSyntaxException ex) {
-            log.warn("Invalid pattern for version info filtering: " + regex + " in " + currentPage.getPath(), ex);
+            log.warn("Invalid pattern for version info filtering: {} in {}",
+                regex, currentPage.getPath(), ex);
             return null;
           }
         })

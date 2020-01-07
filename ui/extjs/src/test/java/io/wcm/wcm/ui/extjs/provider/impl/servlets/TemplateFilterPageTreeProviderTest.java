@@ -28,11 +28,13 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
 import org.apache.sling.testing.mock.jcr.MockJcr;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -153,8 +155,12 @@ class TemplateFilterPageTreeProviderTest {
     List<String> resultPaths = ImmutableList.copyOf(paths);
     List<Node> resultNodes = Lists.transform(resultPaths, new Function<String, Node>() {
       @Override
-      public Node apply(@Nullable String path) {
-        return context.resourceResolver().getResource(path).adaptTo(Node.class);
+      public @Nullable Node apply(@NotNull String path) {
+        Resource resource = context.resourceResolver().getResource(path);
+        if (resource == null) {
+          return null;
+        }
+        return resource.adaptTo(Node.class);
       }
     });
     MockJcr.setQueryResult(context.resourceResolver().adaptTo(Session.class), resultNodes);

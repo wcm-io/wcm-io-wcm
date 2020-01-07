@@ -176,7 +176,7 @@ public final class CacheHeader {
         isModified = lastModificationDate.getTime() - DateUtils.MILLIS_PER_SECOND > clientModificationDate.getTime();
       }
       catch (ParseException ex) {
-        log.warn("Failed to parse value '" + ifModifiedSince + "' of If-Modified-Since header.", ex);
+        log.warn("Failed to parse value '{}' of If-Modified-Since header.", ifModifiedSince, ex);
       }
     }
 
