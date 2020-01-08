@@ -49,6 +49,7 @@ import io.wcm.wcm.ui.extjs.provider.impl.util.PredicatePageFilter;
  * Common functionality for {@link AbstractPageListProvider} and {@link AbstractPageTreeProvider}.
  */
 @ConsumerType
+@SuppressWarnings("deprecation")
 public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
   private static final long serialVersionUID = 1L;
 
@@ -100,6 +101,7 @@ public abstract class AbstractPageProvider extends SlingSafeMethodsServlet {
    * @return JSON array
    * @throws JSONException JSON exception
    */
+  @SuppressWarnings("javadoc")
   protected abstract JSONArray getJsonContent(Resource rootResource, PageFilter pageFilter) throws JSONException;
 
   /**

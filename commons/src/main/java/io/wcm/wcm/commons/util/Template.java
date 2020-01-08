@@ -114,7 +114,7 @@ public final class Template {
    * @param templates Templates
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
-  public static TemplatePathInfo forTemplatePath(@NotNull String templatePath, @NotNull TemplatePathInfo @NotNull... templates) {
+  public static @Nullable TemplatePathInfo forTemplatePath(@NotNull String templatePath, @NotNull TemplatePathInfo @NotNull... templates) {
     if (templatePath == null || templates == null || templates.length == 0) {
       return null;
     }
@@ -134,7 +134,7 @@ public final class Template {
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
   @SafeVarargs
-  public static <E extends Enum<E> & TemplatePathInfo> TemplatePathInfo forTemplatePath(@NotNull String templatePath,
+  public static @Nullable <E extends Enum<E> & TemplatePathInfo> TemplatePathInfo forTemplatePath(@NotNull String templatePath,
       @NotNull Class<E> @NotNull... templateEnums) {
     if (templatePath == null || templateEnums == null) {
       return null;
@@ -155,11 +155,14 @@ public final class Template {
    * @param templates Templates
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
-  public static TemplatePathInfo forPage(@NotNull Page page, @NotNull TemplatePathInfo @NotNull... templates) {
+  public static @Nullable TemplatePathInfo forPage(@NotNull Page page, @NotNull TemplatePathInfo @NotNull... templates) {
     if (page == null || templates == null) {
       return null;
     }
     String templatePath = page.getProperties().get(NameConstants.PN_TEMPLATE, String.class);
+    if (templatePath == null) {
+      return null;
+    }
     return forTemplatePath(templatePath, templates);
   }
 
@@ -171,11 +174,14 @@ public final class Template {
    * @return The {@link TemplatePathInfo} instance or null for unknown template paths
    */
   @SafeVarargs
-  public static <E extends Enum<E> & TemplatePathInfo> TemplatePathInfo forPage(@NotNull Page page, @NotNull Class<E> @NotNull... templateEnums) {
+  public static @Nullable <E extends Enum<E> & TemplatePathInfo> TemplatePathInfo forPage(@NotNull Page page, @NotNull Class<E> @NotNull... templateEnums) {
     if (page == null || templateEnums == null) {
       return null;
     }
     String templatePath = page.getProperties().get(NameConstants.PN_TEMPLATE, String.class);
+    if (templatePath == null) {
+      return null;
+    }
     return forTemplatePath(templatePath, templateEnums);
   }
 

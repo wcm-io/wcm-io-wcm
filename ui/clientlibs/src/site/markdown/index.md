@@ -14,9 +14,10 @@ Extensions for AEM HTML client libraries.
 
 ### AEM Version Support Matrix
 
-|WCM Granite UI Extensions version |AEM version supported
-|----------------------------------|----------------------
-|1.x or higher                     |AEM 6.2 and up
+|WCM Clientlibs UI Extensions version |AEM version supported
+|-------------------------------------|----------------------
+|1.1.x or higher                      |AEM 6.3+
+|1.0.x                                |AEM 6.2+
 
 
 ### Overview

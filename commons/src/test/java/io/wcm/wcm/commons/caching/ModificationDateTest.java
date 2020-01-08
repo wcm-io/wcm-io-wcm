@@ -29,10 +29,14 @@ import java.util.Date;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
+import org.apache.sling.api.resource.ValueMap;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
@@ -40,6 +44,7 @@ import com.day.cq.wcm.api.Page;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class ModificationDateTest {
 
   static final Calendar SAMPLE_CALENDAR_1 = DateUtils.toCalendar(new Date(1000000L));
@@ -53,6 +58,12 @@ class ModificationDateTest {
   private Resource resource1;
   @Mock
   private Resource resource2;
+
+  @BeforeEach
+  void setUp() {
+    when(resource1.getValueMap()).thenReturn(ValueMap.EMPTY);
+    when(resource2.getValueMap()).thenReturn(ValueMap.EMPTY);
+  }
 
   @Test
   void testGetPage() {

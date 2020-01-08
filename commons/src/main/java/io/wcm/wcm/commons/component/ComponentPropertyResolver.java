@@ -114,9 +114,8 @@ public final class ComponentPropertyResolver {
     this.resource = contextResource;
   }
 
-  @SuppressWarnings("null")
   private static boolean hasResourceType(@NotNull Resource resource) {
-    return resource.getResourceType() != null;
+    return StringUtils.isNotEmpty(resource.getResourceType());
   }
 
   private static @Nullable Resource getResourceWithResourceType(@Nullable Resource resource) {

@@ -23,6 +23,7 @@ import java.util.Locale;
 
 import javax.servlet.jsp.PageContext;
 
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
 
 import com.adobe.granite.ui.components.ExpressionResolver;
@@ -34,6 +35,13 @@ public class MockExpressionResolver implements ExpressionResolver {
   @Override
   @SuppressWarnings("null")
   public <T> T resolve(String expression, Locale locale, Class<T> expectedType, PageContext pageContext) {
+    ValueMap valueMap = ImmutableValueMap.of("value", expression);
+    return valueMap.get("value", expectedType);
+  }
+
+  @Override
+  @SuppressWarnings("null")
+  public <T> T resolve(String expression, Locale locale, Class<T> expectedType, SlingHttpServletRequest request) {
     ValueMap valueMap = ImmutableValueMap.of("value", expression);
     return valueMap.get("value", expectedType);
   }

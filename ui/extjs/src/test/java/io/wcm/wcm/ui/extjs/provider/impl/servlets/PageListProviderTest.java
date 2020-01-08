@@ -39,6 +39,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
 @ExtendWith(AemContextExtension.class)
+@SuppressWarnings("deprecation")
 class PageListProviderTest {
 
   private final AemContext context = new AemContext();

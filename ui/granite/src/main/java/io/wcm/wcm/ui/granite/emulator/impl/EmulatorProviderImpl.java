@@ -76,7 +76,7 @@ public class EmulatorProviderImpl implements EmulatorProvider {
         templatePathPatterns.add(Pattern.compile(pattern));
       }
       catch (PatternSyntaxException ex) {
-        log.warn("Ignoring invalid template path pattern: " + pattern, ex);
+        log.warn("Ignoring invalid template path pattern: {}", pattern, ex);
       }
     }
   }
