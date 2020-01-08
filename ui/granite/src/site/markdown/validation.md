@@ -1,6 +1,6 @@
 ## Granite UI validators
 
-Collection of CoralUI 3 validators that can be used in AEM 6.2 and up.
+Collection of CoralUI 3 validators.
 
 
 ### E-Mail validator
