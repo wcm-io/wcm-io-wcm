@@ -20,5 +20,5 @@
 /**
  * Miscellaneous WCM helper classes.
  */
-@org.osgi.annotation.versioning.Version("1.3")
+@org.osgi.annotation.versioning.Version("1.3.1")
 package io.wcm.wcm.commons.util;

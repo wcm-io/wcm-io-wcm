@@ -118,11 +118,14 @@ public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
    * template It uses a XPATH query and return the node iterator of results.
    * @return results node iterator
    */
-  @SuppressWarnings("null")
   private NodeIterator searchNodesByTemplate(String[] templates, String rootPath, SlingHttpServletRequest request) throws RepositoryException {
     String queryString = "/jcr:root" + ISO9075.encodePath(rootPath) + "//*"
         + "[@cq:template='" + StringUtils.join(escapeXPathQueryExpressions(templates), "' or @cq:template='") + "']";
-    QueryManager queryManager = request.getResourceResolver().adaptTo(Session.class).getWorkspace().getQueryManager();
+    Session session = request.getResourceResolver().adaptTo(Session.class);
+    if (session == null) {
+      throw new RuntimeException("No session.");
+    }
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
     @SuppressWarnings("deprecation")
     Query query = queryManager.createQuery(queryString, Query.XPATH);
     QueryResult result = query.execute();
@@ -138,7 +141,7 @@ public class TemplateFilterPageTreeProvider extends AbstractPageTreeProvider {
       escapedExpressions.add(Text.escapeIllegalXpathSearchChars(expr));
     }
 
-    return escapedExpressions.toArray(new String[escapedExpressions.size()]);
+    return escapedExpressions.toArray(new String[0]);
   }
 
   /**

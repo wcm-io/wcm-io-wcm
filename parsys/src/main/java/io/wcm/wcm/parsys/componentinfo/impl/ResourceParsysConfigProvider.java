@@ -90,7 +90,6 @@ final class ResourceParsysConfigProvider {
   /**
    * Paragraph System configuration path definition.
    */
-  @SuppressWarnings("null")
   private static class PathDef implements ParsysConfig {
 
     private final String pageComponentPath;
@@ -107,7 +106,7 @@ final class ResourceParsysConfigProvider {
      */
     PathDef(Resource pathDefResource, String pageComponentPath) {
       this.pageComponentPath = pageComponentPath;
-      ValueMap pathDefProps = pathDefResource.adaptTo(ValueMap.class);
+      ValueMap pathDefProps = pathDefResource.getValueMap();
 
       // resolve path/path pattern
       String path = pathDefProps.get(PN_PATH, String.class);

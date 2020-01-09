@@ -21,8 +21,6 @@ package io.wcm.wcm.commons.component;
 
 import static org.apache.sling.api.resource.ResourceResolver.PROPERTY_RESOURCE_TYPE;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
@@ -114,9 +112,8 @@ public final class ComponentPropertyResolver {
     this.resource = contextResource;
   }
 
-  @SuppressWarnings("null")
   private static boolean hasResourceType(@NotNull Resource resource) {
-    return resource.getResourceType() != null;
+    return StringUtils.isNotEmpty(resource.getResourceType());
   }
 
   private static @Nullable Resource getResourceWithResourceType(@Nullable Resource resource) {
@@ -325,27 +322,13 @@ public final class ComponentPropertyResolver {
   }
 
   /**
-   * Get content policy via policy manager. Please not that the signature to get policy from a resource
-   * is only available in AEM 6.3+. We keep compiling against AEM 6.2 atm, but call the method via reflection
-   * and accept that resolving the content policy only work with AEM 6.3.
+   * Get content policy via policy manager.
    * @param resource Content resource
    * @return Policy or null
    */
   private static @Nullable ContentPolicy getPolicy(@NotNull Resource resource) {
-    try {
-      // TODO: remove this ugly hack once updated to AEM 6.3 API or above
-      ContentPolicyManager policyManager = AdaptTo.notNull(resource.getResourceResolver(), ContentPolicyManager.class);
-      Method getPolicyByResource = policyManager.getClass().getMethod("getPolicy", Resource.class);
-      getPolicyByResource.setAccessible(true);
-      return (ContentPolicy)getPolicyByResource.invoke(policyManager, resource);
-    }
-    catch (NoSuchMethodException ex) {
-      // assume AEM 6.2 - content policy resolution not supported
-      return null;
-    }
-    catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-      throw new RuntimeException("Unable to get content policy.", ex);
-    }
+    ContentPolicyManager policyManager = AdaptTo.notNull(resource.getResourceResolver(), ContentPolicyManager.class);
+    return policyManager.getPolicy(resource);
   }
 
 }

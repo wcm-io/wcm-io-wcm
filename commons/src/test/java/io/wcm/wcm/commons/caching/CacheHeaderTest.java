@@ -50,6 +50,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,6 +76,7 @@ class CacheHeaderTest {
 
   @BeforeEach
   void setUp() {
+    when(resource.getValueMap()).thenReturn(ValueMap.EMPTY);
     applyLastModified(resource, SAMPLE_CALENDAR_1);
   }
 
@@ -159,7 +161,7 @@ class CacheHeaderTest {
    * Parses a expires date header value and checks against a diff to the current time with a tolerance +/- 1h, 5secs.
    * (the 1h to avoid failing tests if the daylight saving time switch is during this period)
    */
-  private final class ValidateDateHeaderAnswer implements Answer {
+  private static final class ValidateDateHeaderAnswer implements Answer {
 
     private static final long TIMESPAN_DIFF_TOLERANCE_MILLISECONDS = DateUtils.MILLIS_PER_SECOND * 5
         + DateUtils.MILLIS_PER_HOUR; // add

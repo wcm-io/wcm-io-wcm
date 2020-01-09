@@ -39,6 +39,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.ui.extjs.provider.AbstractPageProvider;
 
 @ExtendWith(AemContextExtension.class)
+@SuppressWarnings("deprecation")
 class PageTreeProviderTest {
 
   private static final String TEMPLATE = "/apps/app1/templates/template1";

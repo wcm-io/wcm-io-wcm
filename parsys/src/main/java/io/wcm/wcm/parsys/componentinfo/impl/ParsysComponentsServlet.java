@@ -33,7 +33,6 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
-import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.settings.SlingSettingsService;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -86,7 +85,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
     enabled = !RunMode.disableIfNotAuthor(slingSettings.getRunModes(), componentContext, log);
   }
 
-  @SuppressWarnings("null")
+  @SuppressWarnings({ "null", "deprecation" })
   @Override
   protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
     if (!enabled) {
@@ -110,7 +109,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
 
     response.setContentType(ContentType.JSON);
 
-    JSONArray allowedComponents = new JSONArray();
+    org.apache.sling.commons.json.JSONArray allowedComponents = new org.apache.sling.commons.json.JSONArray();
 
     String relativePath = RequestParam.get(request, RP_PATH);
     String resourceType = RequestParam.get(request, RP_RESOURCE_TYPE);
@@ -124,7 +123,7 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
         allowedComponentsRelative.add(ResourceType.makeAbsolute(allowedResourceType, resolver));
       }
 
-      allowedComponents = new JSONArray(allowedComponentsRelative);
+      allowedComponents = new org.apache.sling.commons.json.JSONArray(allowedComponentsRelative);
     }
 
     response.getWriter().write(allowedComponents.toString());

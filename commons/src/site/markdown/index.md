@@ -25,9 +25,10 @@ The WCM Commons library contains:
 
 |WCM Commons version |AEM version supported
 |--------------------|----------------------
-|1.3.x or higher     |AEM 6.2 and up
-|1.0.x - 1.2.x       |AEM 6.1 and up
-|0.x                 |AEM 6.0 and up
+|1.6.x or higher     |AEM 6.3+
+|1.3.x - 1.5.x       |AEM 6.2+
+|1.0.x - 1.2.x       |AEM 6.1+
+|0.x                 |AEM 6.0+
 
 
 ### Dependencies

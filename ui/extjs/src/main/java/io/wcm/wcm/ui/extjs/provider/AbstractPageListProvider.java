@@ -38,6 +38,7 @@ import io.wcm.wcm.ui.extjs.provider.impl.util.PageIterator;
  * Abstract implementation, some methods can be overwritten by sublcasses.
  */
 @ConsumerType
+@SuppressWarnings("deprecation")
 public abstract class AbstractPageListProvider extends AbstractPageProvider {
   private static final long serialVersionUID = 1L;
 

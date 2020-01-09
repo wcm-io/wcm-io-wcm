@@ -60,7 +60,6 @@ class ColumnViewTest {
   private RequestDispatcher requestDispatcher;
 
   @BeforeEach
-  @SuppressWarnings("null")
   void setUp() {
     context.registerService(ExpressionResolver.class, new MockExpressionResolver());
 
@@ -69,13 +68,19 @@ class ColumnViewTest {
       @Override
       public RequestDispatcher getRequestDispatcher(Resource resource, RequestDispatcherOptions options) {
         String path = resource.getValueMap().get("path", String.class);
-        Resource pathRessource = context.resourceResolver().getResource(path);
-        context.request().setAttribute(DataSource.class.getName(), new ResourceDataSource(pathRessource));
+        if (path != null) {
+          Resource pathRessource = context.resourceResolver().getResource(path);
+          context.request().setAttribute(DataSource.class.getName(), new ResourceDataSource(pathRessource));
+        }
         return requestDispatcher;
       }
       @Override
       public RequestDispatcher getRequestDispatcher(String path, RequestDispatcherOptions options) {
-        return getRequestDispatcher(context.resourceResolver().getResource(path), options);
+        Resource resource = context.resourceResolver().getResource(path);
+        if (resource == null) {
+          throw new RuntimeException("No resource: " + path);
+        }
+        return getRequestDispatcher(resource, options);
       }
     });
 
