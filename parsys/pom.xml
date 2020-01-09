@@ -135,7 +135,6 @@
         <configuration>
           <bnd>
             Sling-Initial-Content: SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/wcm/parsys
-            Sling-Model-Packages: io.wcm.wcm.parsys.controller
             Sling-Namespaces: wcmio=http://wcm.io/ns
 
             <!-- For build compatibility with Java 11 -->
