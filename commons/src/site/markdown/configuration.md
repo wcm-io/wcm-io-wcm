@@ -4,7 +4,7 @@
 
 The Component Property Resolver 
 
-The URL handler requires a service user mapping for detecting accessing component properties on publish instances.
+WCM Commons requires a service user mapping for accessing component properties in the `/apps` folder.
 
 Create a service user mapping for the factory configuration `org.apache.sling.serviceusermapping.impl.ServiceUserMapperImpl.amended` with an entry like this:
 
