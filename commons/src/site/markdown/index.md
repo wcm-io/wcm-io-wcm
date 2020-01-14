@@ -7,8 +7,9 @@ Common WCM utility and helper functions.
 
 ### Documentation
 
-* [API documentation][apidocs]
 * [Sightly components][components]
+* [System configuration][configuration]
+* [API documentation][apidocs]
 * [Changelog][changelog]
 
 
@@ -41,6 +42,7 @@ To use this module you have to deploy also:
 
 
 
-[apidocs]: apidocs/
 [components]: components.html
+[configuration]: configuration.html
+[apidocs]: apidocs/
 [changelog]: changes-report.html

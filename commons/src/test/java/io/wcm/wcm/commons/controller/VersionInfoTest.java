@@ -41,6 +41,7 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.commons.bundleinfo.BundleInfo;
 import io.wcm.wcm.commons.bundleinfo.BundleInfoService;
+import io.wcm.wcm.commons.component.impl.ComponentPropertyResolverFactoryImpl;
 import io.wcm.wcm.commons.testcontext.AppAemContext;
 
 @ExtendWith(AemContextExtension.class)
@@ -56,6 +57,7 @@ class VersionInfoTest {
   @BeforeEach
   void setUp() {
     context.registerService(BundleInfoService.class, bundleInfoService);
+    context.registerInjectActivateService(new ComponentPropertyResolverFactoryImpl());
 
     List<BundleInfo> bundles = ImmutableList.of(
         bundle("aaa.bundle1"),

@@ -24,12 +24,16 @@ import static org.apache.sling.api.resource.ResourceResolver.PROPERTY_RESOURCE_T
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.resource.ResourceUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -39,13 +43,14 @@ import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
 
 /**
  * Tries to resolve properties with or without inheritance from pages, content policies or component definitions.
  * <p>
- * The lookup takes place in:
+ * The lookup can take place in:
  * </p>
  * <ol>
  * <li>Properties of the current page (including the parent pages if inheritance is enabled)</li>
@@ -55,10 +60,11 @@ import io.wcm.sling.commons.adapter.AdaptTo;
  * </ol>
  * <p>
  * By default, only option 3 is enabled (with inheritance).
+ * Please make sure to {@link #close()} instances of this class after usage.
  * </p>
  */
 @ProviderType
-public final class ComponentPropertyResolver {
+public final class ComponentPropertyResolver implements AutoCloseable {
 
   private ComponentPropertyResolution componentPropertiesResolution = ComponentPropertyResolution.RESOLVE_INHERIT;
   private ComponentPropertyResolution pagePropertiesResolution = ComponentPropertyResolution.IGNORE;
@@ -66,30 +72,43 @@ public final class ComponentPropertyResolver {
   private final Page currentPage;
   private final Component currentComponent;
   private final Resource resource;
+  private final ResourceResolverFactory resourceResolverFactory;
+  private ResourceResolver componentsResourceResolver;
+  private boolean initComponentsResourceResolverFailed;
+
+  private static final String SERVICEUSER_SUBSERVICE = "component-properties";
+
+  private static final Logger log = LoggerFactory.getLogger(ComponentPropertyResolver.class);
 
   /**
-   * Content resource associated with a component (resource type).
+   * This constructor is for internal use only, please use {@link ComponentPropertyResolverFactory}.
    * @param page Content page
+   * @param resourceResolverFactory Resource resolver factory
    */
-  public ComponentPropertyResolver(@NotNull Page page) {
-    this(page.getContentResource());
+  public ComponentPropertyResolver(@NotNull Page page,
+      @Nullable ResourceResolverFactory resourceResolverFactory) {
+    this(page.getContentResource(), resourceResolverFactory);
   }
 
   /**
-   * Content resource associated with a component (resource type).
+   * This constructor is for internal use only, please use {@link ComponentPropertyResolverFactory}.
    * @param resource Content resource
+   * @param resourceResolverFactory Resource resolver factory
    */
-  public ComponentPropertyResolver(@NotNull Resource resource) {
-    this(resource, false);
+  public ComponentPropertyResolver(@NotNull Resource resource,
+      @Nullable ResourceResolverFactory resourceResolverFactory) {
+    this(resource, false, resourceResolverFactory);
   }
 
   /**
-   * Content resource associated with a component (resource type).
+   * This constructor is for internal use only, please use {@link ComponentPropertyResolverFactory}.
    * @param resource Content resource
    * @param ensureResourceType Ensure the given resource has a resource type.
    *          If this is not the case, try to find the closest parent resource which has a resource type.
+   * @param resourceResolverFactory Resource resolver factory
    */
-  public ComponentPropertyResolver(@NotNull Resource resource, boolean ensureResourceType) {
+  public ComponentPropertyResolver(@NotNull Resource resource, boolean ensureResourceType,
+      @Nullable ResourceResolverFactory resourceResolverFactory) {
     Resource contextResource = null;
     if (ensureResourceType) {
       // find closest parent resource that has a resource type (and not nt:unstructured)
@@ -110,6 +129,62 @@ public final class ComponentPropertyResolver {
       this.currentComponent = null;
     }
     this.resource = contextResource;
+    this.resourceResolverFactory = resourceResolverFactory;
+  }
+
+  /**
+   * This constructor is for internal use only, please use {@link ComponentPropertyResolverFactory}.
+   * @param wcmComponentContext WCM component context
+   * @param resourceResolverFactory Resource resolver factory
+   */
+  public ComponentPropertyResolver(@NotNull ComponentContext wcmComponentContext,
+      @Nullable ResourceResolverFactory resourceResolverFactory) {
+    this.currentPage = wcmComponentContext.getPage();
+    this.currentComponent = wcmComponentContext.getComponent();
+    this.resource = wcmComponentContext.getResource();
+    this.resourceResolverFactory = resourceResolverFactory;
+  }
+
+  /**
+   * Lookup for content resource associated with the page component (resource type).
+   * @param page Content page
+   * @deprecated Please use {@link ComponentPropertyResolverFactory}.
+   */
+  @Deprecated
+  public ComponentPropertyResolver(@NotNull Page page) {
+    this(page, null);
+  }
+
+  /**
+   * Lookup for content resource associated with a component (resource type).
+   * @param resource Content resource
+   * @deprecated Please use {@link ComponentPropertyResolverFactory}.
+   */
+  @Deprecated
+  public ComponentPropertyResolver(@NotNull Resource resource) {
+    this(resource, null);
+  }
+
+  /**
+   * Lookup for content resource associated with a component (resource type).
+   * @param resource Content resource
+   * @param ensureResourceType Ensure the given resource has a resource type.
+   *          If this is not the case, try to find the closest parent resource which has a resource type.
+   * @deprecated Please use {@link ComponentPropertyResolverFactory}.
+   */
+  @Deprecated
+  public ComponentPropertyResolver(@NotNull Resource resource, boolean ensureResourceType) {
+    this(resource, ensureResourceType, null);
+  }
+
+  /**
+   * Lookup with content resource associated with a component (resource type).
+   * @param wcmComponentContext WCM component context
+   * @deprecated Please use {@link ComponentPropertyResolverFactory}.
+   */
+  @Deprecated
+  public ComponentPropertyResolver(@NotNull ComponentContext wcmComponentContext) {
+    this(wcmComponentContext, null);
   }
 
   private static boolean hasResourceType(@NotNull Resource resource) {
@@ -125,16 +200,6 @@ public final class ComponentPropertyResolver {
       return resource;
     }
     return getResourceWithResourceType(resource.getParent());
-  }
-
-  /**
-   * Content resource associated with a component (resource type).
-   * @param wcmComponentContext WCM component context
-   */
-  public ComponentPropertyResolver(@NotNull ComponentContext wcmComponentContext) {
-    this.currentPage = wcmComponentContext.getPage();
-    this.currentComponent = wcmComponentContext.getComponent();
-    this.resource = wcmComponentContext.getResource();
   }
 
   /**
@@ -222,7 +287,7 @@ public final class ComponentPropertyResolver {
       // because the map behind the getProperties() method does not support child resource access
       String childResourcePath = StringUtils.substringBeforeLast(name, "/");
       String localPropertyName = StringUtils.substringAfterLast(name, "/");
-      Resource childResource = component.getLocalResource(childResourcePath);
+      Resource childResource = getLocalComponentResource(component, childResourcePath);
       result = ResourceUtil.getValueMap(childResource).get(localPropertyName, type);
     }
     else {
@@ -278,7 +343,7 @@ public final class ComponentPropertyResolver {
     if (componentPropertiesResolution == ComponentPropertyResolution.IGNORE || component == null) {
       return null;
     }
-    Collection<Resource> result = getResources(component.getLocalResource(name));
+    Collection<Resource> result = getResources(getLocalComponentResource(component, name));
     if (result == null && componentPropertiesResolution == ComponentPropertyResolution.RESOLVE_INHERIT) {
       result = getComponentResources(component.getSuperComponent(), name);
     }
@@ -329,6 +394,46 @@ public final class ComponentPropertyResolver {
   private static @Nullable ContentPolicy getPolicy(@NotNull Resource resource) {
     ContentPolicyManager policyManager = AdaptTo.notNull(resource.getResourceResolver(), ContentPolicyManager.class);
     return policyManager.getPolicy(resource);
+  }
+
+  /**
+   * Get local child resource for component, with a special handling for publish environments where
+   * the local child resources for components below /apps are not accessible for everyone.
+   * @param component Component
+   * @param childResourcePath Child resource path
+   * @return Resource or null
+   */
+  private @Nullable Resource getLocalComponentResource(@NotNull Component component,
+      @NotNull String childResourcePath) {
+    if (componentsResourceResolver == null
+        && resourceResolverFactory != null
+        && !initComponentsResourceResolverFailed) {
+      try {
+        componentsResourceResolver = resourceResolverFactory.getServiceResourceResolver(
+            ImmutableMap.of(ResourceResolverFactory.SUBSERVICE, SERVICEUSER_SUBSERVICE));
+      }
+      catch (LoginException ex) {
+        initComponentsResourceResolverFailed = true;
+        if (log.isDebugEnabled()) {
+          log.debug("Unable to get resource resolver for accessing local component resource, "
+              + "please make sure to grant access to sytstem user 'sling-scripting' for "
+              + "bundle 'io.wcm.wcm.commons', subservice '{}'.", SERVICEUSER_SUBSERVICE, ex);
+        }
+      }
+    }
+    if (componentsResourceResolver != null) {
+      String resourcePath = component.getPath() + "/" + childResourcePath;
+      return componentsResourceResolver.getResource(resourcePath);
+    }
+    // fallback implementation for previous behavior - this will usually not work in publish instances
+    return component.getLocalResource(childResourcePath);
+  }
+
+  @Override
+  public void close() {
+    if (componentsResourceResolver != null) {
+      componentsResourceResolver.close();
+    }
   }
 
 }
