@@ -63,6 +63,7 @@ import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.sling.models.annotations.AemObject;
 import io.wcm.wcm.commons.component.ComponentPropertyResolution;
 import io.wcm.wcm.commons.component.ComponentPropertyResolver;
+import io.wcm.wcm.commons.component.ComponentPropertyResolverFactory;
 import io.wcm.wcm.parsys.ParsysItem;
 
 /**
@@ -102,6 +103,8 @@ public final class Parsys {
   private ComponentContext componentContext;
   @OSGiService
   private ModelFactory modelFactory;
+  @OSGiService
+  private ComponentPropertyResolverFactory componentPropertyResolverFactory;
   private ComponentManager componentManager;
 
   private boolean generateDefaultCss;
@@ -118,19 +121,20 @@ public final class Parsys {
   @PostConstruct
   private void activate() {
     // read customize properties from parsys component
-    ComponentPropertyResolver componentPropertyResolver = new ComponentPropertyResolver(componentContext)
-        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
-    generateDefaultCss = componentPropertyResolver.get(PN_PARSYS_GENERATE_DEAFULT_CSS, true);
-    paragraphCss = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_CSS, String.class);
-    newAreaCss = componentPropertyResolver.get(PN_PARSYS_NEWAREA_CSS, String.class);
-    paragraphElementName = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_ELEMENT, String.class);
-    wrapperElementName = componentPropertyResolver.get(PN_PARSYS_WRAPPER_ELEMENT, String.class);
-    wrapperCss = componentPropertyResolver.get(PN_PARSYS_WRAPPER_CSS, String.class);
-    paragraphValidate = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_VALIDATE, false);
+    try (ComponentPropertyResolver componentPropertyResolver = componentPropertyResolverFactory.get(componentContext)
+        .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)) {
+      generateDefaultCss = componentPropertyResolver.get(PN_PARSYS_GENERATE_DEAFULT_CSS, true);
+      paragraphCss = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_CSS, String.class);
+      newAreaCss = componentPropertyResolver.get(PN_PARSYS_NEWAREA_CSS, String.class);
+      paragraphElementName = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_ELEMENT, String.class);
+      wrapperElementName = componentPropertyResolver.get(PN_PARSYS_WRAPPER_ELEMENT, String.class);
+      wrapperCss = componentPropertyResolver.get(PN_PARSYS_WRAPPER_CSS, String.class);
+      paragraphValidate = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_VALIDATE, false);
 
-    // check decoration
-    String[] paragraphNoDecorationWcmMode = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE, String[].class);
-    paragraphDecoration = getDecoration(paragraphNoDecorationWcmMode, wcmMode);
+      // check decoration
+      String[] paragraphNoDecorationWcmMode = componentPropertyResolver.get(PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE, String[].class);
+      paragraphDecoration = getDecoration(paragraphNoDecorationWcmMode, wcmMode);
+    }
 
     // prepare paragraph items
     items = new ArrayList<>();
