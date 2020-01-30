@@ -23,7 +23,7 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
-    <release version="1.6.0" date="not released">
+    <release version="1.6.0" date="2020-01-30">
       <action type="update" dev="sseifert"><![CDATA[
         ComponentPropertyResolver: Introduce ComponentPropertyResolverFactory to ensure local component resources can be resolved properly on publish instances.<br/>
         <strong>New service user mapping required</strong>, see <a href="configuration.html">System configuration</a>.
