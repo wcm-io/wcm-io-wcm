@@ -27,6 +27,9 @@
       <action type="update" dev="sseifert">
         Switch to AEM 6.3 as minimum version.
       </action>
+      <action type="fix" dev="sseifert">
+        Fix problem with old pathbrowser field and fallback root path in AEM 6.3 &lt; SP3.
+      </action>
     </release>
 
     <release version="1.5.2" date="2019-12-16">

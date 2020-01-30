@@ -160,8 +160,8 @@ class RootPathResolverTest {
     assertEquals(expectedPath, underTest.get());
     Map<String, Object> expectedProps = new HashMap<>();
     expectedProps.put(PN_ROOT_PATH, expectedPath);
-    expectedProps.put(PN_APPEND_PATH, null);
-    expectedProps.put(PN_FALLBACK_PATH, null);
+    expectedProps.put(PN_APPEND_PATH, "");
+    expectedProps.put(PN_FALLBACK_PATH, "");
     assertEquals(expectedProps, underTest.getOverrideProperties());
   }
 

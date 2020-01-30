@@ -44,6 +44,7 @@ import io.wcm.wcm.commons.bundleinfo.BundleInfo;
 import io.wcm.wcm.commons.bundleinfo.BundleInfoService;
 import io.wcm.wcm.commons.component.ComponentPropertyResolution;
 import io.wcm.wcm.commons.component.ComponentPropertyResolver;
+import io.wcm.wcm.commons.component.ComponentPropertyResolverFactory;
 
 /**
  * Provides access to a list of OSGi bundles present in the system.
@@ -61,6 +62,8 @@ public final class VersionInfo {
 
   @OSGiService
   private BundleInfoService bundleInfoService;
+  @OSGiService
+  private ComponentPropertyResolverFactory componentPropertyResolverFactory;
   @AemObject
   private Page currentPage;
 
@@ -95,10 +98,12 @@ public final class VersionInfo {
   }
 
   private Stream<String> getFilterRegex() {
-    ComponentPropertyResolver componentPropertyResolver = new ComponentPropertyResolver(currentPage)
+    String[] regex;
+    try (ComponentPropertyResolver componentPropertyResolver = componentPropertyResolverFactory.get(currentPage)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE)
-        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE);
-    String[] regex = componentPropertyResolver.get(PN_FILTER_REGEX, String[].class);
+        .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE)) {
+      regex = componentPropertyResolver.get(PN_FILTER_REGEX, String[].class);
+    }
     if (regex != null) {
       return Arrays.stream(regex);
     }

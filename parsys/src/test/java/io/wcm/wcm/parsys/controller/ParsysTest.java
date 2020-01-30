@@ -56,6 +56,7 @@ import io.wcm.sling.commons.adapter.AdaptTo;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import io.wcm.wcm.commons.component.impl.ComponentPropertyResolverFactoryImpl;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 @ExtendWith(AemContextExtension.class)
@@ -79,6 +80,7 @@ class ParsysTest {
 
   @BeforeEach
   void setUp() {
+    context.registerInjectActivateService(new ComponentPropertyResolverFactoryImpl());
     context.addModelsForClasses(Parsys.class);
 
     page = context.create().page("/content/page1", "sample/templates/test1");

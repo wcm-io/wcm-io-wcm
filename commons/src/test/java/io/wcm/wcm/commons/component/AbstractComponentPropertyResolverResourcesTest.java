@@ -31,8 +31,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
@@ -41,18 +41,21 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 
 import io.wcm.testing.mock.aem.junit5.AemContext;
-import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-@ExtendWith(AemContextExtension.class)
-class ComponentPropertyResolverResourcesTest {
+abstract class AbstractComponentPropertyResolverResourcesTest {
 
-  private final AemContext context = new AemContext();
+  final AemContext context = new AemContext();
+
+  abstract ComponentPropertyResolver getComponentPropertyResolver(@NotNull Page page);
+  abstract ComponentPropertyResolver getComponentPropertyResolver(@NotNull Resource resource);
+  abstract ComponentPropertyResolver getComponentPropertyResolver(@NotNull Resource resource, boolean ensureResourceType);
+  abstract ComponentPropertyResolver getComponentPropertyResolver(@NotNull ComponentContext wcmComponentContext);
 
   @Test
   void testResourceWithoutResourceTypeWithoutPage() {
     Resource resource = context.create().resource("/content/r1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
     assertNull(underTest.getResources("node1"));
@@ -66,7 +69,7 @@ class ComponentPropertyResolverResourcesTest {
     Resource resource = context.create().resource("/content/r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource);
     assertResources(underTest.getResources("node1"), "item1", "item2");
   }
 
@@ -78,7 +81,7 @@ class ComponentPropertyResolverResourcesTest {
     Resource resource = context.create().resource("/content/r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.IGNORE);
     assertNull(underTest.getResources("node1"));
   }
@@ -94,7 +97,7 @@ class ComponentPropertyResolverResourcesTest {
     Resource resource = context.create().resource("/content/r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource);
     assertResources(underTest.getResources("node1"), "item1", "item2");
     assertResources(underTest.getResources("node2"), "item1");
   }
@@ -110,7 +113,7 @@ class ComponentPropertyResolverResourcesTest {
     Resource resource = context.create().resource("/content/r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE);
     assertNull(underTest.getResources("node1"));
     assertResources(underTest.getResources("node2"), "item1");
@@ -123,7 +126,7 @@ class ComponentPropertyResolverResourcesTest {
     context.create().resource(page, "node1/item2");
     Resource resource = context.create().resource(page, "r1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
     assertResources(underTest.getResources("node1"), "item1", "item2");
   }
@@ -137,7 +140,7 @@ class ComponentPropertyResolverResourcesTest {
     context.create().resource(page2, "node2/item1");
     Resource resource = context.create().resource(page2, "r1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
     assertResources(underTest.getResources("node1"), "item1", "item2");
     assertResources(underTest.getResources("node2"), "item1");
@@ -152,7 +155,7 @@ class ComponentPropertyResolverResourcesTest {
     context.create().resource(page2, "node2/item1");
     Resource resource = context.create().resource(page2, "r1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE);
     assertNull(underTest.get("prop1", String.class));
     assertNull(underTest.getResources("node1"));
@@ -180,7 +183,7 @@ class ComponentPropertyResolverResourcesTest {
     Resource resource = context.create().resource(page2, "r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
     assertResources(underTest.getResources("node1"), "item1", "item2");
@@ -223,7 +226,7 @@ class ComponentPropertyResolverResourcesTest {
     context.currentResource(resource);
 
     ComponentContext wcmComponentContext = WCMUtils.getComponentContext(context.request());
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(wcmComponentContext)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(wcmComponentContext)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
         .contentPolicyResolution(ComponentPropertyResolution.RESOLVE)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
@@ -248,7 +251,7 @@ class ComponentPropertyResolverResourcesTest {
     Resource resource = context.create().resource(page, "r1",
         PROPERTY_RESOURCE_TYPE, "app1/components/comp1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .contentPolicyResolution(ComponentPropertyResolution.RESOLVE);
     assertResourcesIgnoreOrder(underTest.getResources("node1"), "item1", "item2");
   }
@@ -259,7 +262,7 @@ class ComponentPropertyResolverResourcesTest {
     Resource resource = context.create().resource(page, "r1",
         PROPERTY_RESOURCE_TYPE, "app1/components/comp1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .contentPolicyResolution(ComponentPropertyResolution.RESOLVE);
     assertNull(underTest.getResources("node1"));
   }

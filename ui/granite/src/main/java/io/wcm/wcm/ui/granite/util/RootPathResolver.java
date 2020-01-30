@@ -118,8 +118,8 @@ public final class RootPathResolver {
   public Map<String, Object> getOverrideProperties() {
     Map<String, Object> props = new HashMap<>();
     props.put(PN_ROOT_PATH, get());
-    props.put(PN_APPEND_PATH, null);
-    props.put(PN_FALLBACK_PATH, null);
+    props.put(PN_APPEND_PATH, "");
+    props.put(PN_FALLBACK_PATH, "");
     return props;
   }
 

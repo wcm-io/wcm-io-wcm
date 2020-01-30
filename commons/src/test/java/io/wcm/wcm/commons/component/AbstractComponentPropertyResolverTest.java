@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.SyntheticResource;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
@@ -35,18 +35,21 @@ import com.day.cq.wcm.commons.WCMUtils;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
-import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-@ExtendWith(AemContextExtension.class)
-class ComponentPropertyResolverTest {
+abstract class AbstractComponentPropertyResolverTest {
 
-  private final AemContext context = new AemContext();
+  final AemContext context = new AemContext();
+
+  abstract ComponentPropertyResolver getComponentPropertyResolver(@NotNull Page page);
+  abstract ComponentPropertyResolver getComponentPropertyResolver(@NotNull Resource resource);
+  abstract ComponentPropertyResolver getComponentPropertyResolver(@NotNull Resource resource, boolean ensureResourceType);
+  abstract ComponentPropertyResolver getComponentPropertyResolver(@NotNull ComponentContext wcmComponentContext);
 
   @Test
   void testResourceWithoutResourceTypeWithoutPage() {
     Resource resource = context.create().resource("/content/r1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
     assertNull(underTest.get("prop1", String.class));
@@ -60,7 +63,7 @@ class ComponentPropertyResolverTest {
     Resource resource = context.create().resource("/content/r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource);
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals("value1", underTest.get("prop1", "def"));
   }
@@ -74,7 +77,7 @@ class ComponentPropertyResolverTest {
     Resource resource = context.create().resource("/content/r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource);
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals("value1", underTest.get("prop1", "def"));
     assertEquals("value11", underTest.get("child1/prop11", String.class));
@@ -91,7 +94,7 @@ class ComponentPropertyResolverTest {
         JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_UNSTRUCTURED);
     Resource subresource2 = context.create().resource(subresource1, "subresource2");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(subresource2, true);
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(subresource2, true);
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals("value1", underTest.get("prop1", "def"));
   }
@@ -103,7 +106,7 @@ class ComponentPropertyResolverTest {
     Resource resource = context.create().resource("/content/r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.IGNORE);
     assertNull(underTest.get("prop1", String.class));
     assertEquals("def", underTest.get("prop1", "def"));
@@ -119,7 +122,7 @@ class ComponentPropertyResolverTest {
     Resource resource = context.create().resource("/content/r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource);
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals("value1", underTest.get("prop1", "def"));
     assertEquals("value2", underTest.get("prop2", String.class));
@@ -136,7 +139,7 @@ class ComponentPropertyResolverTest {
     Resource resource = context.create().resource("/content/r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE);
     assertNull(underTest.get("prop1", String.class));
     assertEquals("def", underTest.get("prop1", "def"));
@@ -150,7 +153,7 @@ class ComponentPropertyResolverTest {
         "prop1", "value1");
     Resource resource = context.create().resource(page, "r1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals("value1", underTest.get("prop1", "def"));
@@ -164,7 +167,7 @@ class ComponentPropertyResolverTest {
         "prop2", "value2");
     Resource resource = context.create().resource(page2, "r1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals("value1", underTest.get("prop1", "def"));
@@ -180,7 +183,7 @@ class ComponentPropertyResolverTest {
         "prop2", "value2");
     Resource resource = context.create().resource(page2, "r1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE);
     assertNull(underTest.get("prop1", String.class));
     assertEquals("def", underTest.get("prop1", "def"));
@@ -204,7 +207,7 @@ class ComponentPropertyResolverTest {
     Resource resource = context.create().resource(page2, "r1",
         PROPERTY_RESOURCE_TYPE, component.getPath());
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
     assertEquals("value1", underTest.get("prop1", String.class));
@@ -245,7 +248,7 @@ class ComponentPropertyResolverTest {
     context.currentResource(resource);
 
     ComponentContext wcmComponentContext = WCMUtils.getComponentContext(context.request());
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(wcmComponentContext)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(wcmComponentContext)
         .pagePropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT)
         .contentPolicyResolution(ComponentPropertyResolution.RESOLVE)
         .componentPropertiesResolution(ComponentPropertyResolution.RESOLVE_INHERIT);
@@ -275,7 +278,7 @@ class ComponentPropertyResolverTest {
     Resource resource = context.create().resource(page, "r1",
         PROPERTY_RESOURCE_TYPE, "app1/components/comp1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .contentPolicyResolution(ComponentPropertyResolution.RESOLVE);
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals("value1", underTest.get("prop1", "def"));
@@ -287,7 +290,7 @@ class ComponentPropertyResolverTest {
     Resource resource = context.create().resource(page, "r1",
         PROPERTY_RESOURCE_TYPE, "app1/components/comp1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .contentPolicyResolution(ComponentPropertyResolution.RESOLVE);
     assertNull(underTest.get("prop1", String.class));
     assertEquals("def", underTest.get("prop1", "def"));
@@ -302,7 +305,7 @@ class ComponentPropertyResolverTest {
     Resource resource = context.create().resource(page, "r1",
         PROPERTY_RESOURCE_TYPE, "app1/components/comp1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource)
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource)
         .contentPolicyResolution(ComponentPropertyResolution.RESOLVE);
     assertEquals("value1", underTest.get("child1/prop1", String.class));
     assertEquals("value1", underTest.get("child1/prop1", "def"));
@@ -312,7 +315,7 @@ class ComponentPropertyResolverTest {
   void testResourceWithoutResourceType() {
     Resource resource = context.create().resource("/content/r1");
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource);
     assertNull(underTest.get("prop1", String.class));
     assertEquals("def", underTest.get("prop1", "def"));
   }
@@ -321,7 +324,7 @@ class ComponentPropertyResolverTest {
   void testSyntheticResourceWithoutResourceType() {
     Resource resource = new SyntheticResource(context.resourceResolver(), "/content/r1", null);
 
-    ComponentPropertyResolver underTest = new ComponentPropertyResolver(resource);
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resource);
     assertNull(underTest.get("prop1", String.class));
     assertEquals("def", underTest.get("prop1", "def"));
   }

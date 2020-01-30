@@ -25,6 +25,9 @@
 
     <release version="1.4.0" date="not released">
       <action type="update" dev="sseifert">
+        Make use of ComponentPropertyResolverFactory to ensure component properties can be read properly on publish instances.
+      </action>
+      <action type="update" dev="sseifert">
         Switch to AEM 6.3 as minimum version.
       </action>
       <action type="fix" dev="sseifert">
