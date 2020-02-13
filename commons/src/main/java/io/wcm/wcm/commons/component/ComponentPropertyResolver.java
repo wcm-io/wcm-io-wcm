@@ -416,7 +416,7 @@ public final class ComponentPropertyResolver implements AutoCloseable {
         initComponentsResourceResolverFailed = true;
         if (log.isDebugEnabled()) {
           log.debug("Unable to get resource resolver for accessing local component resource, "
-              + "please make sure to grant access to sytstem user 'sling-scripting' for "
+              + "please make sure to grant access to system user 'sling-scripting' for "
               + "bundle 'io.wcm.wcm.commons', subservice '{}'.", SERVICEUSER_SUBSERVICE, ex);
         }
       }
