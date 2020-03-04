@@ -19,8 +19,6 @@
  */
 package io.wcm.wcm.commons.component;
 
-import static org.apache.sling.api.resource.ResourceResolver.PROPERTY_RESOURCE_TYPE;
-
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +33,7 @@ import org.osgi.annotation.versioning.ProviderType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
@@ -195,11 +194,24 @@ public final class ComponentPropertyResolver implements AutoCloseable {
     if (resource == null) {
       return null;
     }
-    String resourceType = resource.getValueMap().get(PROPERTY_RESOURCE_TYPE, String.class);
-    if (resourceType != null) {
+    if (hasRealResourceType(resource)) {
       return resource;
     }
     return getResourceWithResourceType(resource.getParent());
+  }
+
+  private static boolean hasRealResourceType(@NotNull Resource resource) {
+    String resourceType = resource.getResourceType();
+    if(resourceType==null) {
+      return false;
+    }
+
+    // ignore resource types equal to the resource's jcr:primaryType 
+    if(resourceType.equals(resource.getValueMap().get(JcrConstants.JCR_PRIMARYTYPE,String.class))) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
