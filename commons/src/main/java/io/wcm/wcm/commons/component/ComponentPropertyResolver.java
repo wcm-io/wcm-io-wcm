@@ -19,8 +19,6 @@
  */
 package io.wcm.wcm.commons.component;
 
-import static org.apache.sling.api.resource.ResourceResolver.PROPERTY_RESOURCE_TYPE;
-
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
@@ -191,15 +189,26 @@ public final class ComponentPropertyResolver implements AutoCloseable {
     return StringUtils.isNotEmpty(resource.getResourceType());
   }
 
+  @SuppressWarnings("null")
   private static @Nullable Resource getResourceWithResourceType(@Nullable Resource resource) {
     if (resource == null) {
       return null;
     }
-    String resourceType = resource.getValueMap().get(PROPERTY_RESOURCE_TYPE, String.class);
-    if (resourceType != null) {
+    String resourceType = resource.getResourceType();
+    if (resourceType != null && isPathBasedResourceType(resourceType)) {
       return resource;
     }
     return getResourceWithResourceType(resource.getParent());
+  }
+
+  /**
+   * Checks if the resource type is a path pointing to a component resource in the repository
+   * (where we can lookup properties to inherit from).
+   * @param resourceType Resource type
+   * @return true for path-based resource types
+   */
+  private static boolean isPathBasedResourceType(@NotNull String resourceType) {
+    return StringUtils.contains(resourceType, "/");
   }
 
   /**
