@@ -8,8 +8,8 @@
     "test": "jest --coverage"
   },
   "devDependencies": {
-    "jest": "24.8.0",
-    "jest-standard-reporter": "1.0.0",
+    "jest": "25.2.4",
+    "jest-standard-reporter": "1.0.4",
     "lodash": "4.17.15"
   },
   "jest": {
