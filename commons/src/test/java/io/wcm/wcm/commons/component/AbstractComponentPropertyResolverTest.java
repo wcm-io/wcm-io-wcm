@@ -69,6 +69,23 @@ abstract class AbstractComponentPropertyResolverTest {
   }
 
   @Test
+  void testResourceWithComponent_ForceResourceType() {
+    Resource component1 = context.create().resource("/apps/app1/components/comp1",
+        "prop1", "value1");
+    Resource component2 = context.create().resource("/apps/app1/components/comp2",
+        "prop1", "value2");
+    Resource resource = context.create().resource("/content/r1",
+        PROPERTY_RESOURCE_TYPE, component1.getPath());
+
+    TypeOverwritingResourceWrapper resourceWrapper = new TypeOverwritingResourceWrapper(resource,
+        component2.getPath());
+
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resourceWrapper);
+    assertEquals("value2", underTest.get("prop1", String.class));
+    assertEquals("value2", underTest.get("prop1", "def"));
+  }
+
+  @Test
   void testResourceWithComponent_ChildResourceProperty() {
     Resource component = context.create().resource("/apps/app1/components/comp1",
         "prop1", "value1");
@@ -97,6 +114,26 @@ abstract class AbstractComponentPropertyResolverTest {
     ComponentPropertyResolver underTest = getComponentPropertyResolver(subresource2, true);
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals("value1", underTest.get("prop1", "def"));
+  }
+
+  @Test
+  void testResourceWithComponent_EnsureResourceType_ForceResourceType() {
+    Resource component1 = context.create().resource("/apps/app1/components/comp1",
+        "prop1", "value1");
+    Resource component2 = context.create().resource("/apps/app1/components/comp2",
+        "prop1", "value2");
+    Resource resource = context.create().resource("/content/r1",
+        PROPERTY_RESOURCE_TYPE, component1.getPath());
+    Resource subresource1 = context.create().resource(resource, "subresource1",
+        JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_UNSTRUCTURED);
+    Resource subresource2 = context.create().resource(subresource1, "subresource2");
+
+    TypeOverwritingResourceWrapper resourceWrapper = new TypeOverwritingResourceWrapper(subresource2,
+        component2.getPath());
+
+    ComponentPropertyResolver underTest = getComponentPropertyResolver(resourceWrapper, true);
+    assertEquals("value2", underTest.get("prop1", String.class));
+    assertEquals("value2", underTest.get("prop1", "def"));
   }
 
   @Test
