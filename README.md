@@ -8,7 +8,8 @@ Extensions for AEM authoring and AEM applications.
 Documentation: https://wcm.io/wcm/<br/>
 Issues: https://wcm-io.atlassian.net/browse/WWCM<br/>
 Wiki: https://wcm-io.atlassian.net/wiki/<br/>
-Continuous Integration: https://travis-ci.org/wcm-io/wcm-io-wcm/
+Continuous Integration: https://travis-ci.org/wcm-io/wcm-io-wcm/<br/>
+Commercial support: https://wcm.io/commercial-support.html
 
 
 ## Build from sources
