@@ -20,5 +20,5 @@
 /**
  * Sling models controller classes for paragraph system components.
  */
-@org.osgi.annotation.versioning.Version("1.2")
+@org.osgi.annotation.versioning.Version("1.3")
 package io.wcm.wcm.parsys.controller;
