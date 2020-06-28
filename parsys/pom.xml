@@ -25,13 +25,13 @@
   <parent>
     <groupId>io.wcm</groupId>
     <artifactId>io.wcm.wcm.parent</artifactId>
-    <version>1.3.5-SNAPSHOT</version>
+    <version>1.3.6</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.parsys</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.5.0</version>
   <packaging>jar</packaging>
 
   <name>WCM Parsys</name>
@@ -140,7 +140,7 @@
       <dependency>
         <groupId>io.wcm.maven</groupId>
         <artifactId>io.wcm.maven.aem-dependencies</artifactId>
-        <version>6.3.3.0001-SNAPSHOT</version>
+        <version>6.3.3.0001</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
