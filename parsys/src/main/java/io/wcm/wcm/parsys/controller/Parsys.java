@@ -29,17 +29,22 @@ import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
@@ -48,11 +53,16 @@ import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.export.json.SlingModelFilter;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.components.ComponentManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableMap;
 
 import io.wcm.sling.commons.adapter.AdaptTo;
@@ -68,10 +78,14 @@ import io.wcm.wcm.parsys.ParsysItem;
  * but is only a simple paragraph system which allows full control about the markup generated for the child resources
  * and the new area.
  */
-@Model(adaptables = SlingHttpServletRequest.class)
+@Model(adaptables = SlingHttpServletRequest.class,
+    adapters = { Parsys.class, ContainerExporter.class, ComponentExporter.class },
+    resourceType = Parsys.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 @ProviderType
-public final class Parsys {
+public final class Parsys implements ContainerExporter {
 
+  static final String RESOURCE_TYPE = "wcm-io/wcm/parsys/components/parsys";
   static final String RA_PARSYS_PARENT_RESOURCE = "parsysParentResource";
   static final String SECTION_DEFAULT_CLASS_NAME = "section";
   static final String NEWAREA_RESOURCE_PATH = "./*";
@@ -84,9 +98,11 @@ public final class Parsys {
   /**
    * Allows to override the resource which children are iterated to display the parsys.
    */
-  @RequestAttribute(name = RA_PARSYS_PARENT_RESOURCE, optional = true)
+  @RequestAttribute(name = RA_PARSYS_PARENT_RESOURCE, injectionStrategy = InjectionStrategy.OPTIONAL)
   private Resource parsysParentResource;
 
+  @SlingObject
+  private SlingHttpServletRequest request;
   @SlingObject
   private Resource currentResource;
   @SlingObject
@@ -99,6 +115,9 @@ public final class Parsys {
   private ModelFactory modelFactory;
   @OSGiService
   private ComponentPropertyResolverFactory componentPropertyResolverFactory;
+  @OSGiService
+  private SlingModelFilter slingModelFilter;
+
   private ComponentManager componentManager;
 
   private boolean generateDefaultCss;
@@ -111,6 +130,8 @@ public final class Parsys {
   private String wrapperCss;
 
   private List<Item> items;
+  private Map<String, ? extends ComponentExporter> childModels;
+  private String[] exportedItemsOrder;
 
   @PostConstruct
   private void activate() {
@@ -276,6 +297,7 @@ public final class Parsys {
   /**
    * @return Paragraph system items
    */
+  @JsonIgnore
   public List<Item> getItems() {
     return items;
   }
@@ -283,6 +305,7 @@ public final class Parsys {
   /**
    * @return Element name for wrapper element
    */
+  @JsonIgnore
   public String getWrapperElementName() {
     return StringUtils.defaultString(wrapperElementName, DEFAULT_ELEMENT_NAME);
   }
@@ -290,6 +313,7 @@ public final class Parsys {
   /**
    * @return Wrapper element CSS
    */
+  @JsonIgnore
   public String getWrapperCss() {
     return this.wrapperCss;
   }
@@ -297,10 +321,48 @@ public final class Parsys {
   /**
    * @return True if the wrapper element should be rendered
    */
+  @JsonIgnore
   public boolean isWrapperElement() {
     return StringUtils.isNotBlank(wrapperElementName);
   }
 
+  @Override
+  public @NotNull String getExportedType() {
+    return currentResource.getResourceType();
+  }
+
+  @Override
+  public @NotNull Map<String, ? extends ComponentExporter> getExportedItems() {
+    if (childModels == null) {
+      childModels = getChildModels(ComponentExporter.class);
+    }
+    return childModels;
+  }
+
+  @Override
+  public String @NotNull [] getExportedItemsOrder() {
+    if (exportedItemsOrder == null) {
+      Map<String, ? extends ComponentExporter> models = getExportedItems();
+      if (!models.isEmpty()) {
+        exportedItemsOrder = models.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+      }
+      else {
+        exportedItemsOrder = ArrayUtils.EMPTY_STRING_ARRAY;
+      }
+    }
+    return Arrays.copyOf(exportedItemsOrder, exportedItemsOrder.length);
+  }
+
+  private <T> Map<String, T> getChildModels(@NotNull Class<T> modelClass) {
+    Map<String, T> models = new LinkedHashMap<>();
+    for (Resource child : slingModelFilter.filterChildResources(currentResource.getChildren())) {
+      T model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
+      if (model != null) {
+        models.put(child.getName(), model);
+      }
+    }
+    return models;
+  }
 
   /**
    * Paragraph system item.

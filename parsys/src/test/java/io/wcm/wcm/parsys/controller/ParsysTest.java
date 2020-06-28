@@ -35,10 +35,13 @@ import static io.wcm.wcm.parsys.controller.Parsys.NEWAREA_RESOURCE_PATH;
 import static io.wcm.wcm.parsys.controller.Parsys.NEWAREA_STYLE;
 import static io.wcm.wcm.parsys.controller.Parsys.RA_PARSYS_PARENT_RESOURCE;
 import static io.wcm.wcm.parsys.controller.Parsys.SECTION_DEFAULT_CLASS_NAME;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -47,7 +50,12 @@ import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
+import com.adobe.cq.export.json.SlingModelFilter;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
@@ -60,6 +68,7 @@ import io.wcm.wcm.commons.component.impl.ComponentPropertyResolverFactoryImpl;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 @ExtendWith(AemContextExtension.class)
+@ExtendWith(MockitoExtension.class)
 class ParsysTest {
 
   private static final String RESOURCE_TYPE_SAMPLE = "sample/components/parsys";
@@ -78,9 +87,21 @@ class ParsysTest {
   private Resource par1Resource;
   private Resource par2Resource;
 
+  @Mock(lenient = true)
+  private SlingModelFilter slingModelFilter;
+
   @BeforeEach
   void setUp() {
     context.registerInjectActivateService(new ComponentPropertyResolverFactoryImpl());
+
+    context.registerService(SlingModelFilter.class, slingModelFilter);
+    when(slingModelFilter.filterChildResources(any())).then(new Answer<Iterable<Resource>>() {
+      @Override
+      public Iterable<Resource> answer(InvocationOnMock invocation) throws Throwable {
+        return invocation.getArgument(0);
+      }
+    });
+
     context.addModelsForClasses(Parsys.class);
 
     page = context.create().page("/content/page1", "sample/templates/test1");
@@ -133,6 +154,9 @@ class ParsysTest {
     assertEquals(NEWAREA_CSS_CLASS_NAME + " " + SECTION_DEFAULT_CLASS_NAME, item3.getCssClassName());
     assertEquals(DEFAULT_ELEMENT_NAME, item3.getElementName());
     assertTrue(item3.isNewArea());
+
+    assertEquals(RESOURCE_TYPE_SAMPLE, parsys.getExportedType());
+    assertArrayEquals(new String[] { par1Resource.getName(), par2Resource.getName() }, parsys.getExportedItemsOrder());
   }
 
   @Test

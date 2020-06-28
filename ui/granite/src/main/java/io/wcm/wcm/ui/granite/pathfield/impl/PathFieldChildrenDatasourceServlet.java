@@ -21,12 +21,15 @@ package io.wcm.wcm.ui.granite.pathfield.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -45,7 +48,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.servlets.annotations.SlingServletResourceTypes;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
@@ -131,15 +133,11 @@ public class PathFieldChildrenDatasourceServlet extends SlingSafeMethodsServlet 
       final Integer offset = ex.get(cfg.get("offset", String.class), Integer.class);
       final Integer limit = ex.get(cfg.get("limit", String.class), Integer.class);
       final String itemResourceType = cfg.get("itemResourceType", String.class);
-      final String filter = ex.getString(cfg.get("filter", "hierarchyNotFile"));
+      final String[] filter = ex.get(cfg.get("filter", "hierarchyNotFile"), String[].class);
 
       final Collection<Predicate> predicates = new ArrayList<>();
       predicates.add(new HideInternalContentPathsPredicate());
-
-      Predicate filterPredicate = toPredicate(filter);
-      if (filterPredicate != null) {
-        predicates.add(filterPredicate);
-      }
+      predicates.addAll(toPredicates(filter));
 
       if (searchName != null) {
         final Pattern searchNamePattern = Pattern.compile(Pattern.quote(searchName), Pattern.CASE_INSENSITIVE);
@@ -181,15 +179,24 @@ public class PathFieldChildrenDatasourceServlet extends SlingSafeMethodsServlet 
     request.setAttribute(DataSource.class.getName(), ds);
   }
 
-  private @Nullable Predicate toPredicate(@NotNull String filter) {
-    Predicate predicate = predicateProvider.getPredicate(filter);
-    if (predicate != null) {
-      return predicate;
+  private List<Predicate> toPredicates(@NotNull String[] filter) {
+    if (filter == null) {
+      return Collections.emptyList();
     }
-    else {
-      log.warn("Unable to find predicate implementation for filter: {}", filter);
-      return null;
-    }
+    return Arrays.asList(filter).stream()
+        .filter(Objects::nonNull)
+        .map(item -> {
+          Predicate predicate = predicateProvider.getPredicate(item);
+          if (predicate != null) {
+            return predicate;
+          }
+          else {
+            log.warn("Unable to find predicate implementation for filter: {}", item);
+            return null;
+          }
+        })
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
   }
 
   private static Transformer createTransformer(final String itemResourceType, final Predicate predicate) {
