@@ -31,7 +31,7 @@
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.parent</artifactId>
-  <version>1.3.7-SNAPSHOT</version>
+  <version>1.3.6</version>
   <packaging>pom</packaging>
 
   <name>WCM Extensions</name>
