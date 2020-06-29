@@ -133,7 +133,7 @@ public class PathFieldChildrenDatasourceServlet extends SlingSafeMethodsServlet 
       final Integer offset = ex.get(cfg.get("offset", String.class), Integer.class);
       final Integer limit = ex.get(cfg.get("limit", String.class), Integer.class);
       final String itemResourceType = cfg.get("itemResourceType", String.class);
-      final String[] filter = ex.get(cfg.get("filter", "hierarchyNotFile"), String[].class);
+      final String[] filter = new String[] { ex.get(cfg.get("filter", "hierarchyNotFile"), String.class) };
 
       final Collection<Predicate> predicates = new ArrayList<>();
       predicates.add(new HideInternalContentPathsPredicate());
