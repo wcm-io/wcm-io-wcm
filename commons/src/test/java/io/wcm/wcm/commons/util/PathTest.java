@@ -262,4 +262,13 @@ class PathTest {
     assertFalse(Path.isExperienceFragmentPath("/content/other-path"));
   }
 
+  @Test
+  void testIsEditableTemplatePath() {
+    assertTrue(Path.isEditableTemplatePath("/conf/app1/settings/wcm/templates/template1/structure"));
+    assertTrue(Path.isEditableTemplatePath("/conf/app1/subapp2/settings/wcm/templates/template1/initial/jcr:content/somepath"));
+
+    assertFalse(Path.isEditableTemplatePath("/conf/app1/settings/wcm/templates"));
+    assertFalse(Path.isEditableTemplatePath("/content/other-path"));
+  }
+
 }
