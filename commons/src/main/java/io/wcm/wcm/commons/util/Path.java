@@ -61,6 +61,7 @@ public final class Path {
   private static final Pattern LAUNCHES_PATTERN = Pattern.compile(LAUNCHES_PATH + "/\\d+/\\d+/\\d+/[^/]+(/.*)?");
 
   private static final Pattern EXPERIENCE_FRAGMENTS_PATTERN = Pattern.compile("^" + EXPERIENCE_FRAGMENTS_PATH + "/.*$");
+  private static final Pattern EDITABLE_TEMPLATE_PATTERN = Pattern.compile("^/conf/.*/settings/wcm/templates/.*$");
 
   private Path() {
     // static methods only
@@ -192,6 +193,14 @@ public final class Path {
    */
   public static boolean isExperienceFragmentPath(@NotNull String path) {
     return EXPERIENCE_FRAGMENTS_PATTERN.matcher(path).matches();
+  }
+
+  /**
+   * @param path Content path
+   * @return true if content path is inside an editable template definition.
+   */
+  public static boolean isEditableTemplatePath(@NotNull String path) {
+    return EDITABLE_TEMPLATE_PATTERN.matcher(path).matches();
   }
 
 }
