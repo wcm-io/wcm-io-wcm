@@ -25,13 +25,13 @@
   <parent>
     <groupId>io.wcm</groupId>
     <artifactId>io.wcm.wcm.parent</artifactId>
-    <version>1.3.6</version>
+    <version>1.3.7-SNAPSHOT</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.commons</artifactId>
-  <version>1.7.0</version>
+  <version>1.7.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>WCM Commons</name>
