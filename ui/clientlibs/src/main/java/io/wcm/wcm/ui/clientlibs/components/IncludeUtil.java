@@ -73,7 +73,7 @@ final class IncludeUtil {
   @SuppressWarnings("null")
   public static @NotNull List<String> getLibraryUrls(@NotNull HtmlLibraryManager htmlLibraryManager,
       @NotNull ResourceResolver resourceResolver, @NotNull String[] categoryArray, @NotNull LibraryType libraryType) {
-    return htmlLibraryManager.getLibraries(categoryArray, libraryType, false, false).stream()
+    return htmlLibraryManager.getLibraries(categoryArray, libraryType, false, true).stream()
         .map(library -> getLibraryUrl(resourceResolver, library, libraryType, htmlLibraryManager.isMinifyEnabled()))
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
