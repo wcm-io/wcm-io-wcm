@@ -31,7 +31,7 @@
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.ui.clientlibs</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.2</version>
   <packaging>jar</packaging>
 
   <name>WCM Clientlibs UI Extensions</name>
