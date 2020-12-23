@@ -207,7 +207,7 @@
           </execution>
         </executions>
         <configuration>
-          <nodeJsVersion>10.15.3</nodeJsVersion>
+          <nodeJsVersion>14.15.3</nodeJsVersion>
           <tasks>
             <npmInstallTask>
               <workingDirectory>${project.basedir}</workingDirectory>
