@@ -16,7 +16,8 @@ Extensions for AEM HTML client libraries.
 
 |WCM Clientlibs UI Extensions version |AEM version supported
 |-------------------------------------|----------------------
-|1.1.x or higher                      |AEM 6.3+
+|1.2.x or higher                      |AEM 6.4+
+|1.1.x                                |AEM 6.3+
 |1.0.x                                |AEM 6.2+
 
 
