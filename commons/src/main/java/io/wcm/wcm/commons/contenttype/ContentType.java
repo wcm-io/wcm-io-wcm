@@ -19,7 +19,8 @@
  */
 package io.wcm.wcm.commons.contenttype;
 
-import org.apache.commons.lang3.CharEncoding;
+import java.nio.charset.StandardCharsets;
+
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -36,27 +37,27 @@ public final class ContentType {
   /**
    * HTML with UTF-8
    */
-  public static final String HTML = "text/html;charset=" + CharEncoding.UTF_8;
+  public static final String HTML = "text/html;charset=" + StandardCharsets.UTF_8.name();
 
   /**
    * JSON with UTF-8
    */
-  public static final String JSON = "application/json;charset=" + CharEncoding.UTF_8;
+  public static final String JSON = "application/json;charset=" + StandardCharsets.UTF_8.name();
 
   /**
    * Plain text with UTF-8
    */
-  public static final String PLAINTEXT = "text/plain;charset=" + CharEncoding.UTF_8;
+  public static final String PLAINTEXT = "text/plain;charset=" + StandardCharsets.UTF_8.name();
 
   /**
    * CSS with UTF-8
    */
-  public static final String CSS = "text/css;charset=" + CharEncoding.UTF_8;
+  public static final String CSS = "text/css;charset=" + StandardCharsets.UTF_8.name();
 
   /**
    * JavaScript with UTF-8
    */
-  public static final String JAVASCRIPT = "text/javascript;charset=" + CharEncoding.UTF_8;
+  public static final String JAVASCRIPT = "text/javascript;charset=" + StandardCharsets.UTF_8.name();
 
   /**
    * XML (no charset, charset is defined within XML markup)
