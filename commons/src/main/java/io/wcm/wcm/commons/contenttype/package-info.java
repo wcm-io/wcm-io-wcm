@@ -20,5 +20,5 @@
 /**
  * Helper classes for content types and file extensions.
  */
-@org.osgi.annotation.versioning.Version("1.2")
+@org.osgi.annotation.versioning.Version("1.2.1")
 package io.wcm.wcm.commons.contenttype;
