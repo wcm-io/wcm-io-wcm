@@ -267,6 +267,7 @@ abstract class AbstractComponentPropertyResolverResourcesTest {
     assertNull(underTest.getResources("node1"));
   }
 
+  @SuppressWarnings("null")
   private void assertResources(Collection<Resource> resources, String... children) {
     assertNotNull(resources, "found resources");
     // compare child name using set instead of list (ignoring ordering)
@@ -283,6 +284,7 @@ abstract class AbstractComponentPropertyResolverResourcesTest {
    * Compare child resource names from content policies using set instead of list (ignoring child order)
    * until https://issues.apache.org/jira/browse/SLING-8628 is released
    */
+  @SuppressWarnings("null")
   private void assertResourcesIgnoreOrder(Collection<Resource> resources, String... children) {
     assertNotNull(resources, "found resources");
     Set<String> expected = Arrays.stream(children)

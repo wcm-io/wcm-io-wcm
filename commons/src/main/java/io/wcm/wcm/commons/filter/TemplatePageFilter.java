@@ -52,6 +52,7 @@ public final class TemplatePageFilter extends PageFilter {
    * @param includeHidden if <code>true</code> hidden pages are included.
    * @param templates The templates to be included
    */
+  @SuppressWarnings("null")
   public TemplatePageFilter(boolean includeInvalid, boolean includeHidden, @NotNull TemplatePathInfo @NotNull... templates) {
     super(includeInvalid, includeHidden);
     allowedTemplatePaths = Arrays.stream(templates)
