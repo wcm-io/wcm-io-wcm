@@ -43,6 +43,9 @@ public class PageLanguageHandler {
     // assuming ../country/language structure
     Page countryRoot = siteRootPage.getParent(2);
 
+    if(countryRoot == null)
+      return ret;
+
     for (Iterator<Page> countryRootPages = countryRoot.listChildren(); countryRootPages.hasNext(); ) {
       Page countryRootPage = countryRootPages.next();
       for (Iterator<Page> languageRootPages = countryRootPage.listChildren(); languageRootPages.hasNext(); ) {
