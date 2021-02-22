@@ -2,10 +2,12 @@ package io.wcm.wcm.utils;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+
 import io.wcm.handler.url.UrlHandler;
 import io.wcm.handler.url.ui.SiteRoot;
 import io.wcm.sling.models.annotations.AemObject;
 import io.wcm.wcm.commons.contenttype.FileExtension;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -26,7 +28,7 @@ public class PageLanguageHandler {
   private PageManager pageManager;
 
   /**
-   * @return map of all alternative language versions of the page
+   * @return map of all alternative language versions of the page (including itself)
    */
   public Map<Locale, String> getAlternativeLanguageUrls(Page page) {
     Map<Locale, String> ret = new HashMap<>();
@@ -38,7 +40,7 @@ public class PageLanguageHandler {
 
     String relativePath = StringUtils.substringAfter(page.getPath(), siteRootPage.getPath());
 
-    // /content/XYZ
+    // assuming ../country/language structure
     Page countryRoot = siteRootPage.getParent(2);
 
     for (Iterator<Page> countryRootPages = countryRoot.listChildren(); countryRootPages.hasNext(); ) {
@@ -59,6 +61,4 @@ public class PageLanguageHandler {
     }
     return ret;
   }
-
-
 }
