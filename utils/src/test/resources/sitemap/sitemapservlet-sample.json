@@ -46,6 +46,13 @@
             "jcr:primaryType": "cq:PageContent"
           }
         }
+      },
+      "fr": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+          "jcr:primaryType": "cq:PageContent",
+          "jcr:language": "fr_FR"
+        }
       }
     }
   }

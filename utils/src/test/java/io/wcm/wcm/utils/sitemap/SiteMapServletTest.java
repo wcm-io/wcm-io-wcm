@@ -135,7 +135,6 @@ class SiteMapServletTest {
     assertThat(output, hasXPath("(//ns:loc)[2]/text()", equalTo("/content/foo/en/en/about.html")).withNamespaceContext(NAMESPACE));
   }
 
-
   @Test
   public void alternativeLanguages() throws Exception {
 
@@ -154,12 +153,14 @@ class SiteMapServletTest {
     assertThat(output, hasXPath("(//xhtml:link)[1]/@hreflang", equalTo("de")).withNamespaceContext(NAMESPACE));
     assertThat(output, hasXPath("(//xhtml:link)[2]/@href", equalTo("/content/foo/en/en.html")).withNamespaceContext(NAMESPACE));
     assertThat(output, hasXPath("(//xhtml:link)[2]/@hreflang", equalTo("en")).withNamespaceContext(NAMESPACE));
+    assertThat(output, hasXPath("(//xhtml:link)[3]/@href", equalTo("/content/foo/en/fr.html")).withNamespaceContext(NAMESPACE));
+    assertThat(output, hasXPath("(//xhtml:link)[3]/@hreflang", equalTo("fr-FR")).withNamespaceContext(NAMESPACE));
 
     assertThat(output, hasXPath("(//ns:loc)[2]/text()", equalTo("/content/foo/en/en/events.html")).withNamespaceContext(NAMESPACE));
-    assertThat(output, hasXPath("(//xhtml:link)[3]/@href", equalTo("/content/foo/en/de/events.html")).withNamespaceContext(NAMESPACE));
-    assertThat(output, hasXPath("(//xhtml:link)[3]/@hreflang", equalTo("de")).withNamespaceContext(NAMESPACE));
-    assertThat(output, hasXPath("(//xhtml:link)[4]/@href", equalTo("/content/foo/en/en/events.html")).withNamespaceContext(NAMESPACE));
-    assertThat(output, hasXPath("(//xhtml:link)[4]/@hreflang", equalTo("en")).withNamespaceContext(NAMESPACE));
+    assertThat(output, hasXPath("(//xhtml:link)[4]/@href", equalTo("/content/foo/en/de/events.html")).withNamespaceContext(NAMESPACE));
+    assertThat(output, hasXPath("(//xhtml:link)[4]/@hreflang", equalTo("de")).withNamespaceContext(NAMESPACE));
+    assertThat(output, hasXPath("(//xhtml:link)[5]/@href", equalTo("/content/foo/en/en/events.html")).withNamespaceContext(NAMESPACE));
+    assertThat(output, hasXPath("(//xhtml:link)[5]/@hreflang", equalTo("en")).withNamespaceContext(NAMESPACE));
 
     assertThat(output, hasXPath("(//ns:loc)[3]/text()", equalTo("/content/foo/en/en/about.html")).withNamespaceContext(NAMESPACE));
   }

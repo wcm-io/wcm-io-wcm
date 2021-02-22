@@ -32,10 +32,11 @@ class PageLanguageHandlerTest {
   void getAlternativeLanguages_rootPage() {
     Map<Locale, String> alternativeLanguageUrls = underTest.getAlternativeLanguageUrls(context.pageManager().getPage("/content/foo/en/en"));
 
-    assertEquals(2, alternativeLanguageUrls.size());
+    assertEquals(3, alternativeLanguageUrls.size());
 
     assertEquals("/content/foo/en/en.html", alternativeLanguageUrls.get(Locale.ENGLISH));
     assertEquals("/content/foo/en/de.html", alternativeLanguageUrls.get(Locale.GERMAN));
+    assertEquals("/content/foo/en/fr.html", alternativeLanguageUrls.get(Locale.FRANCE));
   }
 
 
