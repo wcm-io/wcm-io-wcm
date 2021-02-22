@@ -48,7 +48,7 @@ import io.wcm.wcm.utils.PageLanguageHandler;
 public class SiteMapServlet extends SlingSafeMethodsServlet {
 
   private static final Namespace NAMESPACE = Namespace.getNamespace("http://www.sitemaps.org/schemas/sitemap/0.9");
-  private static final Namespace NAMESPACE_XHTML = Namespace.getNamespace("http://www.w3.org/1999/xhtml");
+  private static final Namespace NAMESPACE_XHTML = Namespace.getNamespace("xhtml", "http://www.w3.org/1999/xhtml");
 
   private SiteMapServlet.Config config;
 
@@ -68,6 +68,7 @@ public class SiteMapServlet extends SlingSafeMethodsServlet {
 
     Document xmlDocument = new Document();
     Element rootElement = new Element("urlset", NAMESPACE);
+    rootElement.addNamespaceDeclaration(NAMESPACE_XHTML);
     xmlDocument.setRootElement(rootElement);
 
     writeSiteMap(request, rootElement);
@@ -115,7 +116,7 @@ public class SiteMapServlet extends SlingSafeMethodsServlet {
       urlElement.addContent(priorityElement);
     }
     if (page.getLastModified() != null) {
-      Element lastModElement = new Element("lastMode", NAMESPACE).setText(DateUtil.getISO8601Date(page.getLastModified()));
+      Element lastModElement = new Element("lastmod", NAMESPACE).setText(DateUtil.getISO8601DateNoTime(page.getLastModified()));
       urlElement.addContent(lastModElement);
     }
     return urlElement;

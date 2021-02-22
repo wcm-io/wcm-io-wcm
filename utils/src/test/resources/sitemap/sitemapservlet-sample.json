@@ -1,0 +1,52 @@
+{
+  "foo": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent"
+    },
+    "en": {
+      "jcr:primaryType": "cq:Page",
+      "jcr:content": {
+        "jcr:primaryType": "cq:PageContent"
+      },
+      "en": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+          "jcr:primaryType": "cq:PageContent",
+          "cq:template": "/foo/template1",
+          "cq:lastModified": "2021-01-01T13:11:44.223-06:00",
+          "customExcludeProperty": false,
+          "customPriorityProperty": 0.75
+        },
+        "events": {
+          "jcr:primaryType": "cq:Page",
+          "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "cq:template": "/foo/template2",
+            "customExcludeProperty": true,
+            "customPriorityProperty": 1.0
+          }
+        },
+        "about": {
+          "jcr:primaryType": "cq:Page",
+          "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "cq:template": "/foo/template1"
+          }
+        }
+      },
+      "de": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+          "jcr:primaryType": "cq:PageContent"
+        },
+        "events": {
+          "jcr:primaryType": "cq:Page",
+          "jcr:content": {
+            "jcr:primaryType": "cq:PageContent"
+          }
+        }
+      }
+    }
+  }
+}

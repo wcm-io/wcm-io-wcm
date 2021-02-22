@@ -4,9 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Locale;
 import java.util.Map;
+import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import io.wcm.handler.url.SiteConfig;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.utils.testcontext.AppAemContext;
@@ -17,60 +20,61 @@ class PageLanguageHandlerTest {
 
   private final AemContext context = AppAemContext.newAemContext();
 
+  private PageLanguageHandler underTest;
+
+  @BeforeEach
+  public void setup() {
+    context.load().json("/sitemap/sitemapservlet-sample.json", "/content");
+    underTest = context.request().adaptTo(PageLanguageHandler.class);
+  }
 
   @Test
   void getAlternativeLanguages_rootPage() {
-    context.create().page("/content");
-    context.create().page("/content/en");
-    context.create().page("/content/en/fr");
-    context.currentPage(context.create().page("/content/en/de"));
-
-    PageLanguageHandler underTest = context.request().adaptTo(PageLanguageHandler.class);
-    Map<Locale, String> alternativeLanguageUrls = underTest.getAlternativeLanguageUrls(context.currentPage());
+    Map<Locale, String> alternativeLanguageUrls = underTest.getAlternativeLanguageUrls(context.pageManager().getPage("/content/foo/en/en"));
 
     assertEquals(2, alternativeLanguageUrls.size());
 
-    assertEquals("/content/en/fr.html", alternativeLanguageUrls.get(Locale.FRENCH));
-    assertEquals("/content/en/de.html", alternativeLanguageUrls.get(Locale.GERMAN));
+    assertEquals("/content/foo/en/en.html", alternativeLanguageUrls.get(Locale.ENGLISH));
+    assertEquals("/content/foo/en/de.html", alternativeLanguageUrls.get(Locale.GERMAN));
   }
 
 
   @Test
   void getAlternativeLanguages_nestedPage() {
-    context.create().page("/content");
-    context.create().page("/content/en");
-    context.create().page("/content/en/fr");
-    context.create().page("/content/en/fr/foo");
-    context.create().page("/content/en/fr/foo/bar");
-
-    context.create().page("/content/en/es");
-    context.create().page("/content/en/es/foo");
-
-    context.create().page("/content/en/de");
-    context.create().page("/content/en/de/foo");
-    context.currentPage(context.create().page("/content/en/de/foo/bar"));
-
-    PageLanguageHandler underTest = context.request().adaptTo(PageLanguageHandler.class);
-    Map<Locale, String> alternativeLanguageUrls = underTest.getAlternativeLanguageUrls(context.currentPage());
+    Map<Locale, String> alternativeLanguageUrls = underTest.getAlternativeLanguageUrls(context.pageManager().getPage("/content/foo/en/en/events"));
 
     assertEquals(2, alternativeLanguageUrls.size());
 
-    assertEquals("/content/en/fr/foo/bar.html", alternativeLanguageUrls.get(Locale.FRENCH));
-    assertEquals("/content/en/de/foo/bar.html", alternativeLanguageUrls.get(Locale.GERMAN));
+    assertEquals("/content/foo/en/en/events.html", alternativeLanguageUrls.get(Locale.ENGLISH));
+    assertEquals("/content/foo/en/de/events.html", alternativeLanguageUrls.get(Locale.GERMAN));
   }
 
   @Test
   void getAlternativeLanguages_noOtherPages() {
-    context.create().page("/content");
-    context.create().page("/content/en");
-    context.currentPage(context.create().page("/content/en/de"));
-
-    PageLanguageHandler underTest = context.request().adaptTo(PageLanguageHandler.class);
-    Map<Locale, String> alternativeLanguageUrls = underTest.getAlternativeLanguageUrls(context.currentPage());
+    Map<Locale, String> alternativeLanguageUrls = underTest.getAlternativeLanguageUrls(context.pageManager().getPage("/content/foo/en/en/about"));
 
     assertEquals(1, alternativeLanguageUrls.size());
 
-    assertEquals("/content/en/de.html", alternativeLanguageUrls.get(Locale.GERMAN));
+    assertEquals("/content/foo/en/en/about.html", alternativeLanguageUrls.get(Locale.ENGLISH));
+  }
+
+  @Test
+  void ensureCorrectUrlHandlerUsed() {
+    MockContextAwareConfig.writeConfiguration(context, "/content/foo/en/de", SiteConfig.class.getName(),
+        "siteUrl", "http://de.dummysite.org",
+        "siteUrlSecure", "https://de.dummysite.org",
+        "siteUrlAuthor", "https://author.dummysite.org");
+    MockContextAwareConfig.writeConfiguration(context, "/content/foo/en/en", SiteConfig.class.getName(),
+        "siteUrl", "http://en.dummysite.org",
+        "siteUrlSecure", "https://en.dummysite.org",
+        "siteUrlAuthor", "https://author.dummysite.org");
+
+    Map<Locale, String> alternativeLanguageUrls = underTest.getAlternativeLanguageUrls(context.pageManager().getPage("/content/foo/en/en/events"));
+
+    assertEquals(2, alternativeLanguageUrls.size());
+
+    assertEquals("http://en.dummysite.org/content/foo/en/en/events.html", alternativeLanguageUrls.get(Locale.ENGLISH));
+    assertEquals("http://de.dummysite.org/content/foo/en/de/events.html", alternativeLanguageUrls.get(Locale.GERMAN));
   }
 
 }
