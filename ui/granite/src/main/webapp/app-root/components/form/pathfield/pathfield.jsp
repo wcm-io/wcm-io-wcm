@@ -23,7 +23,6 @@
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="com.adobe.granite.ui.components.Config"%>
 <%@page import="com.adobe.granite.ui.components.ExpressionHelper"%>
-<%@page import="com.adobe.granite.license.ProductInfoProvider"%>
 <%@page import="org.apache.jackrabbit.util.Text"%>
 <%@page import="org.apache.sling.api.resource.Resource"%>
 <%@page import="org.apache.sling.api.resource.ResourceResolver"%>
@@ -70,13 +69,7 @@ String resourceType = GraniteUi.getExistingResourceType(resourceResolver,
     "granite/ui/components/foundation/form/pathbrowser");
 Map<String,Object> props = new HashMap<>();
 
-ProductInfoProvider productInfoProvider = sling.getService(ProductInfoProvider.class);
-Version productVersion = productInfoProvider.getProductInfo().getVersion();
-
-// only compatbile with path field from AEM 6.3 SP3 or higher AEM versions
-boolean isPathField = StringUtils.equals(resourceType, "granite/ui/components/coral/foundation/form/pathfield")
-    && productVersion.getMajor() >= 6
-    && (productVersion.getMinor() > 3 || (productVersion.getMinor() == 3 && productVersion.getMicro() >= 3));
+boolean isPathField = StringUtils.equals(resourceType, "granite/ui/components/coral/foundation/form/pathfield");
 
 // resolver root path
 RootPathResolver rootPathResolver = new RootPathResolver(cmp, slingRequest);
