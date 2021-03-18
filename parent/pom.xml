@@ -25,13 +25,13 @@
   <parent>
     <groupId>io.wcm</groupId>
     <artifactId>io.wcm.parent_toplevel</artifactId>
-    <version>1.6.2</version>
+    <version>1.6.4</version>
     <relativePath />
   </parent>
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.parent</artifactId>
-  <version>1.4.3-SNAPSHOT</version>
+  <version>1.4.4</version>
   <packaging>pom</packaging>
 
   <name>WCM Extensions</name>
@@ -70,10 +70,24 @@
 
   </dependencies>
 
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <configuration>
+            <topSiteURL>${site.deploy.url}</topSiteURL>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
   <distributionManagement>
     <site>
       <id>${site.deploy.id}</id>
-      <url>${site.deploy.url}${site.url.module.prefix}</url>
+      <url>${site.deploy.url}/${site.url.module.prefix}</url>
     </site>
   </distributionManagement>
 
