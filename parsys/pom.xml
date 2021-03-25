@@ -25,13 +25,13 @@
   <parent>
     <groupId>io.wcm</groupId>
     <artifactId>io.wcm.wcm.parent</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.4.6</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.parsys</artifactId>
-  <version>1.6.3-SNAPSHOT</version>
+  <version>1.6.4</version>
   <packaging>jar</packaging>
 
   <name>WCM Parsys</name>
