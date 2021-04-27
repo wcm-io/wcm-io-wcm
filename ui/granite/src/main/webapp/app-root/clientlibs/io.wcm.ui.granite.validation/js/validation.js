@@ -35,12 +35,17 @@
   var foundationValidator = $(window).adaptTo("foundation-registry");
 
   var getValue = function(el) {
-    return $(el).val();
+    if (el.value) {
+      return el.value;
+    }
+    else {
+      return $(el).val();
+    }
   };
 
   // predefined "email" pattern validator
   foundationValidator.register('foundation.validation.validator', {
-    selector: '[data-validation="wcmio.email"]',
+    selector: '[data-foundation-validation="wcmio.email"]',
     validate: function(el) {
       var value = getValue(el);
       var valid = value.length === 0 || pattern.email.test(value);
@@ -52,7 +57,7 @@
 
   // predefined "url" pattern validator
   foundationValidator.register('foundation.validation.validator', {
-    selector: '[data-validation="wcmio.url"]',
+    selector: '[data-foundation-validation="wcmio.url"]',
     validate: function(el) {
       var value = getValue(el);
       var valid = value.length === 0 || pattern.url.test(value);
@@ -64,7 +69,7 @@
 
   // predefined "path" pattern validator
   foundationValidator.register('foundation.validation.validator', {
-    selector: '[data-validation="wcmio.path"]',
+    selector: '[data-foundation-validation="wcmio.path"]',
     validate: function(el) {
       var value = getValue(el);
       var valid = value.length === 0 || pattern.path.test(value);
@@ -76,7 +81,7 @@
 
   // "pattern" validator with custom regex pattern and message
   foundationValidator.register('foundation.validation.validator', {
-    selector: '[data-validation="wcmio.pattern"]',
+    selector: '[data-foundation-validation="wcmio.pattern"]',
     validate: function(el) {
       el = $(el);
       var regex = el.attr("data-wcmio-pattern");

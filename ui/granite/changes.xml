@@ -24,8 +24,11 @@
   <body>
 
     <release version="1.7.6" date="not released">
+      <action type="update" dev="WWCM-17">
+        Granite UI validators: Allow to apply validation rules to pathfield component.
+      </action>
       <action type="update" dev="sseifert">
-        Register valiadtion clientlib also to category 'cq.siteadmin.admin.properties' so it's also loaded in page properties dialog.
+        Register validation clientlib also to category 'cq.siteadmin.admin.properties' so it's also loaded in page properties dialog.
       </action>
     </release>
 
