@@ -17,8 +17,7 @@ Form checkbox for boolean data.
 Enhancements over AEM version:
 
 * Store with correct Boolean datatype via explicit @TypeHint
-* Always store value to repository (true or false), even if checkbox is not checked
-* Defaults to value 'true'
+* Writes 'true' when checked
 
 
 ### Number Field
