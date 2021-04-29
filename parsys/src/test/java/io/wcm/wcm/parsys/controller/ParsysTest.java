@@ -25,6 +25,7 @@ import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_NEWAREA_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_ELEMENT;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_NODECORATION_WCMMODE;
+import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_VALIDATE;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_WRAPPER_ELEMENT;
 import static io.wcm.wcm.parsys.controller.Parsys.DEFAULT_ELEMENT_NAME;
@@ -46,7 +47,11 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import org.apache.sling.api.SlingConstants;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -65,6 +70,7 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.commons.component.impl.ComponentPropertyResolverFactoryImpl;
+import io.wcm.wcm.parsys.ParsysItem;
 import io.wcm.wcm.parsys.controller.Parsys.Item;
 
 @ExtendWith(AemContextExtension.class)
@@ -75,6 +81,8 @@ class ParsysTest {
   private static final String SUPER_RESOURCE_TYPE_SAMPLE = "sample/components/superParsys";
   private static final String COMPONENT_PATH_1 = "sample/components/comp1";
   private static final String COMPONENT_PATH_2 = "sample/components/comp2";
+  private static final String COMPONENT_REQUEST_PATH_1 = "sample/components/compRequest1";
+  private static final String COMPONENT_REQUEST_PATH_2 = "sample/components/compRequest2";
   private static final String SUPERCOMPONENT_PATH = "sample/components/super";
 
   private final AemContext context = new AemContextBuilder()
@@ -408,12 +416,9 @@ class ParsysTest {
     assertTrue(item3.isNewArea());
   }
 
-  // --- following tests can be tested (and compiled) only with profile "test-with-latest-sling-models" ---
-  //     (they require Sling Models API 1.3.0 or higher)
-  /*
   @Test
   void testParagraphValidate_DisabledMode() {
-    context.addModelsForClasses(Parsys.class, ParsysItemModel.class);
+    context.addModelsForClasses(ParsysItemModel.class);
 
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
         PN_PARSYS_PARAGRAPH_VALIDATE, true);
@@ -451,7 +456,7 @@ class ParsysTest {
 
   @Test
   void testParagraphValidate_EditMode() {
-    context.addModelsForClasses(Parsys.class, ParsysItemModel.class);
+    context.addModelsForClasses(ParsysItemModel.class);
 
     context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
         PN_PARSYS_PARAGRAPH_VALIDATE, true);
@@ -475,6 +480,31 @@ class ParsysTest {
     assertFalse(item3.isValid());
   }
 
+  @Test
+  void testParagraphValidateRequest_DisabledMode() {
+    context.addModelsForClasses(ParsysItemModel.class, ParsysItemRequestModel.class);
+
+    context.create().resource(parsysResource.getPath() + "/parRequest1",
+        "sling:resourceType", COMPONENT_REQUEST_PATH_1,
+        "valid", true);
+    context.create().resource(parsysResource.getPath() + "/parRequest2",
+        "sling:resourceType", COMPONENT_REQUEST_PATH_2,
+        "valid", false);
+
+    context.create().resource("/apps/" + RESOURCE_TYPE_SAMPLE,
+        PN_PARSYS_PARAGRAPH_VALIDATE, true);
+
+    WCMMode.DISABLED.toRequest(context.request());
+    Parsys parsys = AdaptTo.notNull(context.request(), Parsys.class);
+
+    List<Item> items = parsys.getItems();
+    assertEquals(2, items.size());
+
+    Item item1 = items.get(0);
+    assertEquals(par1Resource.getPath(), item1.getResourcePath());
+    assertTrue(item1.isValid());
+  }
+
 
   @Model(adaptables = Resource.class,
       adapters = { ParsysItemModel.class, ParsysItem.class },
@@ -490,6 +520,20 @@ class ParsysTest {
     }
 
   }
-  */
+
+  @Model(adaptables = SlingHttpServletRequest.class,
+      adapters = { ParsysItemRequestModel.class, ParsysItem.class },
+      resourceType = { COMPONENT_REQUEST_PATH_1, COMPONENT_REQUEST_PATH_2 })
+  public static class ParsysItemRequestModel implements ParsysItem {
+
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private boolean valid;
+
+    @Override
+    public boolean isValid() {
+      return valid;
+    }
+
+  }
 
 }
