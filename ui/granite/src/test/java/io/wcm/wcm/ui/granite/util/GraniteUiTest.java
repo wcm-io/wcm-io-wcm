@@ -42,6 +42,7 @@ import com.day.cq.wcm.api.PageManager;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("deprecation")
 class GraniteUiTest {
 
   private static final String CONTENT_PATH = "/content/my/path";

@@ -111,6 +111,7 @@ public final class GraniteUi {
    * @param request Request
    * @return Current content path or null
    */
+  @SuppressWarnings("deprecation")
   private static @Nullable String getContentPath(@NotNull HttpServletRequest request) {
 
     String contentPath = (String)request.getAttribute(Value.CONTENTPATH_ATTRIBUTE);

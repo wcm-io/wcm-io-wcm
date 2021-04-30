@@ -218,20 +218,27 @@ public final class Parsys implements ContainerExporter {
    * @return if the return value is empty there is no model associated with this resource, or
    *         it does not support validation via {@link ParsysItem} interface. Otherwise it contains the valid status.
    */
+  @SuppressWarnings({ "null", "unused" })
   private Optional<@NotNull Boolean> isParagraphValid(Resource resource) {
-    try {
-      // try to get model associated with the resource, and check if it implements the ParsysItem interface
-      Object model = modelFactory.getModelFromResource(resource);
-      if (model instanceof ParsysItem) {
-        return Optional.of(((ParsysItem)model).isValid());
-      }
+    // try to get model adapting from request associated with the resource implementing ParsysItem
+    ParsysItem parsysItem = modelFactory.getModelFromWrappedRequest(request, resource, ParsysItem.class);
+    if (parsysItem != null) {
+      return Optional.of(parsysItem.isValid());
     }
-    catch (ModelClassException ex) {
-      // ignore if no model was registered for this resource type
+    else {
+      try {
+        // alternatively try to get model adapting from resource, and check if it implements the ParsysItem interface
+        Object model = modelFactory.getModelFromResource(resource);
+        if (model instanceof ParsysItem) {
+          return Optional.of(((ParsysItem)model).isValid());
+        }
+      }
+      catch (ModelClassException ex) {
+        // ignore if no model was registered for this resource type
+      }
     }
     return Optional.empty();
   }
-
 
   /**
    * Get HTML tag attributes from component.
