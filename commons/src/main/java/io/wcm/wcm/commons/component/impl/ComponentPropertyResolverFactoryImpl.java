@@ -41,22 +41,22 @@ public class ComponentPropertyResolverFactoryImpl implements ComponentPropertyRe
   private ResourceResolverFactory resourceResolverFactory;
 
   @Override
-  public ComponentPropertyResolver get(@NotNull Page page) {
+  public @NotNull ComponentPropertyResolver get(@NotNull Page page) {
     return new ComponentPropertyResolver(page, resourceResolverFactory);
   }
 
   @Override
-  public ComponentPropertyResolver get(@NotNull Resource resource) {
+  public @NotNull ComponentPropertyResolver get(@NotNull Resource resource) {
     return new ComponentPropertyResolver(resource, resourceResolverFactory);
   }
 
   @Override
-  public ComponentPropertyResolver get(@NotNull Resource resource, boolean ensureResourceType) {
+  public @NotNull ComponentPropertyResolver get(@NotNull Resource resource, boolean ensureResourceType) {
     return new ComponentPropertyResolver(resource, ensureResourceType, resourceResolverFactory);
   }
 
   @Override
-  public ComponentPropertyResolver get(@NotNull ComponentContext wcmComponentContext) {
+  public @NotNull ComponentPropertyResolver get(@NotNull ComponentContext wcmComponentContext) {
     return new ComponentPropertyResolver(wcmComponentContext, resourceResolverFactory);
   }
 

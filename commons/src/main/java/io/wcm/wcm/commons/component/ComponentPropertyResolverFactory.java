@@ -38,6 +38,7 @@ public interface ComponentPropertyResolverFactory {
    * @param page Content page
    * @return Component property resolver
    */
+  @NotNull
   ComponentPropertyResolver get(@NotNull Page page);
 
   /**
@@ -45,6 +46,7 @@ public interface ComponentPropertyResolverFactory {
    * @param resource Content resource
    * @return Component property resolver
    */
+  @NotNull
   ComponentPropertyResolver get(@NotNull Resource resource);
 
   /**
@@ -54,6 +56,7 @@ public interface ComponentPropertyResolverFactory {
    *          If this is not the case, try to find the closest parent resource which has a resource type.
    * @return Component property resolver
    */
+  @NotNull
   ComponentPropertyResolver get(@NotNull Resource resource, boolean ensureResourceType);
 
   /**
@@ -61,6 +64,7 @@ public interface ComponentPropertyResolverFactory {
    * @param wcmComponentContext WCM component context
    * @return Component property resolver
    */
+  @NotNull
   ComponentPropertyResolver get(@NotNull ComponentContext wcmComponentContext);
 
 }
