@@ -24,6 +24,9 @@
   <body>
 
     <release version="1.8.2" date="not released">
+      <action type="update" dev="sseifert">
+        ComponentPropertyResolverFactory: Mark return values of get methods as @NotNull.
+      </action>
       <action type="update" dev="sseifert" issue="WTOOL-72">
         Add sling-initial-content-transform-maven-plugin to alternatively allow to deploy OSGi bundle and content as content package separately in AEMaaCS.
       </action>
