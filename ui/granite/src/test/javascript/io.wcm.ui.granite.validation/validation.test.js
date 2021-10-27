@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 // simple mocking to capture registered validators
 var validators = {};
 window.Granite = {
