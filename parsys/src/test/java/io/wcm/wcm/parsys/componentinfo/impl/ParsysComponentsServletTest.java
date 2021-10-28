@@ -41,8 +41,9 @@ import com.google.common.collect.ImmutableSortedSet;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import io.wcm.wcm.commons.util.RunMode;
+import io.wcm.testing.mock.wcmio.wcm.MockInstanceType;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
+import io.wcm.wcm.parsys.textcontext.AppAemContext;
 
 @ExtendWith(AemContextExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -53,7 +54,7 @@ class ParsysComponentsServletTest {
   private static final String LOCAL_PATH = "jcr:content/sample";
   private static final String RESOURCE_TYPE = "/sample/components/parsys";
 
-  private final AemContext context = new AemContext();
+  private final AemContext context = AppAemContext.newAemContext();
 
   @Mock
   private AllowedComponentsProvider allowedComponentsProvider;
@@ -78,7 +79,7 @@ class ParsysComponentsServletTest {
 
   @Test
   void testJsonResult() throws Exception {
-    context.runMode(RunMode.AUTHOR);
+    MockInstanceType.setAuthor(context);
     ParsysComponentsServlet underTest = new ParsysComponentsServlet();
     context.registerInjectActivateService(underTest);
 
@@ -89,7 +90,7 @@ class ParsysComponentsServletTest {
 
   @Test
   void testJsonResultNoRequestParam() throws Exception {
-    context.runMode(RunMode.AUTHOR);
+    MockInstanceType.setAuthor(context);
     ParsysComponentsServlet underTest = new ParsysComponentsServlet();
     context.registerInjectActivateService(underTest);
 
@@ -102,7 +103,7 @@ class ParsysComponentsServletTest {
 
   @Test
   void testJsonResultPublish() throws Exception {
-    context.runMode(RunMode.PUBLISH);
+    MockInstanceType.setPublish(context);
     ParsysComponentsServlet underTest = new ParsysComponentsServlet();
     context.registerInjectActivateService(underTest);
 

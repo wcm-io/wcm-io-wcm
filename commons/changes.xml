@@ -23,6 +23,14 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
+    <release version="1.9.0" date="2021-10-28">
+      <action type="add" dev="sseifert"><![CDATA[
+        Provide a new "InstanceTypeService" which allows to detect whether the code is currently running on an author or publish instance.
+        This is usually done via an OSGi configuration - but if this is not present the instance is "guessed" from other OSGi configurations, without relying on the deprecated SlingSettingsService.<br/>
+        <strong>New OSGi configuration "wcm.io Commons AEM Instance Type" required</strong>, see <a href="configuration.html">System configuration</a>.
+      ]]></action>
+    </release>
+
     <release version="1.8.2" date="2021-06-01">
       <action type="update" dev="sseifert">
         ComponentPropertyResolverFactory: Mark return values of get methods as @NotNull.
