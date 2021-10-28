@@ -29,6 +29,10 @@ import org.slf4j.Logger;
 
 /**
  * Sling run mode utility methods.
+ * <p>
+ * Most methods in this class are deprecated because <code>SlingSettingsService</code> is deprecated in recent AEM
+ * versions. The OSGi service {@link io.wcm.wcm.commons.instancetype.InstanceTypeService} can be used instead.
+ * </p>
  */
 @ProviderType
 public final class RunMode {
