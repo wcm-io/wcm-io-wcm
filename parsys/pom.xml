@@ -71,7 +71,7 @@
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.wcm.commons</artifactId>
-      <version>1.8.3-SNAPSHOT</version>
+      <version>1.9.0</version>
       <scope>compile</scope>
     </dependency>
 
@@ -127,7 +127,7 @@
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.testing.wcm-io-mock.wcm</artifactId>
-      <version>1.1.1-SNAPSHOT</version>
+      <version>1.2.0</version>
       <scope>test</scope>
     </dependency>
 
