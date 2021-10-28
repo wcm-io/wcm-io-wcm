@@ -33,8 +33,6 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
-import org.apache.sling.settings.SlingSettingsService;
-import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -49,7 +47,7 @@ import io.wcm.sling.commons.request.RequestParam;
 import io.wcm.sling.commons.resource.ResourceType;
 import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.commons.contenttype.FileExtension;
-import io.wcm.wcm.commons.util.RunMode;
+import io.wcm.wcm.commons.instancetype.InstanceTypeService;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
 
 /**
@@ -74,15 +72,14 @@ public final class ParsysComponentsServlet extends SlingSafeMethodsServlet {
   private AllowedComponentsProvider allowedComponentsProvider;
 
   @Reference
-  private SlingSettingsService slingSettings;
+  private InstanceTypeService instanceTypeService;
 
   private boolean enabled;
 
   @Activate
-  @SuppressWarnings("deprecation")
-  protected void activate(ComponentContext componentContext) {
+  protected void activate() {
     // Activate only in author mode
-    enabled = !RunMode.disableIfNotAuthor(slingSettings.getRunModes(), componentContext, log);
+    enabled = instanceTypeService.isAuthor();
   }
 
   @SuppressWarnings({ "null", "deprecation" })

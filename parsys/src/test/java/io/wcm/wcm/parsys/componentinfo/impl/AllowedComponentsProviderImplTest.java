@@ -19,7 +19,6 @@
  */
 package io.wcm.wcm.parsys.componentinfo.impl;
 
-import static io.wcm.testing.mock.wcmio.sling.ContextPlugins.WCMIO_SLING;
 import static org.apache.sling.api.resource.ResourceResolver.PROPERTY_RESOURCE_TYPE;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -35,14 +34,14 @@ import com.day.cq.wcm.api.Page;
 
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
-import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.parsys.componentinfo.AllowedComponentsProvider;
+import io.wcm.wcm.parsys.textcontext.AppAemContext;
 
 @ExtendWith(AemContextExtension.class)
 class AllowedComponentsProviderImplTest {
 
-  private final AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();
+  private final AemContext context = AppAemContext.newAemContext();
 
   private static final String CONTENT_ROOT_PATH = "/content/dummy";
   private static final String BASE_TEMPLATE = "/apps/dummy/templates/baseTemplate";

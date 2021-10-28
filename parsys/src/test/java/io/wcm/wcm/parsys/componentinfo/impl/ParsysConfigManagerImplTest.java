@@ -40,6 +40,7 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfigManager;
+import io.wcm.wcm.parsys.textcontext.AppAemContext;
 
 @ExtendWith(AemContextExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -51,7 +52,7 @@ class ParsysConfigManagerImplTest {
   private static final Pattern PATH_PATTERN_1 = Pattern.compile("^" + Pattern.quote("jcr:content/path1") + "$");
   private static final Pattern PATH_PATTERN_2 = Pattern.compile("^.*/path2(/.*)?$");
 
-  private final AemContext context = new AemContext();
+  private final AemContext context = AppAemContext.newAemContext();
 
   @Mock
   private ParsysConfig parsysConfig1;

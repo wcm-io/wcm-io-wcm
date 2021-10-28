@@ -34,6 +34,7 @@ import com.google.common.collect.ImmutableSet;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import io.wcm.wcm.parsys.componentinfo.ParsysConfig;
+import io.wcm.wcm.parsys.textcontext.AppAemContext;
 
 @ExtendWith(AemContextExtension.class)
 @SuppressWarnings("null")
@@ -44,7 +45,7 @@ class OsgiParsysConfigProviderTest {
   private static final Set<String> ALLOWED_CHILDREN = ImmutableSet.of("/child1", "/child2");
   private static final Set<String> DENIED_CHILDREN = ImmutableSet.of("/child3");
 
-  private final AemContext context = new AemContext();
+  private final AemContext context = AppAemContext.newAemContext();
 
   @Test
   void testWithProperties_Path() {

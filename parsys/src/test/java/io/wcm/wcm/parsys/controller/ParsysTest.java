@@ -20,6 +20,7 @@
 package io.wcm.wcm.parsys.controller;
 
 import static io.wcm.testing.mock.wcmio.sling.ContextPlugins.WCMIO_SLING;
+import static io.wcm.testing.mock.wcmio.wcm.ContextPlugins.WCMIO_WCM;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_GENERATE_DEAFULT_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_NEWAREA_CSS;
 import static io.wcm.wcm.parsys.ParsysNameConstants.PN_PARSYS_PARAGRAPH_CSS;
@@ -86,7 +87,7 @@ class ParsysTest {
   private static final String SUPERCOMPONENT_PATH = "sample/components/super";
 
   private final AemContext context = new AemContextBuilder()
-      .plugin(WCMIO_SLING)
+      .plugin(WCMIO_SLING, WCMIO_WCM)
       .registerSlingModelsFromClassPath(false)
       .build();
 
