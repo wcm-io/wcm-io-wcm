@@ -31,7 +31,7 @@
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.wcm.commons</artifactId>
-  <version>1.9.0</version>
+  <version>1.9.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>WCM Commons</name>
@@ -49,7 +49,7 @@
     <site.url.module.prefix>wcm/commons</site.url.module.prefix>
 
     <!-- Enable reproducible builds -->
-    <project.build.outputTimestamp>2021-10-28T13:13:19Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2021-10-28T13:15:24Z</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
