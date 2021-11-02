@@ -46,5 +46,5 @@ RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(resourceWrapper
 dispatcher.include(slingRequest, slingResponse);
 
 %>
-<input type="hidden" name="<%=name%>@Delete" value="true" />
+<input type="hidden" name="<%=name%>@Delete" value="" />
 <input type="hidden" name="<%=name%>@TypeHint" value="Boolean" />
