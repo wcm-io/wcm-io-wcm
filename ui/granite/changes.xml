@@ -30,7 +30,7 @@
     </release>
 
     <release version="1.7.6" date="2021-04-30">
-      <action type="update" dev="WWCM-17">
+      <action type="update" dev="sseifert" issue="WWCM-17">
         Granite UI validators: Allow to apply validation rules to pathfield component.
       </action>
       <action type="update" dev="sseifert">
