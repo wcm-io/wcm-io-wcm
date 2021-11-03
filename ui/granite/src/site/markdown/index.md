@@ -9,6 +9,7 @@ Granite UI Components for AEM Touch UI.
 
 * [Granite UI components][components]
 * [Granite UI validators][validation]
+* [Granite UI Show/Hide for dialog fields][showhide]
 * [API documentation][apidocs]
 * [Changelog][changelog]
 
@@ -33,5 +34,6 @@ Additionally a set of [Granite UI validators][validation] is provided which can 
 
 [components]: components.html
 [validation]: validation.html
+[showhide]: showhide.html
 [apidocs]: apidocs/
 [changelog]: changes-report.html
