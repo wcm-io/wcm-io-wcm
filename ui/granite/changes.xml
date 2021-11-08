@@ -23,6 +23,15 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
+    <release version="1.8.0" date="2021-11-08">
+      <action type="add" dev="sseifert">
+        Add generic Granite UI Show/Hide feature for select and checkbox components. Other components can be shown/hidden based on the selection/checkbox state.
+      </action>
+      <action type="fix" dev="sseifert">
+        GraniteUiSyntheticResource: Ensure synthetic resources that are added using "child" method overwrite probably already existing child resources with the same name.
+      </action>
+    </release>
+
     <release version="1.7.8" date="2021-11-02">
       <action type="fix" dev="sseifert">
         Checkbox GraniteUI Component: Do not pass a value for the @Delete command to ensure it is not saved when using in page properties and creating pages using the page creation wizard in AEM.
@@ -30,7 +39,7 @@
     </release>
 
     <release version="1.7.6" date="2021-04-30">
-      <action type="update" dev="WWCM-17">
+      <action type="update" dev="sseifert" issue="WWCM-17">
         Granite UI validators: Allow to apply validation rules to pathfield component.
       </action>
       <action type="update" dev="sseifert">
