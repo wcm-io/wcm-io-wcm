@@ -27,6 +27,9 @@
       <action type="add" dev="sseifert">
         Add generic Granite UI Show/Hide feature for select and checkbox components. Other components can be shown/hidden based on the selection/checkbox state.
       </action>
+      <action type="fix" dev="sseifert">
+        GraniteUiSyntheticResource: Ensure synthetic resources that are added using "child" method overwrite probably already existing child resources with the same name.
+      </action>
     </release>
 
     <release version="1.7.8" date="2021-11-02">

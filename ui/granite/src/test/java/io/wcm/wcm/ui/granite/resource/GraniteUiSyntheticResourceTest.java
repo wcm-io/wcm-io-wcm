@@ -24,6 +24,7 @@ import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.copySubt
 import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.create;
 import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.wrap;
 import static io.wcm.wcm.ui.granite.resource.GraniteUiSyntheticResource.wrapMerge;
+import static org.apache.sling.api.resource.ResourceResolver.PROPERTY_RESOURCE_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -146,6 +147,26 @@ class GraniteUiSyntheticResourceTest {
     Resource parent = create(context.resourceResolver(), "/my/path", "/my/type");
 
     Resource child1 = child(parent, "child1", "/my/child/type", SAMPLE_PROPERTES);
+    assertEquals("/my/path/child1", child1.getPath());
+    assertEquals("/my/child/type", child1.getResourceType());
+    assertEquals("value1", child1.getValueMap().get("prop1", String.class));
+    assertEquals(25, (int)child1.getValueMap().get("prop2", 0));
+  }
+
+  @Test
+  @SuppressWarnings("null")
+  void testChildWithPropetiesThatAlreadyExists() {
+    Resource existingParent = context.create().resource("/my/path",
+        PROPERTY_RESOURCE_TYPE, "/my/type");
+    context.create().resource(existingParent, "child1",
+        PROPERTY_RESOURCE_TYPE, "/my/child/type",
+        "prop1", "value1");
+
+    Resource parent = wrapMerge(existingParent, ValueMap.EMPTY);
+
+    Resource child1 = child(parent, "child1", "/my/child/type", SAMPLE_PROPERTES);
+    child1 = parent.getChild("child1");
+
     assertEquals("/my/path/child1", child1.getPath());
     assertEquals("/my/child/type", child1.getResourceType());
     assertEquals("value1", child1.getValueMap().get("prop1", String.class));

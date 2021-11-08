@@ -21,10 +21,9 @@ package io.wcm.wcm.ui.granite.resource;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -37,7 +36,6 @@ import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 /**
  * Extended version of {@link SyntheticResource} that allows to pass an own value map and optional child resources.
@@ -49,14 +47,14 @@ import com.google.common.collect.Lists;
 public final class GraniteUiSyntheticResource extends SyntheticResource {
 
   private final ValueMap props;
-  private final List<Resource> children;
+  private final Map<String, Resource> children;
 
   private GraniteUiSyntheticResource(ResourceResolver resourceResolver,
       ResourceMetadata resourceMetadata, String resourceType,
       ValueMap props, Iterable<Resource> children) {
     super(resourceResolver, resourceMetadata, resourceType);
     this.props = props;
-    this.children = Lists.newArrayList(children);
+    this.children = childrenMap(children);
   }
 
   private GraniteUiSyntheticResource(ResourceResolver resourceResolver,
@@ -66,7 +64,13 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
       Iterable<Resource> children) {
     super(resourceResolver, path, resourceType);
     this.props = props;
-    this.children = Lists.newArrayList(children);
+    this.children = childrenMap(children);
+  }
+
+  private static Map<String, Resource> childrenMap(Iterable<Resource> children) {
+    Map<String, Resource> result = new LinkedHashMap<>();
+    children.forEach(resource -> result.put(resource.getName(), resource));
+    return result;
   }
 
   @SuppressWarnings({ "unchecked", "null" })
@@ -82,32 +86,31 @@ public final class GraniteUiSyntheticResource extends SyntheticResource {
 
   @Override
   public Iterator<Resource> listChildren() {
-    return children.iterator();
+    return children.values().iterator();
   }
 
   @Override
   public Iterable<Resource> getChildren() {
-    return children;
+    return children.values();
   }
 
   @Override
   public boolean hasChildren() {
-    return children.iterator().hasNext();
+    return !children.isEmpty();
   }
 
   @Override
   public Resource getChild(String relPath) {
-    for (Resource resource : children) {
-      // naive implementation that only covers the simplest-possible case to detect the correct child
-      if (StringUtils.equals(resource.getName(), relPath)) {
-        return resource;
-      }
+    // naive implementation that only covers the simplest-possible case to detect the correct child
+    Resource child = children.get(relPath);
+    if (child != null) {
+      return child;
     }
     return super.getChild(relPath);
   }
 
   private void addChild(Resource child) {
-    children.add(child);
+    children.put(child.getName(), child);
   }
 
   /**
