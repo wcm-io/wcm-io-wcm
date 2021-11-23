@@ -103,6 +103,7 @@
 
      if (show) {
        $element.removeClass("hide");
+       $element.removeClass("wcmio-dialog-showhide-status-hide");
        $element.find("input[aria-required=false], coral-multifield[aria-required=false], foundation-autocomplete[aria-required=false]")
            .filter(":not(.hide>input)")
            .filter(":not(input.hide)")
@@ -120,6 +121,7 @@
            .each(function(index, field) {
              toggleValidation($(field));
            });
+       $element.addClass("wcmio-dialog-showhide-status-hide");
      }
    }
 
@@ -129,27 +131,32 @@
    * @param {jQuery} $field To disable / enable required validation.
    */
   function toggleValidation($field) {
-    var required = $field.prop("required");
-    var ariaRequired = $field.attr('aria-required');
-    var notRequired = ariaRequired === 'true';
+    var propRequired = $field.prop("required");
+    var ariaRequired = $field.attr("aria-required");
+    var isRequired = (ariaRequired === "true");
 
-    if ($field.is("foundation-autocomplete") && required !== 'undefined') {
-      if (required === true) {
-          $field[0].required = false;
-          $field.attr('aria-required', false);
+    // skip toggle if field is already hidden and validation was already toggled (in case of nested show/hide structures)
+    if ($field.parents(".wcmio-dialog-showhide-status-hide").length > 0) {
+      return;
+    }
+
+    if ($field.is("foundation-autocomplete") && propRequired !== "undefined") {
+      if (propRequired === true) {
+        $field[0].required = false;
+        $field.attr("aria-required", false);
       }
-      else if (required === false) {
-          $field[0].required = true;
-          $field.removeAttr('aria-required');
+      else if (propRequired === false) {
+        $field[0].required = true;
+        $field.removeAttr("aria-required");
       }
     }
-    else if (typeof ariaRequired !== 'undefined') {
-      $field.attr('aria-required', String(!notRequired));
+    else if (typeof ariaRequired !== "undefined") {
+      $field.attr("aria-required", String(!isRequired));
     }
 
     var api = $field.adaptTo("foundation-validation");
     if (api) {
-      if (notRequired) {
+      if (isRequired) {
         api.checkValidity();
       }
       api.updateUI();
