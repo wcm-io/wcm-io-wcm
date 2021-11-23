@@ -198,31 +198,41 @@
 
       <!-- Execute JavaScript unit tests using JEST -->
       <plugin>
-        <groupId>io.wcm.maven.plugins</groupId>
-        <artifactId>nodejs-maven-plugin</artifactId>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
         <executions>
           <execution>
-            <phase>compile</phase>
-            <goals><goal>run</goal></goals>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <nodeVersion>v16.13.0</nodeVersion>
+              <npmVersion>8.1.0</npmVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm test</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <arguments>run test</arguments>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <nodeJsVersion>14.15.3</nodeJsVersion>
-          <tasks>
-            <npmInstallTask>
-              <workingDirectory>${project.basedir}</workingDirectory>
-            </npmInstallTask>
-            <nodeJsTask>
-              <workingDirectory>${project.basedir}</workingDirectory>
-              <moduleName>npm</moduleName>
-              <executableName>npm-cli</executableName>
-              <arguments>
-                <argument>run</argument>
-                <argument>test</argument>
-              </arguments>
-            </nodeJsTask>
-          </tasks>
-        </configuration>
       </plugin>
 
     </plugins>
