@@ -103,6 +103,7 @@
 
      if (show) {
        $element.removeClass("hide");
+       $element.removeClass("wcmio-dialog-showhide-status-hide");
        $element.find("input[aria-required=false], coral-multifield[aria-required=false], foundation-autocomplete[aria-required=false]")
            .filter(":not(.hide>input)")
            .filter(":not(input.hide)")
@@ -120,6 +121,7 @@
            .each(function(index, field) {
              toggleValidation($(field));
            });
+       $element.addClass("wcmio-dialog-showhide-status-hide");
      }
    }
 
@@ -132,6 +134,11 @@
     var propRequired = $field.prop("required");
     var ariaRequired = $field.attr("aria-required");
     var isRequired = (ariaRequired === "true");
+
+    // skip toggle if field is already hidden and validation was already toggled (in case of nested show/hide structures)
+    if ($field.parents(".wcmio-dialog-showhide-status-hide").length > 0) {
+      return;
+    }
 
     if ($field.is("foundation-autocomplete") && propRequired !== "undefined") {
       if (propRequired === true) {

@@ -23,6 +23,12 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
+    <release version="1.8.2" date="not released">
+      <action type="add" dev="sseifert">
+        Granite UI Show/Hide feature: Ensure validation is not toggled twice for nested show/hide structures with required fields.
+      </action>
+    </release>
+
     <release version="1.8.0" date="2021-11-08">
       <action type="add" dev="sseifert">
         Add generic Granite UI Show/Hide feature for select and checkbox components. Other components can be shown/hidden based on the selection/checkbox state.
