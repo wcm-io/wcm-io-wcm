@@ -53,23 +53,6 @@
     <site.url.module.prefix>wcm</site.url.module.prefix>
   </properties>
 
-  <dependencies>
-
-    <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-atinject_1.0_spec</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.adobe.aem</groupId>
-      <artifactId>uber-jar</artifactId>
-      <classifier>apis</classifier>
-      <scope>provided</scope>
-    </dependency>
-
-  </dependencies>
-
   <build>
     <pluginManagement>
       <plugins>
