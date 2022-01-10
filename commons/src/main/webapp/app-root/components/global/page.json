@@ -1,8 +1,0 @@
-{
-  /*
-   * Root page component
-   * Default Page properties dialog
-   */
-  "jcr:primaryType": "cq:Component",
-  "sling:resourceSuperType": "/libs/wcm/foundation/components/page"
-}
